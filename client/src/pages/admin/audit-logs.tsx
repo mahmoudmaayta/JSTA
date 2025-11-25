@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
+import { AdminSidebar } from "@/components/layout/admin-sidebar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -88,136 +90,154 @@ export default function AdminAuditLogs() {
     return items.join(" | ");
   };
 
+  const sidebarStyle = {
+    "--sidebar-width": "16rem",
+    "--sidebar-width-icon": "3rem",
+  };
+
   return (
-    <div className="flex-1 p-4 md:p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <History className="h-8 w-8 text-primary" />
-          <div>
-            <h1 className="text-2xl font-semibold" data-testid="text-page-title">Audit Logs</h1>
-            <p className="text-sm text-muted-foreground">Track all administrative actions</p>
-          </div>
-        </div>
-        <Button
-          variant="outline"
-          onClick={() => refetch()}
-          data-testid="button-refresh"
-        >
-          <RefreshCw className="h-4 w-4 mr-2" />
-          Refresh
-        </Button>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Activity History</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {isLoading ? (
-            <div className="space-y-4">
-              {[...Array(5)].map((_, i) => (
-                <Skeleton key={i} className="h-12 w-full" />
-              ))}
+    <SidebarProvider style={sidebarStyle as React.CSSProperties}>
+      <div className="flex min-h-screen w-full">
+        <AdminSidebar />
+        <SidebarInset className="flex-1">
+          <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
+            <SidebarTrigger data-testid="button-sidebar-toggle" />
+            <div className="flex-1">
+              <h1 className="text-lg font-semibold">Audit Logs</h1>
             </div>
-          ) : (
-            <>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Action</TableHead>
-                    <TableHead>Admin User</TableHead>
-                    <TableHead>Target</TableHead>
-                    <TableHead>Details</TableHead>
-                    <TableHead>Date & Time</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {data?.logs.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                        No audit logs found
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    data?.logs.map((log) => {
-                      const Icon = actionIcons[log.action] || History;
-                      return (
-                        <TableRow key={log.id} data-testid={`row-audit-log-${log.id}`}>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              <Icon className={`h-4 w-4 ${
-                                log.action.includes("APPROVED") ? "text-green-600" :
-                                log.action.includes("REJECTED") ? "text-red-600" : "text-blue-600"
-                              }`} />
-                              <Badge className={actionColors[log.action] || "bg-muted"}>
-                                {actionLabels[log.action] || log.action}
-                              </Badge>
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-sm text-muted-foreground">
-                            {log.user?.email || "Unknown"}
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              {log.targetType === "office" ? (
-                                <Building2 className="h-4 w-4 text-muted-foreground" />
-                              ) : (
-                                <RefreshCw className="h-4 w-4 text-muted-foreground" />
-                              )}
-                              <span className="text-sm">
-                                {log.targetType === "office" ? "Office" : "Renewal"} #{log.targetId}
-                              </span>
-                            </div>
-                          </TableCell>
-                          <TableCell className="max-w-xs truncate text-sm text-muted-foreground">
-                            {renderDetails(log)}
-                          </TableCell>
-                          <TableCell className="text-sm text-muted-foreground">
-                            {format(new Date(log.createdAt!), "MMM d, yyyy HH:mm")}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })
-                  )}
-                </TableBody>
-              </Table>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => refetch()}
+              data-testid="button-refresh"
+            >
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh
+            </Button>
+          </header>
 
-              {totalPages > 1 && (
-                <div className="flex items-center justify-between mt-4 pt-4 border-t">
-                  <p className="text-sm text-muted-foreground">
-                    Showing {offset + 1} to {Math.min(offset + limit, data?.total || 0)} of {data?.total || 0} entries
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handlePrevPage}
-                      disabled={offset === 0}
-                      data-testid="button-prev-page"
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                      Previous
-                    </Button>
-                    <span className="text-sm text-muted-foreground">
-                      Page {currentPage} of {totalPages}
-                    </span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleNextPage}
-                      disabled={!data || offset + limit >= data.total}
-                      data-testid="button-next-page"
-                    >
-                      Next
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+          <main className="flex-1 p-4 sm:p-6">
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-bold" data-testid="text-page-title">Activity History</h2>
+                <p className="text-muted-foreground">
+                  Track all administrative actions and status changes
+                </p>
+              </div>
+
+              <Card>
+                <CardContent className="pt-6">
+                  {isLoading ? (
+                    <div className="space-y-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Skeleton key={i} className="h-12 w-full" />
+                      ))}
+                    </div>
+                  ) : (
+                    <>
+                      <div className="rounded-lg border">
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Action</TableHead>
+                              <TableHead>Admin User</TableHead>
+                              <TableHead>Target</TableHead>
+                              <TableHead className="hidden md:table-cell">Details</TableHead>
+                              <TableHead>Date & Time</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {data?.logs.length === 0 ? (
+                              <TableRow>
+                                <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
+                                  No audit logs found
+                                </TableCell>
+                              </TableRow>
+                            ) : (
+                              data?.logs.map((log) => {
+                                const Icon = actionIcons[log.action] || History;
+                                return (
+                                  <TableRow key={log.id} data-testid={`row-audit-log-${log.id}`}>
+                                    <TableCell>
+                                      <div className="flex items-center gap-2">
+                                        <Icon className={`h-4 w-4 ${
+                                          log.action.includes("APPROVED") ? "text-green-600" :
+                                          log.action.includes("REJECTED") ? "text-red-600" : "text-blue-600"
+                                        }`} />
+                                        <Badge className={actionColors[log.action] || "bg-muted"}>
+                                          {actionLabels[log.action] || log.action}
+                                        </Badge>
+                                      </div>
+                                    </TableCell>
+                                    <TableCell className="text-sm text-muted-foreground">
+                                      {log.user?.email || "Unknown"}
+                                    </TableCell>
+                                    <TableCell>
+                                      <div className="flex items-center gap-2">
+                                        {log.targetType === "office" ? (
+                                          <Building2 className="h-4 w-4 text-muted-foreground" />
+                                        ) : (
+                                          <RefreshCw className="h-4 w-4 text-muted-foreground" />
+                                        )}
+                                        <span className="text-sm">
+                                          {log.targetType === "office" ? "Office" : "Renewal"} #{log.targetId}
+                                        </span>
+                                      </div>
+                                    </TableCell>
+                                    <TableCell className="max-w-xs truncate text-sm text-muted-foreground hidden md:table-cell">
+                                      {renderDetails(log)}
+                                    </TableCell>
+                                    <TableCell className="text-sm text-muted-foreground">
+                                      {format(new Date(log.createdAt!), "MMM d, yyyy HH:mm")}
+                                    </TableCell>
+                                  </TableRow>
+                                );
+                              })
+                            )}
+                          </TableBody>
+                        </Table>
+                      </div>
+
+                      {totalPages > 1 && (
+                        <div className="flex items-center justify-between mt-4 pt-4 border-t">
+                          <p className="text-sm text-muted-foreground">
+                            Showing {offset + 1} to {Math.min(offset + limit, data?.total || 0)} of {data?.total || 0} entries
+                          </p>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={handlePrevPage}
+                              disabled={offset === 0}
+                              data-testid="button-prev-page"
+                            >
+                              <ChevronLeft className="h-4 w-4" />
+                              Previous
+                            </Button>
+                            <span className="text-sm text-muted-foreground">
+                              Page {currentPage} of {totalPages}
+                            </span>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={handleNextPage}
+                              disabled={!data || offset + limit >= data.total}
+                              data-testid="button-next-page"
+                            >
+                              Next
+                              <ChevronRight className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </main>
+        </SidebarInset>
+      </div>
+    </SidebarProvider>
   );
 }
