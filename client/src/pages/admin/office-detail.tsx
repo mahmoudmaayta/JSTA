@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { Office, Branch, Document } from "@shared/schema";
+import { DocumentPreviewButton } from "@/components/ui/document-preview";
 import {
   Building,
   ArrowLeft,
@@ -437,12 +438,18 @@ export default function AdminOfficeDetail() {
                                         </p>
                                       </div>
                                     </div>
-                                    <a href={`/api/documents/${doc.id}/download`} data-testid={`button-download-${doc.id}`}>
-                                      <Button variant="outline" size="sm" className="gap-2">
-                                        <Download className="h-4 w-4" />
-                                        Download
-                                      </Button>
-                                    </a>
+                                    <div className="flex gap-2">
+                                      <DocumentPreviewButton
+                                        documentId={doc.id}
+                                        filename={doc.originalFilename}
+                                      />
+                                      <a href={`/api/documents/${doc.id}/download`} data-testid={`button-download-${doc.id}`}>
+                                        <Button variant="outline" size="sm" className="gap-2">
+                                          <Download className="h-4 w-4" />
+                                          Download
+                                        </Button>
+                                      </a>
+                                    </div>
                                   </div>
                                 ))}
                               </div>

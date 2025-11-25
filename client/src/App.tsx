@@ -16,12 +16,14 @@ import OfficeDashboard from "@/pages/office/dashboard";
 import OfficeDocuments from "@/pages/office/documents";
 import OfficeRenewals from "@/pages/office/renewals";
 import OfficeRenewalDetail from "@/pages/office/renewal-detail";
+import OfficeProfile from "@/pages/office/profile";
 
 import AdminDashboard from "@/pages/admin/dashboard";
 import AdminOffices from "@/pages/admin/offices";
 import AdminOfficeDetail from "@/pages/admin/office-detail";
 import AdminRenewals from "@/pages/admin/renewals";
 import AdminRenewalDetail from "@/pages/admin/renewal-detail";
+import AdminAuditLogs from "@/pages/admin/audit-logs";
 
 function ProtectedRoute({ 
   children, 
@@ -115,6 +117,12 @@ function Router() {
           <OfficeRenewalDetail />
         </ProtectedRoute>
       </Route>
+      
+      <Route path="/office/profile">
+        <ProtectedRoute allowedRoles={['OFFICE']}>
+          <OfficeProfile />
+        </ProtectedRoute>
+      </Route>
 
       <Route path="/admin">
         <ProtectedRoute allowedRoles={['ADMIN']}>
@@ -143,6 +151,12 @@ function Router() {
       <Route path="/admin/renewals/:id">
         <ProtectedRoute allowedRoles={['ADMIN']}>
           <AdminRenewalDetail />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/audit-logs">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminAuditLogs />
         </ProtectedRoute>
       </Route>
 

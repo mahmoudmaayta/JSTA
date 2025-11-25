@@ -21,6 +21,7 @@ import {
   FileCheck,
   LogOut,
   Shield,
+  History,
 } from "lucide-react";
 
 const adminMenuItems = [
@@ -38,6 +39,11 @@ const adminMenuItems = [
     title: "Renewals",
     url: "/admin/renewals",
     icon: FileCheck,
+  },
+  {
+    title: "Audit Logs",
+    url: "/admin/audit-logs",
+    icon: History,
   },
 ];
 
