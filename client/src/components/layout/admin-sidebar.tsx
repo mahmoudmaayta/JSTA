@@ -15,7 +15,6 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
-  Building2,
   LayoutDashboard,
   Building,
   FileCheck,
@@ -23,6 +22,7 @@ import {
   Shield,
   History,
 } from "lucide-react";
+import logoImage from "@assets/logo-0 (1)_1764114456004.png";
 
 const adminMenuItems = [
   {
@@ -64,11 +64,14 @@ export function AdminSidebar() {
     <Sidebar>
       <SidebarHeader className="border-b">
         <div className="flex items-center gap-3 px-2 py-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary">
-            <Building2 className="h-5 w-5 text-primary-foreground" />
-          </div>
+          <img 
+            src={logoImage} 
+            alt="JSTA Logo" 
+            className="h-10 w-auto object-contain"
+            data-testid="img-admin-logo"
+          />
           <div className="flex flex-col">
-            <span className="font-semibold text-sm">Tourism Portal</span>
+            <span className="font-semibold text-sm">JSTA Portal</span>
             <span className="text-xs text-muted-foreground flex items-center gap-1">
               <Shield className="h-3 w-3" />
               Admin Panel
