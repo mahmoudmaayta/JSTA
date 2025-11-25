@@ -1,16 +1,151 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider, useAuth } from "@/lib/auth";
+import { LoadingPage } from "@/components/ui/loading-spinner";
+
+import LandingPage from "@/pages/landing";
+import LoginPage from "@/pages/login";
+import RegisterPage from "@/pages/register";
+import RegistrationSuccessPage from "@/pages/registration-success";
 import NotFound from "@/pages/not-found";
+
+import OfficeDashboard from "@/pages/office/dashboard";
+import OfficeDocuments from "@/pages/office/documents";
+import OfficeRenewals from "@/pages/office/renewals";
+import OfficeRenewalDetail from "@/pages/office/renewal-detail";
+
+import AdminDashboard from "@/pages/admin/dashboard";
+import AdminOffices from "@/pages/admin/offices";
+import AdminOfficeDetail from "@/pages/admin/office-detail";
+import AdminRenewals from "@/pages/admin/renewals";
+import AdminRenewalDetail from "@/pages/admin/renewal-detail";
+
+function ProtectedRoute({ 
+  children, 
+  allowedRoles 
+}: { 
+  children: React.ReactNode; 
+  allowedRoles: ('ADMIN' | 'OFFICE')[];
+}) {
+  const { user, isLoading, isAuthenticated } = useAuth();
+
+  if (isLoading) {
+    return <LoadingPage message="Checking authentication..." />;
+  }
+
+  if (!isAuthenticated) {
+    return <Redirect to="/login" />;
+  }
+
+  if (user && !allowedRoles.includes(user.role)) {
+    if (user.role === 'ADMIN') {
+      return <Redirect to="/admin" />;
+    }
+    return <Redirect to="/office/dashboard" />;
+  }
+
+  return <>{children}</>;
+}
+
+function PublicOnlyRoute({ children }: { children: React.ReactNode }) {
+  const { user, isLoading, isAuthenticated } = useAuth();
+
+  if (isLoading) {
+    return <LoadingPage message="Loading..." />;
+  }
+
+  if (isAuthenticated && user) {
+    if (user.role === 'ADMIN') {
+      return <Redirect to="/admin" />;
+    }
+    return <Redirect to="/office/dashboard" />;
+  }
+
+  return <>{children}</>;
+}
 
 function Router() {
   return (
     <Switch>
-      {/* Add pages below */}
-      {/* <Route path="/" component={Home}/> */}
-      {/* Fallback to 404 */}
+      <Route path="/">
+        <PublicOnlyRoute>
+          <LandingPage />
+        </PublicOnlyRoute>
+      </Route>
+      
+      <Route path="/login">
+        <PublicOnlyRoute>
+          <LoginPage />
+        </PublicOnlyRoute>
+      </Route>
+      
+      <Route path="/register">
+        <PublicOnlyRoute>
+          <RegisterPage />
+        </PublicOnlyRoute>
+      </Route>
+      
+      <Route path="/registration-success">
+        <RegistrationSuccessPage />
+      </Route>
+
+      <Route path="/office/dashboard">
+        <ProtectedRoute allowedRoles={['OFFICE']}>
+          <OfficeDashboard />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/office/documents">
+        <ProtectedRoute allowedRoles={['OFFICE']}>
+          <OfficeDocuments />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/office/renewals">
+        <ProtectedRoute allowedRoles={['OFFICE']}>
+          <OfficeRenewals />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/office/renewals/:id">
+        <ProtectedRoute allowedRoles={['OFFICE']}>
+          <OfficeRenewalDetail />
+        </ProtectedRoute>
+      </Route>
+
+      <Route path="/admin">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminDashboard />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/offices">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminOffices />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/offices/:id">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminOfficeDetail />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/renewals">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminRenewals />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/renewals/:id">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminRenewalDetail />
+        </ProtectedRoute>
+      </Route>
+
       <Route component={NotFound} />
     </Switch>
   );
@@ -20,8 +155,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Router />
+        <AuthProvider>
+          <Toaster />
+          <Router />
+        </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
