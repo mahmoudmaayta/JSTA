@@ -20,6 +20,7 @@ import {
   registerSchema,
   loginSchema,
   officeInfoSchema,
+  officeUpdateSchema,
   type DocumentCategoryType,
 } from "@shared/schema";
 
@@ -273,6 +274,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(office);
   });
 
+  app.patch("/api/office/profile", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(404).json({ message: "No office associated" });
+      }
+
+      const parsed = officeUpdateSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ message: "Invalid input", errors: parsed.error.errors });
+      }
+
+      const updatedOffice = await storage.updateOfficeProfile(user.officeId, parsed.data);
+      res.json({ message: "Profile updated successfully", office: updatedOffice });
+    } catch (error) {
+      console.error("Profile update error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.post("/api/office/change-password", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const { currentPassword, newPassword } = req.body;
+
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({ message: "Current and new password are required" });
+      }
+
+      if (newPassword.length < 6) {
+        return res.status(400).json({ message: "New password must be at least 6 characters" });
+      }
+
+      const fullUser = await storage.getUser(user.id);
+      if (!fullUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const isValid = await bcrypt.compare(currentPassword, fullUser.passwordHash);
+      if (!isValid) {
+        return res.status(400).json({ message: "Current password is incorrect" });
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      await storage.updateUserPassword(user.id, hashedPassword);
+
+      res.json({ message: "Password changed successfully" });
+    } catch (error) {
+      console.error("Password change error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   app.get("/api/office/documents", ensureOffice, async (req, res) => {
     const user = (req as any).user;
     const documents = await storage.getDocuments(user.officeId);
@@ -375,6 +429,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(stats);
   });
 
+  app.get("/api/admin/audit-logs", ensureAdmin, async (req, res) => {
+    const limit = parseInt(req.query.limit as string) || 50;
+    const offset = parseInt(req.query.offset as string) || 0;
+    
+    const logs = await storage.getAuditLogs(limit, offset);
+    const total = await storage.getAuditLogsCount();
+    
+    const logsWithUser = await Promise.all(
+      logs.map(async (log) => {
+        const user = await storage.getUser(log.userId);
+        return { ...log, user: { email: user?.email } };
+      })
+    );
+    
+    res.json({ logs: logsWithUser, total, limit, offset });
+  });
+
   app.get("/api/admin/offices", ensureAdmin, async (req, res) => {
     const status = req.query.status as string | undefined;
     
@@ -401,6 +472,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post("/api/admin/offices/:id/approve", ensureAdmin, async (req, res) => {
+    const user = (req as any).user;
     const office = await storage.getOffice(parseInt(req.params.id));
     if (!office) {
       return res.status(404).json({ message: "Office not found" });
@@ -408,12 +480,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     await storage.updateOfficeStatus(office.id, "ACTIVE");
 
+    await storage.createAuditLog({
+      userId: user.id,
+      action: "OFFICE_APPROVED",
+      targetType: "office",
+      targetId: office.id,
+      details: { officeName: office.tradeNameAr }
+    });
+
     sendAccountApprovedEmail(office.mainEmail || "", office.tradeNameAr);
 
     res.json({ message: "Office approved successfully" });
   });
 
   app.post("/api/admin/offices/:id/reject", ensureAdmin, async (req, res) => {
+    const user = (req as any).user;
     const office = await storage.getOffice(parseInt(req.params.id));
     if (!office) {
       return res.status(404).json({ message: "Office not found" });
@@ -421,6 +502,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     const { comment } = req.body;
     await storage.updateOfficeStatus(office.id, "REJECTED", comment);
+
+    await storage.createAuditLog({
+      userId: user.id,
+      action: "OFFICE_REJECTED",
+      targetType: "office",
+      targetId: office.id,
+      details: { officeName: office.tradeNameAr, comment }
+    });
 
     sendAccountRejectedEmail(office.mainEmail || "", office.tradeNameAr, comment);
 
@@ -459,6 +548,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post("/api/admin/renewals/:id/approve-download", ensureAdmin, async (req, res) => {
+    const user = (req as any).user;
     const renewal = await storage.getRenewal(parseInt(req.params.id));
     if (!renewal) {
       return res.status(404).json({ message: "Renewal not found" });
@@ -467,12 +557,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     await storage.updateRenewalStatus(renewal.id, "APPROVED_FOR_DOWNLOAD");
 
     const office = await storage.getOffice(renewal.officeId);
+    
+    await storage.createAuditLog({
+      userId: user.id,
+      action: "RENEWAL_APPROVED_FOR_DOWNLOAD",
+      targetType: "renewal",
+      targetId: renewal.id,
+      details: { officeName: office?.tradeNameAr, year: renewal.year }
+    });
+
     sendRenewalApprovedForDownloadEmail(office?.mainEmail || "", office?.tradeNameAr || "", renewal.year);
 
     res.json({ message: "Renewal approved for download" });
   });
 
   app.post("/api/admin/renewals/:id/final-approve", ensureAdmin, async (req, res) => {
+    const user = (req as any).user;
     const renewal = await storage.getRenewal(parseInt(req.params.id));
     if (!renewal) {
       return res.status(404).json({ message: "Renewal not found" });
@@ -481,12 +581,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     await storage.updateRenewalStatus(renewal.id, "FINAL_APPROVED");
 
     const office = await storage.getOffice(renewal.officeId);
+    
+    await storage.createAuditLog({
+      userId: user.id,
+      action: "RENEWAL_FINAL_APPROVED",
+      targetType: "renewal",
+      targetId: renewal.id,
+      details: { officeName: office?.tradeNameAr, year: renewal.year }
+    });
+
     sendRenewalFinalApprovedEmail(office?.mainEmail || "", office?.tradeNameAr || "", renewal.year);
 
     res.json({ message: "Renewal fully approved" });
   });
 
   app.post("/api/admin/renewals/:id/reject", ensureAdmin, async (req, res) => {
+    const user = (req as any).user;
     const renewal = await storage.getRenewal(parseInt(req.params.id));
     if (!renewal) {
       return res.status(404).json({ message: "Renewal not found" });
@@ -496,6 +606,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     await storage.updateRenewalStatus(renewal.id, "REJECTED", comment);
 
     const office = await storage.getOffice(renewal.officeId);
+    
+    await storage.createAuditLog({
+      userId: user.id,
+      action: "RENEWAL_REJECTED",
+      targetType: "renewal",
+      targetId: renewal.id,
+      details: { officeName: office?.tradeNameAr, year: renewal.year, comment }
+    });
+
     sendRenewalRejectedEmail(office?.mainEmail || "", office?.tradeNameAr || "", renewal.year, comment);
 
     res.json({ message: "Renewal rejected" });
@@ -517,6 +636,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
 
     res.download(document.filePath, document.originalFilename);
+  });
+
+  app.get("/api/documents/:id/preview", ensureAuthenticated, async (req, res) => {
+    const document = await storage.getDocument(parseInt(req.params.id));
+    if (!document) {
+      return res.status(404).json({ message: "Document not found" });
+    }
+
+    const user = (req as any).user;
+    if (user.role !== "ADMIN" && document.officeId !== user.officeId) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    if (!fs.existsSync(document.filePath)) {
+      return res.status(404).json({ message: "File not found on server" });
+    }
+
+    const ext = path.extname(document.originalFilename).toLowerCase();
+    const mimeTypes: Record<string, string> = {
+      ".pdf": "application/pdf",
+      ".jpg": "image/jpeg",
+      ".jpeg": "image/jpeg",
+      ".png": "image/png",
+      ".gif": "image/gif",
+      ".webp": "image/webp",
+      ".txt": "text/plain",
+    };
+
+    const contentType = mimeTypes[ext] || "application/octet-stream";
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("Content-Disposition", `inline; filename="${document.originalFilename}"`);
+    
+    const fileStream = fs.createReadStream(document.filePath);
+    fileStream.pipe(res);
   });
 
   app.get("/api/documents/ministry/:renewalId/download", ensureAuthenticated, async (req, res) => {

@@ -21,6 +21,7 @@ import {
   RefreshCw,
   LogOut,
   Briefcase,
+  UserCog,
 } from "lucide-react";
 
 const officeMenuItems = [
@@ -38,6 +39,11 @@ const officeMenuItems = [
     title: "Renewals",
     url: "/office/renewals",
     icon: RefreshCw,
+  },
+  {
+    title: "Profile",
+    url: "/office/profile",
+    icon: UserCog,
   },
 ];
 

@@ -1,11 +1,13 @@
 import { 
-  users, offices, branches, documents, licenseRenewals,
+  users, offices, branches, documents, licenseRenewals, auditLogs,
   type User, type InsertUser,
   type Office, type InsertOffice,
   type Branch, type InsertBranch,
   type Document, type InsertDocument,
   type LicenseRenewal, type InsertLicenseRenewal,
-  type OfficeStatusType, type RenewalStatusType
+  type AuditLog, type InsertAuditLog,
+  type OfficeStatusType, type RenewalStatusType,
+  type OfficeUpdateForm
 } from "@shared/schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import pkg from "pg";
@@ -27,6 +29,7 @@ export interface IStorage {
   getOfficesByStatus(status: OfficeStatusType): Promise<Office[]>;
   createOffice(office: InsertOffice): Promise<Office>;
   updateOfficeStatus(id: number, status: OfficeStatusType, comment?: string): Promise<void>;
+  updateOfficeProfile(id: number, data: OfficeUpdateForm): Promise<Office | undefined>;
   
   getBranches(officeId: number): Promise<Branch[]>;
   createBranch(branch: InsertBranch): Promise<Branch>;
@@ -48,6 +51,12 @@ export interface IStorage {
     offices: { total: number; pending: number; active: number; rejected: number };
     renewals: { total: number; pending: number; approved: number; rejected: number };
   }>;
+  
+  createAuditLog(log: InsertAuditLog): Promise<AuditLog>;
+  getAuditLogs(limit?: number, offset?: number): Promise<AuditLog[]>;
+  getAuditLogsCount(): Promise<number>;
+  
+  updateUserPassword(userId: number, hashedPassword: string): Promise<void>;
   
   seedAdminUser(): Promise<void>;
 }
@@ -117,6 +126,11 @@ export class DatabaseStorage implements IStorage {
       updates.adminComment = comment;
     }
     await db.update(offices).set(updates).where(eq(offices.id, id));
+  }
+
+  async updateOfficeProfile(id: number, data: OfficeUpdateForm): Promise<Office | undefined> {
+    const [office] = await db.update(offices).set(data).where(eq(offices.id, id)).returning();
+    return office;
   }
 
   async getBranches(officeId: number): Promise<Branch[]> {
@@ -216,6 +230,27 @@ export class DatabaseStorage implements IStorage {
         rejected: renewalsArray.filter((r) => r.status === "REJECTED").length,
       },
     };
+  }
+
+  async createAuditLog(insertLog: InsertAuditLog): Promise<AuditLog> {
+    const [log] = await db.insert(auditLogs).values(insertLog).returning();
+    return log;
+  }
+
+  async getAuditLogs(limit: number = 50, offset: number = 0): Promise<AuditLog[]> {
+    return await db.select().from(auditLogs)
+      .orderBy(desc(auditLogs.createdAt))
+      .limit(limit)
+      .offset(offset);
+  }
+
+  async getAuditLogsCount(): Promise<number> {
+    const result = await db.select({ count: sql<number>`count(*)` }).from(auditLogs);
+    return Number(result[0]?.count || 0);
+  }
+
+  async updateUserPassword(userId: number, hashedPassword: string): Promise<void> {
+    await db.update(users).set({ passwordHash: hashedPassword }).where(eq(users.id, userId));
   }
 }
 

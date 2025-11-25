@@ -1,0 +1,521 @@
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
+import { OfficeSidebar } from "@/components/layout/office-sidebar";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { LoadingPage, LoadingSpinner } from "@/components/ui/loading-spinner";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import type { Office } from "@shared/schema";
+import { officeUpdateSchema, type OfficeUpdateForm } from "@shared/schema";
+import { Building2, Save, MapPin, Phone, Mail, Lock } from "lucide-react";
+
+const passwordChangeSchema = z.object({
+  currentPassword: z.string().min(1, "Current password is required"),
+  newPassword: z.string().min(6, "New password must be at least 6 characters"),
+  confirmPassword: z.string().min(1, "Please confirm your new password"),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+type PasswordChangeForm = z.infer<typeof passwordChangeSchema>;
+
+export default function OfficeProfile() {
+  const { toast } = useToast();
+
+  const { data: office, isLoading } = useQuery<Office>({
+    queryKey: ["/api/office/profile"],
+  });
+
+  const form = useForm<OfficeUpdateForm>({
+    resolver: zodResolver(officeUpdateSchema),
+    defaultValues: {
+      mainCity: "",
+      mainArea: "",
+      mainStreet: "",
+      mainBuildingNumber: "",
+      phone: "",
+      mobile: "",
+      fax: "",
+      website: "",
+      mainEmail: "",
+      extraEmail: "",
+      poBox: "",
+      postalCode: "",
+    },
+    values: office ? {
+      mainCity: office.mainCity || "",
+      mainArea: office.mainArea || "",
+      mainStreet: office.mainStreet || "",
+      mainBuildingNumber: office.mainBuildingNumber || "",
+      phone: office.phone || "",
+      mobile: office.mobile || "",
+      fax: office.fax || "",
+      website: office.website || "",
+      mainEmail: office.mainEmail || "",
+      extraEmail: office.extraEmail || "",
+      poBox: office.poBox || "",
+      postalCode: office.postalCode || "",
+    } : undefined,
+  });
+
+  const passwordForm = useForm<PasswordChangeForm>({
+    resolver: zodResolver(passwordChangeSchema),
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async (data: OfficeUpdateForm) => {
+      const response = await apiRequest("PATCH", "/api/office/profile", data);
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to update profile");
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/office/profile"] });
+      toast({
+        title: "Profile Updated",
+        description: "Your office contact information has been updated successfully.",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const passwordMutation = useMutation({
+    mutationFn: async (data: PasswordChangeForm) => {
+      const response = await apiRequest("POST", "/api/office/change-password", {
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to change password");
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      passwordForm.reset();
+      toast({
+        title: "Password Changed",
+        description: "Your password has been changed successfully.",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const onSubmit = (data: OfficeUpdateForm) => {
+    updateMutation.mutate(data);
+  };
+
+  const onPasswordSubmit = (data: PasswordChangeForm) => {
+    passwordMutation.mutate(data);
+  };
+
+  const sidebarStyle = {
+    "--sidebar-width": "16rem",
+    "--sidebar-width-icon": "3rem",
+  };
+
+  return (
+    <SidebarProvider style={sidebarStyle as React.CSSProperties}>
+      <div className="flex min-h-screen w-full">
+        <OfficeSidebar />
+        <SidebarInset className="flex-1">
+          <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
+            <SidebarTrigger data-testid="button-sidebar-toggle" />
+            <div className="flex-1">
+              <h1 className="text-lg font-semibold">Office Profile</h1>
+            </div>
+          </header>
+
+          <main className="flex-1 p-4 sm:p-6">
+            {isLoading ? (
+              <LoadingPage message="Loading profile..." />
+            ) : (
+              <div className="max-w-3xl space-y-6">
+                <div>
+                  <h2 className="text-2xl font-bold flex items-center gap-3">
+                    <Building2 className="h-7 w-7" />
+                    {office?.tradeNameAr}
+                  </h2>
+                  <p className="text-muted-foreground mt-1">
+                    Update your office contact information
+                  </p>
+                </div>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Business Information</CardTitle>
+                    <CardDescription>
+                      These details cannot be changed. Contact the association for corrections.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <dl className="grid gap-3 text-sm sm:grid-cols-2">
+                      <div className="space-y-1">
+                        <dt className="text-muted-foreground">Trade Name</dt>
+                        <dd className="font-medium">{office?.tradeNameAr}</dd>
+                      </div>
+                      {office?.legalNameRegistrar && (
+                        <div className="space-y-1">
+                          <dt className="text-muted-foreground">Legal Name</dt>
+                          <dd className="font-medium">{office.legalNameRegistrar}</dd>
+                        </div>
+                      )}
+                      {office?.nationalEstablishmentNumber && (
+                        <div className="space-y-1">
+                          <dt className="text-muted-foreground">Establishment Number</dt>
+                          <dd className="font-mono">{office.nationalEstablishmentNumber}</dd>
+                        </div>
+                      )}
+                      {office?.socialSecurityNumber && (
+                        <div className="space-y-1">
+                          <dt className="text-muted-foreground">Social Security Number</dt>
+                          <dd className="font-mono">{office.socialSecurityNumber}</dd>
+                        </div>
+                      )}
+                    </dl>
+                  </CardContent>
+                </Card>
+
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg flex items-center gap-2">
+                          <MapPin className="h-5 w-5" />
+                          Address
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <FormField
+                            control={form.control}
+                            name="mainCity"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>City</FormLabel>
+                                <FormControl>
+                                  <Input {...field} placeholder="Amman" data-testid="input-city" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="mainArea"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Area</FormLabel>
+                                <FormControl>
+                                  <Input {...field} placeholder="Shmeisani" data-testid="input-area" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="mainStreet"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Street</FormLabel>
+                                <FormControl>
+                                  <Input {...field} placeholder="Main Street" data-testid="input-street" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="mainBuildingNumber"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Building Number</FormLabel>
+                                <FormControl>
+                                  <Input {...field} placeholder="123" data-testid="input-building" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="poBox"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>P.O. Box</FormLabel>
+                                <FormControl>
+                                  <Input {...field} placeholder="P.O. Box" data-testid="input-pobox" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="postalCode"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Postal Code</FormLabel>
+                                <FormControl>
+                                  <Input {...field} placeholder="11110" data-testid="input-postal" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg flex items-center gap-2">
+                          <Phone className="h-5 w-5" />
+                          Contact Details
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <FormField
+                            control={form.control}
+                            name="phone"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Phone</FormLabel>
+                                <FormControl>
+                                  <Input {...field} placeholder="+962 6 123 4567" data-testid="input-phone" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="mobile"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Mobile</FormLabel>
+                                <FormControl>
+                                  <Input {...field} placeholder="+962 79 123 4567" data-testid="input-mobile" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="fax"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Fax</FormLabel>
+                                <FormControl>
+                                  <Input {...field} placeholder="+962 6 123 4568" data-testid="input-fax" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg flex items-center gap-2">
+                          <Mail className="h-5 w-5" />
+                          Email & Website
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <FormField
+                            control={form.control}
+                            name="mainEmail"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Primary Email</FormLabel>
+                                <FormControl>
+                                  <Input {...field} type="email" placeholder="info@example.com" data-testid="input-email" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="extraEmail"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Secondary Email</FormLabel>
+                                <FormControl>
+                                  <Input {...field} type="email" placeholder="contact@example.com" data-testid="input-extra-email" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="website"
+                            render={({ field }) => (
+                              <FormItem className="sm:col-span-2">
+                                <FormLabel>Website</FormLabel>
+                                <FormControl>
+                                  <Input {...field} placeholder="https://www.example.com" data-testid="input-website" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <div className="flex justify-end">
+                      <Button
+                        type="submit"
+                        disabled={updateMutation.isPending}
+                        className="gap-2"
+                        data-testid="button-save"
+                      >
+                        {updateMutation.isPending ? (
+                          <LoadingSpinner size="sm" />
+                        ) : (
+                          <Save className="h-4 w-4" />
+                        )}
+                        Save Changes
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
+
+                <Separator className="my-8" />
+
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <Lock className="h-5 w-5" />
+                    Change Password
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Update your account password to keep your account secure.
+                  </p>
+
+                  <Form {...passwordForm}>
+                    <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
+                      <Card>
+                        <CardContent className="pt-6">
+                          <div className="grid gap-4 sm:grid-cols-3">
+                            <FormField
+                              control={passwordForm.control}
+                              name="currentPassword"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Current Password</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      {...field}
+                                      type="password"
+                                      placeholder="Enter current password"
+                                      data-testid="input-current-password"
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={passwordForm.control}
+                              name="newPassword"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>New Password</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      {...field}
+                                      type="password"
+                                      placeholder="Enter new password"
+                                      data-testid="input-new-password"
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={passwordForm.control}
+                              name="confirmPassword"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Confirm Password</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      {...field}
+                                      type="password"
+                                      placeholder="Confirm new password"
+                                      data-testid="input-confirm-password"
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      <div className="flex justify-end">
+                        <Button
+                          type="submit"
+                          variant="outline"
+                          disabled={passwordMutation.isPending}
+                          className="gap-2"
+                          data-testid="button-change-password"
+                        >
+                          {passwordMutation.isPending ? (
+                            <LoadingSpinner size="sm" />
+                          ) : (
+                            <Lock className="h-4 w-4" />
+                          )}
+                          Change Password
+                        </Button>
+                      </div>
+                    </form>
+                  </Form>
+                </div>
+              </div>
+            )}
+          </main>
+        </SidebarInset>
+      </div>
+    </SidebarProvider>
+  );
+}

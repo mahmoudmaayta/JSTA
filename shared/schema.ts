@@ -104,6 +104,26 @@ export const licenseRenewals = pgTable("license_renewals", {
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
 
+export const AuditAction = {
+  OFFICE_APPROVED: 'OFFICE_APPROVED',
+  OFFICE_REJECTED: 'OFFICE_REJECTED',
+  RENEWAL_APPROVED_FOR_DOWNLOAD: 'RENEWAL_APPROVED_FOR_DOWNLOAD',
+  RENEWAL_FINAL_APPROVED: 'RENEWAL_FINAL_APPROVED',
+  RENEWAL_REJECTED: 'RENEWAL_REJECTED',
+} as const;
+
+export type AuditActionType = typeof AuditAction[keyof typeof AuditAction];
+
+export const auditLogs = pgTable("audit_logs", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer("user_id").notNull(),
+  action: text("action").notNull().$type<AuditActionType>(),
+  targetType: text("target_type").notNull(),
+  targetId: integer("target_id").notNull(),
+  details: jsonb("details").$type<Record<string, any>>(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true
@@ -132,6 +152,11 @@ export const insertLicenseRenewalSchema = createInsertSchema(licenseRenewals).om
   status: true,
   ministryDocumentPath: true,
   adminComment: true
+});
+
+export const insertAuditLogSchema = createInsertSchema(auditLogs).omit({
+  id: true,
+  createdAt: true
 });
 
 export const registerSchema = z.object({
@@ -181,6 +206,21 @@ export const branchSchema = z.object({
   fax: z.string().optional()
 });
 
+export const officeUpdateSchema = z.object({
+  mainCity: z.string().optional(),
+  mainArea: z.string().optional(),
+  mainStreet: z.string().optional(),
+  mainBuildingNumber: z.string().optional(),
+  phone: z.string().optional(),
+  mobile: z.string().optional(),
+  fax: z.string().optional(),
+  website: z.string().optional(),
+  mainEmail: z.string().email().optional().or(z.literal("")),
+  extraEmail: z.string().email().optional().or(z.literal("")),
+  poBox: z.string().optional(),
+  postalCode: z.string().optional()
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertOffice = z.infer<typeof insertOfficeSchema>;
@@ -195,3 +235,6 @@ export type RegisterForm = z.infer<typeof registerSchema>;
 export type LoginForm = z.infer<typeof loginSchema>;
 export type OfficeInfoForm = z.infer<typeof officeInfoSchema>;
 export type BranchForm = z.infer<typeof branchSchema>;
+export type OfficeUpdateForm = z.infer<typeof officeUpdateSchema>;
+export type InsertAuditLog = z.infer<typeof insertAuditLogSchema>;
+export type AuditLog = typeof auditLogs.$inferSelect;
