@@ -341,7 +341,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/office/renewals/:id", ensureOffice, async (req, res) => {
     const user = (req as any).user;
-    const renewal = await storage.getRenewal(parseInt(req.params.id));
+    const renewalId = parseInt(req.params.id);
+    
+    if (isNaN(renewalId)) {
+      return res.status(400).json({ message: "Invalid renewal ID" });
+    }
+    
+    const renewal = await storage.getRenewal(renewalId);
     
     if (!renewal || renewal.officeId !== user.officeId) {
       return res.status(404).json({ message: "Renewal not found" });
@@ -376,7 +382,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/office/renewals/:id/download", ensureOffice, async (req, res) => {
     const user = (req as any).user;
-    const renewal = await storage.getRenewal(parseInt(req.params.id));
+    const renewalId = parseInt(req.params.id);
+    
+    if (isNaN(renewalId)) {
+      return res.status(400).json({ message: "Invalid renewal ID" });
+    }
+    
+    const renewal = await storage.getRenewal(renewalId);
 
     if (!renewal || renewal.officeId !== user.officeId) {
       return res.status(404).json({ message: "Renewal not found" });
@@ -401,7 +413,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/office/renewals/:id/upload-ministry-doc", ensureOffice, ministryUpload.single("document"), async (req, res) => {
     const user = (req as any).user;
-    const renewal = await storage.getRenewal(parseInt(req.params.id));
+    const renewalId = parseInt(req.params.id);
+    
+    if (isNaN(renewalId)) {
+      return res.status(400).json({ message: "Invalid renewal ID" });
+    }
+    
+    const renewal = await storage.getRenewal(renewalId);
 
     if (!renewal || renewal.officeId !== user.officeId) {
       return res.status(404).json({ message: "Renewal not found" });
@@ -460,7 +478,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/admin/offices/:id", ensureAdmin, async (req, res) => {
-    const office = await storage.getOffice(parseInt(req.params.id));
+    const officeId = parseInt(req.params.id);
+    if (isNaN(officeId)) {
+      return res.status(400).json({ message: "Invalid office ID" });
+    }
+    
+    const office = await storage.getOffice(officeId);
     if (!office) {
       return res.status(404).json({ message: "Office not found" });
     }
@@ -473,7 +496,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/admin/offices/:id/approve", ensureAdmin, async (req, res) => {
     const user = (req as any).user;
-    const office = await storage.getOffice(parseInt(req.params.id));
+    const officeId = parseInt(req.params.id);
+    if (isNaN(officeId)) {
+      return res.status(400).json({ message: "Invalid office ID" });
+    }
+    
+    const office = await storage.getOffice(officeId);
     if (!office) {
       return res.status(404).json({ message: "Office not found" });
     }
@@ -495,7 +523,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/admin/offices/:id/reject", ensureAdmin, async (req, res) => {
     const user = (req as any).user;
-    const office = await storage.getOffice(parseInt(req.params.id));
+    const officeId = parseInt(req.params.id);
+    if (isNaN(officeId)) {
+      return res.status(400).json({ message: "Invalid office ID" });
+    }
+    
+    const office = await storage.getOffice(officeId);
     if (!office) {
       return res.status(404).json({ message: "Office not found" });
     }
@@ -537,7 +570,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/admin/renewals/:id", ensureAdmin, async (req, res) => {
-    const renewal = await storage.getRenewal(parseInt(req.params.id));
+    const renewalId = parseInt(req.params.id);
+    if (isNaN(renewalId)) {
+      return res.status(400).json({ message: "Invalid renewal ID" });
+    }
+    
+    const renewal = await storage.getRenewal(renewalId);
     if (!renewal) {
       return res.status(404).json({ message: "Renewal not found" });
     }
@@ -549,7 +587,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/admin/renewals/:id/approve-download", ensureAdmin, async (req, res) => {
     const user = (req as any).user;
-    const renewal = await storage.getRenewal(parseInt(req.params.id));
+    const renewalId = parseInt(req.params.id);
+    if (isNaN(renewalId)) {
+      return res.status(400).json({ message: "Invalid renewal ID" });
+    }
+    
+    const renewal = await storage.getRenewal(renewalId);
     if (!renewal) {
       return res.status(404).json({ message: "Renewal not found" });
     }
@@ -573,7 +616,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/admin/renewals/:id/final-approve", ensureAdmin, async (req, res) => {
     const user = (req as any).user;
-    const renewal = await storage.getRenewal(parseInt(req.params.id));
+    const renewalId = parseInt(req.params.id);
+    if (isNaN(renewalId)) {
+      return res.status(400).json({ message: "Invalid renewal ID" });
+    }
+    
+    const renewal = await storage.getRenewal(renewalId);
     if (!renewal) {
       return res.status(404).json({ message: "Renewal not found" });
     }
@@ -597,7 +645,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/admin/renewals/:id/reject", ensureAdmin, async (req, res) => {
     const user = (req as any).user;
-    const renewal = await storage.getRenewal(parseInt(req.params.id));
+    const renewalId = parseInt(req.params.id);
+    if (isNaN(renewalId)) {
+      return res.status(400).json({ message: "Invalid renewal ID" });
+    }
+    
+    const renewal = await storage.getRenewal(renewalId);
     if (!renewal) {
       return res.status(404).json({ message: "Renewal not found" });
     }
@@ -621,7 +674,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/documents/:id/download", ensureAuthenticated, async (req, res) => {
-    const document = await storage.getDocument(parseInt(req.params.id));
+    const docId = parseInt(req.params.id);
+    if (isNaN(docId)) {
+      return res.status(400).json({ message: "Invalid document ID" });
+    }
+    
+    const document = await storage.getDocument(docId);
     if (!document) {
       return res.status(404).json({ message: "Document not found" });
     }
@@ -639,7 +697,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/documents/:id/preview", ensureAuthenticated, async (req, res) => {
-    const document = await storage.getDocument(parseInt(req.params.id));
+    const docId = parseInt(req.params.id);
+    if (isNaN(docId)) {
+      return res.status(400).json({ message: "Invalid document ID" });
+    }
+    
+    const document = await storage.getDocument(docId);
     if (!document) {
       return res.status(404).json({ message: "Document not found" });
     }
@@ -673,7 +736,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/documents/ministry/:renewalId/download", ensureAuthenticated, async (req, res) => {
-    const renewal = await storage.getRenewal(parseInt(req.params.renewalId));
+    const renewalId = parseInt(req.params.renewalId);
+    if (isNaN(renewalId)) {
+      return res.status(400).json({ message: "Invalid renewal ID" });
+    }
+    
+    const renewal = await storage.getRenewal(renewalId);
     if (!renewal || !renewal.ministryDocumentPath) {
       return res.status(404).json({ message: "Ministry document not found" });
     }
