@@ -14,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useTranslation } from "@/lib/i18n";
 import { format } from "date-fns";
 import { ChevronLeft, ChevronRight, History, Building2, RefreshCw, CheckCircle, XCircle, Download, FileCheck } from "lucide-react";
 import type { AuditLog } from "@shared/schema";
@@ -36,15 +37,16 @@ const actionColors: Record<string, string> = {
   RENEWAL_REJECTED: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
 };
 
-const actionLabels: Record<string, string> = {
-  OFFICE_APPROVED: "Office Approved",
-  OFFICE_REJECTED: "Office Rejected",
-  RENEWAL_APPROVED_FOR_DOWNLOAD: "Renewal Approved for Download",
-  RENEWAL_FINAL_APPROVED: "Renewal Final Approved",
-  RENEWAL_REJECTED: "Renewal Rejected",
-};
-
 export default function AdminAuditLogs() {
+  const { t } = useTranslation();
+
+  const actionLabels: Record<string, string> = {
+    OFFICE_APPROVED: t("auditLogs.officeApproved"),
+    OFFICE_REJECTED: t("auditLogs.officeRejected"),
+    RENEWAL_APPROVED_FOR_DOWNLOAD: t("auditLogs.renewalApprovedForDownload"),
+    RENEWAL_FINAL_APPROVED: t("auditLogs.renewalFinalApproved"),
+    RENEWAL_REJECTED: t("auditLogs.renewalRejected"),
+  };
   const [offset, setOffset] = useState(0);
   const limit = 20;
 
@@ -78,13 +80,13 @@ export default function AdminAuditLogs() {
 
     const items = [];
     if (details.officeName) {
-      items.push(`Office: ${details.officeName}`);
+      items.push(`${t("auditLogs.office")}: ${details.officeName}`);
     }
     if (details.year) {
-      items.push(`Year: ${details.year}`);
+      items.push(`${t("auditLogs.year")}: ${details.year}`);
     }
     if (details.comment) {
-      items.push(`Comment: ${details.comment}`);
+      items.push(`${t("auditLogs.comment")}: ${details.comment}`);
     }
     
     return items.join(" | ");
@@ -103,7 +105,7 @@ export default function AdminAuditLogs() {
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-toggle" />
             <div className="flex-1">
-              <h1 className="text-lg font-semibold">Audit Logs</h1>
+              <h1 className="text-lg font-semibold">{t("auditLogs.title")}</h1>
             </div>
             <Button
               variant="outline"
@@ -112,16 +114,16 @@ export default function AdminAuditLogs() {
               data-testid="button-refresh"
             >
               <RefreshCw className="h-4 w-4 mr-2" />
-              Refresh
+              {t("auditLogs.refresh")}
             </Button>
           </header>
 
           <main className="flex-1 p-4 sm:p-6">
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-bold" data-testid="text-page-title">Activity History</h2>
+                <h2 className="text-2xl font-bold" data-testid="text-page-title">{t("auditLogs.activityHistory")}</h2>
                 <p className="text-muted-foreground">
-                  Track all administrative actions and status changes
+                  {t("auditLogs.description")}
                 </p>
               </div>
 
@@ -139,18 +141,18 @@ export default function AdminAuditLogs() {
                         <Table>
                           <TableHeader>
                             <TableRow>
-                              <TableHead>Action</TableHead>
-                              <TableHead>Admin User</TableHead>
-                              <TableHead>Target</TableHead>
-                              <TableHead className="hidden md:table-cell">Details</TableHead>
-                              <TableHead>Date & Time</TableHead>
+                              <TableHead>{t("auditLogs.action")}</TableHead>
+                              <TableHead>{t("auditLogs.adminUser")}</TableHead>
+                              <TableHead>{t("auditLogs.target")}</TableHead>
+                              <TableHead className="hidden md:table-cell">{t("auditLogs.details")}</TableHead>
+                              <TableHead>{t("auditLogs.dateTime")}</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
                             {data?.logs.length === 0 ? (
                               <TableRow>
                                 <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                                  No audit logs found
+                                  {t("auditLogs.noLogs")}
                                 </TableCell>
                               </TableRow>
                             ) : (
@@ -180,7 +182,7 @@ export default function AdminAuditLogs() {
                                           <RefreshCw className="h-4 w-4 text-muted-foreground" />
                                         )}
                                         <span className="text-sm">
-                                          {log.targetType === "office" ? "Office" : "Renewal"} #{log.targetId}
+                                          {log.targetType === "office" ? t("auditLogs.office") : t("auditLogs.renewal")} #{log.targetId}
                                         </span>
                                       </div>
                                     </TableCell>
@@ -201,7 +203,7 @@ export default function AdminAuditLogs() {
                       {totalPages > 1 && (
                         <div className="flex items-center justify-between mt-4 pt-4 border-t">
                           <p className="text-sm text-muted-foreground">
-                            Showing {offset + 1} to {Math.min(offset + limit, data?.total || 0)} of {data?.total || 0} entries
+                            {t("auditLogs.showing", { from: offset + 1, to: Math.min(offset + limit, data?.total || 0), total: data?.total || 0 })}
                           </p>
                           <div className="flex items-center gap-2">
                             <Button
@@ -212,10 +214,10 @@ export default function AdminAuditLogs() {
                               data-testid="button-prev-page"
                             >
                               <ChevronLeft className="h-4 w-4" />
-                              Previous
+                              {t("common.previous")}
                             </Button>
                             <span className="text-sm text-muted-foreground">
-                              Page {currentPage} of {totalPages}
+                              {t("auditLogs.pageOf", { current: currentPage, total: totalPages })}
                             </span>
                             <Button
                               variant="outline"
@@ -224,7 +226,7 @@ export default function AdminAuditLogs() {
                               disabled={!data || offset + limit >= data.total}
                               data-testid="button-next-page"
                             >
-                              Next
+                              {t("common.next")}
                               <ChevronRight className="h-4 w-4" />
                             </Button>
                           </div>

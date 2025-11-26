@@ -6,18 +6,20 @@ import { Button } from "@/components/ui/button";
 import { LoadingPage } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Badge } from "@/components/ui/badge";
+import { useTranslation } from "@/lib/i18n";
 import type { Document } from "@shared/schema";
 import { FileText, Download, Calendar, FolderOpen } from "lucide-react";
 
-const CATEGORY_LABELS: Record<string, string> = {
-  INITIAL_FIRST_FORMS: "Membership & Info Forms",
-  INITIAL_SECOND_LEGAL: "Legal / Commercial Documents",
-  INITIAL_THIRD_PERSONAL: "Personal Documents",
-  RENEWAL_TEMPLATE: "Renewal Template",
-  MINISTRY_APPROVED_DOC: "Ministry Approved Document",
-};
-
 export default function OfficeDocuments() {
+  const { t } = useTranslation();
+
+  const CATEGORY_LABELS: Record<string, string> = {
+    INITIAL_FIRST_FORMS: t("documents.categoryMembership"),
+    INITIAL_SECOND_LEGAL: t("documents.categoryLegal"),
+    INITIAL_THIRD_PERSONAL: t("documents.categoryPersonal"),
+    RENEWAL_TEMPLATE: t("documents.categoryRenewalTemplate"),
+    MINISTRY_APPROVED_DOC: t("documents.categoryMinistryApproved"),
+  };
   const { data: documents, isLoading } = useQuery<Document[]>({
     queryKey: ["/api/office/documents"],
   });
@@ -46,19 +48,19 @@ export default function OfficeDocuments() {
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-toggle" />
             <div className="flex-1">
-              <h1 className="text-lg font-semibold">Documents</h1>
+              <h1 className="text-lg font-semibold">{t("documents.title")}</h1>
             </div>
           </header>
 
           <main className="flex-1 p-4 sm:p-6">
             {isLoading ? (
-              <LoadingPage message="Loading documents..." />
+              <LoadingPage message={t("documents.loading")} />
             ) : categories.length > 0 ? (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold">Your Documents</h2>
+                  <h2 className="text-2xl font-bold">{t("documents.yourDocuments")}</h2>
                   <p className="text-muted-foreground">
-                    All documents uploaded for your office registration and renewals
+                    {t("documents.description")}
                   </p>
                 </div>
 
@@ -70,7 +72,7 @@ export default function OfficeDocuments() {
                         {CATEGORY_LABELS[category] || category}
                       </CardTitle>
                       <CardDescription>
-                        {groupedDocuments[category].length} document(s)
+                        {groupedDocuments[category].length} {t("documents.files")}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -91,7 +93,7 @@ export default function OfficeDocuments() {
                                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                                   <Calendar className="h-3 w-3" />
                                   <span>
-                                    Uploaded {new Date(doc.uploadedAt).toLocaleDateString()}
+                                    {t("documents.uploaded")} {new Date(doc.uploadedAt).toLocaleDateString()}
                                   </span>
                                 </div>
                               </div>
@@ -102,7 +104,7 @@ export default function OfficeDocuments() {
                             >
                               <Button variant="outline" size="sm" className="gap-2">
                                 <Download className="h-4 w-4" />
-                                Download
+                                {t("common.download")}
                               </Button>
                             </a>
                           </div>
@@ -115,8 +117,8 @@ export default function OfficeDocuments() {
             ) : (
               <EmptyState
                 icon={FileText}
-                title="No Documents"
-                description="You haven't uploaded any documents yet."
+                title={t("documents.noDocuments")}
+                description={t("documents.noDocumentsDesc")}
               />
             )}
           </main>
