@@ -12,6 +12,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useLanguage } from "@/lib/i18n";
 import type { LicenseRenewal, Office } from "@shared/schema";
 import {
   ArrowLeft,
@@ -34,6 +35,7 @@ export default function AdminRenewalDetail() {
   const params = useParams();
   const renewalId = params.id;
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
   const [rejectComment, setRejectComment] = useState("");
 
@@ -46,7 +48,7 @@ export default function AdminRenewalDetail() {
       const response = await apiRequest("POST", `/api/admin/renewals/${renewalId}/approve-download`);
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || "Failed to approve renewal");
+        throw new Error(error.message || t("adminRenewalDetail.approveFailed"));
       }
       return response.json();
     },
@@ -55,13 +57,13 @@ export default function AdminRenewalDetail() {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/renewals"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/stats"] });
       toast({
-        title: "Renewal Approved",
-        description: "The office can now download the renewal document.",
+        title: t("adminRenewalDetail.renewalApproved"),
+        description: t("adminRenewalDetail.renewalApprovedDesc"),
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Error",
+        title: t("common.error"),
         description: error.message,
         variant: "destructive",
       });
@@ -73,7 +75,7 @@ export default function AdminRenewalDetail() {
       const response = await apiRequest("POST", `/api/admin/renewals/${renewalId}/final-approve`);
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || "Failed to final approve renewal");
+        throw new Error(error.message || t("adminRenewalDetail.finalApproveFailed"));
       }
       return response.json();
     },
@@ -82,13 +84,13 @@ export default function AdminRenewalDetail() {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/renewals"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/stats"] });
       toast({
-        title: "Renewal Fully Approved",
-        description: "The license renewal has been fully approved.",
+        title: t("adminRenewalDetail.renewalFullyApproved"),
+        description: t("adminRenewalDetail.renewalFullyApprovedDesc"),
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Error",
+        title: t("common.error"),
         description: error.message,
         variant: "destructive",
       });
@@ -100,7 +102,7 @@ export default function AdminRenewalDetail() {
       const response = await apiRequest("POST", `/api/admin/renewals/${renewalId}/reject`, { comment });
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || "Failed to reject renewal");
+        throw new Error(error.message || t("adminRenewalDetail.rejectFailed"));
       }
       return response.json();
     },
@@ -110,13 +112,13 @@ export default function AdminRenewalDetail() {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/stats"] });
       setRejectDialogOpen(false);
       toast({
-        title: "Renewal Rejected",
-        description: "The license renewal has been rejected.",
+        title: t("adminRenewalDetail.renewalRejected"),
+        description: t("adminRenewalDetail.renewalRejectedDesc"),
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Error",
+        title: t("common.error"),
         description: error.message,
         variant: "destructive",
       });
@@ -147,7 +149,7 @@ export default function AdminRenewalDetail() {
               ) : (
                 <CheckCircle2 className="h-4 w-4" />
               )}
-              Approve for Download
+              {t("adminRenewalDetail.approveForDownload")}
             </Button>
             <Button
               variant="destructive"
@@ -156,7 +158,7 @@ export default function AdminRenewalDetail() {
               data-testid="button-reject"
             >
               <XCircle className="h-4 w-4" />
-              Reject
+              {t("adminRenewalDetail.reject")}
             </Button>
           </div>
         );
@@ -174,7 +176,7 @@ export default function AdminRenewalDetail() {
               ) : (
                 <CheckCircle2 className="h-4 w-4" />
               )}
-              Final Approve
+              {t("adminRenewalDetail.finalApprove")}
             </Button>
             <Button
               variant="destructive"
@@ -183,7 +185,7 @@ export default function AdminRenewalDetail() {
               data-testid="button-reject"
             >
               <XCircle className="h-4 w-4" />
-              Reject
+              {t("adminRenewalDetail.reject")}
             </Button>
           </div>
         );
@@ -202,14 +204,14 @@ export default function AdminRenewalDetail() {
             <Link href="/admin/renewals">
               <Button variant="ghost" size="sm" className="gap-2" data-testid="button-back">
                 <ArrowLeft className="h-4 w-4" />
-                Back to Renewals
+                {t("adminRenewalDetail.backToRenewals")}
               </Button>
             </Link>
           </header>
 
           <main className="flex-1 p-4 sm:p-6">
             {isLoading ? (
-              <LoadingPage message="Loading renewal details..." />
+              <LoadingPage message={t("adminRenewalDetail.loading")} />
             ) : data?.renewal ? (
               <div className="space-y-6 max-w-4xl mx-auto">
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -218,9 +220,9 @@ export default function AdminRenewalDetail() {
                       <Calendar className="h-7 w-7 text-primary" />
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold">Renewal {data.renewal.year}</h2>
+                      <h2 className="text-2xl font-bold">{t("adminRenewalDetail.renewalTitle")} {data.renewal.year}</h2>
                       <p className="text-muted-foreground">
-                        {data.office?.tradeNameAr || `Office #${data.renewal.officeId}`}
+                        {data.office?.tradeNameAr || `${t("adminRenewals.officePrefix")} #${data.renewal.officeId}`}
                       </p>
                     </div>
                   </div>
@@ -233,7 +235,7 @@ export default function AdminRenewalDetail() {
                 {data.renewal.status === "REJECTED" && data.renewal.adminComment && (
                   <Alert variant="destructive">
                     <XCircle className="h-4 w-4" />
-                    <AlertTitle>Renewal Rejected</AlertTitle>
+                    <AlertTitle>{t("adminRenewalDetail.renewalRejected")}</AlertTitle>
                     <AlertDescription>{data.renewal.adminComment}</AlertDescription>
                   </Alert>
                 )}
@@ -243,17 +245,17 @@ export default function AdminRenewalDetail() {
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-indigo-700 dark:text-indigo-400">
                         <FileText className="h-5 w-5" />
-                        Ministry Document Uploaded
+                        {t("adminRenewalDetail.ministryDocUploaded")}
                       </CardTitle>
                       <CardDescription>
-                        The office has uploaded their Ministry-approved document. Review and provide final approval.
+                        {t("adminRenewalDetail.ministryDocUploadedDesc")}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <a href={`/api/documents/ministry/${data.renewal.id}/download`} data-testid="button-download-ministry">
                         <Button variant="outline" className="gap-2">
                           <Download className="h-4 w-4" />
-                          Download Ministry Document
+                          {t("adminRenewalDetail.downloadMinistryDoc")}
                         </Button>
                       </a>
                     </CardContent>
@@ -264,10 +266,10 @@ export default function AdminRenewalDetail() {
                   <Alert className="border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                     <AlertTitle className="text-emerald-700 dark:text-emerald-400">
-                      Renewal Fully Approved
+                      {t("adminRenewalDetail.renewalFullyApproved")}
                     </AlertTitle>
                     <AlertDescription className="text-emerald-600 dark:text-emerald-300">
-                      This license renewal has been fully approved.
+                      {t("adminRenewalDetail.renewalFullyApprovedDesc")}
                     </AlertDescription>
                   </Alert>
                 )}
@@ -275,30 +277,30 @@ export default function AdminRenewalDetail() {
                 <div className="grid gap-6 lg:grid-cols-2">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Renewal Details</CardTitle>
+                      <CardTitle className="text-lg">{t("adminRenewalDetail.renewalDetails")}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <dl className="space-y-3 text-sm">
                         <div className="flex justify-between">
-                          <dt className="text-muted-foreground">Renewal ID</dt>
+                          <dt className="text-muted-foreground">{t("adminRenewalDetail.renewalId")}</dt>
                           <dd className="font-mono">{data.renewal.id}</dd>
                         </div>
                         <div className="flex justify-between">
-                          <dt className="text-muted-foreground">Year</dt>
+                          <dt className="text-muted-foreground">{t("adminRenewalDetail.year")}</dt>
                           <dd className="font-medium">{data.renewal.year}</dd>
                         </div>
                         <div className="flex justify-between">
-                          <dt className="text-muted-foreground">Status</dt>
+                          <dt className="text-muted-foreground">{t("adminRenewalDetail.status")}</dt>
                           <dd>
                             <StatusBadge status={data.renewal.status as any} size="sm" />
                           </dd>
                         </div>
                         <div className="flex justify-between">
-                          <dt className="text-muted-foreground">Submitted</dt>
+                          <dt className="text-muted-foreground">{t("adminRenewalDetail.submitted")}</dt>
                           <dd>{new Date(data.renewal.createdAt).toLocaleString()}</dd>
                         </div>
                         <div className="flex justify-between">
-                          <dt className="text-muted-foreground">Last Updated</dt>
+                          <dt className="text-muted-foreground">{t("adminRenewalDetail.lastUpdated")}</dt>
                           <dd>{new Date(data.renewal.updatedAt).toLocaleString()}</dd>
                         </div>
                       </dl>
@@ -309,34 +311,34 @@ export default function AdminRenewalDetail() {
                     <CardHeader>
                       <CardTitle className="text-lg flex items-center gap-2">
                         <Building className="h-5 w-5" />
-                        Office Information
+                        {t("adminRenewalDetail.officeInfo")}
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <dl className="space-y-3 text-sm">
                         <div className="flex justify-between">
-                          <dt className="text-muted-foreground">Office ID</dt>
+                          <dt className="text-muted-foreground">{t("adminRenewalDetail.officeId")}</dt>
                           <dd className="font-mono">{data.office?.id}</dd>
                         </div>
                         <div className="flex justify-between">
-                          <dt className="text-muted-foreground">Trade Name</dt>
+                          <dt className="text-muted-foreground">{t("adminRenewalDetail.tradeName")}</dt>
                           <dd className="font-medium text-right">{data.office?.tradeNameAr}</dd>
                         </div>
                         {data.office?.mainCity && (
                           <div className="flex justify-between">
-                            <dt className="text-muted-foreground">City</dt>
+                            <dt className="text-muted-foreground">{t("adminRenewalDetail.city")}</dt>
                             <dd className="text-right">{data.office.mainCity}</dd>
                           </div>
                         )}
                         {data.office?.phone && (
                           <div className="flex justify-between">
-                            <dt className="text-muted-foreground">Phone</dt>
+                            <dt className="text-muted-foreground">{t("adminRenewalDetail.phone")}</dt>
                             <dd className="text-right">{data.office.phone}</dd>
                           </div>
                         )}
                         {data.office?.mainEmail && (
                           <div className="flex justify-between">
-                            <dt className="text-muted-foreground">Email</dt>
+                            <dt className="text-muted-foreground">{t("adminRenewalDetail.email")}</dt>
                             <dd className="text-right truncate max-w-[150px]">{data.office.mainEmail}</dd>
                           </div>
                         )}
@@ -345,7 +347,7 @@ export default function AdminRenewalDetail() {
                         <Link href={`/admin/offices/${data.office?.id}`}>
                           <Button variant="outline" size="sm" className="w-full gap-2" data-testid="link-office-detail">
                             <Building className="h-4 w-4" />
-                            View Full Office Details
+                            {t("adminRenewalDetail.viewFullOffice")}
                           </Button>
                         </Link>
                       </div>
@@ -356,12 +358,12 @@ export default function AdminRenewalDetail() {
             ) : (
               <div className="text-center py-12">
                 <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold">Renewal Not Found</h3>
+                <h3 className="text-lg font-semibold">{t("adminRenewalDetail.notFound")}</h3>
                 <p className="text-muted-foreground mb-4">
-                  The renewal request you're looking for doesn't exist.
+                  {t("adminRenewalDetail.notFoundDesc")}
                 </p>
                 <Link href="/admin/renewals">
-                  <Button variant="outline">Back to Renewals</Button>
+                  <Button variant="outline">{t("adminRenewalDetail.backToRenewals")}</Button>
                 </Link>
               </div>
             )}
@@ -372,13 +374,13 @@ export default function AdminRenewalDetail() {
       <Dialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Reject Renewal Request</DialogTitle>
+            <DialogTitle>{t("adminRenewalDetail.rejectDialogTitle")}</DialogTitle>
             <DialogDescription>
-              Please provide a reason for rejecting this renewal request. This will be sent to the office.
+              {t("adminRenewalDetail.rejectDialogDesc")}
             </DialogDescription>
           </DialogHeader>
           <Textarea
-            placeholder="Enter rejection reason..."
+            placeholder={t("adminRenewalDetail.enterRejectionReason")}
             value={rejectComment}
             onChange={(e) => setRejectComment(e.target.value)}
             className="min-h-[100px]"
@@ -386,7 +388,7 @@ export default function AdminRenewalDetail() {
           />
           <DialogFooter>
             <Button variant="outline" onClick={() => setRejectDialogOpen(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               variant="destructive"
@@ -394,7 +396,7 @@ export default function AdminRenewalDetail() {
               disabled={rejectMutation.isPending}
               data-testid="button-confirm-reject"
             >
-              {rejectMutation.isPending ? <LoadingSpinner size="sm" /> : "Reject Renewal"}
+              {rejectMutation.isPending ? <LoadingSpinner size="sm" /> : t("adminRenewalDetail.rejectRenewal")}
             </Button>
           </DialogFooter>
         </DialogContent>

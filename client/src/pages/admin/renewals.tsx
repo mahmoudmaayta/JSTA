@@ -11,6 +11,7 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { LoadingPage } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useLanguage } from "@/lib/i18n";
 import type { LicenseRenewal, Office } from "@shared/schema";
 import { FileCheck, Search, Eye, FolderOpen } from "lucide-react";
 
@@ -21,6 +22,7 @@ interface RenewalWithOffice extends LicenseRenewal {
 export default function AdminRenewals() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const { t } = useLanguage();
 
   const { data: renewals, isLoading } = useQuery<RenewalWithOffice[]>({
     queryKey: ["/api/admin/renewals"],
@@ -47,19 +49,19 @@ export default function AdminRenewals() {
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-toggle" />
             <div className="flex-1">
-              <h1 className="text-lg font-semibold">Renewals</h1>
+              <h1 className="text-lg font-semibold">{t("admin.renewals")}</h1>
             </div>
           </header>
 
           <main className="flex-1 p-4 sm:p-6">
             {isLoading ? (
-              <LoadingPage message="Loading renewals..." />
+              <LoadingPage message={t("adminRenewals.loading")} />
             ) : (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold">License Renewals</h2>
+                  <h2 className="text-2xl font-bold">{t("adminRenewals.title")}</h2>
                   <p className="text-muted-foreground">
-                    Review and process license renewal requests
+                    {t("admin.manageRenewals")}
                   </p>
                 </div>
 
@@ -69,7 +71,7 @@ export default function AdminRenewals() {
                       <div className="relative flex-1">
                         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
-                          placeholder="Search by office name or year..."
+                          placeholder={t("adminRenewals.searchPlaceholder")}
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           className="pl-9"
@@ -78,16 +80,16 @@ export default function AdminRenewals() {
                       </div>
                       <Select value={statusFilter} onValueChange={setStatusFilter}>
                         <SelectTrigger className="w-full sm:w-[200px]" data-testid="select-status">
-                          <SelectValue placeholder="Filter by status" />
+                          <SelectValue placeholder={t("admin.filterByStatus")} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="all">All Statuses</SelectItem>
-                          <SelectItem value="SUBMITTED">Submitted</SelectItem>
-                          <SelectItem value="UNDER_REVIEW">Under Review</SelectItem>
-                          <SelectItem value="APPROVED_FOR_DOWNLOAD">Approved for Download</SelectItem>
-                          <SelectItem value="MINISTRY_DOC_UPLOADED">Ministry Doc Uploaded</SelectItem>
-                          <SelectItem value="FINAL_APPROVED">Final Approved</SelectItem>
-                          <SelectItem value="REJECTED">Rejected</SelectItem>
+                          <SelectItem value="all">{t("admin.allStatuses")}</SelectItem>
+                          <SelectItem value="SUBMITTED">{t("status.submitted")}</SelectItem>
+                          <SelectItem value="UNDER_REVIEW">{t("status.inReview")}</SelectItem>
+                          <SelectItem value="APPROVED_FOR_DOWNLOAD">{t("status.approvedForDownload")}</SelectItem>
+                          <SelectItem value="MINISTRY_DOC_UPLOADED">{t("adminRenewals.ministryDocUploaded")}</SelectItem>
+                          <SelectItem value="FINAL_APPROVED">{t("status.finalApproved")}</SelectItem>
+                          <SelectItem value="REJECTED">{t("status.rejected")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -98,12 +100,12 @@ export default function AdminRenewals() {
                         <Table>
                           <TableHeader>
                             <TableRow>
-                              <TableHead>ID</TableHead>
-                              <TableHead>Office</TableHead>
-                              <TableHead>Year</TableHead>
-                              <TableHead className="hidden md:table-cell">Submitted</TableHead>
-                              <TableHead>Status</TableHead>
-                              <TableHead className="text-right">Actions</TableHead>
+                              <TableHead>{t("adminRenewals.id")}</TableHead>
+                              <TableHead>{t("adminRenewals.office")}</TableHead>
+                              <TableHead>{t("adminRenewals.year")}</TableHead>
+                              <TableHead className="hidden md:table-cell">{t("adminRenewals.submitted")}</TableHead>
+                              <TableHead>{t("adminRenewals.status")}</TableHead>
+                              <TableHead className="text-right">{t("adminRenewals.actions")}</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -115,7 +117,7 @@ export default function AdminRenewals() {
                                 <TableCell>
                                   <div>
                                     <p className="font-medium">
-                                      {renewal.office?.tradeNameAr || `Office #${renewal.officeId}`}
+                                      {renewal.office?.tradeNameAr || `${t("adminRenewals.officePrefix")} #${renewal.officeId}`}
                                     </p>
                                   </div>
                                 </TableCell>
@@ -130,7 +132,7 @@ export default function AdminRenewals() {
                                   <Link href={`/admin/renewals/${renewal.id}`}>
                                     <Button variant="ghost" size="sm" className="gap-1" data-testid={`button-view-${renewal.id}`}>
                                       <Eye className="h-4 w-4" />
-                                      View
+                                      {t("common.view")}
                                     </Button>
                                   </Link>
                                 </TableCell>
@@ -142,11 +144,11 @@ export default function AdminRenewals() {
                     ) : (
                       <EmptyState
                         icon={FolderOpen}
-                        title="No Renewals Found"
+                        title={t("adminRenewals.noRenewals")}
                         description={
                           searchQuery || statusFilter !== "all"
-                            ? "No renewals match your search criteria."
-                            : "No license renewal requests have been submitted yet."
+                            ? t("adminRenewals.noMatchingRenewals")
+                            : t("adminRenewals.noSubmittedRenewals")
                         }
                       />
                     )}
