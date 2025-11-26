@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
+import { useTranslation } from "@/lib/i18n";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import { OfficeSidebar } from "@/components/layout/office-sidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { LoadingPage, LoadingSpinner } from "@/components/ui/loading-spinner";
+import { LoadingPage } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
 import type { Office, LicenseRenewal, Document } from "@shared/schema";
 import {
@@ -14,7 +15,6 @@ import {
   FileText,
   RefreshCw,
   Download,
-  Upload,
   Calendar,
   Clock,
   CheckCircle2,
@@ -26,6 +26,7 @@ import {
 export default function OfficeDashboard() {
   const { user } = useAuth();
   const [, setLocation] = useLocation();
+  const { t } = useTranslation();
 
   const { data: office, isLoading: officeLoading } = useQuery<Office>({
     queryKey: ["/api/office/profile"],
@@ -65,22 +66,22 @@ export default function OfficeDashboard() {
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-toggle" />
             <div className="flex-1">
-              <h1 className="text-lg font-semibold">Dashboard</h1>
+              <h1 className="text-lg font-semibold">{t("navigation.dashboard")}</h1>
             </div>
           </header>
 
           <main className="flex-1 p-4 sm:p-6">
             {isLoading ? (
-              <LoadingPage message="Loading dashboard..." />
+              <LoadingPage message={t("common.loading")} />
             ) : (
               <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
                     <h2 className="text-2xl font-bold" data-testid="text-office-name">
-                      {office?.tradeNameAr || "Welcome"}
+                      {office?.tradeNameAr || t("common.welcome")}
                     </h2>
                     <p className="text-muted-foreground">
-                      Manage your office documents and license renewals
+                      {t("office.manageDescription")}
                     </p>
                   </div>
                   {office && (
@@ -92,13 +93,13 @@ export default function OfficeDashboard() {
                   <Card>
                     <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
                       <CardTitle className="text-sm font-medium text-muted-foreground">
-                        Account Status
+                        {t("office.accountStatus")}
                       </CardTitle>
                       <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold capitalize" data-testid="text-status">
-                        {office?.status?.toLowerCase().replace("_", " ") || "Unknown"}
+                        {office?.status?.toLowerCase().replace("_", " ") || t("common.unknown")}
                       </div>
                     </CardContent>
                   </Card>
@@ -106,7 +107,7 @@ export default function OfficeDashboard() {
                   <Card>
                     <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
                       <CardTitle className="text-sm font-medium text-muted-foreground">
-                        Total Documents
+                        {t("office.totalDocuments")}
                       </CardTitle>
                       <Files className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
@@ -120,7 +121,7 @@ export default function OfficeDashboard() {
                   <Card>
                     <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
                       <CardTitle className="text-sm font-medium text-muted-foreground">
-                        Pending Renewals
+                        {t("admin.pendingRenewals")}
                       </CardTitle>
                       <Clock className="h-4 w-4 text-amber-500" />
                     </CardHeader>
@@ -134,7 +135,7 @@ export default function OfficeDashboard() {
                   <Card>
                     <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
                       <CardTitle className="text-sm font-medium text-muted-foreground">
-                        Approved Renewals
+                        {t("office.approvedRenewals")}
                       </CardTitle>
                       <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                     </CardHeader>
@@ -152,17 +153,17 @@ export default function OfficeDashboard() {
                       <div>
                         <CardTitle className="flex items-center gap-2">
                           <RefreshCw className="h-5 w-5" />
-                          License Renewal
+                          {t("renewal.licenseRenewal")}
                         </CardTitle>
                         <CardDescription>
-                          Request and manage your license renewals
+                          {t("renewal.requestAndManage")}
                         </CardDescription>
                       </div>
                       {!hasActiveRenewal && (
                         <Link href="/office/renewals/new">
                           <Button className="gap-2" data-testid="button-new-renewal">
                             <Plus className="h-4 w-4" />
-                            Request Renewal
+                            {t("renewal.requestRenewal")}
                           </Button>
                         </Link>
                       )}
@@ -181,9 +182,9 @@ export default function OfficeDashboard() {
                                 <Calendar className="h-5 w-5 text-primary" />
                               </div>
                               <div>
-                                <p className="font-medium">Year {renewal.year}</p>
+                                <p className="font-medium">{t("renewal.year")} {renewal.year}</p>
                                 <p className="text-sm text-muted-foreground">
-                                  Submitted {new Date(renewal.createdAt).toLocaleDateString()}
+                                  {t("renewal.submitted")} {new Date(renewal.createdAt).toLocaleDateString()}
                                 </p>
                               </div>
                             </div>
@@ -191,8 +192,8 @@ export default function OfficeDashboard() {
                               <StatusBadge status={renewal.status as any} size="sm" />
                               <Link href={`/office/renewals/${renewal.id}`}>
                                 <Button variant="ghost" size="sm" className="gap-1" data-testid={`link-renewal-${renewal.id}`}>
-                                  View
-                                  <ArrowRight className="h-3 w-3" />
+                                  {t("common.view")}
+                                  <ArrowRight className="h-3 w-3 rtl-flip" />
                                 </Button>
                               </Link>
                             </div>
@@ -201,8 +202,8 @@ export default function OfficeDashboard() {
                         {renewals.length > 3 && (
                           <Link href="/office/renewals">
                             <Button variant="outline" className="w-full gap-2" data-testid="link-all-renewals">
-                              View All Renewals
-                              <ArrowRight className="h-4 w-4" />
+                              {t("renewal.viewAllRenewals")}
+                              <ArrowRight className="h-4 w-4 rtl-flip" />
                             </Button>
                           </Link>
                         )}
@@ -210,10 +211,10 @@ export default function OfficeDashboard() {
                     ) : (
                       <EmptyState
                         icon={RefreshCw}
-                        title="No Renewal Requests"
-                        description="You haven't submitted any license renewal requests yet."
+                        title={t("renewal.noRequests")}
+                        description={t("renewal.noRequestsDesc")}
                         action={!hasActiveRenewal ? {
-                          label: "Request Renewal",
+                          label: t("renewal.requestRenewal"),
                           onClick: () => setLocation("/office/renewals/new"),
                         } : undefined}
                       />
@@ -228,9 +229,9 @@ export default function OfficeDashboard() {
                         <div>
                           <CardTitle className="flex items-center gap-2">
                             <Building2 className="h-5 w-5" />
-                            Office Information
+                            {t("office.officeInformation")}
                           </CardTitle>
-                          <CardDescription>Your registered office details</CardDescription>
+                          <CardDescription>{t("office.registeredDetails")}</CardDescription>
                         </div>
                       </div>
                     </CardHeader>
@@ -238,42 +239,42 @@ export default function OfficeDashboard() {
                       {office ? (
                         <dl className="space-y-3 text-sm">
                           <div className="flex justify-between">
-                            <dt className="text-muted-foreground">Trade Name</dt>
-                            <dd className="font-medium text-right">{office.tradeNameAr}</dd>
+                            <dt className="text-muted-foreground">{t("office.tradeName")}</dt>
+                            <dd className="font-medium text-end">{office.tradeNameAr}</dd>
                           </div>
                           {office.legalNameRegistrar && (
                             <div className="flex justify-between">
-                              <dt className="text-muted-foreground">Legal Name</dt>
-                              <dd className="font-medium text-right">{office.legalNameRegistrar}</dd>
+                              <dt className="text-muted-foreground">{t("office.legalName")}</dt>
+                              <dd className="font-medium text-end">{office.legalNameRegistrar}</dd>
                             </div>
                           )}
                           {office.nationalEstablishmentNumber && (
                             <div className="flex justify-between">
-                              <dt className="text-muted-foreground">Establishment No.</dt>
-                              <dd className="font-medium text-right">{office.nationalEstablishmentNumber}</dd>
+                              <dt className="text-muted-foreground">{t("office.establishmentNo")}</dt>
+                              <dd className="font-medium text-end ltr">{office.nationalEstablishmentNumber}</dd>
                             </div>
                           )}
                           {office.mainCity && (
                             <div className="flex justify-between">
-                              <dt className="text-muted-foreground">City</dt>
-                              <dd className="font-medium text-right">{office.mainCity}</dd>
+                              <dt className="text-muted-foreground">{t("office.city")}</dt>
+                              <dd className="font-medium text-end">{office.mainCity}</dd>
                             </div>
                           )}
                           {office.phone && (
                             <div className="flex justify-between">
-                              <dt className="text-muted-foreground">Phone</dt>
-                              <dd className="font-medium text-right">{office.phone}</dd>
+                              <dt className="text-muted-foreground">{t("office.phone")}</dt>
+                              <dd className="font-medium text-end ltr">{office.phone}</dd>
                             </div>
                           )}
                           {office.mainEmail && (
                             <div className="flex justify-between">
-                              <dt className="text-muted-foreground">Email</dt>
-                              <dd className="font-medium text-right">{office.mainEmail}</dd>
+                              <dt className="text-muted-foreground">{t("auth.email")}</dt>
+                              <dd className="font-medium text-end ltr">{office.mainEmail}</dd>
                             </div>
                           )}
                         </dl>
                       ) : (
-                        <p className="text-muted-foreground text-sm">No office information available.</p>
+                        <p className="text-muted-foreground text-sm">{t("office.noInfoAvailable")}</p>
                       )}
                     </CardContent>
                   </Card>
@@ -284,14 +285,14 @@ export default function OfficeDashboard() {
                         <div>
                           <CardTitle className="flex items-center gap-2">
                             <FileText className="h-5 w-5" />
-                            Recent Documents
+                            {t("office.recentDocuments")}
                           </CardTitle>
-                          <CardDescription>Your uploaded documents</CardDescription>
+                          <CardDescription>{t("office.uploadedDocuments")}</CardDescription>
                         </div>
                         <Link href="/office/documents">
                           <Button variant="outline" size="sm" className="gap-1" data-testid="link-all-documents">
-                            View All
-                            <ArrowRight className="h-3 w-3" />
+                            {t("common.viewAll")}
+                            <ArrowRight className="h-3 w-3 rtl-flip" />
                           </Button>
                         </Link>
                       </div>
@@ -323,8 +324,8 @@ export default function OfficeDashboard() {
                       ) : (
                         <EmptyState
                           icon={FileText}
-                          title="No Documents"
-                          description="No documents have been uploaded yet."
+                          title={t("office.noDocuments")}
+                          description={t("office.noDocumentsDesc")}
                         />
                       )}
                     </CardContent>

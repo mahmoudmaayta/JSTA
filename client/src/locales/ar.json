@@ -7,6 +7,8 @@
     "delete": "حذف",
     "edit": "تعديل",
     "view": "عرض",
+    "viewAll": "عرض الكل",
+    "review": "مراجعة",
     "back": "رجوع",
     "next": "التالي",
     "previous": "السابق",
@@ -35,7 +37,9 @@
     "of": "من",
     "showing": "عرض",
     "to": "إلى",
-    "entries": "سجلات"
+    "entries": "سجلات",
+    "welcome": "مرحباً",
+    "unknown": "غير معروف"
   },
   "auth": {
     "login": "تسجيل الدخول",
@@ -134,13 +138,27 @@
     "editProfile": "تعديل الملف الشخصي",
     "noRenewals": "لا توجد تجديدات",
     "noDocuments": "لا توجد مستندات",
+    "noDocumentsDesc": "لم يتم رفع أي مستندات بعد.",
     "uploadDocument": "رفع مستند",
     "documentName": "اسم المستند",
     "documentType": "نوع المستند",
     "uploadDate": "تاريخ الرفع",
     "fileSize": "حجم الملف",
     "downloadDocument": "تحميل المستند",
-    "deleteDocument": "حذف المستند"
+    "deleteDocument": "حذف المستند",
+    "manageDescription": "إدارة مستندات مكتبك وتجديد التراخيص",
+    "accountStatus": "حالة الحساب",
+    "approvedRenewals": "التجديدات المعتمدة",
+    "officeInformation": "معلومات المكتب",
+    "registeredDetails": "تفاصيل مكتبك المسجلة",
+    "tradeName": "الاسم التجاري",
+    "legalName": "الاسم القانوني",
+    "establishmentNo": "رقم المنشأة",
+    "city": "المدينة",
+    "phone": "الهاتف",
+    "noInfoAvailable": "لا تتوفر معلومات عن المكتب.",
+    "recentDocuments": "المستندات الأخيرة",
+    "uploadedDocuments": "المستندات المرفوعة"
   },
   "renewal": {
     "title": "تجديد الترخيص",
@@ -169,7 +187,14 @@
     "renewalRejected": "تم رفض التجديد",
     "rejectionReason": "سبب الرفض",
     "noActiveRenewal": "لا يوجد طلب تجديد نشط",
-    "createRenewal": "إنشاء طلب تجديد"
+    "createRenewal": "إنشاء طلب تجديد",
+    "licenseRenewal": "تجديد الترخيص",
+    "requestAndManage": "طلب وإدارة تجديد تراخيصك",
+    "requestRenewal": "طلب تجديد",
+    "submitted": "تم التقديم",
+    "viewAllRenewals": "عرض جميع التجديدات",
+    "noRequests": "لا توجد طلبات تجديد",
+    "noRequestsDesc": "لم تقدم أي طلبات تجديد ترخيص بعد."
   },
   "admin": {
     "dashboard": "لوحة تحكم المدير",
@@ -212,6 +237,7 @@
     "dateTime": "التاريخ والوقت",
     "noAuditLogs": "لا توجد سجلات مراجعة",
     "manageOffices": "إدارة ومراجعة المكاتب السياحية المسجلة",
+    "manageOfficesDesc": "إدارة المكاتب السياحية وتجديد التراخيص",
     "manageRenewals": "مراجعة ومعالجة طلبات تجديد التراخيص",
     "trackActions": "تتبع جميع الإجراءات الإدارية وتغييرات الحالة",
     "filterByStatus": "تصفية حسب الحالة",
@@ -222,7 +248,14 @@
     "registeredOn": "تاريخ التسجيل",
     "lastUpdated": "آخر تحديث",
     "contactInfo": "معلومات الاتصال",
-    "downloadMinistryDoc": "تحميل مستند الوزارة"
+    "downloadMinistryDoc": "تحميل مستند الوزارة",
+    "pendingRegistrations": "طلبات تسجيل المكاتب المعلقة",
+    "officesAwaitingApproval": "مكاتب بانتظار موافقتك",
+    "allCaughtUp": "لا يوجد معلقات!",
+    "noPendingRegistrations": "لا توجد طلبات تسجيل مكاتب معلقة للمراجعة.",
+    "pendingRenewalRequests": "طلبات التجديد المعلقة",
+    "renewalsAwaitingAction": "تجديدات بانتظار إجراءك",
+    "noPendingRenewals": "لا توجد طلبات تجديد معلقة للمراجعة."
   },
   "status": {
     "pending": "معلق",

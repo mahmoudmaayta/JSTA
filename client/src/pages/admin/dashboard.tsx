@@ -7,16 +7,15 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { LoadingPage } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
+import { useTranslation } from "@/lib/i18n";
 import type { Office, LicenseRenewal } from "@shared/schema";
 import {
   Building,
   FileCheck,
   Clock,
   CheckCircle2,
-  XCircle,
   ArrowRight,
   Users,
-  AlertCircle,
 } from "lucide-react";
 
 interface DashboardStats {
@@ -35,6 +34,8 @@ interface DashboardStats {
 }
 
 export default function AdminDashboard() {
+  const { t } = useTranslation();
+  
   const { data: stats, isLoading: statsLoading } = useQuery<DashboardStats>({
     queryKey: ["/api/admin/stats"],
   });
@@ -62,19 +63,19 @@ export default function AdminDashboard() {
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-toggle" />
             <div className="flex-1">
-              <h1 className="text-lg font-semibold">Admin Dashboard</h1>
+              <h1 className="text-lg font-semibold">{t("admin.dashboard")}</h1>
             </div>
           </header>
 
           <main className="flex-1 p-4 sm:p-6">
             {isLoading ? (
-              <LoadingPage message="Loading dashboard..." />
+              <LoadingPage message={t("common.loading")} />
             ) : (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold">Overview</h2>
+                  <h2 className="text-2xl font-bold">{t("admin.overview")}</h2>
                   <p className="text-muted-foreground">
-                    Manage tourism offices and license renewals
+                    {t("admin.manageOfficesDesc")}
                   </p>
                 </div>
 
@@ -82,7 +83,7 @@ export default function AdminDashboard() {
                   <Card>
                     <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
                       <CardTitle className="text-sm font-medium text-muted-foreground">
-                        Total Offices
+                        {t("admin.totalOffices")}
                       </CardTitle>
                       <Building className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
@@ -96,7 +97,7 @@ export default function AdminDashboard() {
                   <Card>
                     <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
                       <CardTitle className="text-sm font-medium text-muted-foreground">
-                        Pending Approval
+                        {t("admin.pendingApproval")}
                       </CardTitle>
                       <Clock className="h-4 w-4 text-amber-500" />
                     </CardHeader>
@@ -110,7 +111,7 @@ export default function AdminDashboard() {
                   <Card>
                     <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
                       <CardTitle className="text-sm font-medium text-muted-foreground">
-                        Active Offices
+                        {t("admin.activeOffices")}
                       </CardTitle>
                       <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                     </CardHeader>
@@ -124,7 +125,7 @@ export default function AdminDashboard() {
                   <Card>
                     <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
                       <CardTitle className="text-sm font-medium text-muted-foreground">
-                        Pending Renewals
+                        {t("admin.pendingRenewals")}
                       </CardTitle>
                       <FileCheck className="h-4 w-4 text-blue-500" />
                     </CardHeader>
@@ -143,16 +144,16 @@ export default function AdminDashboard() {
                         <div>
                           <CardTitle className="flex items-center gap-2">
                             <Users className="h-5 w-5" />
-                            Pending Office Registrations
+                            {t("admin.pendingRegistrations")}
                           </CardTitle>
                           <CardDescription>
-                            Offices awaiting your approval
+                            {t("admin.officesAwaitingApproval")}
                           </CardDescription>
                         </div>
                         <Link href="/admin/offices">
                           <Button variant="outline" size="sm" className="gap-1" data-testid="link-all-offices">
-                            View All
-                            <ArrowRight className="h-3 w-3" />
+                            {t("common.viewAll")}
+                            <ArrowRight className="h-3 w-3 rtl-flip" />
                           </Button>
                         </Link>
                       </div>
@@ -178,8 +179,8 @@ export default function AdminDashboard() {
                               </div>
                               <Link href={`/admin/offices/${office.id}`}>
                                 <Button variant="ghost" size="sm" className="gap-1" data-testid={`link-office-${office.id}`}>
-                                  Review
-                                  <ArrowRight className="h-3 w-3" />
+                                  {t("common.review")}
+                                  <ArrowRight className="h-3 w-3 rtl-flip" />
                                 </Button>
                               </Link>
                             </div>
@@ -188,8 +189,8 @@ export default function AdminDashboard() {
                       ) : (
                         <EmptyState
                           icon={CheckCircle2}
-                          title="All Caught Up!"
-                          description="No pending office registrations to review."
+                          title={t("admin.allCaughtUp")}
+                          description={t("admin.noPendingRegistrations")}
                         />
                       )}
                     </CardContent>
@@ -201,16 +202,16 @@ export default function AdminDashboard() {
                         <div>
                           <CardTitle className="flex items-center gap-2">
                             <FileCheck className="h-5 w-5" />
-                            Pending Renewal Requests
+                            {t("admin.pendingRenewalRequests")}
                           </CardTitle>
                           <CardDescription>
-                            Renewals awaiting your action
+                            {t("admin.renewalsAwaitingAction")}
                           </CardDescription>
                         </div>
                         <Link href="/admin/renewals">
                           <Button variant="outline" size="sm" className="gap-1" data-testid="link-all-renewals">
-                            View All
-                            <ArrowRight className="h-3 w-3" />
+                            {t("common.viewAll")}
+                            <ArrowRight className="h-3 w-3 rtl-flip" />
                           </Button>
                         </Link>
                       </div>
@@ -229,11 +230,11 @@ export default function AdminDashboard() {
                                 </div>
                                 <div>
                                   <p className="font-medium">
-                                    {renewal.office?.tradeNameAr || `Office #${renewal.officeId}`}
+                                    {renewal.office?.tradeNameAr || `${t("navigation.offices")} #${renewal.officeId}`}
                                   </p>
                                   <div className="flex items-center gap-2">
                                     <span className="text-xs text-muted-foreground">
-                                      Year {renewal.year}
+                                      {t("renewal.year")} {renewal.year}
                                     </span>
                                     <StatusBadge status={renewal.status} size="sm" showIcon={false} />
                                   </div>
@@ -241,8 +242,8 @@ export default function AdminDashboard() {
                               </div>
                               <Link href={`/admin/renewals/${renewal.id}`}>
                                 <Button variant="ghost" size="sm" className="gap-1" data-testid={`link-renewal-${renewal.id}`}>
-                                  Review
-                                  <ArrowRight className="h-3 w-3" />
+                                  {t("common.review")}
+                                  <ArrowRight className="h-3 w-3 rtl-flip" />
                                 </Button>
                               </Link>
                             </div>
@@ -251,8 +252,8 @@ export default function AdminDashboard() {
                       ) : (
                         <EmptyState
                           icon={CheckCircle2}
-                          title="All Caught Up!"
-                          description="No pending renewal requests to review."
+                          title={t("admin.allCaughtUp")}
+                          description={t("admin.noPendingRenewals")}
                         />
                       )}
                     </CardContent>
