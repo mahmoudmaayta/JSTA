@@ -1,5 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
+import { useTranslation } from "@/lib/i18n";
 import {
   Sidebar,
   SidebarContent,
@@ -14,6 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import {
   Building2,
   LayoutDashboard,
@@ -23,33 +25,35 @@ import {
   Briefcase,
   UserCog,
 } from "lucide-react";
-
-const officeMenuItems = [
-  {
-    title: "Dashboard",
-    url: "/office/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Documents",
-    url: "/office/documents",
-    icon: FileText,
-  },
-  {
-    title: "Renewals",
-    url: "/office/renewals",
-    icon: RefreshCw,
-  },
-  {
-    title: "Profile",
-    url: "/office/profile",
-    icon: UserCog,
-  },
-];
+import logoImage from "@assets/logo-0 (1)_1764114456004.png";
 
 export function OfficeSidebar() {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
+  const { t } = useTranslation();
+
+  const officeMenuItems = [
+    {
+      title: t("navigation.dashboard"),
+      url: "/office/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      title: t("navigation.documents"),
+      url: "/office/documents",
+      icon: FileText,
+    },
+    {
+      title: t("navigation.renewals"),
+      url: "/office/renewals",
+      icon: RefreshCw,
+    },
+    {
+      title: t("navigation.profile"),
+      url: "/office/profile",
+      icon: UserCog,
+    },
+  ];
 
   const handleLogout = async () => {
     await logout();
@@ -64,30 +68,33 @@ export function OfficeSidebar() {
     <Sidebar>
       <SidebarHeader className="border-b">
         <div className="flex items-center gap-3 px-2 py-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary">
-            <Building2 className="h-5 w-5 text-primary-foreground" />
-          </div>
+          <img 
+            src={logoImage} 
+            alt="JSTA Logo" 
+            className="h-10 w-auto object-contain"
+            data-testid="img-office-logo"
+          />
           <div className="flex flex-col">
-            <span className="font-semibold text-sm">Tourism Portal</span>
+            <span className="font-semibold text-sm">JSTA Portal</span>
             <span className="text-xs text-muted-foreground flex items-center gap-1">
               <Briefcase className="h-3 w-3" />
-              Office Portal
+              {t("office.dashboard")}
             </span>
           </div>
         </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("navigation.home")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {officeMenuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.url}>
                   <SidebarMenuButton
                     asChild
                     isActive={location === item.url || (item.url !== "/office/dashboard" && location.startsWith(item.url))}
                   >
-                    <Link href={item.url} data-testid={`nav-${item.title.toLowerCase()}`}>
+                    <Link href={item.url} data-testid={`nav-${item.url.split("/").pop()}`}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
                     </Link>
@@ -95,6 +102,13 @@ export function OfficeSidebar() {
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <div className="px-2">
+              <LanguageSwitcher />
+            </div>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
@@ -106,9 +120,9 @@ export function OfficeSidebar() {
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-1 flex-col truncate">
-            <span className="truncate text-sm font-medium">{user?.email}</span>
+            <span className="truncate text-sm font-medium ltr">{user?.email}</span>
             <span className="text-xs text-muted-foreground">
-              {user?.office?.tradeNameAr || "Office Account"}
+              {user?.office?.tradeNameAr || t("office.dashboard")}
             </span>
           </div>
           <Button

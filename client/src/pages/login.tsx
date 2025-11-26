@@ -11,15 +11,18 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Header } from "@/components/layout/header";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { useAuth } from "@/lib/auth";
+import { useTranslation } from "@/lib/i18n";
 import { loginSchema, type LoginForm } from "@shared/schema";
-import { Building2, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { AlertCircle, Eye, EyeOff } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
+import logoImage from "@assets/logo-0 (1)_1764114456004.png";
 
 export default function LoginPage() {
   const [, setLocation] = useLocation();
   const { refetch } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -34,7 +37,7 @@ export default function LoginPage() {
       const response = await apiRequest("POST", "/api/auth/login", data);
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Login failed");
+        throw new Error(errorData.message || t("auth.invalidCredentials"));
       }
       return response.json();
     },
@@ -63,12 +66,17 @@ export default function LoginPage() {
       <main className="flex-1 flex items-center justify-center py-12 px-4">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary">
-              <Building2 className="h-7 w-7 text-primary-foreground" />
+            <div className="mx-auto mb-4">
+              <img 
+                src={logoImage} 
+                alt="JSTA Logo" 
+                className="h-16 w-auto object-contain mx-auto"
+                data-testid="img-login-logo"
+              />
             </div>
-            <CardTitle className="text-2xl">Welcome Back</CardTitle>
+            <CardTitle className="text-2xl">{t("auth.loginTitle")}</CardTitle>
             <CardDescription>
-              Sign in to access your portal dashboard
+              {t("auth.loginSubtitle")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -86,12 +94,13 @@ export default function LoginPage() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email Address</FormLabel>
+                      <FormLabel>{t("auth.email")}</FormLabel>
                       <FormControl>
                         <Input
                           type="email"
                           placeholder="your@email.com"
                           autoComplete="email"
+                          className="ltr"
                           data-testid="input-email"
                           {...field}
                         />
@@ -106,12 +115,12 @@ export default function LoginPage() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>{t("auth.password")}</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Input
                             type={showPassword ? "text" : "password"}
-                            placeholder="Enter your password"
+                            placeholder="••••••••"
                             autoComplete="current-password"
                             data-testid="input-password"
                             {...field}
@@ -146,10 +155,10 @@ export default function LoginPage() {
                   {loginMutation.isPending ? (
                     <>
                       <LoadingSpinner size="sm" className="mr-2" />
-                      Signing in...
+                      {t("auth.loggingIn")}
                     </>
                   ) : (
-                    "Sign In"
+                    t("auth.signIn")
                   )}
                 </Button>
               </form>
@@ -162,13 +171,13 @@ export default function LoginPage() {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-card px-2 text-muted-foreground">
-                  New to the portal?
+                  {t("auth.noAccount")}
                 </span>
               </div>
             </div>
             <Link href="/register" className="w-full">
               <Button variant="outline" className="w-full" data-testid="link-register">
-                Create New Account
+                {t("auth.signUp")}
               </Button>
             </Link>
           </CardFooter>
