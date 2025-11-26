@@ -9,6 +9,7 @@ import { LoadingPage, LoadingSpinner } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useLanguage } from "@/lib/i18n";
 import type { LicenseRenewal } from "@shared/schema";
 import {
   RefreshCw,
@@ -21,6 +22,7 @@ import {
 export default function OfficeRenewals() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const { data: renewals, isLoading } = useQuery<LicenseRenewal[]>({
     queryKey: ["/api/office/renewals"],
@@ -38,14 +40,14 @@ export default function OfficeRenewals() {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["/api/office/renewals"] });
       toast({
-        title: "Renewal Requested",
-        description: "Your license renewal request has been submitted.",
+        title: t("renewals.renewalRequested"),
+        description: t("renewals.renewalRequestedDesc"),
       });
       setLocation(`/office/renewals/${data.id}`);
     },
     onError: (error: Error) => {
       toast({
-        title: "Error",
+        title: t("common.error"),
         description: error.message,
         variant: "destructive",
       });
@@ -70,20 +72,20 @@ export default function OfficeRenewals() {
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-toggle" />
             <div className="flex-1">
-              <h1 className="text-lg font-semibold">License Renewals</h1>
+              <h1 className="text-lg font-semibold">{t("renewals.title")}</h1>
             </div>
           </header>
 
           <main className="flex-1 p-4 sm:p-6">
             {isLoading ? (
-              <LoadingPage message="Loading renewals..." />
+              <LoadingPage message={t("renewals.loadingRenewals")} />
             ) : (
               <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
-                    <h2 className="text-2xl font-bold">License Renewals</h2>
+                    <h2 className="text-2xl font-bold">{t("renewals.title")}</h2>
                     <p className="text-muted-foreground">
-                      Manage your license renewal requests
+                      {t("renewals.manageRenewals")}
                     </p>
                   </div>
                   {!hasActiveRenewal && (
@@ -98,7 +100,7 @@ export default function OfficeRenewals() {
                       ) : (
                         <Plus className="h-4 w-4" />
                       )}
-                      Request New Renewal
+                      {t("renewals.requestNewRenewal")}
                     </Button>
                   )}
                 </div>
@@ -114,9 +116,9 @@ export default function OfficeRenewals() {
                                 <Calendar className="h-6 w-6 text-primary" />
                               </div>
                               <div>
-                                <CardTitle className="text-lg">Year {renewal.year}</CardTitle>
+                                <CardTitle className="text-lg">{t("renewals.year")} {renewal.year}</CardTitle>
                                 <CardDescription>
-                                  Submitted on {new Date(renewal.createdAt).toLocaleDateString()}
+                                  {t("renewals.submittedOn")} {new Date(renewal.createdAt).toLocaleDateString()}
                                 </CardDescription>
                               </div>
                             </div>
@@ -126,16 +128,16 @@ export default function OfficeRenewals() {
                         <CardContent>
                           <div className="flex items-center justify-between">
                             <div className="text-sm text-muted-foreground">
-                              {renewal.status === "SUBMITTED" && "Waiting for admin review"}
-                              {renewal.status === "UNDER_REVIEW" && "Currently being reviewed"}
-                              {renewal.status === "APPROVED_FOR_DOWNLOAD" && "Ready to download your renewal document"}
-                              {renewal.status === "MINISTRY_DOC_UPLOADED" && "Ministry document uploaded, awaiting final approval"}
-                              {renewal.status === "FINAL_APPROVED" && "Renewal has been approved"}
-                              {renewal.status === "REJECTED" && "Renewal was rejected"}
+                              {renewal.status === "SUBMITTED" && t("renewals.statusMessages.submitted")}
+                              {renewal.status === "UNDER_REVIEW" && t("renewals.statusMessages.underReview")}
+                              {renewal.status === "APPROVED_FOR_DOWNLOAD" && t("renewals.statusMessages.approvedForDownload")}
+                              {renewal.status === "MINISTRY_DOC_UPLOADED" && t("renewals.statusMessages.ministryDocUploaded")}
+                              {renewal.status === "FINAL_APPROVED" && t("renewals.statusMessages.finalApproved")}
+                              {renewal.status === "REJECTED" && t("renewals.statusMessages.rejected")}
                             </div>
                             <Link href={`/office/renewals/${renewal.id}`}>
                               <Button variant="outline" className="gap-2" data-testid={`link-renewal-${renewal.id}`}>
-                                View Details
+                                {t("common.details")}
                                 <ArrowRight className="h-4 w-4" />
                               </Button>
                             </Link>
@@ -149,10 +151,10 @@ export default function OfficeRenewals() {
                     <CardContent className="py-12">
                       <EmptyState
                         icon={FileCheck}
-                        title="No Renewal Requests"
-                        description="You haven't submitted any license renewal requests yet. Click the button above to request a new renewal."
+                        title={t("renewals.noRequests")}
+                        description={t("renewals.noRequestsDesc")}
                         action={!hasActiveRenewal ? {
-                          label: "Request Renewal",
+                          label: t("renewals.requestRenewal"),
                           onClick: () => createRenewalMutation.mutate(),
                         } : undefined}
                       />

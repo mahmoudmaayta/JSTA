@@ -16,6 +16,7 @@ import { Header } from "@/components/layout/header";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { registerSchema, officeInfoSchema, branchSchema, type RegisterForm, type OfficeInfoForm, type BranchForm } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
+import { useLanguage } from "@/lib/i18n";
 import { 
   Building2, 
   AlertCircle, 
@@ -35,29 +36,30 @@ import {
   FileCheck
 } from "lucide-react";
 
-const TOURISM_ACTIVITIES = [
-  { id: "tickets", label: "Air Tickets" },
-  { id: "inbound", label: "Inbound Tourism" },
-  { id: "outbound", label: "Outbound Tourism" },
-  { id: "hajj_umrah", label: "Hajj & Umrah" },
-  { id: "domestic", label: "Domestic Tourism" },
-];
-
-const STEPS = [
-  { id: 1, title: "Account", description: "Create your login credentials", icon: User },
-  { id: 2, title: "Office Info", description: "Enter office details", icon: Building },
-  { id: 3, title: "Branches", description: "Add branch offices", icon: MapPin },
-  { id: 4, title: "Documents", description: "Upload required files", icon: FileCheck },
-];
-
 interface DocumentUpload {
   file: File;
   category: string;
 }
 
 export default function RegisterPage() {
+  const { t } = useLanguage();
   const [, setLocation] = useLocation();
   const [currentStep, setCurrentStep] = useState(1);
+  
+  const TOURISM_ACTIVITIES = [
+    { id: "tickets", label: t("forms.officeStep.activities.tickets") },
+    { id: "inbound", label: t("forms.officeStep.activities.inbound") },
+    { id: "outbound", label: t("forms.officeStep.activities.outbound") },
+    { id: "hajj_umrah", label: t("forms.officeStep.activities.hajjUmrah") },
+    { id: "domestic", label: t("forms.officeStep.activities.domestic") },
+  ];
+
+  const STEPS = [
+    { id: 1, title: t("forms.steps.account"), description: t("forms.steps.accountDesc"), icon: User },
+    { id: 2, title: t("forms.steps.officeInfo"), description: t("forms.steps.officeInfoDesc"), icon: Building },
+    { id: 3, title: t("forms.steps.branches"), description: t("forms.steps.branchesDesc"), icon: MapPin },
+    { id: 4, title: t("forms.steps.documents"), description: t("forms.steps.documentsDesc"), icon: FileCheck },
+  ];
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [branches, setBranches] = useState<BranchForm[]>([]);
@@ -254,10 +256,10 @@ export default function RegisterPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="h-5 w-5" />
-                  Account Information
+                  {t("forms.accountStep.title")}
                 </CardTitle>
                 <CardDescription>
-                  Create your login credentials. This email will be used as your username.
+                  {t("forms.accountStep.description")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -268,9 +270,9 @@ export default function RegisterPage() {
                       name="contactName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Contact Person Name *</FormLabel>
+                          <FormLabel>{t("forms.accountStep.contactName")} *</FormLabel>
                           <FormControl>
-                            <Input placeholder="Enter your full name" data-testid="input-contact-name" {...field} />
+                            <Input placeholder={t("forms.accountStep.contactNamePlaceholder")} data-testid="input-contact-name" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -282,11 +284,11 @@ export default function RegisterPage() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email Address *</FormLabel>
+                          <FormLabel>{t("forms.accountStep.emailAddress")} *</FormLabel>
                           <FormControl>
-                            <Input type="email" placeholder="your@email.com" data-testid="input-email" {...field} />
+                            <Input type="email" placeholder={t("forms.accountStep.emailPlaceholder")} data-testid="input-email" {...field} />
                           </FormControl>
-                          <FormDescription>This will be your login username</FormDescription>
+                          <FormDescription>{t("forms.accountStep.emailDescription")}</FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -298,12 +300,12 @@ export default function RegisterPage() {
                         name="password"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Password *</FormLabel>
+                            <FormLabel>{t("forms.accountStep.password")} *</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Input
                                   type={showPassword ? "text" : "password"}
-                                  placeholder="Min 6 characters"
+                                  placeholder={t("forms.accountStep.passwordPlaceholder")}
                                   data-testid="input-password"
                                   {...field}
                                 />
@@ -328,11 +330,11 @@ export default function RegisterPage() {
                         name="confirmPassword"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Confirm Password *</FormLabel>
+                            <FormLabel>{t("forms.accountStep.confirmPassword")} *</FormLabel>
                             <FormControl>
                               <Input
                                 type={showPassword ? "text" : "password"}
-                                placeholder="Re-enter password"
+                                placeholder={t("forms.accountStep.confirmPasswordPlaceholder")}
                                 data-testid="input-confirm-password"
                                 {...field}
                               />
@@ -345,7 +347,7 @@ export default function RegisterPage() {
 
                     <div className="flex justify-end pt-4">
                       <Button type="submit" className="gap-2" data-testid="button-next-step">
-                        Continue
+                        {t("forms.continue")}
                         <ArrowRight className="h-4 w-4" />
                       </Button>
                     </div>
@@ -360,26 +362,26 @@ export default function RegisterPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Building className="h-5 w-5" />
-                  Office Information
+                  {t("forms.officeStep.title")}
                 </CardTitle>
                 <CardDescription>
-                  Enter your tourism office details and contact information.
+                  {t("forms.officeStep.description")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <Form {...officeForm}>
                   <form onSubmit={officeForm.handleSubmit(handleOfficeSubmit)} className="space-y-6">
                     <div className="space-y-4">
-                      <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Basic Information</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">{t("forms.officeStep.basicInfo")}</h3>
                       
                       <FormField
                         control={officeForm.control}
                         name="tradeNameAr"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Trade Name (Arabic) *</FormLabel>
+                            <FormLabel>{t("forms.officeStep.tradeNameAr")} *</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter trade name" data-testid="input-trade-name" {...field} />
+                              <Input placeholder={t("forms.officeStep.tradeNamePlaceholder")} data-testid="input-trade-name" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -391,9 +393,9 @@ export default function RegisterPage() {
                         name="legalNameRegistrar"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Legal Name (Registrar)</FormLabel>
+                            <FormLabel>{t("forms.officeStep.legalName")}</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter legal registered name" data-testid="input-legal-name" {...field} />
+                              <Input placeholder={t("forms.officeStep.legalNamePlaceholder")} data-testid="input-legal-name" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -406,9 +408,9 @@ export default function RegisterPage() {
                           name="nationalEstablishmentNumber"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>National Establishment Number</FormLabel>
+                              <FormLabel>{t("forms.officeStep.nationalNumber")}</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter number" data-testid="input-national-number" {...field} />
+                                <Input placeholder={t("forms.officeStep.nationalNumberPlaceholder")} data-testid="input-national-number" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -420,9 +422,9 @@ export default function RegisterPage() {
                           name="socialSecurityNumber"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Social Security Number</FormLabel>
+                              <FormLabel>{t("forms.officeStep.socialSecurity")}</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter SSN" data-testid="input-ssn" {...field} />
+                                <Input placeholder={t("forms.officeStep.socialSecurityPlaceholder")} data-testid="input-ssn" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -435,7 +437,7 @@ export default function RegisterPage() {
                         name="guaranteeExpiryDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Guarantee Expiry Date</FormLabel>
+                            <FormLabel>{t("forms.officeStep.guaranteeExpiry")}</FormLabel>
                             <FormControl>
                               <Input type="date" data-testid="input-guarantee-date" {...field} />
                             </FormControl>
@@ -449,7 +451,7 @@ export default function RegisterPage() {
                         name="tourismActivities"
                         render={() => (
                           <FormItem>
-                            <FormLabel>Tourism Activities</FormLabel>
+                            <FormLabel>{t("forms.officeStep.tourismActivities")}</FormLabel>
                             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                               {TOURISM_ACTIVITIES.map((activity) => (
                                 <FormField
@@ -487,7 +489,7 @@ export default function RegisterPage() {
                     </div>
 
                     <div className="space-y-4">
-                      <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Address</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">{t("forms.officeStep.address")}</h3>
                       
                       <div className="grid gap-4 sm:grid-cols-2">
                         <FormField
@@ -495,9 +497,9 @@ export default function RegisterPage() {
                           name="mainCity"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>City</FormLabel>
+                              <FormLabel>{t("forms.officeStep.city")}</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter city" data-testid="input-city" {...field} />
+                                <Input placeholder={t("forms.officeStep.cityPlaceholder")} data-testid="input-city" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -509,9 +511,9 @@ export default function RegisterPage() {
                           name="mainArea"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Area</FormLabel>
+                              <FormLabel>{t("forms.officeStep.area")}</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter area" data-testid="input-area" {...field} />
+                                <Input placeholder={t("forms.officeStep.areaPlaceholder")} data-testid="input-area" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -525,9 +527,9 @@ export default function RegisterPage() {
                           name="mainStreet"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Street</FormLabel>
+                              <FormLabel>{t("forms.officeStep.street")}</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter street" data-testid="input-street" {...field} />
+                                <Input placeholder={t("forms.officeStep.streetPlaceholder")} data-testid="input-street" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -539,9 +541,9 @@ export default function RegisterPage() {
                           name="mainBuildingNumber"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Building Number</FormLabel>
+                              <FormLabel>{t("forms.officeStep.buildingNumber")}</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter building #" data-testid="input-building" {...field} />
+                                <Input placeholder={t("forms.officeStep.buildingPlaceholder")} data-testid="input-building" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -555,9 +557,9 @@ export default function RegisterPage() {
                           name="poBox"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>P.O. Box</FormLabel>
+                              <FormLabel>{t("forms.officeStep.poBox")}</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter P.O. Box" data-testid="input-pobox" {...field} />
+                                <Input placeholder={t("forms.officeStep.poBoxPlaceholder")} data-testid="input-pobox" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -569,9 +571,9 @@ export default function RegisterPage() {
                           name="postalCode"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Postal Code</FormLabel>
+                              <FormLabel>{t("forms.officeStep.postalCode")}</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter postal code" data-testid="input-postal" {...field} />
+                                <Input placeholder={t("forms.officeStep.postalCodePlaceholder")} data-testid="input-postal" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -581,7 +583,7 @@ export default function RegisterPage() {
                     </div>
 
                     <div className="space-y-4">
-                      <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Contact Information</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">{t("forms.officeStep.contactInfo")}</h3>
                       
                       <div className="grid gap-4 sm:grid-cols-2">
                         <FormField
@@ -589,9 +591,9 @@ export default function RegisterPage() {
                           name="phone"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Phone</FormLabel>
+                              <FormLabel>{t("forms.officeStep.phone")}</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter phone number" data-testid="input-phone" {...field} />
+                                <Input placeholder={t("forms.officeStep.phonePlaceholder")} data-testid="input-phone" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -603,9 +605,9 @@ export default function RegisterPage() {
                           name="mobile"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Mobile</FormLabel>
+                              <FormLabel>{t("forms.officeStep.mobile")}</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter mobile number" data-testid="input-mobile" {...field} />
+                                <Input placeholder={t("forms.officeStep.mobilePlaceholder")} data-testid="input-mobile" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -619,9 +621,9 @@ export default function RegisterPage() {
                           name="fax"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Fax</FormLabel>
+                              <FormLabel>{t("forms.officeStep.fax")}</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter fax number" data-testid="input-fax" {...field} />
+                                <Input placeholder={t("forms.officeStep.faxPlaceholder")} data-testid="input-fax" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -633,9 +635,9 @@ export default function RegisterPage() {
                           name="website"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Website</FormLabel>
+                              <FormLabel>{t("forms.officeStep.website")}</FormLabel>
                               <FormControl>
-                                <Input placeholder="https://example.com" data-testid="input-website" {...field} />
+                                <Input placeholder={t("forms.officeStep.websitePlaceholder")} data-testid="input-website" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -649,9 +651,9 @@ export default function RegisterPage() {
                           name="mainEmail"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Main Email</FormLabel>
+                              <FormLabel>{t("forms.officeStep.mainEmail")}</FormLabel>
                               <FormControl>
-                                <Input type="email" placeholder="main@office.com" data-testid="input-main-email" {...field} />
+                                <Input type="email" placeholder={t("forms.officeStep.mainEmailPlaceholder")} data-testid="input-main-email" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -663,9 +665,9 @@ export default function RegisterPage() {
                           name="extraEmail"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Additional Email</FormLabel>
+                              <FormLabel>{t("forms.officeStep.additionalEmail")}</FormLabel>
                               <FormControl>
-                                <Input type="email" placeholder="extra@office.com" data-testid="input-extra-email" {...field} />
+                                <Input type="email" placeholder={t("forms.officeStep.additionalEmailPlaceholder")} data-testid="input-extra-email" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -683,10 +685,10 @@ export default function RegisterPage() {
                         data-testid="button-prev-step"
                       >
                         <ArrowLeft className="h-4 w-4" />
-                        Back
+                        {t("common.back")}
                       </Button>
                       <Button type="submit" className="gap-2" data-testid="button-next-step">
-                        Continue
+                        {t("forms.continue")}
                         <ArrowRight className="h-4 w-4" />
                       </Button>
                     </div>
@@ -701,16 +703,16 @@ export default function RegisterPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <MapPin className="h-5 w-5" />
-                  Branch Offices
+                  {t("forms.branchStep.title")}
                 </CardTitle>
                 <CardDescription>
-                  Add any branch offices if applicable. You can skip this step if you have no branches.
+                  {t("forms.branchStep.description")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 {branches.length > 0 && (
                   <div className="mb-6 space-y-3">
-                    <h3 className="text-sm font-medium">Added Branches ({branches.length})</h3>
+                    <h3 className="text-sm font-medium">{t("forms.addedBranches")} ({branches.length})</h3>
                     {branches.map((branch, index) => (
                       <div
                         key={index}
@@ -718,10 +720,10 @@ export default function RegisterPage() {
                       >
                         <div>
                           <p className="font-medium text-sm">
-                            {branch.city || "Branch"} {branch.area && `- ${branch.area}`}
+                            {branch.city || t("forms.branch")} {branch.area && `- ${branch.area}`}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {branch.managerName && `Manager: ${branch.managerName}`}
+                            {branch.managerName && `${t("forms.manager")}: ${branch.managerName}`}
                           </p>
                         </div>
                         <Button
@@ -746,9 +748,9 @@ export default function RegisterPage() {
                         name="city"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>City</FormLabel>
+                            <FormLabel>{t("forms.officeStep.city")}</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter city" data-testid="input-branch-city" {...field} />
+                              <Input placeholder={t("forms.officeStep.cityPlaceholder")} data-testid="input-branch-city" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -760,9 +762,9 @@ export default function RegisterPage() {
                         name="area"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Area</FormLabel>
+                            <FormLabel>{t("forms.officeStep.area")}</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter area" data-testid="input-branch-area" {...field} />
+                              <Input placeholder={t("forms.officeStep.areaPlaceholder")} data-testid="input-branch-area" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -776,9 +778,9 @@ export default function RegisterPage() {
                         name="street"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Street</FormLabel>
+                            <FormLabel>{t("forms.officeStep.street")}</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter street" data-testid="input-branch-street" {...field} />
+                              <Input placeholder={t("forms.officeStep.streetPlaceholder")} data-testid="input-branch-street" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -790,9 +792,9 @@ export default function RegisterPage() {
                         name="buildingNumber"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Building Number</FormLabel>
+                            <FormLabel>{t("forms.officeStep.buildingNumber")}</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter building #" data-testid="input-branch-building" {...field} />
+                              <Input placeholder={t("forms.officeStep.buildingPlaceholder")} data-testid="input-branch-building" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -806,9 +808,9 @@ export default function RegisterPage() {
                         name="managerName"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Manager Name</FormLabel>
+                            <FormLabel>{t("forms.branchStep.managerName")}</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter manager name" data-testid="input-branch-manager" {...field} />
+                              <Input placeholder={t("forms.branchStep.managerNamePlaceholder")} data-testid="input-branch-manager" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -820,9 +822,9 @@ export default function RegisterPage() {
                         name="managerMobile"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Manager Mobile</FormLabel>
+                            <FormLabel>{t("forms.branchStep.managerMobile")}</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter mobile" data-testid="input-branch-manager-mobile" {...field} />
+                              <Input placeholder={t("forms.branchStep.managerMobilePlaceholder")} data-testid="input-branch-manager-mobile" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -836,9 +838,9 @@ export default function RegisterPage() {
                         name="phone"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Phone</FormLabel>
+                            <FormLabel>{t("forms.officeStep.phone")}</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter phone" data-testid="input-branch-phone" {...field} />
+                              <Input placeholder={t("forms.officeStep.phonePlaceholder")} data-testid="input-branch-phone" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -850,9 +852,9 @@ export default function RegisterPage() {
                         name="fax"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Fax</FormLabel>
+                            <FormLabel>{t("forms.officeStep.fax")}</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter fax" data-testid="input-branch-fax" {...field} />
+                              <Input placeholder={t("forms.officeStep.faxPlaceholder")} data-testid="input-branch-fax" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -862,7 +864,7 @@ export default function RegisterPage() {
 
                     <Button type="submit" variant="outline" className="gap-2" data-testid="button-add-branch">
                       <Plus className="h-4 w-4" />
-                      Add Branch
+                      {t("forms.addBranch")}
                     </Button>
                   </form>
                 </Form>
@@ -876,10 +878,10 @@ export default function RegisterPage() {
                     data-testid="button-prev-step"
                   >
                     <ArrowLeft className="h-4 w-4" />
-                    Back
+                    {t("common.back")}
                   </Button>
                   <Button onClick={() => setCurrentStep(4)} className="gap-2" data-testid="button-next-step">
-                    Continue
+                    {t("forms.continue")}
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </div>
@@ -892,10 +894,10 @@ export default function RegisterPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <FileCheck className="h-5 w-5" />
-                  Required Documents
+                  {t("forms.documentStep.title")}
                 </CardTitle>
                 <CardDescription>
-                  Upload the required documents for your membership application.
+                  {t("forms.documentStep.description")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -903,10 +905,10 @@ export default function RegisterPage() {
                   <div className="rounded-lg border p-4">
                     <h3 className="font-medium mb-2 flex items-center gap-2">
                       <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">1</span>
-                      Membership and Info Forms
+                      {t("forms.documentStep.category1Title")}
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Internal association forms filled, printed, signed, and stamped (Office information form, form for owners, authorized signatories, employees).
+                      {t("forms.documentStep.category1Desc")}
                     </p>
                     
                     {getDocsByCategory("INITIAL_FIRST_FORMS").length > 0 && (
@@ -936,8 +938,8 @@ export default function RegisterPage() {
                     
                     <label className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-colors hover:border-primary/50 hover:bg-muted/30">
                       <Upload className="h-8 w-8 text-muted-foreground mb-2" />
-                      <span className="text-sm font-medium">Click to upload files</span>
-                      <span className="text-xs text-muted-foreground">PDF, JPG, PNG up to 10MB</span>
+                      <span className="text-sm font-medium">{t("forms.clickToUpload")}</span>
+                      <span className="text-xs text-muted-foreground">{t("forms.fileTypes")}</span>
                       <input
                         type="file"
                         multiple
@@ -952,10 +954,10 @@ export default function RegisterPage() {
                   <div className="rounded-lg border p-4">
                     <h3 className="font-medium mb-2 flex items-center gap-2">
                       <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">2</span>
-                      Legal / Commercial Documents
+                      {t("forms.documentStep.category2Title")}
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Updated commercial registration showing status and registered trade name. Include updated registration and official letter if there are any changes in partners/authorized signatories.
+                      {t("forms.documentStep.category2Desc")}
                     </p>
                     
                     {getDocsByCategory("INITIAL_SECOND_LEGAL").length > 0 && (
@@ -985,8 +987,8 @@ export default function RegisterPage() {
                     
                     <label className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-colors hover:border-primary/50 hover:bg-muted/30">
                       <Upload className="h-8 w-8 text-muted-foreground mb-2" />
-                      <span className="text-sm font-medium">Click to upload files</span>
-                      <span className="text-xs text-muted-foreground">PDF, JPG, PNG up to 10MB</span>
+                      <span className="text-sm font-medium">{t("forms.clickToUpload")}</span>
+                      <span className="text-xs text-muted-foreground">{t("forms.fileTypes")}</span>
                       <input
                         type="file"
                         multiple
@@ -1001,10 +1003,10 @@ export default function RegisterPage() {
                   <div className="rounded-lg border p-4">
                     <h3 className="font-medium mb-2 flex items-center gap-2">
                       <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">3</span>
-                      Personal Documents
+                      {t("forms.documentStep.category3Title")}
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      ID card for new owners/employees, recent clean criminal record certificate, recent personal photo.
+                      {t("forms.documentStep.category3Desc")}
                     </p>
                     
                     {getDocsByCategory("INITIAL_THIRD_PERSONAL").length > 0 && (
@@ -1034,8 +1036,8 @@ export default function RegisterPage() {
                     
                     <label className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-colors hover:border-primary/50 hover:bg-muted/30">
                       <Upload className="h-8 w-8 text-muted-foreground mb-2" />
-                      <span className="text-sm font-medium">Click to upload files</span>
-                      <span className="text-xs text-muted-foreground">PDF, JPG, PNG up to 10MB</span>
+                      <span className="text-sm font-medium">{t("forms.clickToUpload")}</span>
+                      <span className="text-xs text-muted-foreground">{t("forms.fileTypes")}</span>
                       <input
                         type="file"
                         multiple
@@ -1057,7 +1059,7 @@ export default function RegisterPage() {
                     data-testid="button-prev-step"
                   >
                     <ArrowLeft className="h-4 w-4" />
-                    Back
+                    {t("common.back")}
                   </Button>
                   <Button
                     onClick={handleFinalSubmit}
@@ -1068,11 +1070,11 @@ export default function RegisterPage() {
                     {registerMutation.isPending ? (
                       <>
                         <LoadingSpinner size="sm" />
-                        Submitting...
+                        {t("forms.submitting")}
                       </>
                     ) : (
                       <>
-                        Submit Registration
+                        {t("forms.submitRegistration")}
                         <Check className="h-4 w-4" />
                       </>
                     )}
@@ -1084,9 +1086,9 @@ export default function RegisterPage() {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-muted-foreground">
-              Already have an account?{" "}
+              {t("forms.alreadyHaveAccount")}{" "}
               <Link href="/login" className="font-medium text-primary hover:underline">
-                Sign in here
+                {t("forms.signInHere")}
               </Link>
             </p>
           </div>

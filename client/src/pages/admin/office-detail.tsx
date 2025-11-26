@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useLanguage } from "@/lib/i18n";
 import type { Office, Branch, Document } from "@shared/schema";
 import { DocumentPreviewButton } from "@/components/ui/document-preview";
 import {
@@ -33,20 +34,6 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-const CATEGORY_LABELS: Record<string, string> = {
-  INITIAL_FIRST_FORMS: "Membership & Info Forms",
-  INITIAL_SECOND_LEGAL: "Legal / Commercial Documents",
-  INITIAL_THIRD_PERSONAL: "Personal Documents",
-};
-
-const ACTIVITY_LABELS: Record<string, string> = {
-  tickets: "Air Tickets",
-  inbound: "Inbound Tourism",
-  outbound: "Outbound Tourism",
-  hajj_umrah: "Hajj & Umrah",
-  domestic: "Domestic Tourism",
-};
-
 interface OfficeDetailResponse {
   office: Office;
   branches: Branch[];
@@ -58,8 +45,23 @@ export default function AdminOfficeDetail() {
   const officeId = params.id;
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
   const [rejectComment, setRejectComment] = useState("");
+
+  const CATEGORY_LABELS: Record<string, string> = {
+    INITIAL_FIRST_FORMS: t("adminOffice.categoryMembership"),
+    INITIAL_SECOND_LEGAL: t("adminOffice.categoryLegal"),
+    INITIAL_THIRD_PERSONAL: t("adminOffice.categoryPersonal"),
+  };
+
+  const ACTIVITY_LABELS: Record<string, string> = {
+    tickets: t("adminOffice.activityTickets"),
+    inbound: t("adminOffice.activityInbound"),
+    outbound: t("adminOffice.activityOutbound"),
+    hajj_umrah: t("adminOffice.activityHajjUmrah"),
+    domestic: t("adminOffice.activityDomestic"),
+  };
 
   const { data, isLoading } = useQuery<OfficeDetailResponse>({
     queryKey: ["/api/admin/offices", officeId],
@@ -79,13 +81,13 @@ export default function AdminOfficeDetail() {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/offices"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/stats"] });
       toast({
-        title: "Office Approved",
-        description: "The office has been approved and can now access the portal.",
+        title: t("adminOffice.officeApproved"),
+        description: t("adminOffice.officeApprovedDesc"),
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Error",
+        title: t("common.error"),
         description: error.message,
         variant: "destructive",
       });
@@ -107,13 +109,13 @@ export default function AdminOfficeDetail() {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/stats"] });
       setRejectDialogOpen(false);
       toast({
-        title: "Office Rejected",
-        description: "The office registration has been rejected.",
+        title: t("adminOffice.officeRejected"),
+        description: t("adminOffice.officeRejectedDesc"),
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Error",
+        title: t("common.error"),
         description: error.message,
         variant: "destructive",
       });
@@ -144,14 +146,14 @@ export default function AdminOfficeDetail() {
             <Link href="/admin/offices">
               <Button variant="ghost" size="sm" className="gap-2" data-testid="button-back">
                 <ArrowLeft className="h-4 w-4" />
-                Back to Offices
+                {t("adminOffice.backToOffices")}
               </Button>
             </Link>
           </header>
 
           <main className="flex-1 p-4 sm:p-6">
             {isLoading ? (
-              <LoadingPage message="Loading office details..." />
+              <LoadingPage message={t("adminOffice.loadingDetails")} />
             ) : data?.office ? (
               <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -164,7 +166,7 @@ export default function AdminOfficeDetail() {
                         {data.office.tradeNameAr}
                       </h2>
                       <p className="text-muted-foreground">
-                        Office ID: {data.office.id}
+                        {t("adminOffice.officeId")}: {data.office.id}
                       </p>
                     </div>
                   </div>
@@ -183,7 +185,7 @@ export default function AdminOfficeDetail() {
                           ) : (
                             <CheckCircle2 className="h-4 w-4" />
                           )}
-                          Approve
+                          {t("adminOffice.approve")}
                         </Button>
                         <Button
                           variant="destructive"
@@ -192,7 +194,7 @@ export default function AdminOfficeDetail() {
                           data-testid="button-reject"
                         >
                           <XCircle className="h-4 w-4" />
-                          Reject
+                          {t("adminOffice.reject")}
                         </Button>
                       </div>
                     )}
@@ -203,7 +205,7 @@ export default function AdminOfficeDetail() {
                   <Card className="border-destructive bg-destructive/5">
                     <CardContent className="pt-4">
                       <p className="text-sm">
-                        <span className="font-medium">Rejection Reason:</span> {data.office.adminComment}
+                        <span className="font-medium">{t("adminOffice.rejectionReason")}:</span> {data.office.adminComment}
                       </p>
                     </CardContent>
                   </Card>
@@ -211,12 +213,12 @@ export default function AdminOfficeDetail() {
 
                 <Tabs defaultValue="info">
                   <TabsList>
-                    <TabsTrigger value="info" data-testid="tab-info">Office Info</TabsTrigger>
+                    <TabsTrigger value="info" data-testid="tab-info">{t("adminOffice.tabInfo")}</TabsTrigger>
                     <TabsTrigger value="branches" data-testid="tab-branches">
-                      Branches ({data.branches.length})
+                      {t("adminOffice.tabBranches")} ({data.branches.length})
                     </TabsTrigger>
                     <TabsTrigger value="documents" data-testid="tab-documents">
-                      Documents ({data.documents.length})
+                      {t("adminOffice.tabDocuments")} ({data.documents.length})
                     </TabsTrigger>
                   </TabsList>
 
@@ -224,40 +226,40 @@ export default function AdminOfficeDetail() {
                     <div className="grid gap-6 lg:grid-cols-2">
                       <Card>
                         <CardHeader>
-                          <CardTitle className="text-lg">Basic Information</CardTitle>
+                          <CardTitle className="text-lg">{t("adminOffice.basicInfo")}</CardTitle>
                         </CardHeader>
                         <CardContent>
                           <dl className="space-y-3 text-sm">
                             <div className="flex justify-between">
-                              <dt className="text-muted-foreground">Trade Name</dt>
+                              <dt className="text-muted-foreground">{t("adminOffice.tradeName")}</dt>
                               <dd className="font-medium text-right">{data.office.tradeNameAr}</dd>
                             </div>
                             {data.office.legalNameRegistrar && (
                               <div className="flex justify-between">
-                                <dt className="text-muted-foreground">Legal Name</dt>
+                                <dt className="text-muted-foreground">{t("adminOffice.legalName")}</dt>
                                 <dd className="font-medium text-right">{data.office.legalNameRegistrar}</dd>
                               </div>
                             )}
                             {data.office.nationalEstablishmentNumber && (
                               <div className="flex justify-between">
-                                <dt className="text-muted-foreground">Establishment No.</dt>
+                                <dt className="text-muted-foreground">{t("adminOffice.establishmentNo")}</dt>
                                 <dd className="font-mono text-right">{data.office.nationalEstablishmentNumber}</dd>
                               </div>
                             )}
                             {data.office.socialSecurityNumber && (
                               <div className="flex justify-between">
-                                <dt className="text-muted-foreground">SSN</dt>
+                                <dt className="text-muted-foreground">{t("adminOffice.ssn")}</dt>
                                 <dd className="font-mono text-right">{data.office.socialSecurityNumber}</dd>
                               </div>
                             )}
                             {data.office.guaranteeExpiryDate && (
                               <div className="flex justify-between">
-                                <dt className="text-muted-foreground">Guarantee Expiry</dt>
+                                <dt className="text-muted-foreground">{t("adminOffice.guaranteeExpiry")}</dt>
                                 <dd className="text-right">{data.office.guaranteeExpiryDate}</dd>
                               </div>
                             )}
                             <div className="flex justify-between">
-                              <dt className="text-muted-foreground">Registered</dt>
+                              <dt className="text-muted-foreground">{t("adminOffice.registered")}</dt>
                               <dd className="text-right">
                                 {new Date(data.office.createdAt).toLocaleDateString()}
                               </dd>
@@ -266,7 +268,7 @@ export default function AdminOfficeDetail() {
 
                           {data.office.tourismActivities && (data.office.tourismActivities as string[]).length > 0 && (
                             <div className="mt-4 pt-4 border-t">
-                              <p className="text-sm font-medium mb-2">Tourism Activities</p>
+                              <p className="text-sm font-medium mb-2">{t("adminOffice.tourismActivities")}</p>
                               <div className="flex flex-wrap gap-1">
                                 {(data.office.tourismActivities as string[]).map((activity) => (
                                   <Badge key={activity} variant="secondary" className="text-xs">
@@ -281,7 +283,7 @@ export default function AdminOfficeDetail() {
 
                       <Card>
                         <CardHeader>
-                          <CardTitle className="text-lg">Contact Information</CardTitle>
+                          <CardTitle className="text-lg">{t("adminOffice.contactInfo")}</CardTitle>
                         </CardHeader>
                         <CardContent>
                           <dl className="space-y-3 text-sm">
@@ -306,7 +308,7 @@ export default function AdminOfficeDetail() {
                             {data.office.mobile && (
                               <div className="flex items-center gap-2">
                                 <Phone className="h-4 w-4 text-muted-foreground" />
-                                <span>{data.office.mobile} (Mobile)</span>
+                                <span>{data.office.mobile} ({t("adminOffice.mobile")})</span>
                               </div>
                             )}
                             {data.office.mainEmail && (
@@ -333,9 +335,9 @@ export default function AdminOfficeDetail() {
                               <div className="flex items-center gap-2">
                                 <Mail className="h-4 w-4 text-muted-foreground" />
                                 <span>
-                                  {data.office.poBox && `P.O. Box: ${data.office.poBox}`}
+                                  {data.office.poBox && `${t("adminOffice.poBox")}: ${data.office.poBox}`}
                                   {data.office.poBox && data.office.postalCode && ", "}
-                                  {data.office.postalCode && `Postal: ${data.office.postalCode}`}
+                                  {data.office.postalCode && `${t("adminOffice.postal")}: ${data.office.postalCode}`}
                                 </span>
                               </div>
                             )}
@@ -353,14 +355,14 @@ export default function AdminOfficeDetail() {
                             <CardHeader className="pb-2">
                               <CardTitle className="text-base flex items-center gap-2">
                                 <MapPin className="h-4 w-4" />
-                                Branch {index + 1}
+                                {t("adminOffice.branch")} {index + 1}
                               </CardTitle>
                             </CardHeader>
                             <CardContent>
                               <dl className="space-y-2 text-sm">
                                 {branch.city && (
                                   <div className="flex justify-between">
-                                    <dt className="text-muted-foreground">Location</dt>
+                                    <dt className="text-muted-foreground">{t("adminOffice.location")}</dt>
                                     <dd className="text-right">
                                       {[branch.city, branch.area].filter(Boolean).join(", ")}
                                     </dd>
@@ -368,7 +370,7 @@ export default function AdminOfficeDetail() {
                                 )}
                                 {branch.street && (
                                   <div className="flex justify-between">
-                                    <dt className="text-muted-foreground">Address</dt>
+                                    <dt className="text-muted-foreground">{t("adminOffice.address")}</dt>
                                     <dd className="text-right">
                                       {[branch.street, branch.buildingNumber].filter(Boolean).join(", ")}
                                     </dd>
@@ -376,19 +378,19 @@ export default function AdminOfficeDetail() {
                                 )}
                                 {branch.managerName && (
                                   <div className="flex justify-between">
-                                    <dt className="text-muted-foreground">Manager</dt>
+                                    <dt className="text-muted-foreground">{t("adminOffice.manager")}</dt>
                                     <dd className="text-right">{branch.managerName}</dd>
                                   </div>
                                 )}
                                 {branch.managerMobile && (
                                   <div className="flex justify-between">
-                                    <dt className="text-muted-foreground">Manager Mobile</dt>
+                                    <dt className="text-muted-foreground">{t("adminOffice.managerMobile")}</dt>
                                     <dd className="text-right">{branch.managerMobile}</dd>
                                   </div>
                                 )}
                                 {branch.phone && (
                                   <div className="flex justify-between">
-                                    <dt className="text-muted-foreground">Phone</dt>
+                                    <dt className="text-muted-foreground">{t("adminOffice.phone")}</dt>
                                     <dd className="text-right">{branch.phone}</dd>
                                   </div>
                                 )}
@@ -402,8 +404,8 @@ export default function AdminOfficeDetail() {
                         <CardContent className="py-12">
                           <EmptyState
                             icon={MapPin}
-                            title="No Branches"
-                            description="This office has not registered any branch locations."
+                            title={t("adminOffice.noBranches")}
+                            description={t("adminOffice.noBranchesDesc")}
                           />
                         </CardContent>
                       </Card>
@@ -420,7 +422,7 @@ export default function AdminOfficeDetail() {
                                 <FolderOpen className="h-4 w-4" />
                                 {CATEGORY_LABELS[category] || category}
                               </CardTitle>
-                              <CardDescription>{docs.length} file(s)</CardDescription>
+                              <CardDescription>{docs.length} {t("adminOffice.files")}</CardDescription>
                             </CardHeader>
                             <CardContent>
                               <div className="space-y-2">
@@ -434,7 +436,7 @@ export default function AdminOfficeDetail() {
                                       <div className="min-w-0">
                                         <p className="font-medium truncate text-sm">{doc.originalFilename}</p>
                                         <p className="text-xs text-muted-foreground">
-                                          Uploaded {new Date(doc.uploadedAt).toLocaleDateString()}
+                                          {t("adminOffice.uploaded")} {new Date(doc.uploadedAt).toLocaleDateString()}
                                         </p>
                                       </div>
                                     </div>
@@ -446,7 +448,7 @@ export default function AdminOfficeDetail() {
                                       <a href={`/api/documents/${doc.id}/download`} data-testid={`button-download-${doc.id}`}>
                                         <Button variant="outline" size="sm" className="gap-2">
                                           <Download className="h-4 w-4" />
-                                          Download
+                                          {t("common.download")}
                                         </Button>
                                       </a>
                                     </div>
@@ -462,8 +464,8 @@ export default function AdminOfficeDetail() {
                         <CardContent className="py-12">
                           <EmptyState
                             icon={FileText}
-                            title="No Documents"
-                            description="No documents have been uploaded for this office."
+                            title={t("adminOffice.noDocuments")}
+                            description={t("adminOffice.noDocumentsDesc")}
                           />
                         </CardContent>
                       </Card>
@@ -474,12 +476,12 @@ export default function AdminOfficeDetail() {
             ) : (
               <div className="text-center py-12">
                 <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold">Office Not Found</h3>
+                <h3 className="text-lg font-semibold">{t("adminOffice.officeNotFound")}</h3>
                 <p className="text-muted-foreground mb-4">
-                  The office you're looking for doesn't exist.
+                  {t("adminOffice.officeNotFoundDesc")}
                 </p>
                 <Link href="/admin/offices">
-                  <Button variant="outline">Back to Offices</Button>
+                  <Button variant="outline">{t("adminOffice.backToOffices")}</Button>
                 </Link>
               </div>
             )}
@@ -490,13 +492,13 @@ export default function AdminOfficeDetail() {
       <Dialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Reject Office Registration</DialogTitle>
+            <DialogTitle>{t("adminOffice.rejectDialogTitle")}</DialogTitle>
             <DialogDescription>
-              Please provide a reason for rejecting this office registration. This will be sent to the applicant.
+              {t("adminOffice.rejectDialogDesc")}
             </DialogDescription>
           </DialogHeader>
           <Textarea
-            placeholder="Enter rejection reason..."
+            placeholder={t("adminOffice.enterRejectionReason")}
             value={rejectComment}
             onChange={(e) => setRejectComment(e.target.value)}
             className="min-h-[100px]"
@@ -504,7 +506,7 @@ export default function AdminOfficeDetail() {
           />
           <DialogFooter>
             <Button variant="outline" onClick={() => setRejectDialogOpen(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               variant="destructive"
@@ -512,7 +514,7 @@ export default function AdminOfficeDetail() {
               disabled={rejectMutation.isPending}
               data-testid="button-confirm-reject"
             >
-              {rejectMutation.isPending ? <LoadingSpinner size="sm" /> : "Reject Office"}
+              {rejectMutation.isPending ? <LoadingSpinner size="sm" /> : t("adminOffice.rejectOffice")}
             </Button>
           </DialogFooter>
         </DialogContent>

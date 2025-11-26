@@ -10,6 +10,7 @@ import { LoadingPage, LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
+import { useLanguage } from "@/lib/i18n";
 import type { LicenseRenewal } from "@shared/schema";
 import {
   Calendar,
@@ -23,19 +24,20 @@ import {
   XCircle,
 } from "lucide-react";
 
-const statusSteps = [
-  { status: "SUBMITTED", label: "Submitted", icon: Clock },
-  { status: "APPROVED_FOR_DOWNLOAD", label: "Approved for Download", icon: Download },
-  { status: "MINISTRY_DOC_UPLOADED", label: "Ministry Doc Uploaded", icon: Upload },
-  { status: "FINAL_APPROVED", label: "Final Approved", icon: CheckCircle2 },
-];
-
 export default function OfficeRenewalDetail() {
   const params = useParams();
   const renewalId = params.id;
   const { toast } = useToast();
+  const { t } = useLanguage();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  
+  const statusSteps = [
+    { status: "SUBMITTED", label: t("renewalDetail.steps.submitted"), icon: Clock },
+    { status: "APPROVED_FOR_DOWNLOAD", label: t("renewalDetail.steps.approvedForDownload"), icon: Download },
+    { status: "MINISTRY_DOC_UPLOADED", label: t("renewalDetail.steps.ministryDocUploaded"), icon: Upload },
+    { status: "FINAL_APPROVED", label: t("renewalDetail.steps.finalApproved"), icon: CheckCircle2 },
+  ];
 
   const { data: renewal, isLoading } = useQuery<LicenseRenewal>({
     queryKey: ["/api/office/renewals", renewalId],
@@ -61,14 +63,14 @@ export default function OfficeRenewalDetail() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/office/renewals", renewalId] });
       toast({
-        title: "Document Uploaded",
-        description: "Ministry-approved document has been uploaded successfully.",
+        title: t("renewalDetail.documentUploaded"),
+        description: t("renewalDetail.documentUploadedDesc"),
       });
       setUploading(false);
     },
     onError: (error: Error) => {
       toast({
-        title: "Upload Failed",
+        title: t("renewalDetail.uploadFailed"),
         description: error.message,
         variant: "destructive",
       });
@@ -105,14 +107,14 @@ export default function OfficeRenewalDetail() {
             <Link href="/office/renewals">
               <Button variant="ghost" size="sm" className="gap-2" data-testid="button-back">
                 <ArrowLeft className="h-4 w-4" />
-                Back to Renewals
+                {t("renewalDetail.backToRenewals")}
               </Button>
             </Link>
           </header>
 
           <main className="flex-1 p-4 sm:p-6">
             {isLoading ? (
-              <LoadingPage message="Loading renewal details..." />
+              <LoadingPage message={t("renewalDetail.loadingDetails")} />
             ) : renewal ? (
               <div className="space-y-6 max-w-4xl mx-auto">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -121,9 +123,9 @@ export default function OfficeRenewalDetail() {
                       <Calendar className="h-7 w-7 text-primary" />
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold">License Renewal {renewal.year}</h2>
+                      <h2 className="text-2xl font-bold">{t("renewalDetail.licenseRenewal")} {renewal.year}</h2>
                       <p className="text-muted-foreground">
-                        Submitted on {new Date(renewal.createdAt).toLocaleDateString()}
+                        {t("renewals.submittedOn")} {new Date(renewal.createdAt).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
@@ -133,8 +135,8 @@ export default function OfficeRenewalDetail() {
                 {renewal.status !== "REJECTED" && (
                   <Card>
                     <CardHeader>
-                      <CardTitle>Progress</CardTitle>
-                      <CardDescription>Track the status of your renewal request</CardDescription>
+                      <CardTitle>{t("renewalDetail.progress")}</CardTitle>
+                      <CardDescription>{t("renewalDetail.trackStatus")}</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="flex items-center justify-between">
@@ -190,7 +192,7 @@ export default function OfficeRenewalDetail() {
                 {renewal.status === "REJECTED" && renewal.adminComment && (
                   <Alert variant="destructive">
                     <XCircle className="h-4 w-4" />
-                    <AlertTitle>Renewal Rejected</AlertTitle>
+                    <AlertTitle>{t("renewalDetail.renewalRejected")}</AlertTitle>
                     <AlertDescription>{renewal.adminComment}</AlertDescription>
                   </Alert>
                 )}
@@ -200,24 +202,24 @@ export default function OfficeRenewalDetail() {
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-cyan-700 dark:text-cyan-400">
                         <Download className="h-5 w-5" />
-                        Download Renewal Document
+                        {t("renewalDetail.downloadRenewalDoc")}
                       </CardTitle>
                       <CardDescription>
-                        Your renewal request has been approved. Download the document to take to the Ministry.
+                        {t("renewalDetail.downloadRenewalDocDesc")}
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <a href={`/api/office/renewals/${renewal.id}/download`} data-testid="button-download-pdf">
                         <Button className="gap-2">
                           <Download className="h-4 w-4" />
-                          Download PDF Document
+                          {t("renewalDetail.downloadPdf")}
                         </Button>
                       </a>
 
                       <div className="border-t pt-4">
-                        <h4 className="font-medium mb-2">Upload Ministry-Approved Document</h4>
+                        <h4 className="font-medium mb-2">{t("renewalDetail.uploadMinistryDoc")}</h4>
                         <p className="text-sm text-muted-foreground mb-3">
-                          After visiting the Ministry, upload the signed/approved document here.
+                          {t("renewalDetail.uploadMinistryDocDesc")}
                         </p>
                         <input
                           type="file"
@@ -239,7 +241,7 @@ export default function OfficeRenewalDetail() {
                           ) : (
                             <Upload className="h-4 w-4" />
                           )}
-                          Upload Ministry Document
+                          {t("renewalDetail.uploadMinistryButton")}
                         </Button>
                       </div>
                     </CardContent>
@@ -249,9 +251,9 @@ export default function OfficeRenewalDetail() {
                 {renewal.status === "MINISTRY_DOC_UPLOADED" && (
                   <Alert>
                     <Clock className="h-4 w-4" />
-                    <AlertTitle>Awaiting Final Approval</AlertTitle>
+                    <AlertTitle>{t("renewalDetail.awaitingFinalApproval")}</AlertTitle>
                     <AlertDescription>
-                      Your Ministry-approved document has been uploaded and is awaiting final review by the association.
+                      {t("renewalDetail.awaitingFinalApprovalDesc")}
                     </AlertDescription>
                   </Alert>
                 )}
@@ -259,49 +261,49 @@ export default function OfficeRenewalDetail() {
                 {renewal.status === "FINAL_APPROVED" && (
                   <Alert className="border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                    <AlertTitle className="text-emerald-700 dark:text-emerald-400">Renewal Approved</AlertTitle>
+                    <AlertTitle className="text-emerald-700 dark:text-emerald-400">{t("renewalDetail.renewalApproved")}</AlertTitle>
                     <AlertDescription className="text-emerald-600 dark:text-emerald-300">
-                      Congratulations! Your license renewal has been fully approved.
+                      {t("renewalDetail.renewalApprovedDesc")}
                     </AlertDescription>
                   </Alert>
                 )}
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Renewal Details</CardTitle>
+                    <CardTitle>{t("renewalDetail.renewalDetails")}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <dl className="space-y-3 text-sm">
                       <div className="flex justify-between">
-                        <dt className="text-muted-foreground">Renewal ID</dt>
+                        <dt className="text-muted-foreground">{t("renewalDetail.renewalId")}</dt>
                         <dd className="font-mono">{renewal.id}</dd>
                       </div>
                       <div className="flex justify-between">
-                        <dt className="text-muted-foreground">Year</dt>
+                        <dt className="text-muted-foreground">{t("renewals.year")}</dt>
                         <dd className="font-medium">{renewal.year}</dd>
                       </div>
                       <div className="flex justify-between">
-                        <dt className="text-muted-foreground">Status</dt>
+                        <dt className="text-muted-foreground">{t("common.status")}</dt>
                         <dd>
                           <StatusBadge status={renewal.status as any} size="sm" />
                         </dd>
                       </div>
                       <div className="flex justify-between">
-                        <dt className="text-muted-foreground">Submitted</dt>
+                        <dt className="text-muted-foreground">{t("renewalDetail.submitted")}</dt>
                         <dd>{new Date(renewal.createdAt).toLocaleString()}</dd>
                       </div>
                       <div className="flex justify-between">
-                        <dt className="text-muted-foreground">Last Updated</dt>
+                        <dt className="text-muted-foreground">{t("renewalDetail.lastUpdated")}</dt>
                         <dd>{new Date(renewal.updatedAt).toLocaleString()}</dd>
                       </div>
                       {renewal.ministryDocumentPath && (
                         <div className="flex justify-between items-center">
-                          <dt className="text-muted-foreground">Ministry Document</dt>
+                          <dt className="text-muted-foreground">{t("renewalDetail.ministryDocument")}</dt>
                           <dd>
                             <a href={`/api/documents/ministry/${renewal.id}/download`}>
                               <Button variant="outline" size="sm" className="gap-2">
                                 <FileText className="h-3 w-3" />
-                                View Document
+                                {t("renewalDetail.viewDocument")}
                               </Button>
                             </a>
                           </dd>
@@ -314,12 +316,12 @@ export default function OfficeRenewalDetail() {
             ) : (
               <div className="text-center py-12">
                 <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold">Renewal Not Found</h3>
+                <h3 className="text-lg font-semibold">{t("renewalDetail.notFound")}</h3>
                 <p className="text-muted-foreground mb-4">
-                  The renewal request you're looking for doesn't exist.
+                  {t("renewalDetail.notFoundDesc")}
                 </p>
                 <Link href="/office/renewals">
-                  <Button variant="outline">Back to Renewals</Button>
+                  <Button variant="outline">{t("renewalDetail.backToRenewals")}</Button>
                 </Link>
               </div>
             )}

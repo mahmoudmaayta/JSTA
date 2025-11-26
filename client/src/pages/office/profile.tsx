@@ -12,6 +12,7 @@ import { LoadingPage, LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useLanguage } from "@/lib/i18n";
 import type { Office } from "@shared/schema";
 import { officeUpdateSchema, type OfficeUpdateForm } from "@shared/schema";
 import { Building2, Save, MapPin, Phone, Mail, Lock } from "lucide-react";
@@ -29,6 +30,7 @@ type PasswordChangeForm = z.infer<typeof passwordChangeSchema>;
 
 export default function OfficeProfile() {
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const { data: office, isLoading } = useQuery<Office>({
     queryKey: ["/api/office/profile"],
@@ -87,13 +89,13 @@ export default function OfficeProfile() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/office/profile"] });
       toast({
-        title: "Profile Updated",
-        description: "Your office contact information has been updated successfully.",
+        title: t("profile.profileUpdated"),
+        description: t("profile.profileUpdatedDesc"),
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Error",
+        title: t("common.error"),
         description: error.message,
         variant: "destructive",
       });
@@ -115,13 +117,13 @@ export default function OfficeProfile() {
     onSuccess: () => {
       passwordForm.reset();
       toast({
-        title: "Password Changed",
-        description: "Your password has been changed successfully.",
+        title: t("profile.passwordChanged"),
+        description: t("profile.passwordChangedDesc"),
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Error",
+        title: t("common.error"),
         description: error.message,
         variant: "destructive",
       });
@@ -149,13 +151,13 @@ export default function OfficeProfile() {
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-toggle" />
             <div className="flex-1">
-              <h1 className="text-lg font-semibold">Office Profile</h1>
+              <h1 className="text-lg font-semibold">{t("profile.title")}</h1>
             </div>
           </header>
 
           <main className="flex-1 p-4 sm:p-6">
             {isLoading ? (
-              <LoadingPage message="Loading profile..." />
+              <LoadingPage message={t("profile.loadingProfile")} />
             ) : (
               <div className="max-w-3xl space-y-6">
                 <div>
@@ -164,38 +166,38 @@ export default function OfficeProfile() {
                     {office?.tradeNameAr}
                   </h2>
                   <p className="text-muted-foreground mt-1">
-                    Update your office contact information
+                    {t("profile.updateContactInfo")}
                   </p>
                 </div>
 
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Business Information</CardTitle>
+                    <CardTitle className="text-lg">{t("profile.businessInfo")}</CardTitle>
                     <CardDescription>
-                      These details cannot be changed. Contact the association for corrections.
+                      {t("profile.businessInfoDesc")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <dl className="grid gap-3 text-sm sm:grid-cols-2">
                       <div className="space-y-1">
-                        <dt className="text-muted-foreground">Trade Name</dt>
+                        <dt className="text-muted-foreground">{t("profile.tradeName")}</dt>
                         <dd className="font-medium">{office?.tradeNameAr}</dd>
                       </div>
                       {office?.legalNameRegistrar && (
                         <div className="space-y-1">
-                          <dt className="text-muted-foreground">Legal Name</dt>
+                          <dt className="text-muted-foreground">{t("profile.legalName")}</dt>
                           <dd className="font-medium">{office.legalNameRegistrar}</dd>
                         </div>
                       )}
                       {office?.nationalEstablishmentNumber && (
                         <div className="space-y-1">
-                          <dt className="text-muted-foreground">Establishment Number</dt>
+                          <dt className="text-muted-foreground">{t("profile.establishmentNumber")}</dt>
                           <dd className="font-mono">{office.nationalEstablishmentNumber}</dd>
                         </div>
                       )}
                       {office?.socialSecurityNumber && (
                         <div className="space-y-1">
-                          <dt className="text-muted-foreground">Social Security Number</dt>
+                          <dt className="text-muted-foreground">{t("profile.socialSecurityNumber")}</dt>
                           <dd className="font-mono">{office.socialSecurityNumber}</dd>
                         </div>
                       )}
@@ -209,7 +211,7 @@ export default function OfficeProfile() {
                       <CardHeader>
                         <CardTitle className="text-lg flex items-center gap-2">
                           <MapPin className="h-5 w-5" />
-                          Address
+                          {t("forms.officeStep.address")}
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
@@ -219,9 +221,9 @@ export default function OfficeProfile() {
                             name="mainCity"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>City</FormLabel>
+                                <FormLabel>{t("forms.officeStep.city")}</FormLabel>
                                 <FormControl>
-                                  <Input {...field} placeholder="Amman" data-testid="input-city" />
+                                  <Input {...field} placeholder={t("forms.officeStep.cityPlaceholder")} data-testid="input-city" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -232,9 +234,9 @@ export default function OfficeProfile() {
                             name="mainArea"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Area</FormLabel>
+                                <FormLabel>{t("forms.officeStep.area")}</FormLabel>
                                 <FormControl>
-                                  <Input {...field} placeholder="Shmeisani" data-testid="input-area" />
+                                  <Input {...field} placeholder={t("forms.officeStep.areaPlaceholder")} data-testid="input-area" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -245,9 +247,9 @@ export default function OfficeProfile() {
                             name="mainStreet"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Street</FormLabel>
+                                <FormLabel>{t("forms.officeStep.street")}</FormLabel>
                                 <FormControl>
-                                  <Input {...field} placeholder="Main Street" data-testid="input-street" />
+                                  <Input {...field} placeholder={t("forms.officeStep.streetPlaceholder")} data-testid="input-street" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -258,9 +260,9 @@ export default function OfficeProfile() {
                             name="mainBuildingNumber"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Building Number</FormLabel>
+                                <FormLabel>{t("forms.officeStep.buildingNumber")}</FormLabel>
                                 <FormControl>
-                                  <Input {...field} placeholder="123" data-testid="input-building" />
+                                  <Input {...field} placeholder={t("forms.officeStep.buildingPlaceholder")} data-testid="input-building" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -271,9 +273,9 @@ export default function OfficeProfile() {
                             name="poBox"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>P.O. Box</FormLabel>
+                                <FormLabel>{t("forms.officeStep.poBox")}</FormLabel>
                                 <FormControl>
-                                  <Input {...field} placeholder="P.O. Box" data-testid="input-pobox" />
+                                  <Input {...field} placeholder={t("forms.officeStep.poBoxPlaceholder")} data-testid="input-pobox" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -284,9 +286,9 @@ export default function OfficeProfile() {
                             name="postalCode"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Postal Code</FormLabel>
+                                <FormLabel>{t("forms.officeStep.postalCode")}</FormLabel>
                                 <FormControl>
-                                  <Input {...field} placeholder="11110" data-testid="input-postal" />
+                                  <Input {...field} placeholder={t("forms.officeStep.postalCodePlaceholder")} data-testid="input-postal" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -300,7 +302,7 @@ export default function OfficeProfile() {
                       <CardHeader>
                         <CardTitle className="text-lg flex items-center gap-2">
                           <Phone className="h-5 w-5" />
-                          Contact Details
+                          {t("profile.contactDetails")}
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
@@ -310,9 +312,9 @@ export default function OfficeProfile() {
                             name="phone"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Phone</FormLabel>
+                                <FormLabel>{t("forms.officeStep.phone")}</FormLabel>
                                 <FormControl>
-                                  <Input {...field} placeholder="+962 6 123 4567" data-testid="input-phone" />
+                                  <Input {...field} placeholder={t("forms.officeStep.phonePlaceholder")} data-testid="input-phone" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -323,9 +325,9 @@ export default function OfficeProfile() {
                             name="mobile"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Mobile</FormLabel>
+                                <FormLabel>{t("forms.officeStep.mobile")}</FormLabel>
                                 <FormControl>
-                                  <Input {...field} placeholder="+962 79 123 4567" data-testid="input-mobile" />
+                                  <Input {...field} placeholder={t("forms.officeStep.mobilePlaceholder")} data-testid="input-mobile" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -336,9 +338,9 @@ export default function OfficeProfile() {
                             name="fax"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Fax</FormLabel>
+                                <FormLabel>{t("forms.officeStep.fax")}</FormLabel>
                                 <FormControl>
-                                  <Input {...field} placeholder="+962 6 123 4568" data-testid="input-fax" />
+                                  <Input {...field} placeholder={t("forms.officeStep.faxPlaceholder")} data-testid="input-fax" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -352,7 +354,7 @@ export default function OfficeProfile() {
                       <CardHeader>
                         <CardTitle className="text-lg flex items-center gap-2">
                           <Mail className="h-5 w-5" />
-                          Email & Website
+                          {t("profile.emailWebsite")}
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
@@ -362,9 +364,9 @@ export default function OfficeProfile() {
                             name="mainEmail"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Primary Email</FormLabel>
+                                <FormLabel>{t("profile.primaryEmail")}</FormLabel>
                                 <FormControl>
-                                  <Input {...field} type="email" placeholder="info@example.com" data-testid="input-email" />
+                                  <Input {...field} type="email" placeholder={t("forms.officeStep.mainEmailPlaceholder")} data-testid="input-email" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -375,9 +377,9 @@ export default function OfficeProfile() {
                             name="extraEmail"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Secondary Email</FormLabel>
+                                <FormLabel>{t("profile.secondaryEmail")}</FormLabel>
                                 <FormControl>
-                                  <Input {...field} type="email" placeholder="contact@example.com" data-testid="input-extra-email" />
+                                  <Input {...field} type="email" placeholder={t("forms.officeStep.additionalEmailPlaceholder")} data-testid="input-extra-email" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -388,9 +390,9 @@ export default function OfficeProfile() {
                             name="website"
                             render={({ field }) => (
                               <FormItem className="sm:col-span-2">
-                                <FormLabel>Website</FormLabel>
+                                <FormLabel>{t("forms.officeStep.website")}</FormLabel>
                                 <FormControl>
-                                  <Input {...field} placeholder="https://www.example.com" data-testid="input-website" />
+                                  <Input {...field} placeholder={t("forms.officeStep.websitePlaceholder")} data-testid="input-website" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -412,7 +414,7 @@ export default function OfficeProfile() {
                         ) : (
                           <Save className="h-4 w-4" />
                         )}
-                        Save Changes
+                        {t("common.save")}
                       </Button>
                     </div>
                   </form>
@@ -423,10 +425,10 @@ export default function OfficeProfile() {
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold flex items-center gap-2">
                     <Lock className="h-5 w-5" />
-                    Change Password
+                    {t("profile.changePassword")}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    Update your account password to keep your account secure.
+                    {t("profile.changePasswordDesc")}
                   </p>
 
                   <Form {...passwordForm}>
@@ -439,12 +441,12 @@ export default function OfficeProfile() {
                               name="currentPassword"
                               render={({ field }) => (
                                 <FormItem>
-                                  <FormLabel>Current Password</FormLabel>
+                                  <FormLabel>{t("profile.currentPassword")}</FormLabel>
                                   <FormControl>
                                     <Input
                                       {...field}
                                       type="password"
-                                      placeholder="Enter current password"
+                                      placeholder={t("profile.currentPasswordPlaceholder")}
                                       data-testid="input-current-password"
                                     />
                                   </FormControl>
@@ -457,12 +459,12 @@ export default function OfficeProfile() {
                               name="newPassword"
                               render={({ field }) => (
                                 <FormItem>
-                                  <FormLabel>New Password</FormLabel>
+                                  <FormLabel>{t("profile.newPassword")}</FormLabel>
                                   <FormControl>
                                     <Input
                                       {...field}
                                       type="password"
-                                      placeholder="Enter new password"
+                                      placeholder={t("profile.newPasswordPlaceholder")}
                                       data-testid="input-new-password"
                                     />
                                   </FormControl>
@@ -475,12 +477,12 @@ export default function OfficeProfile() {
                               name="confirmPassword"
                               render={({ field }) => (
                                 <FormItem>
-                                  <FormLabel>Confirm Password</FormLabel>
+                                  <FormLabel>{t("profile.confirmNewPassword")}</FormLabel>
                                   <FormControl>
                                     <Input
                                       {...field}
                                       type="password"
-                                      placeholder="Confirm new password"
+                                      placeholder={t("profile.confirmPasswordPlaceholder")}
                                       data-testid="input-confirm-password"
                                     />
                                   </FormControl>
@@ -505,7 +507,7 @@ export default function OfficeProfile() {
                           ) : (
                             <Lock className="h-4 w-4" />
                           )}
-                          Change Password
+                          {t("profile.changePassword")}
                         </Button>
                       </div>
                     </form>
