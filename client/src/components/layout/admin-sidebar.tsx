@@ -1,5 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
+import { useTranslation } from "@/lib/i18n";
 import {
   Sidebar,
   SidebarContent,
@@ -14,6 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import {
   LayoutDashboard,
   Building,
@@ -24,32 +26,33 @@ import {
 } from "lucide-react";
 import logoImage from "@assets/logo-0 (1)_1764114456004.png";
 
-const adminMenuItems = [
-  {
-    title: "Dashboard",
-    url: "/admin",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Offices",
-    url: "/admin/offices",
-    icon: Building,
-  },
-  {
-    title: "Renewals",
-    url: "/admin/renewals",
-    icon: FileCheck,
-  },
-  {
-    title: "Audit Logs",
-    url: "/admin/audit-logs",
-    icon: History,
-  },
-];
-
 export function AdminSidebar() {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
+  const { t } = useTranslation();
+
+  const adminMenuItems = [
+    {
+      title: t("navigation.dashboard"),
+      url: "/admin",
+      icon: LayoutDashboard,
+    },
+    {
+      title: t("navigation.offices"),
+      url: "/admin/offices",
+      icon: Building,
+    },
+    {
+      title: t("navigation.renewals"),
+      url: "/admin/renewals",
+      icon: FileCheck,
+    },
+    {
+      title: t("navigation.auditLogs"),
+      url: "/admin/audit-logs",
+      icon: History,
+    },
+  ];
 
   const handleLogout = async () => {
     await logout();
@@ -74,23 +77,23 @@ export function AdminSidebar() {
             <span className="font-semibold text-sm">JSTA Portal</span>
             <span className="text-xs text-muted-foreground flex items-center gap-1">
               <Shield className="h-3 w-3" />
-              Admin Panel
+              {t("navigation.adminPanel")}
             </span>
           </div>
         </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Management</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("navigation.management")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {adminMenuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.url}>
                   <SidebarMenuButton
                     asChild
                     isActive={location === item.url || (item.url !== "/admin" && location.startsWith(item.url))}
                   >
-                    <Link href={item.url} data-testid={`nav-${item.title.toLowerCase()}`}>
+                    <Link href={item.url} data-testid={`nav-${item.url.split("/").pop()}`}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
                     </Link>
@@ -98,6 +101,13 @@ export function AdminSidebar() {
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <div className="px-2">
+              <LanguageSwitcher />
+            </div>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
@@ -109,8 +119,8 @@ export function AdminSidebar() {
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-1 flex-col truncate">
-            <span className="truncate text-sm font-medium">{user?.email}</span>
-            <span className="text-xs text-muted-foreground">Administrator</span>
+            <span className="truncate text-sm font-medium ltr">{user?.email}</span>
+            <span className="text-xs text-muted-foreground">{t("admin.overview")}</span>
           </div>
           <Button
             variant="ghost"

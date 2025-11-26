@@ -2,8 +2,8 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Header } from "@/components/layout/header";
+import { useTranslation } from "@/lib/i18n";
 import {
-  Building2,
   FileCheck,
   Shield,
   Users,
@@ -12,58 +12,61 @@ import {
   Clock,
   Upload,
 } from "lucide-react";
-
-const features = [
-  {
-    icon: Users,
-    title: "Office Registration",
-    description: "Register your tourism office and submit required documentation for membership approval.",
-  },
-  {
-    icon: FileCheck,
-    title: "License Renewals",
-    description: "Request license renewals and download official documents for Ministry submission.",
-  },
-  {
-    icon: Shield,
-    title: "Secure Portal",
-    description: "Your documents and data are securely stored and accessible only to authorized users.",
-  },
-  {
-    icon: Upload,
-    title: "Document Management",
-    description: "Upload, track, and manage all your official documents in one centralized location.",
-  },
-];
-
-const processSteps = [
-  {
-    step: 1,
-    title: "Create Account",
-    description: "Register with your email and create a secure password",
-    icon: Users,
-  },
-  {
-    step: 2,
-    title: "Submit Information",
-    description: "Fill in your office details and upload required documents",
-    icon: Upload,
-  },
-  {
-    step: 3,
-    title: "Await Approval",
-    description: "The association reviews your application",
-    icon: Clock,
-  },
-  {
-    step: 4,
-    title: "Access Portal",
-    description: "Once approved, access your dashboard and manage renewals",
-    icon: CheckCircle2,
-  },
-];
+import logoImage from "@assets/logo-0 (1)_1764114456004.png";
 
 export default function LandingPage() {
+  const { t } = useTranslation();
+
+  const features = [
+    {
+      icon: Users,
+      title: t("landing.featureRegistration"),
+      description: t("landing.featureRegistrationDesc"),
+    },
+    {
+      icon: FileCheck,
+      title: t("landing.featureRenewal"),
+      description: t("landing.featureRenewalDesc"),
+    },
+    {
+      icon: Shield,
+      title: t("landing.featureDocuments"),
+      description: t("landing.featureDocumentsDesc"),
+    },
+    {
+      icon: Upload,
+      title: t("landing.featureTracking"),
+      description: t("landing.featureTrackingDesc"),
+    },
+  ];
+
+  const processSteps = [
+    {
+      step: 1,
+      title: t("registration.step1"),
+      description: t("registration.accountInfo"),
+      icon: Users,
+    },
+    {
+      step: 2,
+      title: t("registration.step2"),
+      description: t("registration.officeInfo"),
+      icon: Upload,
+    },
+    {
+      step: 3,
+      title: t("registration.step3"),
+      description: t("registration.branchInfo"),
+      icon: Clock,
+    },
+    {
+      step: 4,
+      title: t("registration.step4"),
+      description: t("registration.documentUpload"),
+      icon: CheckCircle2,
+    },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
@@ -73,26 +76,29 @@ export default function LandingPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-3xl text-center">
               <div className="mb-6 flex justify-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary">
-                  <Building2 className="h-8 w-8 text-primary-foreground" />
-                </div>
+                <img 
+                  src={logoImage} 
+                  alt="JSTA Logo" 
+                  className="h-20 w-auto object-contain"
+                  data-testid="img-hero-logo"
+                />
               </div>
               <h1 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-                Tourism Offices Membership & License Renewal Portal
+                {t("landing.heroTitle")}
               </h1>
               <p className="mb-8 text-lg text-muted-foreground">
-                Welcome to the official portal for tourism office registration, membership management, and license renewal services. Streamline your administrative processes with our secure online platform.
+                {t("landing.heroSubtitle")}
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link href="/register">
                   <Button size="lg" className="w-full sm:w-auto gap-2" data-testid="button-hero-register">
-                    Create New Account
-                    <ArrowRight className="h-4 w-4" />
+                    {t("landing.getStarted")}
+                    <ArrowRight className="h-4 w-4 rtl-flip" />
                   </Button>
                 </Link>
                 <Link href="/login">
                   <Button size="lg" variant="outline" className="w-full sm:w-auto" data-testid="button-hero-login">
-                    Login to Your Account
+                    {t("landing.memberLogin")}
                   </Button>
                 </Link>
               </div>
@@ -104,10 +110,10 @@ export default function LandingPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-2xl text-center mb-12">
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl mb-4">
-                Portal Features
+                {t("landing.features")}
               </h2>
               <p className="text-muted-foreground">
-                Everything you need to manage your tourism office membership and licenses
+                {t("landing.heroSubtitle")}
               </p>
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -134,10 +140,10 @@ export default function LandingPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-2xl text-center mb-12">
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl mb-4">
-                Registration Process
+                {t("registration.title")}
               </h2>
               <p className="text-muted-foreground">
-                Follow these simple steps to register your tourism office
+                {t("registration.subtitle")}
               </p>
             </div>
             <div className="mx-auto max-w-4xl">
@@ -167,16 +173,16 @@ export default function LandingPage() {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl mb-4">
-                Ready to Get Started?
+                {t("landing.getStarted")}
               </h2>
               <p className="text-muted-foreground mb-6">
-                Join the portal today and simplify your tourism office management
+                {t("landing.heroSubtitle")}
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link href="/register">
                   <Button size="lg" className="gap-2" data-testid="button-cta-register">
-                    Create Your Account
-                    <ArrowRight className="h-4 w-4" />
+                    {t("auth.register")}
+                    <ArrowRight className="h-4 w-4 rtl-flip" />
                   </Button>
                 </Link>
               </div>
@@ -189,13 +195,17 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <Building2 className="h-5 w-5 text-muted-foreground" />
+              <img 
+                src={logoImage} 
+                alt="JSTA Logo" 
+                className="h-6 w-auto object-contain"
+              />
               <span className="text-sm text-muted-foreground">
-                Tourism Offices Portal
+                JSTA Portal
               </span>
             </div>
             <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} Jordan Society of Tourism Agents. All rights reserved.
+              &copy; {new Date().getFullYear()} {t("landing.heroTitle")}
             </p>
           </div>
         </div>
