@@ -7,6 +7,8 @@
     "delete": "Delete",
     "edit": "Edit",
     "view": "View",
+    "viewAll": "View All",
+    "review": "Review",
     "back": "Back",
     "next": "Next",
     "previous": "Previous",
@@ -35,7 +37,9 @@
     "of": "of",
     "showing": "Showing",
     "to": "to",
-    "entries": "entries"
+    "entries": "entries",
+    "welcome": "Welcome",
+    "unknown": "Unknown"
   },
   "auth": {
     "login": "Login",
@@ -133,14 +137,28 @@
     "viewDocuments": "View Documents",
     "editProfile": "Edit Profile",
     "noRenewals": "No renewals found",
-    "noDocuments": "No documents found",
+    "noDocuments": "No Documents",
+    "noDocumentsDesc": "No documents have been uploaded yet.",
     "uploadDocument": "Upload Document",
     "documentName": "Document Name",
     "documentType": "Document Type",
     "uploadDate": "Upload Date",
     "fileSize": "File Size",
     "downloadDocument": "Download Document",
-    "deleteDocument": "Delete Document"
+    "deleteDocument": "Delete Document",
+    "manageDescription": "Manage your office documents and license renewals",
+    "accountStatus": "Account Status",
+    "approvedRenewals": "Approved Renewals",
+    "officeInformation": "Office Information",
+    "registeredDetails": "Your registered office details",
+    "tradeName": "Trade Name",
+    "legalName": "Legal Name",
+    "establishmentNo": "Establishment No.",
+    "city": "City",
+    "phone": "Phone",
+    "noInfoAvailable": "No office information available.",
+    "recentDocuments": "Recent Documents",
+    "uploadedDocuments": "Your uploaded documents"
   },
   "renewal": {
     "title": "License Renewal",
@@ -169,7 +187,14 @@
     "renewalRejected": "Your renewal has been rejected",
     "rejectionReason": "Rejection Reason",
     "noActiveRenewal": "No active renewal request",
-    "createRenewal": "Create Renewal Request"
+    "createRenewal": "Create Renewal Request",
+    "licenseRenewal": "License Renewal",
+    "requestAndManage": "Request and manage your license renewals",
+    "requestRenewal": "Request Renewal",
+    "submitted": "Submitted",
+    "viewAllRenewals": "View All Renewals",
+    "noRequests": "No Renewal Requests",
+    "noRequestsDesc": "You haven't submitted any license renewal requests yet."
   },
   "admin": {
     "dashboard": "Admin Dashboard",
@@ -212,6 +237,7 @@
     "dateTime": "Date & Time",
     "noAuditLogs": "No audit logs found",
     "manageOffices": "Manage and review registered tourism offices",
+    "manageOfficesDesc": "Manage tourism offices and license renewals",
     "manageRenewals": "Review and process license renewal requests",
     "trackActions": "Track all administrative actions and status changes",
     "filterByStatus": "Filter by status",
@@ -222,7 +248,14 @@
     "registeredOn": "Registered On",
     "lastUpdated": "Last Updated",
     "contactInfo": "Contact Information",
-    "downloadMinistryDoc": "Download Ministry Document"
+    "downloadMinistryDoc": "Download Ministry Document",
+    "pendingRegistrations": "Pending Office Registrations",
+    "officesAwaitingApproval": "Offices awaiting your approval",
+    "allCaughtUp": "All Caught Up!",
+    "noPendingRegistrations": "No pending office registrations to review.",
+    "pendingRenewalRequests": "Pending Renewal Requests",
+    "renewalsAwaitingAction": "Renewals awaiting your action",
+    "noPendingRenewals": "No pending renewal requests to review."
   },
   "status": {
     "pending": "Pending",
