@@ -122,3 +122,28 @@ Preferred communication style: Simple, everyday language.
 5. Office uploads Ministry-approved document
 6. Admin performs final review and approval/rejection
 7. Status notifications sent at each stage
+
+### Internationalization (i18n)
+
+**Languages Supported**: English (en) and Arabic (ar) with full RTL support
+
+**Implementation**: 
+- Custom React Context-based i18n system (`client/src/lib/i18n.tsx`)
+- Locale files: `client/src/locales/en.json` and `client/src/locales/ar.json`
+- Language preference persisted in localStorage (key: `jsta_language`)
+- Automatic RTL/LTR layout switching based on language selection
+
+**Translation Coverage**:
+- All pages fully translated (900+ translation keys)
+- Multi-step registration form
+- Admin and office dashboards
+- Renewal workflow pages
+- Audit logs and document management
+- Form validation error messages
+- Status badges and labels
+
+**Language Switcher**: Available in header, toggles between English and Arabic with RTL layout support
+
+**Admin Test Credentials**: 
+- Email: atallaabutaha@gmail.com
+- Password: Admin123
