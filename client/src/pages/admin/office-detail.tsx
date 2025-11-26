@@ -72,7 +72,7 @@ export default function AdminOfficeDetail() {
       const response = await apiRequest("POST", `/api/admin/offices/${officeId}/approve`);
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || "Failed to approve office");
+        throw new Error(error.message || t("adminOffice.approveFailed"));
       }
       return response.json();
     },
@@ -99,7 +99,7 @@ export default function AdminOfficeDetail() {
       const response = await apiRequest("POST", `/api/admin/offices/${officeId}/reject`, { comment });
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || "Failed to reject office");
+        throw new Error(error.message || t("adminOffice.rejectFailed"));
       }
       return response.json();
     },

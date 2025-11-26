@@ -11,12 +11,14 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { LoadingPage } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useLanguage } from "@/lib/i18n";
 import type { Office } from "@shared/schema";
 import { Building, Search, Eye, FolderOpen } from "lucide-react";
 
 export default function AdminOffices() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const { t } = useLanguage();
 
   const { data: offices, isLoading } = useQuery<Office[]>({
     queryKey: ["/api/admin/offices"],
@@ -44,19 +46,19 @@ export default function AdminOffices() {
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-toggle" />
             <div className="flex-1">
-              <h1 className="text-lg font-semibold">Offices</h1>
+              <h1 className="text-lg font-semibold">{t("admin.offices")}</h1>
             </div>
           </header>
 
           <main className="flex-1 p-4 sm:p-6">
             {isLoading ? (
-              <LoadingPage message="Loading offices..." />
+              <LoadingPage message={t("adminOffices.loading")} />
             ) : (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold">Tourism Offices</h2>
+                  <h2 className="text-2xl font-bold">{t("adminOffices.title")}</h2>
                   <p className="text-muted-foreground">
-                    Manage and review registered tourism offices
+                    {t("admin.manageOffices")}
                   </p>
                 </div>
 
@@ -66,7 +68,7 @@ export default function AdminOffices() {
                       <div className="relative flex-1">
                         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
-                          placeholder="Search by name or email..."
+                          placeholder={t("admin.searchByName")}
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           className="pl-9"
@@ -75,13 +77,13 @@ export default function AdminOffices() {
                       </div>
                       <Select value={statusFilter} onValueChange={setStatusFilter}>
                         <SelectTrigger className="w-full sm:w-[180px]" data-testid="select-status">
-                          <SelectValue placeholder="Filter by status" />
+                          <SelectValue placeholder={t("admin.filterByStatus")} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="all">All Statuses</SelectItem>
-                          <SelectItem value="PENDING_APPROVAL">Pending Approval</SelectItem>
-                          <SelectItem value="ACTIVE">Active</SelectItem>
-                          <SelectItem value="REJECTED">Rejected</SelectItem>
+                          <SelectItem value="all">{t("admin.allStatuses")}</SelectItem>
+                          <SelectItem value="PENDING_APPROVAL">{t("status.pendingApproval")}</SelectItem>
+                          <SelectItem value="ACTIVE">{t("status.active")}</SelectItem>
+                          <SelectItem value="REJECTED">{t("status.rejected")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -92,12 +94,12 @@ export default function AdminOffices() {
                         <Table>
                           <TableHeader>
                             <TableRow>
-                              <TableHead>ID</TableHead>
-                              <TableHead>Trade Name</TableHead>
-                              <TableHead className="hidden md:table-cell">City</TableHead>
-                              <TableHead className="hidden lg:table-cell">Registered</TableHead>
-                              <TableHead>Status</TableHead>
-                              <TableHead className="text-right">Actions</TableHead>
+                              <TableHead>{t("adminOffices.id")}</TableHead>
+                              <TableHead>{t("adminOffices.tradeName")}</TableHead>
+                              <TableHead className="hidden md:table-cell">{t("adminOffices.city")}</TableHead>
+                              <TableHead className="hidden lg:table-cell">{t("adminOffices.registered")}</TableHead>
+                              <TableHead>{t("adminOffices.status")}</TableHead>
+                              <TableHead className="text-right">{t("adminOffices.actions")}</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -127,7 +129,7 @@ export default function AdminOffices() {
                                   <Link href={`/admin/offices/${office.id}`}>
                                     <Button variant="ghost" size="sm" className="gap-1" data-testid={`button-view-${office.id}`}>
                                       <Eye className="h-4 w-4" />
-                                      View
+                                      {t("common.view")}
                                     </Button>
                                   </Link>
                                 </TableCell>
@@ -139,11 +141,11 @@ export default function AdminOffices() {
                     ) : (
                       <EmptyState
                         icon={FolderOpen}
-                        title="No Offices Found"
+                        title={t("adminOffices.noOffices")}
                         description={
                           searchQuery || statusFilter !== "all"
-                            ? "No offices match your search criteria."
-                            : "No tourism offices have registered yet."
+                            ? t("adminOffices.noMatchingOffices")
+                            : t("adminOffices.noRegisteredOffices")
                         }
                       />
                     )}
