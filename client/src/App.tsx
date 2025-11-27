@@ -17,6 +17,7 @@ import OfficeDashboard from "@/pages/office/dashboard";
 import OfficeDocuments from "@/pages/office/documents";
 import OfficeRenewals from "@/pages/office/renewals";
 import OfficeRenewalDetail from "@/pages/office/renewal-detail";
+import OfficeRenewal2026 from "@/pages/office/renewal-2026";
 import OfficeProfile from "@/pages/office/profile";
 
 import AdminDashboard from "@/pages/admin/dashboard";
@@ -116,6 +117,12 @@ function Router() {
       <Route path="/office/renewals/:id">
         <ProtectedRoute allowedRoles={['OFFICE']}>
           <OfficeRenewalDetail />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/office/renewals-2026/:id">
+        <ProtectedRoute allowedRoles={['OFFICE']}>
+          <OfficeRenewal2026 />
         </ProtectedRoute>
       </Route>
       

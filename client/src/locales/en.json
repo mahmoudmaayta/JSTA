@@ -728,5 +728,149 @@
     "step3": "After approval, you can log in and access all portal features",
     "backToHome": "Back to Home",
     "loginNow": "Login Now"
+  },
+  "renewal2026": {
+    "title": "Renewal Form",
+    "subtitle": "Complete all forms and upload required documents",
+    "loading": "Loading renewal details...",
+    "notFound": "Renewal not found",
+    "backToRenewals": "Back to Renewals",
+    "saveForm": "Save Form",
+    "next": "Next",
+    "back": "Back",
+    "formSaved": "Form Saved",
+    "officeFormSaved": "Office information has been saved successfully.",
+    "staffFormSaved": "Staff information has been saved successfully.",
+    "commitmentFormSaved": "Commitment form has been saved successfully.",
+    "fileUploaded": "File Uploaded",
+    "fileUploadedDesc": "Document has been uploaded successfully.",
+    "fileDeleted": "File Deleted",
+    "fileDeletedDesc": "Document has been removed successfully.",
+    "submitted": "Renewal Submitted",
+    "submittedDesc": "Your renewal has been submitted for review.",
+    "tabs": {
+      "office": "Office Info",
+      "staff": "Staff",
+      "commitment": "Commitment",
+      "attachments": "Attachments",
+      "submit": "Submit"
+    },
+    "officeForm": {
+      "title": "Office Information Form",
+      "description": "Enter your tourism office details for the renewal year.",
+      "officeNameAr": "Office Name (Arabic)",
+      "officeNameEn": "Office Name (English)",
+      "licenseNumber": "License Number",
+      "commercialRegNumber": "Commercial Registration Number",
+      "dateEstablished": "Date Established",
+      "branchCount": "Number of Branches",
+      "mainAddress": "Main Office Address",
+      "phone": "Phone Number",
+      "email": "Email Address",
+      "website": "Website"
+    },
+    "staffForm": {
+      "title": "Staff Information Form",
+      "description": "Enter details for all staff members including owners, managers, and employees.",
+      "noStaff": "No staff members added yet",
+      "addStaff": "Add Staff Member",
+      "addMore": "Add Another Staff Member",
+      "staffMember": "Staff Member",
+      "fullNameAr": "Full Name (Arabic)",
+      "fullNameEn": "Full Name (English)",
+      "nationalId": "National ID",
+      "socialSecurityNo": "Social Security Number",
+      "nationality": "Nationality",
+      "gender": "Gender",
+      "motherName": "Mother's Name",
+      "mobile": "Mobile Number",
+      "birthDate": "Date of Birth",
+      "currentPosition": "Current Position",
+      "startDate": "Start Date",
+      "branch": "Branch",
+      "roleType": "Role Type",
+      "nationalities": {
+        "jo": "Jordanian",
+        "sy": "Syrian",
+        "eg": "Egyptian",
+        "other": "Other"
+      },
+      "genders": {
+        "male": "Male",
+        "female": "Female"
+      },
+      "roles": {
+        "owner": "Owner",
+        "manager": "Manager",
+        "employee": "Employee",
+        "accountant": "Accountant",
+        "guide": "Tour Guide"
+      }
+    },
+    "commitmentForm": {
+      "title": "Commitment Form",
+      "description": "Please review and accept the following commitments.",
+      "complaintNumbers": "Complaint Numbers (if any)",
+      "complaintNumbersPlaceholder": "Enter complaint numbers separated by commas",
+      "notes": "Additional Notes",
+      "notesPlaceholder": "Enter any additional notes or comments",
+      "consents": {
+        "DATA_ACCURACY": {
+          "title": "Data Accuracy Commitment",
+          "description": "I confirm that all information provided in this renewal application is accurate and complete to the best of my knowledge."
+        },
+        "TERMS_ACCEPTANCE": {
+          "title": "Terms and Conditions Acceptance",
+          "description": "I agree to comply with all JSTA membership terms, conditions, and regulations as outlined in the membership guidelines."
+        },
+        "ANTI_FRAUD": {
+          "title": "Anti-Fraud Declaration",
+          "description": "I declare that this application does not contain any fraudulent information and I have not engaged in any deceptive practices."
+        },
+        "MINISTRY_AUTHORIZATION": {
+          "title": "Ministry Authorization",
+          "description": "I authorize JSTA to share this renewal application and supporting documents with the Ministry of Tourism and Antiquities."
+        }
+      }
+    },
+    "attachments": {
+      "upload": "Upload",
+      "required": "Required",
+      "packs": {
+        "PACK_1_FINANCIAL_DOCS": {
+          "title": "Pack 1: Financial Documents",
+          "description": "Bank statement, financial audit report, tax clearance certificate"
+        },
+        "PACK_2_LEGAL_DOCS": {
+          "title": "Pack 2: Legal Documents",
+          "description": "Commercial registration, professional license, memorandum of association"
+        },
+        "PACK_3_INSURANCE_DOCS": {
+          "title": "Pack 3: Insurance Documents",
+          "description": "Professional liability insurance, employee insurance certificates"
+        },
+        "PACK_4_EMPLOYEE_DOCS": {
+          "title": "Pack 4: Employee Documents",
+          "description": "Employee contracts, social security registration, training certificates (optional)"
+        },
+        "PACK_5_OTHER_DOCS": {
+          "title": "Pack 5: Additional Documents",
+          "description": "Any other supporting documents (optional)"
+        }
+      }
+    },
+    "submitForm": {
+      "title": "Review and Submit",
+      "description": "Review your application before final submission.",
+      "checklist": "Submission Checklist",
+      "officeFormStatus": "Office Information Form completed",
+      "staffFormStatus": "Staff Information Form completed",
+      "commitmentFormStatus": "Commitment Form completed",
+      "cannotSubmit": "Cannot Submit",
+      "cannotSubmitDesc": "Please complete all required forms and upload mandatory document packs before submitting.",
+      "readyToSubmit": "Ready to Submit",
+      "readyToSubmitDesc": "All requirements have been met. You can now submit your renewal application.",
+      "submitButton": "Submit Renewal Application"
+    }
   }
 }
