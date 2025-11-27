@@ -1,18 +1,23 @@
 import { 
   users, offices, branches, documents, licenseRenewals, auditLogs,
+  people, rolesInOffice, consents, renewalAttachments,
   type User, type InsertUser,
   type Office, type InsertOffice,
   type Branch, type InsertBranch,
   type Document, type InsertDocument,
   type LicenseRenewal, type InsertLicenseRenewal,
   type AuditLog, type InsertAuditLog,
-  type OfficeStatusType, type RenewalStatusType,
-  type OfficeUpdateForm
+  type Person, type InsertPerson,
+  type RoleInOffice, type InsertRoleInOffice,
+  type Consent, type InsertConsent,
+  type RenewalAttachment, type InsertRenewalAttachment,
+  type OfficeStatusType, type RenewalStatusType, type PersonRoleTypeType,
+  type OfficeUpdateForm, type DocumentCategoryType
 } from "@shared/schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import pkg from "pg";
 const { Pool } = pkg;
-import { eq, desc, inArray, sql } from "drizzle-orm";
+import { eq, desc, inArray, sql, and, gte, lte, count, avg } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
@@ -28,11 +33,13 @@ export interface IStorage {
   getAllOffices(): Promise<Office[]>;
   getOfficesByStatus(status: OfficeStatusType): Promise<Office[]>;
   createOffice(office: InsertOffice): Promise<Office>;
+  updateOffice(id: number, data: Partial<Office>): Promise<Office | undefined>;
   updateOfficeStatus(id: number, status: OfficeStatusType, comment?: string): Promise<void>;
   updateOfficeProfile(id: number, data: OfficeUpdateForm): Promise<Office | undefined>;
   
   getBranches(officeId: number): Promise<Branch[]>;
   createBranch(branch: InsertBranch): Promise<Branch>;
+  deleteBranchesByOffice(officeId: number): Promise<void>;
   
   getDocument(id: number): Promise<Document | undefined>;
   getDocuments(officeId: number): Promise<Document[]>;
@@ -44,12 +51,42 @@ export interface IStorage {
   getAllRenewals(): Promise<LicenseRenewal[]>;
   getPendingRenewals(): Promise<LicenseRenewal[]>;
   createRenewal(renewal: InsertLicenseRenewal): Promise<LicenseRenewal>;
+  updateRenewal(id: number, data: Partial<LicenseRenewal>): Promise<LicenseRenewal | undefined>;
   updateRenewalStatus(id: number, status: RenewalStatusType, comment?: string): Promise<void>;
   updateRenewalMinistryDoc(id: number, path: string): Promise<void>;
+  
+  getPerson(id: number): Promise<Person | undefined>;
+  getPeopleByOffice(officeId: number): Promise<Person[]>;
+  getPeopleByRenewal(renewalId: number): Promise<Person[]>;
+  createPerson(person: InsertPerson): Promise<Person>;
+  deletePeopleByRenewal(renewalId: number): Promise<void>;
+  
+  getRolesInOffice(officeId: number): Promise<RoleInOffice[]>;
+  getRolesByRenewal(renewalId: number): Promise<RoleInOffice[]>;
+  createRoleInOffice(role: InsertRoleInOffice): Promise<RoleInOffice>;
+  deleteRolesByRenewal(renewalId: number): Promise<void>;
+  
+  getConsents(officeId: number): Promise<Consent[]>;
+  getConsentsByRenewal(renewalId: number): Promise<Consent[]>;
+  createConsent(consent: InsertConsent): Promise<Consent>;
+  
+  getRenewalAttachments(renewalId: number): Promise<RenewalAttachment[]>;
+  getRenewalAttachmentsByCategory(renewalId: number, category: DocumentCategoryType): Promise<RenewalAttachment[]>;
+  createRenewalAttachment(attachment: InsertRenewalAttachment): Promise<RenewalAttachment>;
+  deleteRenewalAttachment(id: number): Promise<void>;
   
   getStats(): Promise<{
     offices: { total: number; pending: number; active: number; rejected: number };
     renewals: { total: number; pending: number; approved: number; rejected: number };
+  }>;
+  
+  getRenewalKPIs(): Promise<{
+    open: number;
+    approved: number;
+    rejected: number;
+    active: number;
+    avgReviewDays: number;
+    successRate: number;
   }>;
   
   createAuditLog(log: InsertAuditLog): Promise<AuditLog>;
@@ -133,6 +170,11 @@ export class DatabaseStorage implements IStorage {
     return office;
   }
 
+  async updateOffice(id: number, data: Partial<Office>): Promise<Office | undefined> {
+    const [office] = await db.update(offices).set({ ...data, updatedAt: new Date() }).where(eq(offices.id, id)).returning();
+    return office;
+  }
+
   async getBranches(officeId: number): Promise<Branch[]> {
     return await db.select().from(branches).where(eq(branches.officeId, officeId));
   }
@@ -140,6 +182,10 @@ export class DatabaseStorage implements IStorage {
   async createBranch(insertBranch: InsertBranch): Promise<Branch> {
     const [branch] = await db.insert(branches).values(insertBranch).returning();
     return branch;
+  }
+
+  async deleteBranchesByOffice(officeId: number): Promise<void> {
+    await db.delete(branches).where(eq(branches.officeId, officeId));
   }
 
   async getDocument(id: number): Promise<Document | undefined> {
@@ -158,7 +204,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createDocument(insertDoc: InsertDocument): Promise<Document> {
-    const [doc] = await db.insert(documents).values(insertDoc).returning();
+    const [doc] = await db.insert(documents).values(insertDoc as any).returning();
     return doc;
   }
 
@@ -207,6 +253,82 @@ export class DatabaseStorage implements IStorage {
     }).where(eq(licenseRenewals.id, id));
   }
 
+  async updateRenewal(id: number, data: Partial<LicenseRenewal>): Promise<LicenseRenewal | undefined> {
+    const [renewal] = await db.update(licenseRenewals).set({ ...data, updatedAt: new Date() }).where(eq(licenseRenewals.id, id)).returning();
+    return renewal;
+  }
+
+  async getPerson(id: number): Promise<Person | undefined> {
+    const [person] = await db.select().from(people).where(eq(people.id, id));
+    return person;
+  }
+
+  async getPeopleByOffice(officeId: number): Promise<Person[]> {
+    return await db.select().from(people).where(eq(people.officeId, officeId)).orderBy(desc(people.createdAt));
+  }
+
+  async getPeopleByRenewal(renewalId: number): Promise<Person[]> {
+    return await db.select().from(people).where(eq(people.renewalId, renewalId)).orderBy(desc(people.createdAt));
+  }
+
+  async createPerson(insertPerson: InsertPerson): Promise<Person> {
+    const [person] = await db.insert(people).values(insertPerson).returning();
+    return person;
+  }
+
+  async deletePeopleByRenewal(renewalId: number): Promise<void> {
+    await db.delete(people).where(eq(people.renewalId, renewalId));
+  }
+
+  async getRolesInOffice(officeId: number): Promise<RoleInOffice[]> {
+    return await db.select().from(rolesInOffice).where(eq(rolesInOffice.officeId, officeId));
+  }
+
+  async getRolesByRenewal(renewalId: number): Promise<RoleInOffice[]> {
+    return await db.select().from(rolesInOffice).where(eq(rolesInOffice.renewalId, renewalId));
+  }
+
+  async createRoleInOffice(insertRole: InsertRoleInOffice): Promise<RoleInOffice> {
+    const [role] = await db.insert(rolesInOffice).values(insertRole).returning();
+    return role;
+  }
+
+  async deleteRolesByRenewal(renewalId: number): Promise<void> {
+    await db.delete(rolesInOffice).where(eq(rolesInOffice.renewalId, renewalId));
+  }
+
+  async getConsents(officeId: number): Promise<Consent[]> {
+    return await db.select().from(consents).where(eq(consents.officeId, officeId)).orderBy(desc(consents.acceptedAt));
+  }
+
+  async getConsentsByRenewal(renewalId: number): Promise<Consent[]> {
+    return await db.select().from(consents).where(eq(consents.renewalId, renewalId));
+  }
+
+  async createConsent(insertConsent: InsertConsent): Promise<Consent> {
+    const [consent] = await db.insert(consents).values(insertConsent).returning();
+    return consent;
+  }
+
+  async getRenewalAttachments(renewalId: number): Promise<RenewalAttachment[]> {
+    return await db.select().from(renewalAttachments).where(eq(renewalAttachments.renewalId, renewalId)).orderBy(desc(renewalAttachments.createdAt));
+  }
+
+  async getRenewalAttachmentsByCategory(renewalId: number, category: DocumentCategoryType): Promise<RenewalAttachment[]> {
+    return await db.select().from(renewalAttachments)
+      .where(and(eq(renewalAttachments.renewalId, renewalId), eq(renewalAttachments.category, category)))
+      .orderBy(desc(renewalAttachments.createdAt));
+  }
+
+  async createRenewalAttachment(insertAttachment: InsertRenewalAttachment): Promise<RenewalAttachment> {
+    const [attachment] = await db.insert(renewalAttachments).values(insertAttachment).returning();
+    return attachment;
+  }
+
+  async deleteRenewalAttachment(id: number): Promise<void> {
+    await db.delete(renewalAttachments).where(eq(renewalAttachments.id, id));
+  }
+
   async getStats(): Promise<{
     offices: { total: number; pending: number; active: number; rejected: number };
     renewals: { total: number; pending: number; approved: number; rejected: number };
@@ -232,8 +354,46 @@ export class DatabaseStorage implements IStorage {
     };
   }
 
+  async getRenewalKPIs(): Promise<{
+    open: number;
+    approved: number;
+    rejected: number;
+    active: number;
+    avgReviewDays: number;
+    successRate: number;
+  }> {
+    const renewalsArray = await this.getAllRenewals();
+    
+    const open = renewalsArray.filter((r) => 
+      ["SUBMITTED", "UNDER_REVIEW", "APPROVED_FOR_DOWNLOAD", "MINISTRY_DOC_UPLOADED"].includes(r.status)
+    ).length;
+    
+    const approved = renewalsArray.filter((r) => r.status === "APPROVED_FOR_DOWNLOAD" || r.status === "FINAL_APPROVED").length;
+    const rejected = renewalsArray.filter((r) => r.status === "REJECTED").length;
+    const active = renewalsArray.filter((r) => r.status === "FINAL_APPROVED").length;
+    
+    const completedRenewals = renewalsArray.filter((r) => 
+      r.status === "FINAL_APPROVED" || r.status === "REJECTED"
+    );
+    
+    let avgReviewDays = 0;
+    if (completedRenewals.length > 0) {
+      const totalDays = completedRenewals.reduce((acc, r) => {
+        const start = new Date(r.createdAt);
+        const end = new Date(r.updatedAt);
+        return acc + Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+      }, 0);
+      avgReviewDays = Math.round(totalDays / completedRenewals.length);
+    }
+    
+    const totalCompleted = approved + rejected;
+    const successRate = totalCompleted > 0 ? Math.round((approved / totalCompleted) * 100) : 0;
+    
+    return { open, approved, rejected, active, avgReviewDays, successRate };
+  }
+
   async createAuditLog(insertLog: InsertAuditLog): Promise<AuditLog> {
-    const [log] = await db.insert(auditLogs).values(insertLog).returning();
+    const [log] = await db.insert(auditLogs).values(insertLog as any).returning();
     return log;
   }
 
