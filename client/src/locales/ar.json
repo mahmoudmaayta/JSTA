@@ -311,7 +311,19 @@
     "noPendingRegistrations": "لا توجد طلبات تسجيل مكاتب معلقة للمراجعة.",
     "pendingRenewalRequests": "طلبات التجديد المعلقة",
     "renewalsAwaitingAction": "تجديدات بانتظار إجراءك",
-    "noPendingRenewals": "لا توجد طلبات تجديد معلقة للمراجعة."
+    "noPendingRenewals": "لا توجد طلبات تجديد معلقة للمراجعة.",
+    "renewalKpis": {
+      "title": "مؤشرات أداء تجديد 2026",
+      "description": "نظرة عامة على تقدم تجديد التراخيص لعام 2026",
+      "draft": "مسودة",
+      "submitted": "مقدم",
+      "underReview": "قيد المراجعة",
+      "approved": "معتمد",
+      "rejected": "مرفوض",
+      "completionRate": "معدل الإنجاز المتوسط",
+      "formsCompleted": "النماذج المكتملة",
+      "attachmentsUploaded": "المرفقات المرفوعة"
+    }
   },
   "adminOffice": {
     "backToOffices": "العودة إلى المكاتب",
