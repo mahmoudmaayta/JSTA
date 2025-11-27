@@ -22,6 +22,11 @@ import {
   officeInfoSchema,
   officeUpdateSchema,
   type DocumentCategoryType,
+  type InsertPerson,
+  type InsertRoleInOffice,
+  type InsertConsent,
+  type InsertRenewalAttachment,
+  type PersonRoleTypeType,
 } from "@shared/schema";
 
 declare module "express-session" {
@@ -757,6 +762,559 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     res.download(renewal.ministryDocumentPath);
   });
+
+  // ==========================================
+  // 2026 RENEWAL SYSTEM - Arabic Forms & New Workflow
+  // ==========================================
+
+  // Create renewal attachments directory
+  const renewalDocsDir = path.join(uploadsDir, "renewal_2026");
+  if (!fs.existsSync(renewalDocsDir)) fs.mkdirSync(renewalDocsDir, { recursive: true });
+
+  const renewalUpload = multer({
+    storage: multer.diskStorage({
+      destination: renewalDocsDir,
+      filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        cb(null, uniqueSuffix + "-" + file.originalname);
+      },
+    }),
+    limits: { fileSize: 10 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+      const allowedTypes = [".pdf", ".jpg", ".jpeg", ".png", ".doc", ".docx"];
+      const ext = path.extname(file.originalname).toLowerCase();
+      if (allowedTypes.includes(ext)) {
+        cb(null, true);
+      } else {
+        cb(new Error("Invalid file type. Allowed: PDF, JPG, PNG, DOC, DOCX"));
+      }
+    },
+  });
+
+  // Create new 2026 renewal for office
+  app.post("/api/office/renewals-2026", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const currentYear = 2026;
+      
+      const existingRenewals = await storage.getRenewals(user.officeId);
+      const hasActiveRenewal = existingRenewals.some(
+        (r) => r.year === currentYear && r.status !== "REJECTED"
+      );
+
+      if (hasActiveRenewal) {
+        return res.status(400).json({ message: "You already have an active renewal for 2026" });
+      }
+
+      const renewal = await storage.createRenewal({
+        officeId: user.officeId,
+        year: currentYear,
+      });
+
+      res.json(renewal);
+    } catch (error) {
+      console.error("Create renewal 2026 error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Get renewal with full form data
+  app.get("/api/office/renewals-2026/:id", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const renewalId = parseInt(req.params.id);
+      
+      if (isNaN(renewalId)) {
+        return res.status(400).json({ message: "Invalid renewal ID" });
+      }
+      
+      const renewal = await storage.getRenewal(renewalId);
+      if (!renewal || renewal.officeId !== user.officeId) {
+        return res.status(404).json({ message: "Renewal not found" });
+      }
+
+      const office = await storage.getOffice(user.officeId);
+      const branches = await storage.getBranches(user.officeId);
+      const peopleData = await storage.getPeopleByRenewal(renewalId);
+      const rolesData = await storage.getRolesByRenewal(renewalId);
+      const consentsData = await storage.getConsentsByRenewal(renewalId);
+      const attachments = await storage.getRenewalAttachments(renewalId);
+
+      res.json({
+        renewal,
+        office,
+        branches,
+        people: peopleData,
+        roles: rolesData,
+        consents: consentsData,
+        attachments,
+      });
+    } catch (error) {
+      console.error("Get renewal 2026 error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Form 1: Office Information 2026 - Save/Update
+  app.post("/api/office/renewals-2026/:id/form-office", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const renewalId = parseInt(req.params.id);
+      
+      if (isNaN(renewalId)) {
+        return res.status(400).json({ message: "Invalid renewal ID" });
+      }
+      
+      const renewal = await storage.getRenewal(renewalId);
+      if (!renewal || renewal.officeId !== user.officeId) {
+        return res.status(404).json({ message: "Renewal not found" });
+      }
+
+      const { 
+        officeData, 
+        branches: branchesData 
+      } = req.body;
+
+      // Update office information using schema fields
+      if (officeData) {
+        await storage.updateOffice(user.officeId, {
+          tradeNameAr: officeData.tradeNameAr,
+          tradeNameEn: officeData.tradeNameEn,
+          legalNameAr: officeData.legalNameAr,
+          nationalEntityNo: officeData.nationalEntityNo,
+          trademark: officeData.trademark,
+          awqafApprovalNo: officeData.awqafApprovalNo,
+          socialSecurityNumber: officeData.socialSecurityNumber,
+          guaranteeExpiryDate: officeData.guaranteeExpiryDate,
+          tourismActivities: officeData.tourismActivities,
+          mainCity: officeData.mainCity,
+          mainArea: officeData.mainArea,
+          mainStreet: officeData.mainStreet,
+          mainBuildingNumber: officeData.mainBuildingNumber,
+          phone: officeData.phone,
+          mobile: officeData.mobile,
+          fax: officeData.fax,
+          website: officeData.website,
+          mainEmail: officeData.mainEmail,
+          extraEmail: officeData.extraEmail,
+          poBox: officeData.poBox,
+          postalCode: officeData.postalCode,
+        });
+      }
+
+      // Update branches - delete old and recreate
+      if (Array.isArray(branchesData)) {
+        await storage.deleteBranchesByOffice(user.officeId);
+        for (const branch of branchesData) {
+          await storage.createBranch({
+            officeId: user.officeId,
+            city: branch.city,
+            area: branch.area,
+            street: branch.street,
+            buildingNumber: branch.buildingNumber,
+            managerName: branch.managerName,
+            managerMobile: branch.managerMobile,
+            phone: branch.phone,
+            fax: branch.fax,
+          });
+        }
+      }
+
+      // Mark office form as completed
+      await storage.updateRenewal(renewalId, {
+        officeFormCompleted: true,
+      });
+
+      res.json({ message: "Office form saved successfully" });
+    } catch (error) {
+      console.error("Form office save error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Form 2: Staff Information 2026 - Save/Update
+  app.post("/api/office/renewals-2026/:id/form-staff", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const renewalId = parseInt(req.params.id);
+      
+      if (isNaN(renewalId)) {
+        return res.status(400).json({ message: "Invalid renewal ID" });
+      }
+      
+      const renewal = await storage.getRenewal(renewalId);
+      if (!renewal || renewal.officeId !== user.officeId) {
+        return res.status(404).json({ message: "Renewal not found" });
+      }
+
+      const { staffList } = req.body;
+
+      if (!Array.isArray(staffList)) {
+        return res.status(400).json({ message: "staffList must be an array" });
+      }
+
+      // Delete existing people and roles for this renewal
+      await storage.deleteRolesByRenewal(renewalId);
+      await storage.deletePeopleByRenewal(renewalId);
+
+      // Create new people and roles using schema fields
+      for (const staff of staffList) {
+        const person = await storage.createPerson({
+          officeId: user.officeId,
+          renewalId: renewalId,
+          fullNameAr: staff.fullNameAr,
+          fullNameEn: staff.fullNameEn,
+          nationalId: staff.nationalId,
+          socialSecurityNo: staff.socialSecurityNo,
+          nationality: staff.nationality,
+          gender: staff.gender,
+          motherName: staff.motherName,
+          mobile: staff.mobile,
+          birthDate: staff.birthDate,
+          currentPosition: staff.currentPosition,
+          startDate: staff.startDate,
+          branch: staff.branch,
+        });
+
+        // Create role assignment
+        await storage.createRoleInOffice({
+          personId: person.id,
+          officeId: user.officeId,
+          renewalId: renewalId,
+          roleType: staff.roleType as PersonRoleTypeType,
+        });
+      }
+
+      // Mark staff form as completed
+      await storage.updateRenewal(renewalId, {
+        staffFormCompleted: true,
+      });
+
+      res.json({ message: "Staff form saved successfully" });
+    } catch (error) {
+      console.error("Form staff save error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Form 3: Commitment Form 2026 - Save
+  app.post("/api/office/renewals-2026/:id/form-commitment", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const renewalId = parseInt(req.params.id);
+      
+      if (isNaN(renewalId)) {
+        return res.status(400).json({ message: "Invalid renewal ID" });
+      }
+      
+      const renewal = await storage.getRenewal(renewalId);
+      if (!renewal || renewal.officeId !== user.officeId) {
+        return res.status(404).json({ message: "Renewal not found" });
+      }
+
+      const { consents, complaintNumbers, notes } = req.body;
+      const ipAddress = req.ip || req.socket?.remoteAddress || "unknown";
+      const userAgent = req.headers["user-agent"] || "unknown";
+
+      if (!Array.isArray(consents)) {
+        return res.status(400).json({ message: "consents must be an array" });
+      }
+
+      // Create consent records using schema fields
+      for (const consentType of consents) {
+        await storage.createConsent({
+          officeId: user.officeId,
+          renewalId: renewalId,
+          consentType: consentType,
+          userId: user.id,
+          ipAddress: ipAddress,
+          userAgent: userAgent,
+          payload: { complaintNumbers, notes },
+        });
+      }
+
+      // Update renewal with commitment form completion
+      await storage.updateRenewal(renewalId, {
+        commitmentFormCompleted: true,
+        reviewerNotes: notes,
+      });
+
+      res.json({ message: "Commitment form saved successfully" });
+    } catch (error) {
+      console.error("Form commitment save error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Upload renewal attachment
+  app.post("/api/office/renewals-2026/:id/attachments", ensureOffice, renewalUpload.single("file"), async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const renewalId = parseInt(req.params.id);
+      
+      if (isNaN(renewalId)) {
+        return res.status(400).json({ message: "Invalid renewal ID" });
+      }
+      
+      const renewal = await storage.getRenewal(renewalId);
+      if (!renewal || renewal.officeId !== user.officeId) {
+        return res.status(404).json({ message: "Renewal not found" });
+      }
+
+      const file = req.file;
+      if (!file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      const { category } = req.body;
+      const validCategories = [
+        "PACK_1_FINANCIAL_DOCS",
+        "PACK_2_LEGAL_DOCS", 
+        "PACK_3_INSURANCE_DOCS",
+        "PACK_4_EMPLOYEE_DOCS",
+        "PACK_5_OTHER_DOCS",
+      ];
+
+      if (!validCategories.includes(category)) {
+        fs.unlinkSync(file.path);
+        return res.status(400).json({ message: "Invalid document category" });
+      }
+
+      // Use fileUrl and fileName per schema
+      const attachment = await storage.createRenewalAttachment({
+        renewalId: renewalId,
+        officeId: user.officeId,
+        category: category as DocumentCategoryType,
+        fileUrl: file.path,
+        fileName: file.originalname,
+        fileSize: file.size,
+        mimeType: file.mimetype,
+        uploadedByUserId: user.id,
+      });
+
+      res.json(attachment);
+    } catch (error) {
+      console.error("Upload attachment error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Get renewal attachments
+  app.get("/api/office/renewals-2026/:id/attachments", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const renewalId = parseInt(req.params.id);
+      
+      if (isNaN(renewalId)) {
+        return res.status(400).json({ message: "Invalid renewal ID" });
+      }
+      
+      const renewal = await storage.getRenewal(renewalId);
+      if (!renewal || renewal.officeId !== user.officeId) {
+        return res.status(404).json({ message: "Renewal not found" });
+      }
+
+      const attachments = await storage.getRenewalAttachments(renewalId);
+      res.json(attachments);
+    } catch (error) {
+      console.error("Get attachments error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Delete renewal attachment
+  app.delete("/api/office/renewals-2026/:id/attachments/:attachmentId", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const renewalId = parseInt(req.params.id);
+      const attachmentId = parseInt(req.params.attachmentId);
+      
+      if (isNaN(renewalId) || isNaN(attachmentId)) {
+        return res.status(400).json({ message: "Invalid ID" });
+      }
+      
+      const renewal = await storage.getRenewal(renewalId);
+      if (!renewal || renewal.officeId !== user.officeId) {
+        return res.status(404).json({ message: "Renewal not found" });
+      }
+
+      const attachments = await storage.getRenewalAttachments(renewalId);
+      const attachment = attachments.find(a => a.id === attachmentId);
+      
+      if (!attachment) {
+        return res.status(404).json({ message: "Attachment not found" });
+      }
+
+      // Delete file from disk (use fileUrl per schema)
+      if (fs.existsSync(attachment.fileUrl)) {
+        fs.unlinkSync(attachment.fileUrl);
+      }
+
+      await storage.deleteRenewalAttachment(attachmentId);
+      res.json({ message: "Attachment deleted successfully" });
+    } catch (error) {
+      console.error("Delete attachment error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Submit renewal (final submission triggers n8n webhook)
+  app.post("/api/office/renewals-2026/:id/submit", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const renewalId = parseInt(req.params.id);
+      
+      if (isNaN(renewalId)) {
+        return res.status(400).json({ message: "Invalid renewal ID" });
+      }
+      
+      const renewal = await storage.getRenewal(renewalId);
+      if (!renewal || renewal.officeId !== user.officeId) {
+        return res.status(404).json({ message: "Renewal not found" });
+      }
+
+      // Validate all forms are completed
+      if (!renewal.officeFormCompleted || !renewal.staffFormCompleted || !renewal.commitmentFormCompleted) {
+        return res.status(400).json({ 
+          message: "Please complete all forms before submitting",
+          incompleteFields: {
+            officeForm: !renewal.officeFormCompleted,
+            staffForm: !renewal.staffFormCompleted,
+            commitmentForm: !renewal.commitmentFormCompleted,
+          }
+        });
+      }
+
+      // Validate attachments - check at least one in each required pack
+      const attachments = await storage.getRenewalAttachments(renewalId);
+      const hasFinancial = attachments.some(a => a.category === "PACK_1_FINANCIAL_DOCS");
+      const hasLegal = attachments.some(a => a.category === "PACK_2_LEGAL_DOCS");
+      const hasInsurance = attachments.some(a => a.category === "PACK_3_INSURANCE_DOCS");
+
+      if (!hasFinancial || !hasLegal || !hasInsurance) {
+        return res.status(400).json({ 
+          message: "Please upload required documents in all mandatory packs",
+          missingPacks: {
+            pack1: !hasFinancial,
+            pack2: !hasLegal,
+            pack3: !hasInsurance,
+          }
+        });
+      }
+
+      // Update renewal status to submitted
+      await storage.updateRenewal(renewalId, {
+        status: "SUBMITTED",
+      });
+
+      const office = await storage.getOffice(user.officeId);
+      const peopleData = await storage.getPeopleByRenewal(renewalId);
+
+      // Trigger n8n webhook for new submission
+      await triggerN8nWebhook("renewal_submitted", {
+        renewalId: renewal.id,
+        officeId: renewal.officeId,
+        officeName: office?.tradeNameAr,
+        year: renewal.year,
+        staffCount: peopleData.length,
+        submittedAt: new Date().toISOString(),
+      });
+
+      // Create audit log
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "RENEWAL_SUBMITTED",
+        targetType: "renewal",
+        targetId: renewal.id,
+        details: { officeName: office?.tradeNameAr, year: renewal.year }
+      });
+
+      // Send notification email
+      sendRenewalRequestedEmail("atallaabutaha@gmail.com", office?.tradeNameAr || "Unknown Office", renewal.year);
+
+      res.json({ message: "Renewal submitted successfully" });
+    } catch (error) {
+      console.error("Submit renewal error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // KPI Dashboard endpoint for admin
+  app.get("/api/admin/renewals/kpis", ensureAdmin, async (req, res) => {
+    try {
+      const kpis = await storage.getRenewalKPIs();
+      res.json(kpis);
+    } catch (error) {
+      console.error("Get renewal KPIs error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get renewal 2026 with full data
+  app.get("/api/admin/renewals-2026/:id", ensureAdmin, async (req, res) => {
+    try {
+      const renewalId = parseInt(req.params.id);
+      if (isNaN(renewalId)) {
+        return res.status(400).json({ message: "Invalid renewal ID" });
+      }
+      
+      const renewal = await storage.getRenewal(renewalId);
+      if (!renewal) {
+        return res.status(404).json({ message: "Renewal not found" });
+      }
+
+      const office = await storage.getOffice(renewal.officeId);
+      const branches = await storage.getBranches(renewal.officeId);
+      const peopleData = await storage.getPeopleByRenewal(renewalId);
+      const rolesData = await storage.getRolesByRenewal(renewalId);
+      const consentsData = await storage.getConsentsByRenewal(renewalId);
+      const attachments = await storage.getRenewalAttachments(renewalId);
+
+      res.json({
+        renewal,
+        office,
+        branches,
+        people: peopleData,
+        roles: rolesData,
+        consents: consentsData,
+        attachments,
+      });
+    } catch (error) {
+      console.error("Admin get renewal 2026 error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // n8n webhook trigger helper function
+  async function triggerN8nWebhook(eventType: string, data: any) {
+    const webhookUrl = process.env.N8N_WEBHOOK_URL;
+    if (!webhookUrl) {
+      console.log(`[n8n] Webhook not configured. Event: ${eventType}`, data);
+      return;
+    }
+
+    try {
+      const response = await fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          eventType,
+          timestamp: new Date().toISOString(),
+          ...data,
+        }),
+      });
+      
+      if (!response.ok) {
+        console.error(`[n8n] Webhook failed: ${response.status}`);
+      } else {
+        console.log(`[n8n] Webhook sent: ${eventType}`);
+      }
+    } catch (error) {
+      console.error(`[n8n] Webhook error:`, error);
+    }
+  }
 
   const httpServer = createServer(app);
   return httpServer;
