@@ -43,7 +43,8 @@ export default function OfficeRenewals() {
         title: t("renewals.renewalRequested"),
         description: t("renewals.renewalRequestedDesc"),
       });
-      setLocation(`/office/renewals/${data.id}`);
+      const year = data.year || new Date().getFullYear();
+      setLocation(year >= 2026 ? `/office/renewals-2026/${data.id}` : `/office/renewals/${data.id}`);
     },
     onError: (error: Error) => {
       toast({
@@ -135,7 +136,7 @@ export default function OfficeRenewals() {
                               {renewal.status === "FINAL_APPROVED" && t("renewals.statusMessages.finalApproved")}
                               {renewal.status === "REJECTED" && t("renewals.statusMessages.rejected")}
                             </div>
-                            <Link href={`/office/renewals/${renewal.id}`}>
+                            <Link href={renewal.year >= 2026 ? `/office/renewals-2026/${renewal.id}` : `/office/renewals/${renewal.id}`}>
                               <Button variant="outline" className="gap-2" data-testid={`link-renewal-${renewal.id}`}>
                                 {t("common.details")}
                                 <ArrowRight className="h-4 w-4" />
