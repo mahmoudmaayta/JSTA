@@ -355,41 +355,45 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getRenewalKPIs(): Promise<{
-    open: number;
+    total: number;
+    draft: number;
+    submitted: number;
     approved: number;
     rejected: number;
-    active: number;
-    avgReviewDays: number;
-    successRate: number;
+    formsCompleted: number;
+    attachmentsUploaded: number;
+    avgCompletionRate: number;
   }> {
     const renewalsArray = await this.getAllRenewals();
+    const renewals2026 = renewalsArray.filter(r => r.year === 2026);
     
-    const open = renewalsArray.filter((r) => 
+    const total = renewals2026.length;
+    const draft = renewals2026.filter(r => r.status === "DRAFT").length;
+    const submitted = renewals2026.filter(r => 
       ["SUBMITTED", "UNDER_REVIEW", "APPROVED_FOR_DOWNLOAD", "MINISTRY_DOC_UPLOADED"].includes(r.status)
     ).length;
+    const approved = renewals2026.filter(r => r.status === "FINAL_APPROVED").length;
+    const rejected = renewals2026.filter(r => r.status === "REJECTED").length;
     
-    const approved = renewalsArray.filter((r) => r.status === "APPROVED_FOR_DOWNLOAD" || r.status === "FINAL_APPROVED").length;
-    const rejected = renewalsArray.filter((r) => r.status === "REJECTED").length;
-    const active = renewalsArray.filter((r) => r.status === "FINAL_APPROVED").length;
-    
-    const completedRenewals = renewalsArray.filter((r) => 
-      r.status === "FINAL_APPROVED" || r.status === "REJECTED"
-    );
-    
-    let avgReviewDays = 0;
-    if (completedRenewals.length > 0) {
-      const totalDays = completedRenewals.reduce((acc, r) => {
-        const start = new Date(r.createdAt);
-        const end = new Date(r.updatedAt);
-        return acc + Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-      }, 0);
-      avgReviewDays = Math.round(totalDays / completedRenewals.length);
+    let formsCompleted = 0;
+    let totalCompletionRate = 0;
+    for (const renewal of renewals2026) {
+      const officeForm = renewal.officeFormCompleted ? 1 : 0;
+      const staffForm = renewal.staffFormCompleted ? 1 : 0;
+      const commitmentForm = renewal.commitmentFormCompleted ? 1 : 0;
+      formsCompleted += officeForm + staffForm + commitmentForm;
+      totalCompletionRate += ((officeForm + staffForm + commitmentForm) / 3) * 100;
     }
     
-    const totalCompleted = approved + rejected;
-    const successRate = totalCompleted > 0 ? Math.round((approved / totalCompleted) * 100) : 0;
+    const avgCompletionRate = total > 0 ? Math.round(totalCompletionRate / total) : 0;
     
-    return { open, approved, rejected, active, avgReviewDays, successRate };
+    const attachmentsArray = await db.select().from(renewalAttachments);
+    const attachments2026 = attachmentsArray.filter(a => 
+      renewals2026.some(r => r.id === a.renewalId)
+    );
+    const attachmentsUploaded = attachments2026.length;
+    
+    return { total, draft, submitted, approved, rejected, formsCompleted, attachmentsUploaded, avgCompletionRate };
   }
 
   async createAuditLog(insertLog: InsertAuditLog): Promise<AuditLog> {
