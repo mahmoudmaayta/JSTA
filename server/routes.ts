@@ -574,6 +574,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(renewalsWithOffice);
   });
 
+  // KPI Dashboard endpoint for admin - must be before :id route
+  app.get("/api/admin/renewals/kpis", ensureAdmin, async (req, res) => {
+    try {
+      const kpis = await storage.getRenewalKPIs();
+      res.json(kpis);
+    } catch (error) {
+      console.error("Get renewal KPIs error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   app.get("/api/admin/renewals/:id", ensureAdmin, async (req, res) => {
     const renewalId = parseInt(req.params.id);
     if (isNaN(renewalId)) {
@@ -1235,17 +1246,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ message: "Renewal submitted successfully" });
     } catch (error) {
       console.error("Submit renewal error:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  });
-
-  // KPI Dashboard endpoint for admin
-  app.get("/api/admin/renewals/kpis", ensureAdmin, async (req, res) => {
-    try {
-      const kpis = await storage.getRenewalKPIs();
-      res.json(kpis);
-    } catch (error) {
-      console.error("Get renewal KPIs error:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   });
