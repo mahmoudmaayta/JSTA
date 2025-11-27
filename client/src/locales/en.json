@@ -311,7 +311,19 @@
     "noPendingRegistrations": "No pending office registrations to review.",
     "pendingRenewalRequests": "Pending Renewal Requests",
     "renewalsAwaitingAction": "Renewals awaiting your action",
-    "noPendingRenewals": "No pending renewal requests to review."
+    "noPendingRenewals": "No pending renewal requests to review.",
+    "renewalKpis": {
+      "title": "2026 Renewal KPIs",
+      "description": "Overview of license renewal progress for year 2026",
+      "draft": "Draft",
+      "submitted": "Submitted",
+      "underReview": "Under Review",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "completionRate": "Average Completion Rate",
+      "formsCompleted": "Forms Completed",
+      "attachmentsUploaded": "Attachments Uploaded"
+    }
   },
   "adminOffice": {
     "backToOffices": "Back to Offices",

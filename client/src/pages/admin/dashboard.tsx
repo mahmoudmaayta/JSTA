@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { LoadingPage } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Progress } from "@/components/ui/progress";
 import { useTranslation } from "@/lib/i18n";
 import type { Office, LicenseRenewal } from "@shared/schema";
 import {
@@ -16,6 +17,11 @@ import {
   CheckCircle2,
   ArrowRight,
   Users,
+  TrendingUp,
+  CalendarCheck,
+  AlertCircle,
+  XCircle,
+  Send,
 } from "lucide-react";
 
 interface DashboardStats {
@@ -33,6 +39,18 @@ interface DashboardStats {
   };
 }
 
+interface RenewalKPIs {
+  total: number;
+  draft: number;
+  submitted: number;
+  underReview: number;
+  approved: number;
+  rejected: number;
+  formsCompleted: number;
+  attachmentsUploaded: number;
+  avgCompletionRate: number;
+}
+
 export default function AdminDashboard() {
   const { t } = useTranslation();
   
@@ -46,6 +64,10 @@ export default function AdminDashboard() {
 
   const { data: pendingRenewals, isLoading: renewalsLoading } = useQuery<LicenseRenewal[]>({
     queryKey: ["/api/admin/renewals", { pending: true }],
+  });
+
+  const { data: kpis } = useQuery<RenewalKPIs>({
+    queryKey: ["/api/admin/renewals/kpis"],
   });
 
   const isLoading = statsLoading || officesLoading || renewalsLoading;
@@ -136,6 +158,72 @@ export default function AdminDashboard() {
                     </CardContent>
                   </Card>
                 </div>
+
+                {/* 2026 Renewal KPIs Section */}
+                {kpis && kpis.total > 0 && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <TrendingUp className="h-5 w-5 text-primary" />
+                        {t("admin.renewalKpis.title")}
+                      </CardTitle>
+                      <CardDescription>{t("admin.renewalKpis.description")}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-6">
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-muted-foreground">{t("admin.renewalKpis.draft")}</span>
+                            <Clock className="h-4 w-4 text-slate-400" />
+                          </div>
+                          <div className="text-2xl font-bold" data-testid="kpi-draft">{kpis.draft}</div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-muted-foreground">{t("admin.renewalKpis.submitted")}</span>
+                            <Send className="h-4 w-4 text-blue-500" />
+                          </div>
+                          <div className="text-2xl font-bold text-blue-600" data-testid="kpi-submitted">{kpis.submitted}</div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-muted-foreground">{t("admin.renewalKpis.approved")}</span>
+                            <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                          </div>
+                          <div className="text-2xl font-bold text-emerald-600" data-testid="kpi-approved">{kpis.approved}</div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-muted-foreground">{t("admin.renewalKpis.rejected")}</span>
+                            <XCircle className="h-4 w-4 text-red-500" />
+                          </div>
+                          <div className="text-2xl font-bold text-red-600" data-testid="kpi-rejected">{kpis.rejected}</div>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">{t("admin.renewalKpis.completionRate")}</span>
+                            <span className="font-medium">{kpis.avgCompletionRate}%</span>
+                          </div>
+                          <Progress value={kpis.avgCompletionRate} className="h-2" />
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4 pt-2 border-t">
+                          <div className="text-sm">
+                            <span className="text-muted-foreground">{t("admin.renewalKpis.formsCompleted")}: </span>
+                            <span className="font-medium">{kpis.formsCompleted}</span>
+                          </div>
+                          <div className="text-sm">
+                            <span className="text-muted-foreground">{t("admin.renewalKpis.attachmentsUploaded")}: </span>
+                            <span className="font-medium">{kpis.attachmentsUploaded}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
 
                 <div className="grid gap-6 lg:grid-cols-2">
                   <Card>
