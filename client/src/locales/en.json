@@ -588,7 +588,9 @@
     "auditLogs": "Audit Logs",
     "settings": "Settings",
     "management": "Management",
-    "adminPanel": "Admin Panel"
+    "adminPanel": "Admin Panel",
+    "staffForm2026": "Staff Form 2026",
+    "staffDashboard": "Staff Dashboard"
   },
   "forms": {
     "continue": "Continue",
@@ -883,6 +885,132 @@
       "readyToSubmit": "Ready to Submit",
       "readyToSubmitDesc": "All requirements have been met. You can now submit your renewal application.",
       "submitButton": "Submit Renewal Application"
+    }
+  },
+  "staffForm2026": {
+    "title": "Staff Information Form 2026",
+    "subtitle": "Enter details of all staff members in the office and its branches",
+    "loading": "Loading data...",
+    "sections": {
+      "ownersPartners": "Owners or Partners (as per Commercial Registry)",
+      "ownersDesc": "Enter owner or partner details as listed in the Commercial Registry",
+      "authorizedSignatories": "Authorized Signatories (as per Commercial Registry)",
+      "authorizedDesc": "Enter authorized signatory details as per Commercial Registry",
+      "dedicatedManagers": "Dedicated Manager",
+      "managersDesc": "Enter dedicated manager details (at least one row required)",
+      "employees": "Employees",
+      "employeesDesc": "Enter employee details for the office and its branches"
+    },
+    "columns": {
+      "fullNameAr": "Full Name (Arabic)",
+      "fullNameEn": "Full Name (English)",
+      "nationalId": "National ID",
+      "socialSecurityNo": "Social Security No.",
+      "nationality": "Nationality",
+      "gender": "Gender",
+      "motherName": "Mother's Name",
+      "mobile": "Mobile",
+      "birthDate": "Birth Date",
+      "currentPosition": "Position",
+      "startDate": "Start Date",
+      "branch": "Branch",
+      "actions": "Actions"
+    },
+    "placeholders": {
+      "fullNameAr": "Ahmad Mohammad Ali Khalid",
+      "fullNameEn": "Ahmad M. Ali",
+      "nationalId": "1234567890",
+      "socialSecurityNo": "Optional",
+      "selectNationality": "Select",
+      "selectGender": "Select",
+      "motherName": "Mother's Name",
+      "mobile": "07XXXXXXXX"
+    },
+    "nationalities": {
+      "jordanian": "Jordanian",
+      "saudi": "Saudi",
+      "emirati": "Emirati",
+      "kuwaiti": "Kuwaiti",
+      "qatari": "Qatari",
+      "omani": "Omani",
+      "bahraini": "Bahraini",
+      "egyptian": "Egyptian",
+      "syrian": "Syrian",
+      "lebanese": "Lebanese",
+      "palestinian": "Palestinian",
+      "iraqi": "Iraqi",
+      "yemeni": "Yemeni",
+      "sudanese": "Sudanese",
+      "moroccan": "Moroccan",
+      "algerian": "Algerian",
+      "tunisian": "Tunisian",
+      "libyan": "Libyan",
+      "other": "Other"
+    },
+    "genders": {
+      "male": "Male",
+      "female": "Female"
+    },
+    "positions": {
+      "partner": "Partner",
+      "authorized": "Authorized",
+      "dedicatedManager": "Dedicated Manager",
+      "branchManager": "Branch Manager",
+      "reservations": "Reservations",
+      "customerService": "Customer Service",
+      "accountant": "Accountant",
+      "secretary": "Secretary",
+      "receptionist": "Receptionist",
+      "salesRep": "Sales Rep",
+      "admin": "Admin",
+      "other": "Other"
+    },
+    "branches": {
+      "main": "Main Branch"
+    },
+    "buttons": {
+      "addRow": "Add Row",
+      "save": "Save Data",
+      "back": "Back to Dashboard"
+    },
+    "consent": {
+      "title": "Electronic Consent",
+      "text": "I confirm the accuracy of owner/authorized/manager/employee data and agree to the privacy policy and association terms."
+    },
+    "messages": {
+      "savedSuccess": "Saved Successfully",
+      "savedCount": "{{count}} staff records saved",
+      "saveError": "Save Error",
+      "reviewErrors": "Please review and correct the errors",
+      "consentRequired": "Consent Required",
+      "consentRequiredDesc": "You must accept the consent before saving",
+      "missingData": "Missing Data",
+      "ownersOrAuthorizedRequired": "At least one row is required in Owners/Partners or Authorized section",
+      "managersRequired": "At least one row is required in Dedicated Manager section",
+      "cannotDelete": "Cannot Delete",
+      "noData": "No data. Click \"Add Row\" to add new data."
+    },
+    "dialogs": {
+      "confirmDelete": "Confirm Delete",
+      "confirmDeleteDesc": "Are you sure you want to delete this row? This action cannot be undone.",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    },
+    "validation": {
+      "fullNameArRequired": "Full name in Arabic is required",
+      "fullNameEnRequired": "Full name in English is required",
+      "nationalIdRequired": "National ID is required",
+      "nationalityRequired": "Nationality is required",
+      "genderRequired": "Gender is required",
+      "motherNameRequired": "Mother's name is required",
+      "mobileRequired": "Mobile number is required",
+      "birthDateRequired": "Birth date is required",
+      "positionRequired": "Current position is required",
+      "startDateRequired": "Start date is required",
+      "branchRequired": "Branch is required"
+    },
+    "errors": {
+      "dataErrors": "Data Errors:"
     }
   }
 }

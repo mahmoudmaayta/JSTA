@@ -24,6 +24,7 @@ import {
   LogOut,
   Briefcase,
   UserCog,
+  Users,
 } from "lucide-react";
 import logoImage from "@assets/logo-0 (1)_1764114456004.png";
 
@@ -47,6 +48,11 @@ export function OfficeSidebar() {
       title: t("navigation.renewals"),
       url: "/office/renewals",
       icon: RefreshCw,
+    },
+    {
+      title: t("navigation.staffForm2026"),
+      url: "/office/staff-form-2026",
+      icon: Users,
     },
     {
       title: t("navigation.profile"),
