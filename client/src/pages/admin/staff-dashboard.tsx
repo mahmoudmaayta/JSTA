@@ -65,8 +65,10 @@ export default function AdminStaffDashboard() {
   const [selectedPerson, setSelectedPerson] = useState<StaffDataItem | null>(null);
 
   const { data: officesData, isLoading: isLoadingOffices } = useQuery<Office[]>({
-    queryKey: ["/api/offices"],
+    queryKey: ["/api/admin/offices"],
   });
+
+  const [officeSearchQuery, setOfficeSearchQuery] = useState("");
 
   const { data: staffData, isLoading: isLoadingStaff } = useQuery<StaffDataItem[]>({
     queryKey: ["/api/admin/staff"],
@@ -101,6 +103,17 @@ export default function AdminStaffDashboard() {
     const nationalities = new Set(staffData.map((item) => item.person.nationality).filter(Boolean));
     return Array.from(nationalities).sort();
   }, [staffData]);
+
+  const filteredOffices = useMemo(() => {
+    if (!officesData) return [];
+    if (!officeSearchQuery.trim()) return officesData;
+    
+    const query = officeSearchQuery.toLowerCase();
+    return officesData.filter(office => 
+      office.tradeNameAr?.toLowerCase().includes(query) ||
+      office.tradeNameEn?.toLowerCase().includes(query)
+    );
+  }, [officesData, officeSearchQuery]);
 
   const roleTypeLabels: Record<string, { ar: string; en: string }> = {
     OWNER_PARTNER: { ar: "مالك/شريك", en: "Owner/Partner" },
@@ -253,17 +266,49 @@ export default function AdminStaffDashboard() {
 
                   <div>
                     <Label>{language === "ar" ? "المكتب" : "Office"}</Label>
-                    <Select value={selectedOffice} onValueChange={setSelectedOffice}>
+                    <Select value={selectedOffice} onValueChange={(value) => {
+                      setSelectedOffice(value);
+                      setOfficeSearchQuery("");
+                    }}>
                       <SelectTrigger data-testid="select-office">
                         <SelectValue placeholder={language === "ar" ? "جميع المكاتب" : "All Offices"} />
                       </SelectTrigger>
                       <SelectContent>
+                        <div className="p-2 border-b">
+                          <div className="relative">
+                            <Search className="absolute start-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                            <Input
+                              value={officeSearchQuery}
+                              onChange={(e) => setOfficeSearchQuery(e.target.value)}
+                              placeholder={language === "ar" ? "ابحث عن مكتب..." : "Search office..."}
+                              className="ps-8 h-8"
+                              onClick={(e) => e.stopPropagation()}
+                              onKeyDown={(e) => e.stopPropagation()}
+                              data-testid="input-office-search"
+                            />
+                          </div>
+                        </div>
                         <SelectItem value="all">{language === "ar" ? "جميع المكاتب" : "All Offices"}</SelectItem>
-                        {officesData?.map((office) => (
-                          <SelectItem key={office.id} value={office.id.toString()}>
-                            {office.tradeNameAr}
-                          </SelectItem>
-                        ))}
+                        {isLoadingOffices ? (
+                          <div className="p-2 text-center text-muted-foreground">
+                            <Loader2 className="w-4 h-4 animate-spin mx-auto" />
+                          </div>
+                        ) : filteredOffices.length === 0 ? (
+                          <div className="p-2 text-center text-muted-foreground text-sm">
+                            {language === "ar" ? "لا توجد مكاتب مطابقة" : "No matching offices"}
+                          </div>
+                        ) : (
+                          filteredOffices.map((office) => (
+                            <SelectItem key={office.id} value={office.id.toString()}>
+                              <div className="flex flex-col">
+                                <span>{office.tradeNameAr}</span>
+                                {office.tradeNameEn && (
+                                  <span className="text-xs text-muted-foreground">{office.tradeNameEn}</span>
+                                )}
+                              </div>
+                            </SelectItem>
+                          ))
+                        )}
                       </SelectContent>
                     </Select>
                   </div>
