@@ -595,7 +595,11 @@
   "forms": {
     "continue": "Continue",
     "addBranch": "Add Branch",
+    "addNewBranch": "Add New Branch",
     "addedBranches": "Added Branches",
+    "editBranch": "Edit Branch",
+    "saveBranch": "Save Changes",
+    "cancelEdit": "Cancel",
     "manager": "Manager",
     "branch": "Branch",
     "clickToUpload": "Click to upload files",

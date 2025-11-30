@@ -595,7 +595,11 @@
   "forms": {
     "continue": "متابعة",
     "addBranch": "إضافة فرع",
+    "addNewBranch": "إضافة فرع جديد",
     "addedBranches": "الفروع المضافة",
+    "editBranch": "تعديل الفرع",
+    "saveBranch": "حفظ التغييرات",
+    "cancelEdit": "إلغاء",
     "manager": "المدير",
     "branch": "فرع",
     "clickToUpload": "انقر لرفع الملفات",
