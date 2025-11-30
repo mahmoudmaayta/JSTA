@@ -58,13 +58,19 @@ export interface IStorage {
   getPerson(id: number): Promise<Person | undefined>;
   getPeopleByOffice(officeId: number): Promise<Person[]>;
   getPeopleByRenewal(renewalId: number): Promise<Person[]>;
+  getPersonByNationalId(officeId: number, nationalId: string): Promise<Person | undefined>;
   createPerson(person: InsertPerson): Promise<Person>;
+  updatePerson(id: number, data: Partial<Person>): Promise<Person | undefined>;
+  upsertPersonByNationalId(officeId: number, nationalId: string, data: InsertPerson): Promise<Person>;
+  deletePerson(id: number): Promise<void>;
   deletePeopleByRenewal(renewalId: number): Promise<void>;
   
   getRolesInOffice(officeId: number): Promise<RoleInOffice[]>;
   getRolesByRenewal(renewalId: number): Promise<RoleInOffice[]>;
+  getRolesByPerson(personId: number): Promise<RoleInOffice[]>;
   createRoleInOffice(role: InsertRoleInOffice): Promise<RoleInOffice>;
   deleteRolesByRenewal(renewalId: number): Promise<void>;
+  deleteRolesByPerson(personId: number): Promise<void>;
   
   getConsents(officeId: number): Promise<Consent[]>;
   getConsentsByRenewal(renewalId: number): Promise<Consent[]>;
@@ -81,12 +87,14 @@ export interface IStorage {
   }>;
   
   getRenewalKPIs(): Promise<{
-    open: number;
+    total: number;
+    draft: number;
+    submitted: number;
     approved: number;
     rejected: number;
-    active: number;
-    avgReviewDays: number;
-    successRate: number;
+    formsCompleted: number;
+    attachmentsUploaded: number;
+    avgCompletionRate: number;
   }>;
   
   createAuditLog(log: InsertAuditLog): Promise<AuditLog>;
@@ -271,9 +279,36 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(people).where(eq(people.renewalId, renewalId)).orderBy(desc(people.createdAt));
   }
 
+  async getPersonByNationalId(officeId: number, nationalId: string): Promise<Person | undefined> {
+    const [person] = await db.select().from(people)
+      .where(and(eq(people.officeId, officeId), eq(people.nationalId, nationalId)));
+    return person;
+  }
+
   async createPerson(insertPerson: InsertPerson): Promise<Person> {
     const [person] = await db.insert(people).values(insertPerson).returning();
     return person;
+  }
+
+  async updatePerson(id: number, data: Partial<Person>): Promise<Person | undefined> {
+    const [person] = await db.update(people).set({ ...data, updatedAt: new Date() }).where(eq(people.id, id)).returning();
+    return person;
+  }
+
+  async upsertPersonByNationalId(officeId: number, nationalId: string, data: InsertPerson): Promise<Person> {
+    const existing = await this.getPersonByNationalId(officeId, nationalId);
+    if (existing) {
+      const [updated] = await db.update(people)
+        .set({ ...data, updatedAt: new Date() })
+        .where(eq(people.id, existing.id))
+        .returning();
+      return updated;
+    }
+    return this.createPerson(data);
+  }
+
+  async deletePerson(id: number): Promise<void> {
+    await db.delete(people).where(eq(people.id, id));
   }
 
   async deletePeopleByRenewal(renewalId: number): Promise<void> {
@@ -288,6 +323,10 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(rolesInOffice).where(eq(rolesInOffice.renewalId, renewalId));
   }
 
+  async getRolesByPerson(personId: number): Promise<RoleInOffice[]> {
+    return await db.select().from(rolesInOffice).where(eq(rolesInOffice.personId, personId));
+  }
+
   async createRoleInOffice(insertRole: InsertRoleInOffice): Promise<RoleInOffice> {
     const [role] = await db.insert(rolesInOffice).values(insertRole).returning();
     return role;
@@ -295,6 +334,10 @@ export class DatabaseStorage implements IStorage {
 
   async deleteRolesByRenewal(renewalId: number): Promise<void> {
     await db.delete(rolesInOffice).where(eq(rolesInOffice.renewalId, renewalId));
+  }
+
+  async deleteRolesByPerson(personId: number): Promise<void> {
+    await db.delete(rolesInOffice).where(eq(rolesInOffice.personId, personId));
   }
 
   async getConsents(officeId: number): Promise<Consent[]> {
@@ -321,7 +364,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createRenewalAttachment(insertAttachment: InsertRenewalAttachment): Promise<RenewalAttachment> {
-    const [attachment] = await db.insert(renewalAttachments).values(insertAttachment).returning();
+    const [attachment] = await db.insert(renewalAttachments).values(insertAttachment as any).returning();
     return attachment;
   }
 

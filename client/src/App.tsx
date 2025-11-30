@@ -19,6 +19,7 @@ import OfficeRenewals from "@/pages/office/renewals";
 import OfficeRenewalDetail from "@/pages/office/renewal-detail";
 import OfficeRenewal2026 from "@/pages/office/renewal-2026";
 import OfficeProfile from "@/pages/office/profile";
+import StaffForm2026 from "@/pages/office/staff-form-2026";
 
 import AdminDashboard from "@/pages/admin/dashboard";
 import AdminOffices from "@/pages/admin/offices";
@@ -26,6 +27,7 @@ import AdminOfficeDetail from "@/pages/admin/office-detail";
 import AdminRenewals from "@/pages/admin/renewals";
 import AdminRenewalDetail from "@/pages/admin/renewal-detail";
 import AdminAuditLogs from "@/pages/admin/audit-logs";
+import AdminStaffDashboard from "@/pages/admin/staff-dashboard";
 
 function ProtectedRoute({ 
   children, 
@@ -131,6 +133,12 @@ function Router() {
           <OfficeProfile />
         </ProtectedRoute>
       </Route>
+      
+      <Route path="/office/staff-form-2026">
+        <ProtectedRoute allowedRoles={['OFFICE']}>
+          <StaffForm2026 />
+        </ProtectedRoute>
+      </Route>
 
       <Route path="/admin">
         <ProtectedRoute allowedRoles={['ADMIN']}>
@@ -165,6 +173,12 @@ function Router() {
       <Route path="/admin/audit-logs">
         <ProtectedRoute allowedRoles={['ADMIN']}>
           <AdminAuditLogs />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/staff">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminStaffDashboard />
         </ProtectedRoute>
       </Route>
 

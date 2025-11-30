@@ -588,7 +588,9 @@
     "auditLogs": "سجل المراجعة",
     "settings": "الإعدادات",
     "management": "الإدارة",
-    "adminPanel": "لوحة الإدارة"
+    "adminPanel": "لوحة الإدارة",
+    "staffForm2026": "نموذج العاملين 2026",
+    "staffDashboard": "لوحة العاملين"
   },
   "forms": {
     "continue": "متابعة",
@@ -883,6 +885,132 @@
       "readyToSubmit": "جاهز للتقديم",
       "readyToSubmitDesc": "تم استيفاء جميع المتطلبات. يمكنك الآن تقديم طلب التجديد.",
       "submitButton": "تقديم طلب التجديد"
+    }
+  },
+  "staffForm2026": {
+    "title": "نموذج معلومات العاملين 2026",
+    "subtitle": "أدخل بيانات جميع العاملين في المكتب وفروعه",
+    "loading": "جاري تحميل البيانات...",
+    "sections": {
+      "ownersPartners": "المالك أو الشركاء حسب السجل التجاري",
+      "ownersDesc": "أدخل بيانات المالك أو الشركاء كما هو مدوّن في السجل التجاري",
+      "authorizedSignatories": "المفوّضون حسب السجل التجاري",
+      "authorizedDesc": "أدخل بيانات المفوّضين بالتوقيع حسب السجل التجاري",
+      "dedicatedManagers": "المدير المتفرّغ للمكتب",
+      "managersDesc": "أدخل بيانات المدير المتفرّغ للمكتب (مطلوب صف واحد على الأقل)",
+      "employees": "الموظفون",
+      "employeesDesc": "أدخل بيانات الموظفين العاملين في المكتب وفروعه"
+    },
+    "columns": {
+      "fullNameAr": "الاسم الرباعي",
+      "fullNameEn": "الاسم بالإنجليزية",
+      "nationalId": "الرقم الوطني",
+      "socialSecurityNo": "رقم الضمان",
+      "nationality": "الجنسية",
+      "gender": "الجنس",
+      "motherName": "اسم الأم",
+      "mobile": "موبايل",
+      "birthDate": "تاريخ الميلاد",
+      "currentPosition": "الوظيفة",
+      "startDate": "تاريخ المباشرة",
+      "branch": "الفرع",
+      "actions": "إجراءات"
+    },
+    "placeholders": {
+      "fullNameAr": "أحمد محمد علي خالد",
+      "fullNameEn": "Ahmad M. Ali",
+      "nationalId": "1234567890",
+      "socialSecurityNo": "اختياري",
+      "selectNationality": "اختر",
+      "selectGender": "اختر",
+      "motherName": "اسم الأم",
+      "mobile": "07XXXXXXXX"
+    },
+    "nationalities": {
+      "jordanian": "أردني",
+      "saudi": "سعودي",
+      "emirati": "إماراتي",
+      "kuwaiti": "كويتي",
+      "qatari": "قطري",
+      "omani": "عماني",
+      "bahraini": "بحريني",
+      "egyptian": "مصري",
+      "syrian": "سوري",
+      "lebanese": "لبناني",
+      "palestinian": "فلسطيني",
+      "iraqi": "عراقي",
+      "yemeni": "يمني",
+      "sudanese": "سوداني",
+      "moroccan": "مغربي",
+      "algerian": "جزائري",
+      "tunisian": "تونسي",
+      "libyan": "ليبي",
+      "other": "أخرى"
+    },
+    "genders": {
+      "male": "ذكر",
+      "female": "أنثى"
+    },
+    "positions": {
+      "partner": "شريك",
+      "authorized": "مفوض",
+      "dedicatedManager": "المدير المتفرغ",
+      "branchManager": "مدير فرع",
+      "reservations": "مسؤول حجوزات",
+      "customerService": "خدمة عملاء",
+      "accountant": "محاسب",
+      "secretary": "سكرتير",
+      "receptionist": "موظف استقبال",
+      "salesRep": "مندوب مبيعات",
+      "admin": "موظف إداري",
+      "other": "أخرى"
+    },
+    "branches": {
+      "main": "الفرع الرئيسي"
+    },
+    "buttons": {
+      "addRow": "إضافة صف",
+      "save": "حفظ البيانات",
+      "back": "العودة للوحة التحكم"
+    },
+    "consent": {
+      "title": "الموافقة الإلكترونية",
+      "text": "أُقرّ بصحة بيانات المالكين/المفوّضين/المدير/الموظفين، وأوافق على سياسة الخصوصية وشروط الجمعية."
+    },
+    "messages": {
+      "savedSuccess": "تم الحفظ بنجاح",
+      "savedCount": "تم حفظ {{count}} من بيانات العاملين",
+      "saveError": "خطأ في الحفظ",
+      "reviewErrors": "يرجى مراجعة الأخطاء وتصحيحها",
+      "consentRequired": "الموافقة مطلوبة",
+      "consentRequiredDesc": "يجب الموافقة على صحة البيانات قبل الحفظ",
+      "missingData": "بيانات ناقصة",
+      "ownersOrAuthorizedRequired": "مطلوب صف واحد على الأقل في مقطع المالك/الشركاء أو المفوّضين",
+      "managersRequired": "مطلوب صف واحد على الأقل في مقطع المدير المتفرّغ",
+      "cannotDelete": "لا يمكن الحذف",
+      "noData": "لا توجد بيانات. انقر على \"إضافة صف\" لإضافة بيانات جديدة."
+    },
+    "dialogs": {
+      "confirmDelete": "تأكيد الحذف",
+      "confirmDeleteDesc": "هل أنت متأكد من حذف هذا الصف؟ لا يمكن التراجع عن هذا الإجراء.",
+      "cancel": "إلغاء",
+      "delete": "حذف"
+    },
+    "validation": {
+      "fullNameArRequired": "الاسم الرباعي مطلوب",
+      "fullNameEnRequired": "الاسم باللغة الإنجليزية مطلوب",
+      "nationalIdRequired": "الرقم الوطني مطلوب",
+      "nationalityRequired": "الجنسية مطلوبة",
+      "genderRequired": "الجنس مطلوب",
+      "motherNameRequired": "اسم الأم مطلوب",
+      "mobileRequired": "رقم الموبايل مطلوب",
+      "birthDateRequired": "تاريخ الميلاد مطلوب",
+      "positionRequired": "الوظيفة الحالية مطلوبة",
+      "startDateRequired": "تاريخ مباشرة العمل مطلوب",
+      "branchRequired": "الفرع مطلوب"
+    },
+    "errors": {
+      "dataErrors": "أخطاء في البيانات:"
     }
   }
 }

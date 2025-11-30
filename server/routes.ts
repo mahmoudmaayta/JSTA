@@ -574,6 +574,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(renewalsWithOffice);
   });
 
+  app.get("/api/admin/staff", ensureAdmin, async (req, res) => {
+    try {
+      const offices = await storage.getAllOffices();
+      const staffData: any[] = [];
+
+      for (const office of offices) {
+        const people = await storage.getPeopleByOffice(office.id);
+        
+        for (const person of people) {
+          const roles = await storage.getRolesByPerson(person.id);
+          
+          for (const role of roles) {
+            staffData.push({
+              person,
+              role,
+              office,
+            });
+          }
+        }
+      }
+
+      res.json(staffData);
+    } catch (error) {
+      console.error("Get admin staff error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   // KPI Dashboard endpoint for admin - must be before :id route
   app.get("/api/admin/renewals/kpis", ensureAdmin, async (req, res) => {
     try {
@@ -1054,6 +1082,380 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Form commitment save error:", error);
       res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // ==========================================
+  // STAFF FORM 2026 - Comprehensive Staff Data (Arabic)
+  // POST /api/forms/staff-2026
+  // ==========================================
+  app.post("/api/forms/staff-2026", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const ipAddress = req.ip || req.socket?.remoteAddress || "unknown";
+      const userAgent = req.headers["user-agent"] || "unknown";
+
+      const { 
+        officeId,
+        ownersPartners = [],
+        authorizedSignatories = [],
+        dedicatedManagers = [],
+        employees = [],
+        consentAccepted
+      } = req.body;
+
+      // Validate office access
+      if (officeId && officeId !== user.officeId) {
+        return res.status(403).json({ message: "لا يمكنك الوصول إلى هذا المكتب" });
+      }
+
+      const targetOfficeId = officeId || user.officeId;
+
+      // Validate consent
+      if (!consentAccepted) {
+        return res.status(400).json({ message: "يجب الموافقة على صحة البيانات قبل الحفظ" });
+      }
+
+      // Validate required managers
+      if (dedicatedManagers.length === 0) {
+        return res.status(400).json({ message: "مطلوب صف واحد على الأقل في مقطع المدير المتفرّغ" });
+      }
+
+      // Validate at least one owner/partner or authorized signatory
+      if (ownersPartners.length === 0 && authorizedSignatories.length === 0) {
+        return res.status(400).json({ 
+          message: "مطلوب صف واحد على الأقل في مقطع المالك/الشركاء أو المفوّضين" 
+        });
+      }
+
+      // Validate branches exist
+      const branches = await storage.getBranches(targetOfficeId);
+      const branchNames = branches.map(b => b.city || "الفرع الرئيسي");
+      branchNames.push("الفرع الرئيسي"); // Always include main branch
+
+      // Helper to validate and process person rows
+      const validateRow = (row: any, section: string): string[] => {
+        const errors: string[] = [];
+        
+        // Check if row has any data
+        const hasData = Object.values(row).some(v => v && String(v).trim());
+        if (!hasData) return errors; // Empty row is allowed (except for managers)
+
+        // All-or-none validation: if any field has data, all required fields must be filled
+        if (!row.fullNameAr || !row.fullNameAr.trim()) {
+          errors.push(`${section}: الاسم الرباعي مطلوب`);
+        } else {
+          // Validate 4-part Arabic name
+          const nameParts = row.fullNameAr.trim().split(/\s+/);
+          if (nameParts.length < 4) {
+            errors.push(`${section}: يرجى إدخال الاسم الرباعي كاملًا (4 أجزاء على الأقل)`);
+          }
+        }
+
+        if (!row.fullNameEn || !row.fullNameEn.trim()) {
+          errors.push(`${section}: الاسم باللغة الإنجليزية مطلوب`);
+        } else if (!/^[a-zA-Z\s]+$/.test(row.fullNameEn)) {
+          errors.push(`${section}: يرجى إدخال الاسم بالإنجليزية`);
+        }
+
+        if (!row.nationalId || !row.nationalId.trim()) {
+          errors.push(`${section}: الرقم الوطني مطلوب`);
+        } else if (!/^\d+$/.test(row.nationalId)) {
+          errors.push(`${section}: الرقم الوطني يجب أن يكون أرقام فقط`);
+        }
+
+        if (!row.nationality || !row.nationality.trim()) {
+          errors.push(`${section}: الجنسية مطلوبة`);
+        }
+
+        if (!row.gender || !row.gender.trim()) {
+          errors.push(`${section}: الجنس مطلوب`);
+        }
+
+        if (!row.motherName || !row.motherName.trim()) {
+          errors.push(`${section}: اسم الأم مطلوب`);
+        }
+
+        if (!row.mobile || !row.mobile.trim()) {
+          errors.push(`${section}: رقم الموبايل مطلوب`);
+        } else if (!/^07\d{8}$/.test(row.mobile)) {
+          errors.push(`${section}: صيغة رقم الهاتف غير صحيحة (يجب أن يبدأ بـ 07 ويتكون من 10 أرقام)`);
+        }
+
+        if (!row.birthDate) {
+          errors.push(`${section}: تاريخ الميلاد مطلوب`);
+        } else if (new Date(row.birthDate) > new Date()) {
+          errors.push(`${section}: تاريخ الميلاد لا يمكن أن يكون في المستقبل`);
+        }
+
+        if (!row.currentPosition || !row.currentPosition.trim()) {
+          errors.push(`${section}: الوظيفة الحالية مطلوبة`);
+        }
+
+        if (!row.startDate) {
+          errors.push(`${section}: تاريخ مباشرة العمل مطلوب`);
+        } else if (new Date(row.startDate) > new Date()) {
+          errors.push(`${section}: تاريخ مباشرة العمل لا يمكن أن يكون في المستقبل`);
+        }
+
+        return errors;
+      };
+
+      // Collect all validation errors
+      const allErrors: string[] = [];
+      const nationalIdSet = new Set<string>();
+
+      // Process and validate all sections
+      const processSection = (rows: any[], roleType: PersonRoleTypeType, sectionName: string) => {
+        return rows.filter((row: any) => {
+          const hasData = Object.values(row).some(v => v && String(v).trim());
+          if (!hasData) return false;
+
+          const errors = validateRow(row, sectionName);
+          allErrors.push(...errors);
+
+          // Check for duplicate national IDs
+          if (row.nationalId) {
+            if (nationalIdSet.has(row.nationalId)) {
+              allErrors.push(`${sectionName}: الرقم الوطني ${row.nationalId} موجود مسبقًا`);
+            } else {
+              nationalIdSet.add(row.nationalId);
+            }
+          }
+
+          return true;
+        }).map((row: any) => ({ ...row, roleType }));
+      };
+
+      const validOwnersPartners = processSection(ownersPartners, "PARTNER", "المالك أو الشركاء");
+      const validAuthorized = processSection(authorizedSignatories, "AUTHORIZED", "المفوّضون");
+      const validManagers = processSection(dedicatedManagers, "DEDICATED_MANAGER", "المدير المتفرّغ");
+      const validEmployees = processSection(employees, "EMPLOYEE", "الموظفون");
+
+      // Return all validation errors
+      if (allErrors.length > 0) {
+        return res.status(400).json({ 
+          message: "خطأ في التحقق من البيانات",
+          errors: allErrors 
+        });
+      }
+
+      // Combine all valid rows
+      const allStaff = [
+        ...validOwnersPartners,
+        ...validAuthorized,
+        ...validManagers,
+        ...validEmployees,
+      ];
+
+      const upsertedPeople: any[] = [];
+
+      // Upsert each person by national_id
+      for (const staff of allStaff) {
+        // Upsert person
+        const person = await storage.upsertPersonByNationalId(targetOfficeId, staff.nationalId, {
+          officeId: targetOfficeId,
+          fullNameAr: staff.fullNameAr,
+          fullNameEn: staff.fullNameEn,
+          nationalId: staff.nationalId,
+          socialSecurityNo: staff.socialSecurityNo || null,
+          nationality: staff.nationality,
+          gender: staff.gender,
+          motherName: staff.motherName,
+          mobile: staff.mobile,
+          birthDate: staff.birthDate,
+          currentPosition: staff.currentPosition,
+          startDate: staff.startDate,
+          branch: staff.branch || "الفرع الرئيسي",
+        });
+
+        // Delete existing roles for this person (to avoid duplicates)
+        await storage.deleteRolesByPerson(person.id);
+
+        // Create new role assignment
+        await storage.createRoleInOffice({
+          personId: person.id,
+          officeId: targetOfficeId,
+          roleType: staff.roleType as PersonRoleTypeType,
+        });
+
+        upsertedPeople.push(person);
+
+        // Create audit log for upsert
+        await storage.createAuditLog({
+          userId: user.id,
+          action: "PERSON_UPSERTED",
+          targetType: "person",
+          targetId: person.id,
+          details: { 
+            fullNameAr: staff.fullNameAr, 
+            nationalId: staff.nationalId,
+            roleType: staff.roleType,
+            officeId: targetOfficeId,
+          }
+        });
+      }
+
+      // Log consent
+      await storage.createConsent({
+        officeId: targetOfficeId,
+        userId: user.id,
+        consentType: "DATA_ACCURACY",
+        ipAddress: ipAddress,
+        userAgent: userAgent,
+        payload: { 
+          formType: "staff-2026",
+          staffCount: allStaff.length,
+          sections: {
+            ownersPartners: validOwnersPartners.length,
+            authorizedSignatories: validAuthorized.length,
+            dedicatedManagers: validManagers.length,
+            employees: validEmployees.length,
+          }
+        },
+      });
+
+      // Create main audit log
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "STAFF_FORM_SAVED",
+        targetType: "office",
+        targetId: targetOfficeId,
+        details: { 
+          staffCount: allStaff.length,
+          sections: {
+            ownersPartners: validOwnersPartners.length,
+            authorizedSignatories: validAuthorized.length,
+            dedicatedManagers: validManagers.length,
+            employees: validEmployees.length,
+          }
+        }
+      });
+
+      res.json({ 
+        message: "تم حفظ نموذج معلومات العاملين بنجاح",
+        savedCount: upsertedPeople.length,
+        people: upsertedPeople,
+      });
+    } catch (error) {
+      console.error("Staff form 2026 save error:", error);
+      res.status(500).json({ message: "خطأ داخلي في الخادم" });
+    }
+  });
+
+  // GET staff form data for an office
+  app.get("/api/forms/staff-2026/:officeId", ensureAuthenticated, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const officeId = parseInt(req.params.officeId);
+
+      if (isNaN(officeId)) {
+        return res.status(400).json({ message: "رقم المكتب غير صالح" });
+      }
+
+      // Check access
+      if (user.role !== "ADMIN" && user.officeId !== officeId) {
+        return res.status(403).json({ message: "لا يمكنك الوصول إلى هذا المكتب" });
+      }
+
+      const people = await storage.getPeopleByOffice(officeId);
+      const roles = await storage.getRolesInOffice(officeId);
+      const branches = await storage.getBranches(officeId);
+
+      // Group people by role type
+      const ownersPartners: any[] = [];
+      const authorizedSignatories: any[] = [];
+      const dedicatedManagers: any[] = [];
+      const employees: any[] = [];
+
+      for (const person of people) {
+        const personRoles = roles.filter(r => r.personId === person.id);
+        for (const role of personRoles) {
+          const personData = {
+            id: person.id,
+            fullNameAr: person.fullNameAr,
+            fullNameEn: person.fullNameEn,
+            nationalId: person.nationalId,
+            socialSecurityNo: person.socialSecurityNo,
+            nationality: person.nationality,
+            gender: person.gender,
+            motherName: person.motherName,
+            mobile: person.mobile,
+            birthDate: person.birthDate,
+            currentPosition: person.currentPosition,
+            startDate: person.startDate,
+            branch: person.branch,
+          };
+
+          switch (role.roleType) {
+            case "PARTNER":
+              ownersPartners.push(personData);
+              break;
+            case "AUTHORIZED":
+              authorizedSignatories.push(personData);
+              break;
+            case "DEDICATED_MANAGER":
+              dedicatedManagers.push(personData);
+              break;
+            case "EMPLOYEE":
+              employees.push(personData);
+              break;
+          }
+        }
+      }
+
+      res.json({
+        officeId,
+        ownersPartners,
+        authorizedSignatories,
+        dedicatedManagers,
+        employees,
+        branches: branches.map(b => ({ id: b.id, name: b.city || "الفرع الرئيسي" })),
+      });
+    } catch (error) {
+      console.error("Get staff form data error:", error);
+      res.status(500).json({ message: "خطأ داخلي في الخادم" });
+    }
+  });
+
+  // DELETE a person from staff
+  app.delete("/api/forms/staff-2026/person/:personId", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const personId = parseInt(req.params.personId);
+
+      if (isNaN(personId)) {
+        return res.status(400).json({ message: "رقم الشخص غير صالح" });
+      }
+
+      const person = await storage.getPerson(personId);
+      if (!person || person.officeId !== user.officeId) {
+        return res.status(404).json({ message: "الشخص غير موجود" });
+      }
+
+      // Delete roles first
+      await storage.deleteRolesByPerson(personId);
+      
+      // Delete person
+      await storage.deletePerson(personId);
+
+      // Create audit log
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "PERSON_DELETED",
+        targetType: "person",
+        targetId: personId,
+        details: { 
+          fullNameAr: person.fullNameAr, 
+          nationalId: person.nationalId,
+          officeId: user.officeId,
+        }
+      });
+
+      res.json({ message: "تم حذف الشخص بنجاح" });
+    } catch (error) {
+      console.error("Delete person error:", error);
+      res.status(500).json({ message: "خطأ داخلي في الخادم" });
     }
   });
 

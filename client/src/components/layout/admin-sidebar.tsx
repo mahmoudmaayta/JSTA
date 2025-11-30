@@ -23,6 +23,7 @@ import {
   LogOut,
   Shield,
   History,
+  Users,
 } from "lucide-react";
 import logoImage from "@assets/logo-0 (1)_1764114456004.png";
 
@@ -46,6 +47,11 @@ export function AdminSidebar() {
       title: t("navigation.renewals"),
       url: "/admin/renewals",
       icon: FileCheck,
+    },
+    {
+      title: t("navigation.staffDashboard"),
+      url: "/admin/staff",
+      icon: Users,
     },
     {
       title: t("navigation.auditLogs"),
