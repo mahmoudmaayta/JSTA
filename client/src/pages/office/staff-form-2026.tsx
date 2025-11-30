@@ -698,7 +698,7 @@ export default function StaffForm2026() {
             <div className="flex items-center justify-between mt-6">
               <Button
                 variant="outline"
-                onClick={() => navigate("/office")}
+                onClick={() => navigate("/office/dashboard")}
                 data-testid="button-back"
               >
                 <ArrowRight className="w-4 h-4 ms-2" />
