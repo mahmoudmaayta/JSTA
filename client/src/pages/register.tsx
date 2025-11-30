@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Header } from "@/components/layout/header";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { registerSchema, officeInfoSchema, branchSchema, type RegisterForm, type OfficeInfoForm, type BranchForm } from "@shared/schema";
@@ -33,7 +34,9 @@ import {
   User,
   Building,
   MapPin,
-  FileCheck
+  FileCheck,
+  ChevronDown,
+  Edit
 } from "lucide-react";
 
 interface DocumentUpload {
@@ -63,6 +66,7 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [branches, setBranches] = useState<BranchForm[]>([]);
+  const [editingBranchIndex, setEditingBranchIndex] = useState<number | null>(null);
   const [documents, setDocuments] = useState<DocumentUpload[]>([]);
   const [registrationData, setRegistrationData] = useState<{
     account?: RegisterForm;
@@ -152,8 +156,29 @@ export default function RegisterPage() {
     branchForm.reset();
   };
 
+  const handleBranchUpdate = (index: number, data: BranchForm) => {
+    setBranches((prev) => prev.map((branch, i) => i === index ? data : branch));
+    setEditingBranchIndex(null);
+    branchForm.reset();
+  };
+
   const handleBranchRemove = (index: number) => {
     setBranches((prev) => prev.filter((_, i) => i !== index));
+    if (editingBranchIndex === index) {
+      setEditingBranchIndex(null);
+      branchForm.reset();
+    }
+  };
+
+  const startEditingBranch = (index: number) => {
+    const branch = branches[index];
+    branchForm.reset(branch);
+    setEditingBranchIndex(index);
+  };
+
+  const cancelEditingBranch = () => {
+    setEditingBranchIndex(null);
+    branchForm.reset();
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, category: string) => {
@@ -729,163 +754,356 @@ export default function RegisterPage() {
               </CardHeader>
               <CardContent>
                 {branches.length > 0 && (
-                  <div className="mb-6 space-y-3">
-                    <h3 className="text-sm font-medium">{t("forms.addedBranches")} ({branches.length})</h3>
-                    {branches.map((branch, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between rounded-lg border p-3 bg-muted/30"
-                      >
-                        <div>
-                          <p className="font-medium text-sm">
-                            {branch.city || t("forms.branch")} {branch.area && `- ${branch.area}`}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {branch.managerName && `${t("forms.manager")}: ${branch.managerName}`}
-                          </p>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleBranchRemove(index)}
-                          className="text-destructive hover:text-destructive"
-                          data-testid={`button-remove-branch-${index}`}
+                  <div className="mb-6">
+                    <h3 className="text-sm font-medium mb-3">{t("forms.addedBranches")} ({branches.length})</h3>
+                    <Accordion type="single" collapsible className="space-y-2">
+                      {branches.map((branch, index) => (
+                        <AccordionItem 
+                          key={index} 
+                          value={`branch-${index}`}
+                          className="border rounded-lg px-4"
                         >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
+                          <AccordionTrigger className="hover:no-underline py-3">
+                            <div className="flex items-center justify-between w-full pe-2">
+                              <div className="text-start">
+                                <p className="font-medium text-sm">
+                                  {t("forms.branch")} {index + 1}: {branch.city || "-"} {branch.area && `- ${branch.area}`}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {branch.managerName && `${t("forms.manager")}: ${branch.managerName}`}
+                                </p>
+                              </div>
+                            </div>
+                          </AccordionTrigger>
+                          <AccordionContent className="pb-4">
+                            {editingBranchIndex === index ? (
+                              <Form {...branchForm}>
+                                <form 
+                                  onSubmit={branchForm.handleSubmit((data) => handleBranchUpdate(index, data))} 
+                                  className="space-y-4 pt-2"
+                                >
+                                  <div className="grid gap-4 sm:grid-cols-2">
+                                    <FormField
+                                      control={branchForm.control}
+                                      name="city"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>{t("forms.officeStep.city")}</FormLabel>
+                                          <FormControl>
+                                            <Input placeholder={t("forms.officeStep.cityPlaceholder")} {...field} />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
+                                    />
+                                    <FormField
+                                      control={branchForm.control}
+                                      name="area"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>{t("forms.officeStep.area")}</FormLabel>
+                                          <FormControl>
+                                            <Input placeholder={t("forms.officeStep.areaPlaceholder")} {...field} />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
+                                    />
+                                  </div>
+                                  <div className="grid gap-4 sm:grid-cols-2">
+                                    <FormField
+                                      control={branchForm.control}
+                                      name="street"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>{t("forms.officeStep.street")}</FormLabel>
+                                          <FormControl>
+                                            <Input placeholder={t("forms.officeStep.streetPlaceholder")} {...field} />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
+                                    />
+                                    <FormField
+                                      control={branchForm.control}
+                                      name="buildingNumber"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>{t("forms.officeStep.buildingNumber")}</FormLabel>
+                                          <FormControl>
+                                            <Input placeholder={t("forms.officeStep.buildingPlaceholder")} {...field} />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
+                                    />
+                                  </div>
+                                  <div className="grid gap-4 sm:grid-cols-2">
+                                    <FormField
+                                      control={branchForm.control}
+                                      name="managerName"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>{t("forms.branchStep.managerName")}</FormLabel>
+                                          <FormControl>
+                                            <Input placeholder={t("forms.branchStep.managerNamePlaceholder")} {...field} />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
+                                    />
+                                    <FormField
+                                      control={branchForm.control}
+                                      name="managerMobile"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>{t("forms.branchStep.managerMobile")}</FormLabel>
+                                          <FormControl>
+                                            <Input placeholder={t("forms.branchStep.managerMobilePlaceholder")} {...field} />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
+                                    />
+                                  </div>
+                                  <div className="grid gap-4 sm:grid-cols-2">
+                                    <FormField
+                                      control={branchForm.control}
+                                      name="phone"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>{t("forms.officeStep.phone")}</FormLabel>
+                                          <FormControl>
+                                            <Input placeholder={t("forms.officeStep.phonePlaceholder")} {...field} />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
+                                    />
+                                    <FormField
+                                      control={branchForm.control}
+                                      name="fax"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>{t("forms.officeStep.fax")}</FormLabel>
+                                          <FormControl>
+                                            <Input placeholder={t("forms.officeStep.faxPlaceholder")} {...field} />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
+                                    />
+                                  </div>
+                                  <div className="flex gap-2 justify-end pt-2">
+                                    <Button type="button" variant="outline" onClick={cancelEditingBranch}>
+                                      {t("forms.cancelEdit")}
+                                    </Button>
+                                    <Button type="submit">
+                                      {t("forms.saveBranch")}
+                                    </Button>
+                                  </div>
+                                </form>
+                              </Form>
+                            ) : (
+                              <div className="space-y-3 pt-2">
+                                <div className="grid gap-2 sm:grid-cols-2 text-sm">
+                                  <div>
+                                    <span className="text-muted-foreground">{t("forms.officeStep.city")}:</span>{" "}
+                                    <span>{branch.city || "-"}</span>
+                                  </div>
+                                  <div>
+                                    <span className="text-muted-foreground">{t("forms.officeStep.area")}:</span>{" "}
+                                    <span>{branch.area || "-"}</span>
+                                  </div>
+                                  <div>
+                                    <span className="text-muted-foreground">{t("forms.officeStep.street")}:</span>{" "}
+                                    <span>{branch.street || "-"}</span>
+                                  </div>
+                                  <div>
+                                    <span className="text-muted-foreground">{t("forms.officeStep.buildingNumber")}:</span>{" "}
+                                    <span>{branch.buildingNumber || "-"}</span>
+                                  </div>
+                                  <div>
+                                    <span className="text-muted-foreground">{t("forms.branchStep.managerName")}:</span>{" "}
+                                    <span>{branch.managerName || "-"}</span>
+                                  </div>
+                                  <div>
+                                    <span className="text-muted-foreground">{t("forms.branchStep.managerMobile")}:</span>{" "}
+                                    <span>{branch.managerMobile || "-"}</span>
+                                  </div>
+                                  <div>
+                                    <span className="text-muted-foreground">{t("forms.officeStep.phone")}:</span>{" "}
+                                    <span>{branch.phone || "-"}</span>
+                                  </div>
+                                  <div>
+                                    <span className="text-muted-foreground">{t("forms.officeStep.fax")}:</span>{" "}
+                                    <span>{branch.fax || "-"}</span>
+                                  </div>
+                                </div>
+                                <div className="flex gap-2 justify-end pt-2 border-t">
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={() => startEditingBranch(index)}
+                                    className="gap-1"
+                                    data-testid={`button-edit-branch-${index}`}
+                                  >
+                                    <Edit className="h-3 w-3" />
+                                    {t("forms.editBranch")}
+                                  </Button>
+                                  <Button
+                                    variant="destructive"
+                                    size="sm"
+                                    onClick={() => handleBranchRemove(index)}
+                                    className="gap-1"
+                                    data-testid={`button-remove-branch-${index}`}
+                                  >
+                                    <Trash2 className="h-3 w-3" />
+                                    {t("common.delete")}
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
                   </div>
                 )}
 
-                <Form {...branchForm}>
-                  <form onSubmit={branchForm.handleSubmit(handleBranchAdd)} className="space-y-4">
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <FormField
-                        control={branchForm.control}
-                        name="city"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>{t("forms.officeStep.city")}</FormLabel>
-                            <FormControl>
-                              <Input placeholder={t("forms.officeStep.cityPlaceholder")} data-testid="input-branch-city" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                {editingBranchIndex === null && (
+                  <div className="border rounded-lg p-4 bg-muted/30">
+                    <h4 className="text-sm font-medium mb-4">{t("forms.addNewBranch")}</h4>
+                    <Form {...branchForm}>
+                      <form onSubmit={branchForm.handleSubmit(handleBranchAdd)} className="space-y-4">
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <FormField
+                            control={branchForm.control}
+                            name="city"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>{t("forms.officeStep.city")}</FormLabel>
+                                <FormControl>
+                                  <Input placeholder={t("forms.officeStep.cityPlaceholder")} data-testid="input-branch-city" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
 
-                      <FormField
-                        control={branchForm.control}
-                        name="area"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>{t("forms.officeStep.area")}</FormLabel>
-                            <FormControl>
-                              <Input placeholder={t("forms.officeStep.areaPlaceholder")} data-testid="input-branch-area" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+                          <FormField
+                            control={branchForm.control}
+                            name="area"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>{t("forms.officeStep.area")}</FormLabel>
+                                <FormControl>
+                                  <Input placeholder={t("forms.officeStep.areaPlaceholder")} data-testid="input-branch-area" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
 
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <FormField
-                        control={branchForm.control}
-                        name="street"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>{t("forms.officeStep.street")}</FormLabel>
-                            <FormControl>
-                              <Input placeholder={t("forms.officeStep.streetPlaceholder")} data-testid="input-branch-street" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <FormField
+                            control={branchForm.control}
+                            name="street"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>{t("forms.officeStep.street")}</FormLabel>
+                                <FormControl>
+                                  <Input placeholder={t("forms.officeStep.streetPlaceholder")} data-testid="input-branch-street" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
 
-                      <FormField
-                        control={branchForm.control}
-                        name="buildingNumber"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>{t("forms.officeStep.buildingNumber")}</FormLabel>
-                            <FormControl>
-                              <Input placeholder={t("forms.officeStep.buildingPlaceholder")} data-testid="input-branch-building" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+                          <FormField
+                            control={branchForm.control}
+                            name="buildingNumber"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>{t("forms.officeStep.buildingNumber")}</FormLabel>
+                                <FormControl>
+                                  <Input placeholder={t("forms.officeStep.buildingPlaceholder")} data-testid="input-branch-building" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
 
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <FormField
-                        control={branchForm.control}
-                        name="managerName"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>{t("forms.branchStep.managerName")}</FormLabel>
-                            <FormControl>
-                              <Input placeholder={t("forms.branchStep.managerNamePlaceholder")} data-testid="input-branch-manager" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <FormField
+                            control={branchForm.control}
+                            name="managerName"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>{t("forms.branchStep.managerName")}</FormLabel>
+                                <FormControl>
+                                  <Input placeholder={t("forms.branchStep.managerNamePlaceholder")} data-testid="input-branch-manager" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
 
-                      <FormField
-                        control={branchForm.control}
-                        name="managerMobile"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>{t("forms.branchStep.managerMobile")}</FormLabel>
-                            <FormControl>
-                              <Input placeholder={t("forms.branchStep.managerMobilePlaceholder")} data-testid="input-branch-manager-mobile" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+                          <FormField
+                            control={branchForm.control}
+                            name="managerMobile"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>{t("forms.branchStep.managerMobile")}</FormLabel>
+                                <FormControl>
+                                  <Input placeholder={t("forms.branchStep.managerMobilePlaceholder")} data-testid="input-branch-manager-mobile" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
 
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <FormField
-                        control={branchForm.control}
-                        name="phone"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>{t("forms.officeStep.phone")}</FormLabel>
-                            <FormControl>
-                              <Input placeholder={t("forms.officeStep.phonePlaceholder")} data-testid="input-branch-phone" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <FormField
+                            control={branchForm.control}
+                            name="phone"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>{t("forms.officeStep.phone")}</FormLabel>
+                                <FormControl>
+                                  <Input placeholder={t("forms.officeStep.phonePlaceholder")} data-testid="input-branch-phone" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
 
-                      <FormField
-                        control={branchForm.control}
-                        name="fax"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>{t("forms.officeStep.fax")}</FormLabel>
-                            <FormControl>
-                              <Input placeholder={t("forms.officeStep.faxPlaceholder")} data-testid="input-branch-fax" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+                          <FormField
+                            control={branchForm.control}
+                            name="fax"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>{t("forms.officeStep.fax")}</FormLabel>
+                                <FormControl>
+                                  <Input placeholder={t("forms.officeStep.faxPlaceholder")} data-testid="input-branch-fax" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
 
-                    <Button type="submit" variant="outline" className="gap-2" data-testid="button-add-branch">
-                      <Plus className="h-4 w-4" />
-                      {t("forms.addBranch")}
-                    </Button>
-                  </form>
-                </Form>
+                        <Button type="submit" variant="outline" className="gap-2" data-testid="button-add-branch">
+                          <Plus className="h-4 w-4" />
+                          {t("forms.addBranch")}
+                        </Button>
+                      </form>
+                    </Form>
+                  </div>
+                )}
 
                 <div className="flex justify-between pt-6 mt-6 border-t">
                   <Button
