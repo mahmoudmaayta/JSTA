@@ -289,7 +289,7 @@
 
 /* RTL (Right-to-Left) Support for Arabic */
 html[dir="rtl"] {
-  font-family: "Noto Sans Arabic", "Open Sans", system-ui, sans-serif;
+  font-family: "Cairo", "Open Sans", system-ui, sans-serif;
 }
 
 html[dir="rtl"] body {
