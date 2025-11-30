@@ -54,7 +54,7 @@ export default function RegistrationSuccessPage() {
               <Link href="/login">
                 <Button className="gap-2" data-testid="button-go-login">
                   {t("registrationSuccess.goToLogin")}
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                 </Button>
               </Link>
             </div>

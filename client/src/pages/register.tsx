@@ -348,7 +348,7 @@ export default function RegisterPage() {
                     <div className="flex justify-end pt-4">
                       <Button type="submit" className="gap-2" data-testid="button-next-step">
                         {t("forms.continue")}
-                        <ArrowRight className="h-4 w-4" />
+                        <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                       </Button>
                     </div>
                   </form>
@@ -684,12 +684,12 @@ export default function RegisterPage() {
                         className="gap-2"
                         data-testid="button-prev-step"
                       >
-                        <ArrowLeft className="h-4 w-4" />
+                        <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
                         {t("common.back")}
                       </Button>
                       <Button type="submit" className="gap-2" data-testid="button-next-step">
                         {t("forms.continue")}
-                        <ArrowRight className="h-4 w-4" />
+                        <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                       </Button>
                     </div>
                   </form>
@@ -877,12 +877,12 @@ export default function RegisterPage() {
                     className="gap-2"
                     data-testid="button-prev-step"
                   >
-                    <ArrowLeft className="h-4 w-4" />
+                    <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
                     {t("common.back")}
                   </Button>
                   <Button onClick={() => setCurrentStep(4)} className="gap-2" data-testid="button-next-step">
                     {t("forms.continue")}
-                    <ArrowRight className="h-4 w-4" />
+                    <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                   </Button>
                 </div>
               </CardContent>
@@ -1058,7 +1058,7 @@ export default function RegisterPage() {
                     className="gap-2"
                     data-testid="button-prev-step"
                   >
-                    <ArrowLeft className="h-4 w-4" />
+                    <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
                     {t("common.back")}
                   </Button>
                   <Button
