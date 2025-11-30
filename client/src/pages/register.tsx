@@ -270,7 +270,7 @@ export default function RegisterPage() {
                       name="contactName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("forms.accountStep.contactName")} *</FormLabel>
+                          <FormLabel>{t("forms.accountStep.contactName")} <span className="text-red-500">*</span></FormLabel>
                           <FormControl>
                             <Input placeholder={t("forms.accountStep.contactNamePlaceholder")} data-testid="input-contact-name" {...field} />
                           </FormControl>
@@ -284,7 +284,7 @@ export default function RegisterPage() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("forms.accountStep.emailAddress")} *</FormLabel>
+                          <FormLabel>{t("forms.accountStep.emailAddress")} <span className="text-red-500">*</span></FormLabel>
                           <FormControl>
                             <Input type="email" placeholder={t("forms.accountStep.emailPlaceholder")} data-testid="input-email" {...field} />
                           </FormControl>
@@ -300,7 +300,7 @@ export default function RegisterPage() {
                         name="password"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("forms.accountStep.password")} *</FormLabel>
+                            <FormLabel>{t("forms.accountStep.password")} <span className="text-red-500">*</span></FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Input
@@ -330,7 +330,7 @@ export default function RegisterPage() {
                         name="confirmPassword"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("forms.accountStep.confirmPassword")} *</FormLabel>
+                            <FormLabel>{t("forms.accountStep.confirmPassword")} <span className="text-red-500">*</span></FormLabel>
                             <FormControl>
                               <Input
                                 type={showPassword ? "text" : "password"}
@@ -379,7 +379,7 @@ export default function RegisterPage() {
                         name="tradeNameAr"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("forms.officeStep.tradeNameAr")} *</FormLabel>
+                            <FormLabel>{t("forms.officeStep.tradeNameAr")} <span className="text-red-500">*</span></FormLabel>
                             <FormControl>
                               <Input placeholder={t("forms.officeStep.tradeNamePlaceholder")} data-testid="input-trade-name" {...field} />
                             </FormControl>
