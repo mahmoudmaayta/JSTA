@@ -33,7 +33,7 @@ export default function NotFound() {
               className="gap-2"
               data-testid="button-back"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
               Go Back
             </Button>
           </CardContent>

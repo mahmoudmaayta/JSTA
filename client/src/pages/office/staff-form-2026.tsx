@@ -701,7 +701,7 @@ export default function StaffForm2026() {
                 onClick={() => navigate("/office/dashboard")}
                 data-testid="button-back"
               >
-                <ArrowRight className="w-4 h-4 ms-2" />
+                <ArrowRight className="w-4 h-4 ms-2 rtl:rotate-180" />
                 العودة للوحة التحكم
               </Button>
               

@@ -139,7 +139,7 @@ export default function OfficeRenewals() {
                             <Link href={renewal.year >= 2026 ? `/office/renewals-2026/${renewal.id}` : `/office/renewals/${renewal.id}`}>
                               <Button variant="outline" className="gap-2" data-testid={`link-renewal-${renewal.id}`}>
                                 {t("common.details")}
-                                <ArrowRight className="h-4 w-4" />
+                                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                               </Button>
                             </Link>
                           </div>
