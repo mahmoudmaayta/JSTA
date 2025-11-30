@@ -738,16 +738,6 @@
       "downloadPdfDesc": "Download the renewal request PDF to submit to the Ministry"
     }
   },
-  "registrationSuccess": {
-    "title": "Registration Submitted!",
-    "message": "Your tourism office registration has been successfully submitted.",
-    "nextSteps": "What happens next?",
-    "step1": "Our team will review your application and documents",
-    "step2": "You will receive an email notification once your registration is approved",
-    "step3": "After approval, you can log in and access all portal features",
-    "backToHome": "Back to Home",
-    "loginNow": "Login Now"
-  },
   "renewal2026": {
     "title": "Renewal Form",
     "subtitle": "Complete all forms and upload required documents",

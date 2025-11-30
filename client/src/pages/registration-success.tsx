@@ -1,9 +1,7 @@
-import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Header } from "@/components/layout/header";
 import { useTranslation } from "@/lib/i18n";
-import { CheckCircle2, Clock, Mail, ArrowRight } from "lucide-react";
+import { CheckCircle2, Clock } from "lucide-react";
 
 export default function RegistrationSuccessPage() {
   const { t } = useTranslation();
@@ -19,9 +17,6 @@ export default function RegistrationSuccessPage() {
               <CheckCircle2 className="h-10 w-10 text-emerald-600 dark:text-emerald-400" />
             </div>
             <CardTitle className="text-2xl">{t("registrationSuccess.title")}</CardTitle>
-            <CardDescription className="text-base">
-              {t("registrationSuccess.description")}
-            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="rounded-lg bg-muted/50 p-4 text-left rtl:text-right">
@@ -43,20 +38,6 @@ export default function RegistrationSuccessPage() {
                   <span>{t("registrationSuccess.step3")}</span>
                 </li>
               </ul>
-            </div>
-
-            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-              <Mail className="h-4 w-4" />
-              <span>{t("registrationSuccess.checkEmail")}</span>
-            </div>
-
-            <div className="pt-2">
-              <Link href="/login">
-                <Button className="gap-2" data-testid="button-go-login">
-                  {t("registrationSuccess.goToLogin")}
-                  <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-                </Button>
-              </Link>
             </div>
           </CardContent>
         </Card>
