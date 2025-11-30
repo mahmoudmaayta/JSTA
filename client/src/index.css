@@ -288,7 +288,9 @@
 }
 
 /* RTL (Right-to-Left) Support for Arabic */
-html[dir="rtl"] {
+html[dir="rtl"],
+html[dir="rtl"] body,
+html[dir="rtl"] * {
   font-family: "Cairo", "Open Sans", system-ui, sans-serif;
 }
 
