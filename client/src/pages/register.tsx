@@ -449,26 +449,44 @@ export default function RegisterPage() {
                       <FormField
                         control={officeForm.control}
                         name="tourismActivities"
-                        render={() => (
+                        render={({ field }) => (
                           <FormItem>
                             <FormLabel>{t("forms.officeStep.tourismActivities")}</FormLabel>
                             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                              <FormItem className="flex items-center space-x-2 rtl:space-x-reverse space-y-0">
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.length === TOURISM_ACTIVITIES.length}
+                                    onCheckedChange={(checked) => {
+                                      if (checked) {
+                                        field.onChange(TOURISM_ACTIVITIES.map(a => a.id));
+                                      } else {
+                                        field.onChange([]);
+                                      }
+                                    }}
+                                    data-testid="checkbox-activity-all"
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-medium text-sm cursor-pointer">
+                                  {t("forms.officeStep.activities.all")}
+                                </FormLabel>
+                              </FormItem>
                               {TOURISM_ACTIVITIES.map((activity) => (
                                 <FormField
                                   key={activity.id}
                                   control={officeForm.control}
                                   name="tourismActivities"
-                                  render={({ field }) => (
-                                    <FormItem className="flex items-center space-x-2 space-y-0">
+                                  render={({ field: innerField }) => (
+                                    <FormItem className="flex items-center space-x-2 rtl:space-x-reverse space-y-0">
                                       <FormControl>
                                         <Checkbox
-                                          checked={field.value?.includes(activity.id)}
+                                          checked={innerField.value?.includes(activity.id)}
                                           onCheckedChange={(checked) => {
-                                            const current = field.value || [];
+                                            const current = innerField.value || [];
                                             if (checked) {
-                                              field.onChange([...current, activity.id]);
+                                              innerField.onChange([...current, activity.id]);
                                             } else {
-                                              field.onChange(current.filter((v) => v !== activity.id));
+                                              innerField.onChange(current.filter((v) => v !== activity.id));
                                             }
                                           }}
                                           data-testid={`checkbox-activity-${activity.id}`}

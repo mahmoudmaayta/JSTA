@@ -642,6 +642,7 @@
       "guaranteeExpiry": "Guarantee Expiry Date",
       "tourismActivities": "Tourism Activities",
       "activities": {
+        "all": "Select All",
         "tickets": "Air Tickets",
         "inbound": "Inbound Tourism",
         "outbound": "Outbound Tourism",

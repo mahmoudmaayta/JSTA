@@ -642,6 +642,7 @@
       "guaranteeExpiry": "تاريخ انتهاء الضمان",
       "tourismActivities": "الأنشطة السياحية",
       "activities": {
+        "all": "تحديد الكل",
         "tickets": "تذاكر الطيران",
         "inbound": "السياحة الوافدة",
         "outbound": "السياحة الصادرة",
