@@ -24,6 +24,7 @@ import {
   Shield,
   History,
   Users,
+  FileWarning,
 } from "lucide-react";
 import logoImage from "@assets/logo-0 (1)_1764114456004.png";
 
@@ -52,6 +53,11 @@ export function AdminSidebar() {
       title: t("navigation.staffDashboard"),
       url: "/admin/staff",
       icon: Users,
+    },
+    {
+      title: t("navigation.commitmentsDashboard"),
+      url: "/admin/commitments",
+      icon: FileWarning,
     },
     {
       title: t("navigation.auditLogs"),
