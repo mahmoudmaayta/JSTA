@@ -591,7 +591,8 @@
     "adminPanel": "لوحة الإدارة",
     "staffForm2026": "نموذج العاملين 2026",
     "staffDashboard": "لوحة العاملين",
-    "commitmentForm": "إقرار والتزام"
+    "commitmentForm": "إقرار والتزام",
+    "commitmentsDashboard": "الالتزامات"
   },
   "forms": {
     "continue": "متابعة",

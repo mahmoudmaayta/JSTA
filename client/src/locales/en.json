@@ -591,7 +591,8 @@
     "adminPanel": "Admin Panel",
     "staffForm2026": "Staff Form 2026",
     "staffDashboard": "Staff Dashboard",
-    "commitmentForm": "Commitment Form"
+    "commitmentForm": "Commitment Form",
+    "commitmentsDashboard": "Commitments"
   },
   "forms": {
     "continue": "Continue",

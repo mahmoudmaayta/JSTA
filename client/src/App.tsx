@@ -29,6 +29,7 @@ import AdminRenewals from "@/pages/admin/renewals";
 import AdminRenewalDetail from "@/pages/admin/renewal-detail";
 import AdminAuditLogs from "@/pages/admin/audit-logs";
 import AdminStaffDashboard from "@/pages/admin/staff-dashboard";
+import AdminCommitmentDashboard from "@/pages/admin/commitment-dashboard";
 
 function ProtectedRoute({ 
   children, 
@@ -186,6 +187,12 @@ function Router() {
       <Route path="/admin/staff">
         <ProtectedRoute allowedRoles={['ADMIN']}>
           <AdminStaffDashboard />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/commitments">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminCommitmentDashboard />
         </ProtectedRoute>
       </Route>
 
