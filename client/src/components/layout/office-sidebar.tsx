@@ -25,6 +25,7 @@ import {
   Briefcase,
   UserCog,
   Users,
+  FileWarning,
 } from "lucide-react";
 import logoImage from "@assets/logo-0 (1)_1764114456004.png";
 
@@ -53,6 +54,11 @@ export function OfficeSidebar() {
       title: t("navigation.staffForm2026"),
       url: "/office/staff-form-2026",
       icon: Users,
+    },
+    {
+      title: t("navigation.commitmentForm"),
+      url: "/office/commitment-form-2026",
+      icon: FileWarning,
     },
     {
       title: t("navigation.profile"),
