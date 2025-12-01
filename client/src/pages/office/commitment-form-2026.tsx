@@ -138,8 +138,8 @@ export default function CommitmentForm2026() {
       if (result.ok) {
         queryClient.invalidateQueries({ queryKey: ["/api/office/commitment-form"] });
         toast({
-          title: t("commitmentForm.successTitle"),
-          description: t("commitmentForm.successMessage"),
+          title: t("commitmentForm2026.messages.savedSuccess"),
+          description: t("commitmentForm2026.messages.savedDesc"),
         });
         navigate("/office/dashboard");
       }
@@ -147,7 +147,7 @@ export default function CommitmentForm2026() {
     onError: (error: any) => {
       toast({
         title: t("common.error"),
-        description: error.message || t("commitmentForm.errorMessage"),
+        description: error.message || t("commitmentForm2026.messages.saveError"),
         variant: "destructive",
       });
     },
@@ -157,39 +157,39 @@ export default function CommitmentForm2026() {
     const newErrors: Record<string, string> = {};
 
     if (!formData.officeName.trim()) {
-      newErrors.officeName = t("commitmentForm.errors.officeNameRequired");
+      newErrors.officeName = language === "ar" ? "اسم المكتب مطلوب" : "Office name is required";
     }
     if (!formData.licenseNo.trim()) {
-      newErrors.licenseNo = t("commitmentForm.errors.licenseNoRequired");
+      newErrors.licenseNo = language === "ar" ? "رقم الترخيص مطلوب" : "License number is required";
     }
     if (!formData.contactName.trim()) {
-      newErrors.contactName = t("commitmentForm.errors.contactNameRequired");
+      newErrors.contactName = language === "ar" ? "اسم المسؤول مطلوب" : "Contact name is required";
     }
     if (!formData.contactEmail.trim()) {
-      newErrors.contactEmail = t("commitmentForm.errors.contactEmailRequired");
+      newErrors.contactEmail = language === "ar" ? "البريد الإلكتروني مطلوب" : "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.contactEmail)) {
-      newErrors.contactEmail = t("commitmentForm.errors.invalidEmail");
+      newErrors.contactEmail = language === "ar" ? "البريد الإلكتروني غير صالح" : "Invalid email address";
     }
     if (!formData.contactMobile.trim()) {
-      newErrors.contactMobile = t("commitmentForm.errors.contactMobileRequired");
+      newErrors.contactMobile = language === "ar" ? "رقم الموبايل مطلوب" : "Mobile number is required";
     }
 
     if (formData.hasComplaints && formData.complaints.length > 0) {
       formData.complaints.forEach((complaint, index) => {
         if (!complaint.complaintNumber.trim()) {
-          newErrors[`complaint_${index}_number`] = t("commitmentForm.errors.complaintNumberRequired");
+          newErrors[`complaint_${index}_number`] = language === "ar" ? "رقم الشكوى مطلوب" : "Complaint number is required";
         }
         if (!complaint.notifiedAt) {
-          newErrors[`complaint_${index}_date`] = t("commitmentForm.errors.notifiedAtRequired");
+          newErrors[`complaint_${index}_date`] = language === "ar" ? "تاريخ التبليغ مطلوب" : "Notification date is required";
         }
         if (complaint.summary && complaint.summary.length > 200) {
-          newErrors[`complaint_${index}_summary`] = t("commitmentForm.errors.summaryTooLong");
+          newErrors[`complaint_${index}_summary`] = language === "ar" ? "الملخص طويل جداً" : "Summary is too long";
         }
       });
     }
 
     if (!formData.consentAccepted) {
-      newErrors.consent = t("commitmentForm.errors.consentRequired");
+      newErrors.consent = t("commitmentForm2026.messages.consentRequiredDesc");
     }
 
     setErrors(newErrors);
@@ -245,10 +245,10 @@ export default function CommitmentForm2026() {
           <CardHeader className="text-center border-b">
             <div className="flex items-center justify-center gap-3 mb-2">
               <FileWarning className="w-8 h-8 text-primary" />
-              <CardTitle className="text-2xl">{t("commitmentForm.title")}</CardTitle>
+              <CardTitle className="text-2xl">{t("commitmentForm2026.title")}</CardTitle>
             </div>
             <CardDescription className="text-base">
-              {t("commitmentForm.description")}
+              {t("commitmentForm2026.subtitle")}
             </CardDescription>
           </CardHeader>
         </Card>
@@ -257,20 +257,19 @@ export default function CommitmentForm2026() {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Building2 className="w-5 h-5 text-primary" />
-              <CardTitle className="text-lg">{t("commitmentForm.officeInfo")}</CardTitle>
+              <CardTitle className="text-lg">{t("commitmentForm2026.officeInfo.title")}</CardTitle>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="officeName">
-                  {t("commitmentForm.officeName")} <span className="text-red-500">*</span>
+                  {t("commitmentForm2026.officeInfo.officeName")} <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="officeName"
                   value={formData.officeName}
                   onChange={(e) => setFormData(prev => ({ ...prev, officeName: e.target.value }))}
-                  placeholder={t("commitmentForm.officeNamePlaceholder")}
                   data-testid="input-office-name"
                 />
                 {errors.officeName && (
@@ -280,13 +279,12 @@ export default function CommitmentForm2026() {
 
               <div className="space-y-2">
                 <Label htmlFor="licenseNo">
-                  {t("commitmentForm.licenseNo")} <span className="text-red-500">*</span>
+                  {t("commitmentForm2026.officeInfo.licenseNo")} <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="licenseNo"
                   value={formData.licenseNo}
                   onChange={(e) => setFormData(prev => ({ ...prev, licenseNo: e.target.value }))}
-                  placeholder={t("commitmentForm.licenseNoPlaceholder")}
                   data-testid="input-license-no"
                 />
                 {errors.licenseNo && (
@@ -297,13 +295,12 @@ export default function CommitmentForm2026() {
               <div className="space-y-2">
                 <Label htmlFor="contactName">
                   <User className="w-4 h-4 inline me-1" />
-                  {t("commitmentForm.contactName")} <span className="text-red-500">*</span>
+                  {t("commitmentForm2026.officeInfo.contactName")} <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="contactName"
                   value={formData.contactName}
                   onChange={(e) => setFormData(prev => ({ ...prev, contactName: e.target.value }))}
-                  placeholder={t("commitmentForm.contactNamePlaceholder")}
                   data-testid="input-contact-name"
                 />
                 {errors.contactName && (
@@ -314,14 +311,13 @@ export default function CommitmentForm2026() {
               <div className="space-y-2">
                 <Label htmlFor="contactEmail">
                   <Mail className="w-4 h-4 inline me-1" />
-                  {t("commitmentForm.contactEmail")} <span className="text-red-500">*</span>
+                  {t("commitmentForm2026.officeInfo.contactEmail")} <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="contactEmail"
                   type="email"
                   value={formData.contactEmail}
                   onChange={(e) => setFormData(prev => ({ ...prev, contactEmail: e.target.value }))}
-                  placeholder={t("commitmentForm.contactEmailPlaceholder")}
                   data-testid="input-contact-email"
                 />
                 {errors.contactEmail && (
@@ -332,13 +328,12 @@ export default function CommitmentForm2026() {
               <div className="space-y-2 md:col-span-2">
                 <Label htmlFor="contactMobile">
                   <Phone className="w-4 h-4 inline me-1" />
-                  {t("commitmentForm.contactMobile")} <span className="text-red-500">*</span>
+                  {t("commitmentForm2026.officeInfo.contactMobile")} <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="contactMobile"
                   value={formData.contactMobile}
                   onChange={(e) => setFormData(prev => ({ ...prev, contactMobile: e.target.value }))}
-                  placeholder={t("commitmentForm.contactMobilePlaceholder")}
                   className="md:w-1/2"
                   data-testid="input-contact-mobile"
                 />
@@ -355,11 +350,11 @@ export default function CommitmentForm2026() {
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex items-center gap-2">
                 <AlertTriangle className="w-5 h-5 text-amber-500" />
-                <CardTitle className="text-lg">{t("commitmentForm.complaintsSection")}</CardTitle>
+                <CardTitle className="text-lg">{t("commitmentForm2026.complaintsSection.title")}</CardTitle>
               </div>
               <div className="flex items-center gap-3">
                 <Label htmlFor="hasComplaints" className="text-sm">
-                  {t("commitmentForm.hasComplaints")}
+                  {t("commitmentForm2026.complaintsSection.hasComplaints")}
                 </Label>
                 <Switch
                   id="hasComplaints"
@@ -377,8 +372,8 @@ export default function CommitmentForm2026() {
             </div>
             <CardDescription>
               {formData.hasComplaints 
-                ? t("commitmentForm.complaintsHint")
-                : t("commitmentForm.noComplaintsHint")
+                ? ""
+                : t("commitmentForm2026.complaintsSection.noComplaintsDesc")
               }
             </CardDescription>
           </CardHeader>
@@ -389,11 +384,11 @@ export default function CommitmentForm2026() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="min-w-[120px]">{t("commitmentForm.complaintNumber")}</TableHead>
-                      <TableHead className="min-w-[120px]">{t("commitmentForm.authority")}</TableHead>
-                      <TableHead className="min-w-[140px]">{t("commitmentForm.notifiedAt")}</TableHead>
-                      <TableHead className="min-w-[200px]">{t("commitmentForm.summary")}</TableHead>
-                      <TableHead className="min-w-[200px]">{t("commitmentForm.proposedAction")}</TableHead>
+                      <TableHead className="min-w-[120px]">{t("commitmentForm2026.complaintsSection.tableHeaders.complaintNumber")}</TableHead>
+                      <TableHead className="min-w-[120px]">{t("commitmentForm2026.complaintsSection.tableHeaders.authority")}</TableHead>
+                      <TableHead className="min-w-[140px]">{t("commitmentForm2026.complaintsSection.tableHeaders.notifiedAt")}</TableHead>
+                      <TableHead className="min-w-[200px]">{t("commitmentForm2026.complaintsSection.tableHeaders.summary")}</TableHead>
+                      <TableHead className="min-w-[200px]">{t("commitmentForm2026.complaintsSection.tableHeaders.proposedAction")}</TableHead>
                       <TableHead className="w-[60px]"></TableHead>
                     </TableRow>
                   </TableHeader>
@@ -404,7 +399,6 @@ export default function CommitmentForm2026() {
                           <Input
                             value={complaint.complaintNumber}
                             onChange={(e) => updateComplaint(index, "complaintNumber", e.target.value)}
-                            placeholder={t("commitmentForm.complaintNumberPlaceholder")}
                             className={errors[`complaint_${index}_number`] ? "border-destructive" : ""}
                             data-testid={`input-complaint-number-${index}`}
                           />
@@ -443,7 +437,6 @@ export default function CommitmentForm2026() {
                           <Textarea
                             value={complaint.summary || ""}
                             onChange={(e) => updateComplaint(index, "summary", e.target.value)}
-                            placeholder={t("commitmentForm.summaryPlaceholder")}
                             className={`resize-none ${errors[`complaint_${index}_summary`] ? "border-destructive" : ""}`}
                             rows={2}
                             data-testid={`input-summary-${index}`}
@@ -459,7 +452,6 @@ export default function CommitmentForm2026() {
                           <Textarea
                             value={complaint.proposedAction || ""}
                             onChange={(e) => updateComplaint(index, "proposedAction", e.target.value)}
-                            placeholder={t("commitmentForm.proposedActionPlaceholder")}
                             className="resize-none"
                             rows={2}
                             data-testid={`input-proposed-action-${index}`}
@@ -489,7 +481,7 @@ export default function CommitmentForm2026() {
                 data-testid="button-add-complaint"
               >
                 <Plus className="w-4 h-4 me-2" />
-                {t("commitmentForm.addComplaint")}
+                {t("commitmentForm2026.complaintsSection.addComplaint")}
               </Button>
             </CardContent>
           )}
@@ -499,13 +491,13 @@ export default function CommitmentForm2026() {
           <CardHeader>
             <div className="flex items-center gap-2">
               <FileText className="w-5 h-5 text-primary" />
-              <CardTitle className="text-lg">{t("commitmentForm.commitmentText")}</CardTitle>
+              <CardTitle className="text-lg">{t("commitmentForm2026.consent.title")}</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
             <div className="p-4 bg-muted/50 rounded-lg border mb-6">
               <p className="text-base leading-relaxed">
-                {t("commitmentForm.commitmentTextContent")}
+                {t("commitmentForm2026.consent.text")}
               </p>
             </div>
 
@@ -518,11 +510,8 @@ export default function CommitmentForm2026() {
               />
               <div className="space-y-1">
                 <Label htmlFor="consent" className="text-base font-medium cursor-pointer">
-                  {t("commitmentForm.consentLabel")}
+                  {t("commitmentForm2026.consent.accept")}
                 </Label>
-                <p className="text-sm text-muted-foreground">
-                  {t("commitmentForm.consentDescription")}
-                </p>
                 {errors.consent && (
                   <p className="text-sm text-destructive">{errors.consent}</p>
                 )}
@@ -536,7 +525,7 @@ export default function CommitmentForm2026() {
                 data-testid="button-back"
               >
                 <ArrowRight className="w-4 h-4 ms-2 rtl:rotate-180" />
-                {t("commitmentForm.backToDashboard")}
+                {t("commitmentForm2026.buttons.back")}
               </Button>
               
               <Button
@@ -550,7 +539,10 @@ export default function CommitmentForm2026() {
                 ) : (
                   <Save className="w-4 h-4" />
                 )}
-                {t("commitmentForm.submit")}
+                {saveMutation.isPending 
+                  ? t("commitmentForm2026.buttons.saving")
+                  : t("commitmentForm2026.buttons.save")
+                }
               </Button>
             </div>
           </CardContent>
@@ -561,10 +553,10 @@ export default function CommitmentForm2026() {
             <CardContent className="pt-6">
               <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
                 <CheckCircle2 className="w-5 h-5" />
-                <p className="font-medium">{t("commitmentForm.alreadySubmitted")}</p>
+                <p className="font-medium">{t("commitmentForm2026.status.alreadySubmitted")}</p>
               </div>
               <p className="text-sm text-muted-foreground mt-1">
-                {t("commitmentForm.submittedAt")}: {new Date(existingForm.submittedAt).toLocaleDateString(language === "ar" ? "ar-JO" : "en-US")}
+                {t("commitmentForm2026.status.submittedAt", { date: new Date(existingForm.submittedAt).toLocaleDateString(language === "ar" ? "ar-JO" : "en-US") })}
               </p>
             </CardContent>
           </Card>
