@@ -695,7 +695,7 @@ export default function StaffForm2026() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between mt-6">
+            <div className="flex items-center justify-between mt-6 rtl:flex-row-reverse">
               <Button
                 variant="outline"
                 onClick={() => navigate("/office/dashboard")}
