@@ -197,6 +197,44 @@ export const renewalAttachments = pgTable("renewal_attachments", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+export const ComplaintAuthority = {
+  ASSOCIATION: 'الجمعية',
+  MINISTRY: 'الوزارة',
+  OTHER: 'أخرى'
+} as const;
+
+export type ComplaintAuthorityType = typeof ComplaintAuthority[keyof typeof ComplaintAuthority];
+
+export const complaints = pgTable("complaints", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  officeId: integer("office_id").notNull(),
+  renewalId: integer("renewal_id"),
+  commitmentId: integer("commitment_id"),
+  complaintNumber: text("complaint_number").notNull(),
+  authority: text("authority").notNull().$type<ComplaintAuthorityType>(),
+  notifiedAt: text("notified_at").notNull(),
+  summary: text("summary"),
+  proposedAction: text("proposed_action"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+export const commitmentForms = pgTable("commitment_forms", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  officeId: integer("office_id").notNull(),
+  renewalId: integer("renewal_id"),
+  officeName: text("office_name").notNull(),
+  licenseNo: text("license_no").notNull(),
+  contactName: text("contact_name").notNull(),
+  contactEmail: text("contact_email").notNull(),
+  contactMobile: text("contact_mobile").notNull(),
+  hasComplaints: boolean("has_complaints").default(false),
+  consentAccepted: boolean("consent_accepted").default(false),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  submittedAt: timestamp("submitted_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
 export const AuditAction = {
   OFFICE_APPROVED: 'OFFICE_APPROVED',
   OFFICE_REJECTED: 'OFFICE_REJECTED',
@@ -208,6 +246,7 @@ export const AuditAction = {
   PERSON_UPSERTED: 'PERSON_UPSERTED',
   PERSON_DELETED: 'PERSON_DELETED',
   ROLE_ASSIGNED: 'ROLE_ASSIGNED',
+  COMMITMENT_FORM_SUBMITTED: 'COMMITMENT_FORM_SUBMITTED',
 } as const;
 
 export type AuditActionType = typeof AuditAction[keyof typeof AuditAction];
@@ -479,13 +518,56 @@ export const staffForm2026Schema = z.object({
   consentAccepted: z.boolean().refine(val => val === true, "يجب الموافقة على صحة البيانات")
 });
 
+export const complaintRowSchema = z.object({
+  complaintNumber: z.string().min(1, "رقم الشكوى مطلوب"),
+  authority: z.enum(['الجمعية', 'الوزارة', 'أخرى'], { required_error: "الجهة مطلوبة" }),
+  notifiedAt: z.string().min(1, "تاريخ الإشعار مطلوب"),
+  summary: z.string().max(200, "الملخص يجب ألا يتجاوز 200 حرف").optional(),
+  proposedAction: z.string().optional()
+});
+
 export const commitmentFormSchema = z.object({
-  complaintNumbers: z.array(z.string()).optional(),
-  notes: z.string().optional(),
+  officeName: z.string().min(1, "اسم المكتب مطلوب"),
+  licenseNo: z.string().min(1, "رقم الرخصة مطلوب"),
+  contactName: z.string().min(1, "اسم الشخص المسؤول مطلوب"),
+  contactEmail: z.string().email("البريد الإلكتروني غير صالح").min(1, "البريد الإلكتروني مطلوب"),
+  contactMobile: z.string().min(1, "رقم الموبايل مطلوب"),
+  hasComplaints: z.boolean().default(false),
+  complaints: z.array(complaintRowSchema).optional(),
   consentAccepted: z.boolean().refine(val => val === true, "يجب الموافقة على التعهد")
+});
+
+export const insertComplaintSchema = z.object({
+  officeId: z.number(),
+  renewalId: z.number().nullable().optional(),
+  commitmentId: z.number().nullable().optional(),
+  complaintNumber: z.string(),
+  authority: z.string(),
+  notifiedAt: z.string(),
+  summary: z.string().nullable().optional(),
+  proposedAction: z.string().nullable().optional()
+});
+
+export const insertCommitmentFormSchema = z.object({
+  officeId: z.number(),
+  renewalId: z.number().nullable().optional(),
+  officeName: z.string(),
+  licenseNo: z.string(),
+  contactName: z.string(),
+  contactEmail: z.string(),
+  contactMobile: z.string(),
+  hasComplaints: z.boolean().optional(),
+  consentAccepted: z.boolean(),
+  ipAddress: z.string().nullable().optional(),
+  userAgent: z.string().nullable().optional()
 });
 
 export type OfficeForm2026 = z.infer<typeof officeForm2026Schema>;
 export type PersonFormData = z.infer<typeof personSchema>;
 export type StaffForm2026 = z.infer<typeof staffForm2026Schema>;
 export type CommitmentForm = z.infer<typeof commitmentFormSchema>;
+export type ComplaintRow = z.infer<typeof complaintRowSchema>;
+export type InsertComplaint = z.infer<typeof insertComplaintSchema>;
+export type Complaint = typeof complaints.$inferSelect;
+export type InsertCommitmentForm = z.infer<typeof insertCommitmentFormSchema>;
+export type CommitmentFormRecord = typeof commitmentForms.$inferSelect;
