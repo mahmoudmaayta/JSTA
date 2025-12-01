@@ -1687,6 +1687,198 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ============ Commitment Form Routes ============
+
+  // Office: Get commitment form for office
+  app.get("/api/office/commitment-form", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const renewalId = req.query.renewalId ? parseInt(req.query.renewalId as string) : undefined;
+      
+      const form = await storage.getCommitmentFormByOffice(user.officeId, renewalId);
+      if (!form) {
+        return res.json(null);
+      }
+
+      const complaints = await storage.getComplaintsByCommitment(form.id);
+      res.json({ ...form, complaints });
+    } catch (error) {
+      console.error("Get commitment form error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Office: Submit commitment form
+  app.post("/api/office/commitment-form", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const office = await storage.getOffice(user.officeId);
+      if (!office) {
+        return res.status(404).json({ message: "Office not found" });
+      }
+
+      const { officeName, licenseNo, contactName, contactEmail, contactMobile, hasComplaints, complaints, consentAccepted, renewalId } = req.body;
+
+      if (!consentAccepted) {
+        return res.status(400).json({ message: "يجب الموافقة على التعهد" });
+      }
+
+      // Check for existing commitment form for this office/renewal
+      const existingForm = await storage.getCommitmentFormByOffice(user.officeId, renewalId);
+      if (existingForm) {
+        // Delete old complaints and update form
+        await storage.deleteComplaintsByCommitment(existingForm.id);
+      }
+
+      // Create new commitment form
+      const ipAddress = req.headers['x-forwarded-for'] as string || req.socket.remoteAddress || '';
+      const userAgent = req.headers['user-agent'] || '';
+
+      const form = await storage.createCommitmentForm({
+        officeId: user.officeId,
+        renewalId: renewalId || null,
+        officeName,
+        licenseNo,
+        contactName,
+        contactEmail,
+        contactMobile,
+        hasComplaints: hasComplaints || false,
+        consentAccepted: true,
+        ipAddress,
+        userAgent,
+      });
+
+      // Create complaints if any
+      if (hasComplaints && complaints && complaints.length > 0) {
+        for (const complaint of complaints) {
+          await storage.createComplaint({
+            officeId: user.officeId,
+            renewalId: renewalId || null,
+            commitmentId: form.id,
+            complaintNumber: complaint.complaintNumber,
+            authority: complaint.authority,
+            notifiedAt: complaint.notifiedAt,
+            summary: complaint.summary || null,
+            proposedAction: complaint.proposedAction || null,
+          });
+        }
+      }
+
+      // Update renewal if linked
+      if (renewalId) {
+        await storage.updateRenewal(renewalId, { commitmentFormCompleted: true });
+      }
+
+      // Create consent record
+      await storage.createConsent({
+        officeId: user.officeId,
+        renewalId: renewalId || null,
+        userId: user.id,
+        consentType: "COMPLAINT_COMMITMENT",
+        ipAddress,
+        userAgent,
+        payload: {
+          formId: form.id,
+          hasComplaints,
+          complaintsCount: complaints?.length || 0,
+          commitmentText: "أوافق على بذل أقصى جهد لتسوية الشكوى/الشكاوى المقدَّمة إلى الجمعية/الوزارة بحق المكتب، وتزويد الجهة المختصة بما يثبت ذلك خلال مدة أقصاها 30 يومًا من تاريخ الإشعار، وتحت طائلة الإحالة إلى المجلس التأديبي في حال وجود شكاوى مُحِقّة بقرار من لجنة الشكاوى."
+        },
+      });
+
+      // Create audit log
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "COMMITMENT_FORM_SUBMITTED",
+        targetType: "commitment_form",
+        targetId: form.id,
+        details: { 
+          officeName: office.tradeNameAr, 
+          hasComplaints, 
+          complaintsCount: complaints?.length || 0 
+        }
+      });
+
+      // Trigger n8n webhook
+      await triggerN8nWebhook("commitment_form_submitted", {
+        formId: form.id,
+        officeId: user.officeId,
+        officeName: office.tradeNameAr,
+        hasComplaints,
+        complaintsCount: complaints?.length || 0,
+        submittedAt: new Date().toISOString(),
+      });
+
+      res.json({ ok: true, data: { commitmentId: form.id } });
+    } catch (error) {
+      console.error("Submit commitment form error:", error);
+      res.status(500).json({ ok: false, error: { code: "INTERNAL_ERROR", message: "Internal server error" } });
+    }
+  });
+
+  // Admin: Get all commitment forms
+  app.get("/api/admin/commitment-forms", ensureAdmin, async (req, res) => {
+    try {
+      const forms = await storage.getAllCommitmentForms();
+      
+      const formsWithDetails = await Promise.all(
+        forms.map(async (form) => {
+          const office = await storage.getOffice(form.officeId);
+          const complaints = await storage.getComplaintsByCommitment(form.id);
+          return { ...form, office, complaints };
+        })
+      );
+      
+      res.json(formsWithDetails);
+    } catch (error) {
+      console.error("Get commitment forms error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get commitment form by ID
+  app.get("/api/admin/commitment-forms/:id", ensureAdmin, async (req, res) => {
+    try {
+      const formId = parseInt(req.params.id);
+      if (isNaN(formId)) {
+        return res.status(400).json({ message: "Invalid form ID" });
+      }
+      
+      const form = await storage.getCommitmentForm(formId);
+      if (!form) {
+        return res.status(404).json({ message: "Form not found" });
+      }
+
+      const office = await storage.getOffice(form.officeId);
+      const complaints = await storage.getComplaintsByCommitment(form.id);
+      
+      res.json({ ...form, office, complaints });
+    } catch (error) {
+      console.error("Get commitment form error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get commitment form by office ID
+  app.get("/api/admin/offices/:id/commitment-form", ensureAdmin, async (req, res) => {
+    try {
+      const officeId = parseInt(req.params.id);
+      if (isNaN(officeId)) {
+        return res.status(400).json({ message: "Invalid office ID" });
+      }
+      
+      const form = await storage.getCommitmentFormByOffice(officeId);
+      if (!form) {
+        return res.json(null);
+      }
+
+      const complaints = await storage.getComplaintsByCommitment(form.id);
+      res.json({ ...form, complaints });
+    } catch (error) {
+      console.error("Get office commitment form error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   // n8n webhook trigger helper function
   async function triggerN8nWebhook(eventType: string, data: any) {
     const webhookUrl = process.env.N8N_WEBHOOK_URL;
