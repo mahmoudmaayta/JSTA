@@ -6,6 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useTranslation, useLanguage } from "@/lib/i18n";
+import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
+import { OfficeSidebar } from "@/components/layout/office-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -402,31 +404,51 @@ export default function StaffForm2026() {
 
   if (isLoadingStaff) {
     return (
-      <div className="flex items-center justify-center min-h-screen" dir={dir}>
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-primary" />
-          <p>جاري تحميل البيانات...</p>
+      <SidebarProvider>
+        <div className="flex h-screen w-full" dir={dir}>
+          <OfficeSidebar />
+          <SidebarInset className="flex-1 overflow-auto">
+            <div className="flex items-center justify-center min-h-screen">
+              <div className="text-center">
+                <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-primary" />
+                <p>جاري تحميل البيانات...</p>
+              </div>
+            </div>
+          </SidebarInset>
         </div>
-      </div>
+      </SidebarProvider>
     );
   }
 
   const { data: currentData, section: currentSection } = getSectionData();
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-6" dir={dir}>
-      <div className="max-w-[1600px] mx-auto">
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="text-2xl flex items-center gap-2">
-              <Users className="w-6 h-6" />
-              نموذج معلومات العاملين 2026
-            </CardTitle>
-            <CardDescription>
-              أدخل بيانات جميع العاملين في المكتب وفروعه
-            </CardDescription>
-          </CardHeader>
-        </Card>
+    <SidebarProvider>
+      <div className="flex h-screen w-full" dir={dir}>
+        <OfficeSidebar />
+        <SidebarInset className="flex-1 overflow-auto">
+          <header className="sticky top-0 z-10 flex items-center gap-2 border-b bg-background px-4 h-14">
+            <SidebarTrigger data-testid="button-sidebar-trigger" />
+            <div className="flex items-center gap-2">
+              <Users className="h-5 w-5 text-primary" />
+              <h1 className="font-semibold text-lg">
+                {language === "ar" ? "نموذج معلومات العاملين 2026" : "Staff Information Form 2026"}
+              </h1>
+            </div>
+          </header>
+          <main className="p-4 md:p-6">
+            <div className="max-w-[1600px] mx-auto">
+              <Card className="mb-6">
+                <CardHeader>
+                  <CardTitle className="text-2xl flex items-center gap-2">
+                    <Users className="w-6 h-6" />
+                    نموذج معلومات العاملين 2026
+                  </CardTitle>
+                  <CardDescription>
+                    أدخل بيانات جميع العاملين في المكتب وفروعه
+                  </CardDescription>
+                </CardHeader>
+              </Card>
 
         {validationErrors.length > 0 && (
           <Card className="mb-6 border-destructive">
@@ -744,7 +766,10 @@ export default function StaffForm2026() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+            </div>
+          </main>
+        </SidebarInset>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }

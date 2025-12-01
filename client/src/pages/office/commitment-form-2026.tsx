@@ -3,6 +3,8 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useTranslation, useLanguage } from "@/lib/i18n";
+import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
+import { OfficeSidebar } from "@/components/layout/office-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -232,26 +234,44 @@ export default function CommitmentForm2026() {
 
   if (officeLoading || formLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
+      <SidebarProvider>
+        <div className="flex h-screen w-full" dir={dir}>
+          <OfficeSidebar />
+          <SidebarInset className="flex-1 overflow-auto">
+            <div className="flex items-center justify-center min-h-screen">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          </SidebarInset>
+        </div>
+      </SidebarProvider>
     );
   }
 
   return (
-    <div className="min-h-screen bg-muted/30 py-8" dir={dir}>
-      <div className="max-w-4xl mx-auto px-4">
-        <Card className="mb-6">
-          <CardHeader className="text-center border-b">
-            <div className="flex items-center justify-center gap-3 mb-2">
-              <FileWarning className="w-8 h-8 text-primary" />
-              <CardTitle className="text-2xl">{t("commitmentForm2026.title")}</CardTitle>
+    <SidebarProvider>
+      <div className="flex h-screen w-full" dir={dir}>
+        <OfficeSidebar />
+        <SidebarInset className="flex-1 overflow-auto">
+          <header className="sticky top-0 z-10 flex items-center gap-2 border-b bg-background px-4 h-14">
+            <SidebarTrigger data-testid="button-sidebar-trigger" />
+            <div className="flex items-center gap-2">
+              <FileWarning className="h-5 w-5 text-primary" />
+              <h1 className="font-semibold text-lg">{t("commitmentForm2026.title")}</h1>
             </div>
-            <CardDescription className="text-base">
-              {t("commitmentForm2026.subtitle")}
-            </CardDescription>
-          </CardHeader>
-        </Card>
+          </header>
+          <main className="bg-muted/30 py-8">
+            <div className="max-w-4xl mx-auto px-4">
+              <Card className="mb-6">
+                <CardHeader className="text-center border-b">
+                  <div className="flex items-center justify-center gap-3 mb-2">
+                    <FileWarning className="w-8 h-8 text-primary" />
+                    <CardTitle className="text-2xl">{t("commitmentForm2026.title")}</CardTitle>
+                  </div>
+                  <CardDescription className="text-base">
+                    {t("commitmentForm2026.subtitle")}
+                  </CardDescription>
+                </CardHeader>
+              </Card>
 
         <Card className="mb-6">
           <CardHeader>
@@ -548,20 +568,23 @@ export default function CommitmentForm2026() {
           </CardContent>
         </Card>
 
-        {existingForm && (
-          <Card className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/30">
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
-                <CheckCircle2 className="w-5 h-5" />
-                <p className="font-medium">{t("commitmentForm2026.status.alreadySubmitted")}</p>
-              </div>
-              <p className="text-sm text-muted-foreground mt-1">
-                {t("commitmentForm2026.status.submittedAt", { date: new Date(existingForm.submittedAt).toLocaleDateString(language === "ar" ? "ar-JO" : "en-US") })}
-              </p>
-            </CardContent>
-          </Card>
-        )}
+              {existingForm && (
+                <Card className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/30">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
+                      <CheckCircle2 className="w-5 h-5" />
+                      <p className="font-medium">{t("commitmentForm2026.status.alreadySubmitted")}</p>
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {t("commitmentForm2026.status.submittedAt", { date: new Date(existingForm.submittedAt).toLocaleDateString(language === "ar" ? "ar-JO" : "en-US") })}
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </main>
+        </SidebarInset>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }
