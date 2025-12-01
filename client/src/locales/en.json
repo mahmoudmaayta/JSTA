@@ -590,7 +590,8 @@
     "management": "Management",
     "adminPanel": "Admin Panel",
     "staffForm2026": "Staff Form 2026",
-    "staffDashboard": "Staff Dashboard"
+    "staffDashboard": "Staff Dashboard",
+    "commitmentForm": "Commitment Form"
   },
   "forms": {
     "continue": "Continue",
@@ -1006,6 +1007,66 @@
     },
     "errors": {
       "dataErrors": "Data Errors:"
+    }
+  },
+  "commitmentForm2026": {
+    "pageTitle": "Electronic Commitment (Complaints) Form 2026",
+    "title": "Electronic Commitment and Acknowledgement Form",
+    "subtitle": "Submit your office commitment statement and complaints information",
+    "loading": "Loading data...",
+    "header": {
+      "formTitle": "ANNUAL ELECTRONIC COMMITMENT AND ACKNOWLEDGEMENT FORM",
+      "year": "2026"
+    },
+    "officeInfo": {
+      "title": "Office Information",
+      "officeName": "Office Name",
+      "licenseNo": "License Number",
+      "contactName": "Contact Name",
+      "contactEmail": "Email",
+      "contactMobile": "Mobile"
+    },
+    "complaintsSection": {
+      "title": "Complaints Information",
+      "hasComplaints": "Does your office have any complaints?",
+      "noComplaints": "No complaints to report",
+      "noComplaintsDesc": "Check this if your office has no complaints to report for this year",
+      "tableHeaders": {
+        "complaintNumber": "Complaint No.",
+        "authority": "Authority",
+        "notifiedAt": "Notification Date",
+        "summary": "Summary",
+        "proposedAction": "Proposed Action"
+      },
+      "authorities": {
+        "association": "Association",
+        "ministry": "Ministry",
+        "other": "Other"
+      },
+      "addComplaint": "Add Complaint",
+      "removeComplaint": "Remove",
+      "noComplaintRows": "No complaints added. Click \"Add Complaint\" to add a new complaint or check \"No complaints\" if your office has no complaints."
+    },
+    "consent": {
+      "title": "Electronic Consent and Commitment",
+      "text": "I, the undersigned, confirm the accuracy of all information provided above regarding office complaints and commit to updating the Association promptly of any changes. I acknowledge that providing false information may result in disciplinary action.",
+      "accept": "I confirm and accept the above commitment"
+    },
+    "buttons": {
+      "save": "Submit Form",
+      "saving": "Submitting...",
+      "back": "Back to Dashboard"
+    },
+    "messages": {
+      "savedSuccess": "Form Submitted Successfully",
+      "savedDesc": "Your commitment form has been submitted",
+      "saveError": "Submission Error",
+      "consentRequired": "Consent Required",
+      "consentRequiredDesc": "You must accept the consent before submitting"
+    },
+    "status": {
+      "alreadySubmitted": "Form Already Submitted",
+      "submittedAt": "This form was submitted on {{date}}"
     }
   }
 }
