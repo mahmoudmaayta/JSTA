@@ -1,6 +1,7 @@
 import { 
   users, offices, branches, documents, licenseRenewals, auditLogs,
   people, rolesInOffice, consents, renewalAttachments,
+  complaints, commitmentForms,
   type User, type InsertUser,
   type Office, type InsertOffice,
   type Branch, type InsertBranch,
@@ -11,6 +12,8 @@ import {
   type RoleInOffice, type InsertRoleInOffice,
   type Consent, type InsertConsent,
   type RenewalAttachment, type InsertRenewalAttachment,
+  type Complaint, type InsertComplaint,
+  type CommitmentFormRecord, type InsertCommitmentForm,
   type OfficeStatusType, type RenewalStatusType, type PersonRoleTypeType,
   type OfficeUpdateForm, type DocumentCategoryType
 } from "@shared/schema";
@@ -102,6 +105,16 @@ export interface IStorage {
   getAuditLogsCount(): Promise<number>;
   
   updateUserPassword(userId: number, hashedPassword: string): Promise<void>;
+  
+  getCommitmentForm(id: number): Promise<CommitmentFormRecord | undefined>;
+  getCommitmentFormByOffice(officeId: number, renewalId?: number): Promise<CommitmentFormRecord | undefined>;
+  getAllCommitmentForms(): Promise<CommitmentFormRecord[]>;
+  createCommitmentForm(form: InsertCommitmentForm): Promise<CommitmentFormRecord>;
+  
+  getComplaintsByCommitment(commitmentId: number): Promise<Complaint[]>;
+  getComplaintsByOffice(officeId: number): Promise<Complaint[]>;
+  createComplaint(complaint: InsertComplaint): Promise<Complaint>;
+  deleteComplaintsByCommitment(commitmentId: number): Promise<void>;
   
   seedAdminUser(): Promise<void>;
 }
@@ -458,6 +471,49 @@ export class DatabaseStorage implements IStorage {
 
   async updateUserPassword(userId: number, hashedPassword: string): Promise<void> {
     await db.update(users).set({ passwordHash: hashedPassword }).where(eq(users.id, userId));
+  }
+
+  async getCommitmentForm(id: number): Promise<CommitmentFormRecord | undefined> {
+    const [form] = await db.select().from(commitmentForms).where(eq(commitmentForms.id, id));
+    return form;
+  }
+
+  async getCommitmentFormByOffice(officeId: number, renewalId?: number): Promise<CommitmentFormRecord | undefined> {
+    if (renewalId) {
+      const [form] = await db.select().from(commitmentForms)
+        .where(and(eq(commitmentForms.officeId, officeId), eq(commitmentForms.renewalId, renewalId)));
+      return form;
+    }
+    const [form] = await db.select().from(commitmentForms)
+      .where(eq(commitmentForms.officeId, officeId))
+      .orderBy(desc(commitmentForms.createdAt));
+    return form;
+  }
+
+  async getAllCommitmentForms(): Promise<CommitmentFormRecord[]> {
+    return await db.select().from(commitmentForms).orderBy(desc(commitmentForms.createdAt));
+  }
+
+  async createCommitmentForm(form: InsertCommitmentForm): Promise<CommitmentFormRecord> {
+    const [created] = await db.insert(commitmentForms).values(form).returning();
+    return created;
+  }
+
+  async getComplaintsByCommitment(commitmentId: number): Promise<Complaint[]> {
+    return await db.select().from(complaints).where(eq(complaints.commitmentId, commitmentId));
+  }
+
+  async getComplaintsByOffice(officeId: number): Promise<Complaint[]> {
+    return await db.select().from(complaints).where(eq(complaints.officeId, officeId)).orderBy(desc(complaints.createdAt));
+  }
+
+  async createComplaint(complaint: InsertComplaint): Promise<Complaint> {
+    const [created] = await db.insert(complaints).values(complaint as any).returning();
+    return created;
+  }
+
+  async deleteComplaintsByCommitment(commitmentId: number): Promise<void> {
+    await db.delete(complaints).where(eq(complaints.commitmentId, commitmentId));
   }
 }
 
