@@ -18,7 +18,7 @@ export default function LandingPage() {
         <section className={`flex-1 flex flex-col lg:flex-row ${isRTL ? "lg:flex-row-reverse" : ""}`}>
           <div 
             className={`flex-1 flex flex-col justify-center px-8 md:px-12 lg:px-16 py-12 ${
-              isRTL ? "text-right" : "text-left"
+              isRTL ? "text-right items-end" : "text-left items-start"
             }`}
           >
             <div className={`max-w-xl ${isRTL ? "mr-0 ml-auto" : "ml-0 mr-auto"}`}>
