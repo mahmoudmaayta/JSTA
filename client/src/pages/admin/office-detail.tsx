@@ -34,10 +34,39 @@ import {
   AlertCircle,
   FileWarning,
   AlertTriangle,
+  Users,
+  UserCheck,
+  Briefcase,
+  Building2,
 } from "lucide-react";
 
 interface CommitmentFormResponse extends CommitmentFormRecord {
   complaints: Complaint[];
+}
+
+interface StaffPerson {
+  id?: number;
+  fullNameAr: string | null;
+  fullNameEn: string | null;
+  nationalId: string | null;
+  socialSecurityNo: string | null;
+  nationality: string | null;
+  gender: string | null;
+  motherName: string | null;
+  mobile: string | null;
+  birthDate: string | null;
+  currentPosition: string | null;
+  startDate: string | null;
+  branch: string | null;
+}
+
+interface StaffFormResponse {
+  officeId: number;
+  ownersPartners: StaffPerson[];
+  authorizedSignatories: StaffPerson[];
+  dedicatedManagers: StaffPerson[];
+  employees: StaffPerson[];
+  branches: { id: number; name: string }[];
 }
 
 interface OfficeDetailResponse {
@@ -77,6 +106,20 @@ export default function AdminOfficeDetail() {
     queryKey: ["/api/admin/offices", officeId, "commitment-form"],
     enabled: !!officeId,
   });
+
+  const { data: staffFormData } = useQuery<StaffFormResponse | null>({
+    queryKey: ["/api/forms/staff-2026", officeId],
+    enabled: !!officeId,
+  });
+
+  const hasStaffData = staffFormData && (
+    staffFormData.ownersPartners.length > 0 ||
+    staffFormData.authorizedSignatories.length > 0 ||
+    staffFormData.dedicatedManagers.length > 0 ||
+    staffFormData.employees.length > 0
+  );
+
+  const notFilled = t("adminOffice.notFilled");
 
   const approveMutation = useMutation({
     mutationFn: async () => {
@@ -223,13 +266,16 @@ export default function AdminOfficeDetail() {
                 )}
 
                 <Tabs defaultValue="info">
-                  <TabsList>
+                  <TabsList className="flex flex-wrap">
                     <TabsTrigger value="info" data-testid="tab-info">{t("adminOffice.tabInfo")}</TabsTrigger>
                     <TabsTrigger value="branches" data-testid="tab-branches">
                       {t("adminOffice.tabBranches")} ({data.branches.length})
                     </TabsTrigger>
                     <TabsTrigger value="documents" data-testid="tab-documents">
                       {t("adminOffice.tabDocuments")} ({data.documents.length})
+                    </TabsTrigger>
+                    <TabsTrigger value="staff" data-testid="tab-staff">
+                      {t("adminOffice.tabStaffForm")} {hasStaffData ? "✓" : ""}
                     </TabsTrigger>
                     <TabsTrigger value="pledge" data-testid="tab-pledge">
                       {t("adminOffice.tabPledge")} {commitmentForm ? "✓" : ""}
@@ -523,6 +569,530 @@ export default function AdminOfficeDetail() {
                           </Card>
                         );
                       })}
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="staff" className="mt-4">
+                    <div className="space-y-6">
+                      {/* Section 1: Owners/Partners */}
+                      <Card>
+                        <CardHeader>
+                          <div className="flex items-center gap-2">
+                            <Building2 className="h-5 w-5 text-primary" />
+                            <CardTitle className="text-lg">{t("adminOffice.staffSectionPartners")}</CardTitle>
+                          </div>
+                          <CardDescription>
+                            {staffFormData?.ownersPartners.length || 0} {t("adminOffice.staffPersonsRegistered")}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          {staffFormData && staffFormData.ownersPartners.length > 0 ? (
+                            <div className="space-y-4">
+                              {staffFormData.ownersPartners.map((person, index) => (
+                                <div key={person.id || index} className="p-4 border rounded-lg bg-muted/20">
+                                  <div className="flex items-center gap-2 mb-3 pb-2 border-b">
+                                    <User className="h-4 w-4 text-muted-foreground" />
+                                    <span className="font-medium">{person.fullNameAr || notFilled}</span>
+                                  </div>
+                                  <dl className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffFullNameAr")}</dt>
+                                      <dd className="font-medium">{person.fullNameAr || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffFullNameEn")}</dt>
+                                      <dd>{person.fullNameEn || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffNationalId")}</dt>
+                                      <dd className="font-mono">{person.nationalId || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffSocialSecurityNo")}</dt>
+                                      <dd className="font-mono">{person.socialSecurityNo || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffNationality")}</dt>
+                                      <dd>{person.nationality || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffGender")}</dt>
+                                      <dd>{person.gender || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffMotherName")}</dt>
+                                      <dd>{person.motherName || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffMobile")}</dt>
+                                      <dd>{person.mobile || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffBirthDate")}</dt>
+                                      <dd>{person.birthDate || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffCurrentPosition")}</dt>
+                                      <dd>{person.currentPosition || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffStartDate")}</dt>
+                                      <dd>{person.startDate || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffBranch")}</dt>
+                                      <dd>{person.branch || notFilled}</dd>
+                                    </div>
+                                  </dl>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="p-4 border rounded-lg bg-muted/20">
+                              <dl className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffFullNameAr")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffFullNameEn")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffNationalId")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffSocialSecurityNo")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffNationality")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffGender")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffMotherName")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffMobile")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffBirthDate")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffCurrentPosition")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffStartDate")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffBranch")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                              </dl>
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+
+                      {/* Section 2: Authorized Signatories */}
+                      <Card>
+                        <CardHeader>
+                          <div className="flex items-center gap-2">
+                            <UserCheck className="h-5 w-5 text-blue-500" />
+                            <CardTitle className="text-lg">{t("adminOffice.staffSectionAuthorized")}</CardTitle>
+                          </div>
+                          <CardDescription>
+                            {staffFormData?.authorizedSignatories.length || 0} {t("adminOffice.staffPersonsRegistered")}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          {staffFormData && staffFormData.authorizedSignatories.length > 0 ? (
+                            <div className="space-y-4">
+                              {staffFormData.authorizedSignatories.map((person, index) => (
+                                <div key={person.id || index} className="p-4 border rounded-lg bg-muted/20">
+                                  <div className="flex items-center gap-2 mb-3 pb-2 border-b">
+                                    <User className="h-4 w-4 text-muted-foreground" />
+                                    <span className="font-medium">{person.fullNameAr || notFilled}</span>
+                                  </div>
+                                  <dl className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffFullNameAr")}</dt>
+                                      <dd className="font-medium">{person.fullNameAr || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffFullNameEn")}</dt>
+                                      <dd>{person.fullNameEn || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffNationalId")}</dt>
+                                      <dd className="font-mono">{person.nationalId || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffSocialSecurityNo")}</dt>
+                                      <dd className="font-mono">{person.socialSecurityNo || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffNationality")}</dt>
+                                      <dd>{person.nationality || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffGender")}</dt>
+                                      <dd>{person.gender || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffMotherName")}</dt>
+                                      <dd>{person.motherName || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffMobile")}</dt>
+                                      <dd>{person.mobile || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffBirthDate")}</dt>
+                                      <dd>{person.birthDate || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffCurrentPosition")}</dt>
+                                      <dd>{person.currentPosition || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffStartDate")}</dt>
+                                      <dd>{person.startDate || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffBranch")}</dt>
+                                      <dd>{person.branch || notFilled}</dd>
+                                    </div>
+                                  </dl>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="p-4 border rounded-lg bg-muted/20">
+                              <dl className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffFullNameAr")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffFullNameEn")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffNationalId")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffSocialSecurityNo")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffNationality")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffGender")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffMotherName")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffMobile")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffBirthDate")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffCurrentPosition")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffStartDate")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffBranch")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                              </dl>
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+
+                      {/* Section 3: Dedicated Managers */}
+                      <Card>
+                        <CardHeader>
+                          <div className="flex items-center gap-2">
+                            <Users className="h-5 w-5 text-emerald-500" />
+                            <CardTitle className="text-lg">{t("adminOffice.staffSectionManagers")}</CardTitle>
+                          </div>
+                          <CardDescription>
+                            {staffFormData?.dedicatedManagers.length || 0} {t("adminOffice.staffPersonsRegistered")}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          {staffFormData && staffFormData.dedicatedManagers.length > 0 ? (
+                            <div className="space-y-4">
+                              {staffFormData.dedicatedManagers.map((person, index) => (
+                                <div key={person.id || index} className="p-4 border rounded-lg bg-muted/20">
+                                  <div className="flex items-center gap-2 mb-3 pb-2 border-b">
+                                    <User className="h-4 w-4 text-muted-foreground" />
+                                    <span className="font-medium">{person.fullNameAr || notFilled}</span>
+                                  </div>
+                                  <dl className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffFullNameAr")}</dt>
+                                      <dd className="font-medium">{person.fullNameAr || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffFullNameEn")}</dt>
+                                      <dd>{person.fullNameEn || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffNationalId")}</dt>
+                                      <dd className="font-mono">{person.nationalId || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffSocialSecurityNo")}</dt>
+                                      <dd className="font-mono">{person.socialSecurityNo || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffNationality")}</dt>
+                                      <dd>{person.nationality || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffGender")}</dt>
+                                      <dd>{person.gender || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffMotherName")}</dt>
+                                      <dd>{person.motherName || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffMobile")}</dt>
+                                      <dd>{person.mobile || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffBirthDate")}</dt>
+                                      <dd>{person.birthDate || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffCurrentPosition")}</dt>
+                                      <dd>{person.currentPosition || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffStartDate")}</dt>
+                                      <dd>{person.startDate || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffBranch")}</dt>
+                                      <dd>{person.branch || notFilled}</dd>
+                                    </div>
+                                  </dl>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="p-4 border rounded-lg bg-muted/20">
+                              <dl className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffFullNameAr")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffFullNameEn")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffNationalId")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffSocialSecurityNo")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffNationality")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffGender")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffMotherName")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffMobile")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffBirthDate")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffCurrentPosition")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffStartDate")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffBranch")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                              </dl>
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+
+                      {/* Section 4: Employees */}
+                      <Card>
+                        <CardHeader>
+                          <div className="flex items-center gap-2">
+                            <Briefcase className="h-5 w-5 text-orange-500" />
+                            <CardTitle className="text-lg">{t("adminOffice.staffSectionEmployees")}</CardTitle>
+                          </div>
+                          <CardDescription>
+                            {staffFormData?.employees.length || 0} {t("adminOffice.staffPersonsRegistered")}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          {staffFormData && staffFormData.employees.length > 0 ? (
+                            <div className="space-y-4">
+                              {staffFormData.employees.map((person, index) => (
+                                <div key={person.id || index} className="p-4 border rounded-lg bg-muted/20">
+                                  <div className="flex items-center gap-2 mb-3 pb-2 border-b">
+                                    <User className="h-4 w-4 text-muted-foreground" />
+                                    <span className="font-medium">{person.fullNameAr || notFilled}</span>
+                                  </div>
+                                  <dl className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffFullNameAr")}</dt>
+                                      <dd className="font-medium">{person.fullNameAr || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffFullNameEn")}</dt>
+                                      <dd>{person.fullNameEn || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffNationalId")}</dt>
+                                      <dd className="font-mono">{person.nationalId || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffSocialSecurityNo")}</dt>
+                                      <dd className="font-mono">{person.socialSecurityNo || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffNationality")}</dt>
+                                      <dd>{person.nationality || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffGender")}</dt>
+                                      <dd>{person.gender || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffMotherName")}</dt>
+                                      <dd>{person.motherName || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffMobile")}</dt>
+                                      <dd>{person.mobile || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffBirthDate")}</dt>
+                                      <dd>{person.birthDate || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffCurrentPosition")}</dt>
+                                      <dd>{person.currentPosition || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffStartDate")}</dt>
+                                      <dd>{person.startDate || notFilled}</dd>
+                                    </div>
+                                    <div>
+                                      <dt className="text-muted-foreground">{t("adminOffice.staffBranch")}</dt>
+                                      <dd>{person.branch || notFilled}</dd>
+                                    </div>
+                                  </dl>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="p-4 border rounded-lg bg-muted/20">
+                              <dl className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffFullNameAr")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffFullNameEn")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffNationalId")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffSocialSecurityNo")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffNationality")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffGender")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffMotherName")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffMobile")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffBirthDate")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffCurrentPosition")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffStartDate")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-muted-foreground">{t("adminOffice.staffBranch")}</dt>
+                                  <dd>{notFilled}</dd>
+                                </div>
+                              </dl>
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
                     </div>
                   </TabsContent>
 
