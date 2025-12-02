@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useLanguage } from "@/lib/i18n";
-import type { Office, Branch, Document } from "@shared/schema";
+import type { Office, Branch, Document, CommitmentFormRecord, Complaint } from "@shared/schema";
 import { DocumentPreviewButton } from "@/components/ui/document-preview";
 import {
   Building,
@@ -32,7 +32,13 @@ import {
   User,
   FolderOpen,
   AlertCircle,
+  FileWarning,
+  AlertTriangle,
 } from "lucide-react";
+
+interface CommitmentFormResponse extends CommitmentFormRecord {
+  complaints: Complaint[];
+}
 
 interface OfficeDetailResponse {
   office: Office;
@@ -65,6 +71,11 @@ export default function AdminOfficeDetail() {
 
   const { data, isLoading } = useQuery<OfficeDetailResponse>({
     queryKey: ["/api/admin/offices", officeId],
+  });
+
+  const { data: commitmentForm } = useQuery<CommitmentFormResponse | null>({
+    queryKey: ["/api/admin/offices", officeId, "commitment-form"],
+    enabled: !!officeId,
   });
 
   const approveMutation = useMutation({
@@ -219,6 +230,9 @@ export default function AdminOfficeDetail() {
                     </TabsTrigger>
                     <TabsTrigger value="documents" data-testid="tab-documents">
                       {t("adminOffice.tabDocuments")} ({data.documents.length})
+                    </TabsTrigger>
+                    <TabsTrigger value="pledge" data-testid="tab-pledge">
+                      {t("adminOffice.tabPledge")} {commitmentForm ? "✓" : ""}
                     </TabsTrigger>
                   </TabsList>
 
@@ -510,6 +524,157 @@ export default function AdminOfficeDetail() {
                         );
                       })}
                     </div>
+                  </TabsContent>
+
+                  <TabsContent value="pledge" className="mt-4">
+                    {commitmentForm ? (
+                      <div className="space-y-4">
+                        {/* Pledge Details Card */}
+                        <Card>
+                          <CardHeader>
+                            <div className="flex items-center gap-2">
+                              <FileWarning className="h-5 w-5 text-amber-500" />
+                              <CardTitle className="text-lg">{t("adminOffice.pledgeDetails")}</CardTitle>
+                            </div>
+                            <CardDescription>
+                              {t("adminOffice.pledgeSubmittedAt", { date: new Date(commitmentForm.submittedAt).toLocaleDateString() })}
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent className="space-y-4">
+                            {/* Office & Contact Info */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <p className="text-sm text-muted-foreground">{t("adminOffice.pledgeOfficeName")}</p>
+                                <p className="font-medium">{commitmentForm.officeName || "-"}</p>
+                              </div>
+                              <div className="space-y-2">
+                                <p className="text-sm text-muted-foreground">{t("adminOffice.pledgeLicenseNo")}</p>
+                                <p className="font-mono">{commitmentForm.licenseNo || "-"}</p>
+                              </div>
+                              <div className="space-y-2">
+                                <p className="text-sm text-muted-foreground">{t("adminOffice.pledgeContactName")}</p>
+                                <p className="font-medium">{commitmentForm.contactName || "-"}</p>
+                              </div>
+                              <div className="space-y-2">
+                                <p className="text-sm text-muted-foreground">{t("adminOffice.pledgeContactEmail")}</p>
+                                <p>{commitmentForm.contactEmail || "-"}</p>
+                              </div>
+                              <div className="space-y-2">
+                                <p className="text-sm text-muted-foreground">{t("adminOffice.pledgeContactMobile")}</p>
+                                <p>{commitmentForm.contactMobile || "-"}</p>
+                              </div>
+                              <div className="space-y-2">
+                                <p className="text-sm text-muted-foreground">{t("adminOffice.pledgeHasComplaints")}</p>
+                                <Badge variant={commitmentForm.hasComplaints ? "destructive" : "secondary"}>
+                                  {commitmentForm.hasComplaints ? t("common.yes") : t("common.no")}
+                                </Badge>
+                              </div>
+                            </div>
+
+                            {/* Pledge Text */}
+                            <div className="p-4 bg-amber-50 dark:bg-amber-950/30 rounded-lg border border-amber-200 dark:border-amber-800 mt-4">
+                              <div className="flex items-center gap-2 mb-3">
+                                <FileText className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                                <h3 className="font-semibold text-amber-800 dark:text-amber-300">
+                                  {t("adminOffice.pledgeText")}
+                                </h3>
+                              </div>
+                              <p className="text-base leading-relaxed text-amber-900 dark:text-amber-200">
+                                {t("adminOffice.pledgeTextFull", { 
+                                  contactName: commitmentForm.contactName, 
+                                  officeName: commitmentForm.officeName 
+                                })}
+                              </p>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        {/* Complaints Card - if any */}
+                        {commitmentForm.hasComplaints && commitmentForm.complaints && commitmentForm.complaints.length > 0 && (
+                          <Card>
+                            <CardHeader>
+                              <div className="flex items-center gap-2">
+                                <AlertTriangle className="h-5 w-5 text-destructive" />
+                                <CardTitle className="text-lg">{t("adminOffice.registeredComplaints")}</CardTitle>
+                              </div>
+                              <CardDescription>
+                                {commitmentForm.complaints.length} {t("adminOffice.complaintsRegistered")}
+                              </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="space-y-3">
+                                {commitmentForm.complaints.map((complaint, index) => (
+                                  <div key={complaint.id || index} className="p-3 border rounded-lg bg-muted/30">
+                                    <div className="flex items-center justify-between mb-2">
+                                      <span className="font-medium">
+                                        {t("adminOffice.complaintNumber")}: {complaint.complaintNumber}
+                                      </span>
+                                      <Badge variant="outline">{complaint.authority}</Badge>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                                      <div>
+                                        <span className="text-muted-foreground">{t("adminOffice.complaintNotifiedAt")}:</span>{" "}
+                                        {complaint.notifiedAt ? new Date(complaint.notifiedAt).toLocaleDateString() : "-"}
+                                      </div>
+                                      {complaint.summary && (
+                                        <div className="md:col-span-2">
+                                          <span className="text-muted-foreground">{t("adminOffice.complaintSummary")}:</span>{" "}
+                                          {complaint.summary}
+                                        </div>
+                                      )}
+                                      {complaint.proposedAction && (
+                                        <div className="md:col-span-2">
+                                          <span className="text-muted-foreground">{t("adminOffice.complaintProposedAction")}:</span>{" "}
+                                          {complaint.proposedAction}
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        )}
+                      </div>
+                    ) : (
+                      <Card>
+                        <CardHeader>
+                          <div className="flex items-center gap-2">
+                            <FileWarning className="h-5 w-5 text-muted-foreground" />
+                            <CardTitle className="text-lg">{t("adminOffice.pledgeFields")}</CardTitle>
+                          </div>
+                          <CardDescription>{t("adminOffice.noPledgeSubmitted")}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <dl className="space-y-2 text-sm">
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.pledgeOfficeName")}</dt>
+                              <dd className="text-right">-</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.pledgeLicenseNo")}</dt>
+                              <dd className="text-right">-</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.pledgeContactName")}</dt>
+                              <dd className="text-right">-</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.pledgeContactEmail")}</dt>
+                              <dd className="text-right">-</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.pledgeContactMobile")}</dt>
+                              <dd className="text-right">-</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.pledgeHasComplaints")}</dt>
+                              <dd className="text-right">-</dd>
+                            </div>
+                          </dl>
+                        </CardContent>
+                      </Card>
+                    )}
                   </TabsContent>
                 </Tabs>
               </div>
