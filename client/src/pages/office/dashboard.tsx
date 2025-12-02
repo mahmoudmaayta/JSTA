@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
 import { useTranslation } from "@/lib/i18n";
@@ -7,8 +7,10 @@ import { OfficeSidebar } from "@/components/layout/office-sidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { LoadingPage } from "@/components/ui/loading-spinner";
+import { LoadingPage, LoadingSpinner } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { Office, LicenseRenewal, Document } from "@shared/schema";
 import {
   Building2,
@@ -27,6 +29,7 @@ export default function OfficeDashboard() {
   const { user } = useAuth();
   const [, setLocation] = useLocation();
   const { t } = useTranslation();
+  const { toast } = useToast();
 
   const { data: office, isLoading: officeLoading } = useQuery<Office>({
     queryKey: ["/api/office/profile"],
@@ -38,6 +41,33 @@ export default function OfficeDashboard() {
 
   const { data: documents, isLoading: documentsLoading } = useQuery<Document[]>({
     queryKey: ["/api/office/documents"],
+  });
+
+  const createRenewalMutation = useMutation({
+    mutationFn: async () => {
+      const response = await apiRequest("POST", "/api/office/renewals");
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to create renewal");
+      }
+      return response.json();
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/office/renewals"] });
+      toast({
+        title: t("renewal.renewalRequested") || "Renewal Requested",
+        description: t("renewal.renewalRequestedDesc") || "Your renewal request has been submitted.",
+      });
+      const year = data.year || new Date().getFullYear();
+      setLocation(year >= 2026 ? `/office/renewals-2026/${data.id}` : `/office/renewals/${data.id}`);
+    },
+    onError: (error: Error) => {
+      toast({
+        title: t("common.error") || "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
   });
 
   const isLoading = officeLoading || renewalsLoading || documentsLoading;
@@ -160,12 +190,19 @@ export default function OfficeDashboard() {
                         </CardDescription>
                       </div>
                       {!hasActiveRenewal && (
-                        <Link href="/office/renewals/new">
-                          <Button className="gap-2" data-testid="button-new-renewal">
+                        <Button 
+                          className="gap-2" 
+                          data-testid="button-new-renewal"
+                          onClick={() => createRenewalMutation.mutate()}
+                          disabled={createRenewalMutation.isPending}
+                        >
+                          {createRenewalMutation.isPending ? (
+                            <LoadingSpinner size="sm" />
+                          ) : (
                             <Plus className="h-4 w-4" />
-                            {t("renewal.requestRenewal")}
-                          </Button>
-                        </Link>
+                          )}
+                          {t("renewal.requestRenewal")}
+                        </Button>
                       )}
                     </div>
                   </CardHeader>
@@ -215,7 +252,7 @@ export default function OfficeDashboard() {
                         description={t("renewal.noRequestsDesc")}
                         action={!hasActiveRenewal ? {
                           label: t("renewal.requestRenewal"),
-                          onClick: () => setLocation("/office/renewals/new"),
+                          onClick: () => createRenewalMutation.mutate(),
                         } : undefined}
                       />
                     )}
