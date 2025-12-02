@@ -232,62 +232,44 @@ export default function AdminOfficeDetail() {
                           <dl className="space-y-3 text-sm">
                             <div className="flex justify-between">
                               <dt className="text-muted-foreground">{t("adminOffice.tradeNameAr")}</dt>
-                              <dd className="font-medium text-right">{data.office.tradeNameAr}</dd>
+                              <dd className="font-medium text-right">{data.office.tradeNameAr || "-"}</dd>
                             </div>
-                            {data.office.tradeNameEn && (
-                              <div className="flex justify-between">
-                                <dt className="text-muted-foreground">{t("adminOffice.tradeNameEn")}</dt>
-                                <dd className="font-medium text-right">{data.office.tradeNameEn}</dd>
-                              </div>
-                            )}
-                            {data.office.legalNameAr && (
-                              <div className="flex justify-between">
-                                <dt className="text-muted-foreground">{t("adminOffice.legalNameAr")}</dt>
-                                <dd className="font-medium text-right">{data.office.legalNameAr}</dd>
-                              </div>
-                            )}
-                            {data.office.legalNameRegistrar && (
-                              <div className="flex justify-between">
-                                <dt className="text-muted-foreground">{t("adminOffice.legalName")}</dt>
-                                <dd className="font-medium text-right">{data.office.legalNameRegistrar}</dd>
-                              </div>
-                            )}
-                            {data.office.nationalEntityNo && (
-                              <div className="flex justify-between">
-                                <dt className="text-muted-foreground">{t("adminOffice.nationalEntityNo")}</dt>
-                                <dd className="font-mono text-right">{data.office.nationalEntityNo}</dd>
-                              </div>
-                            )}
-                            {data.office.nationalEstablishmentNumber && (
-                              <div className="flex justify-between">
-                                <dt className="text-muted-foreground">{t("adminOffice.establishmentNo")}</dt>
-                                <dd className="font-mono text-right">{data.office.nationalEstablishmentNumber}</dd>
-                              </div>
-                            )}
-                            {data.office.trademark && (
-                              <div className="flex justify-between">
-                                <dt className="text-muted-foreground">{t("adminOffice.trademark")}</dt>
-                                <dd className="font-medium text-right">{data.office.trademark}</dd>
-                              </div>
-                            )}
-                            {data.office.awqafApprovalNo && (
-                              <div className="flex justify-between">
-                                <dt className="text-muted-foreground">{t("adminOffice.awqafApprovalNo")}</dt>
-                                <dd className="font-mono text-right">{data.office.awqafApprovalNo}</dd>
-                              </div>
-                            )}
-                            {data.office.socialSecurityNumber && (
-                              <div className="flex justify-between">
-                                <dt className="text-muted-foreground">{t("adminOffice.ssn")}</dt>
-                                <dd className="font-mono text-right">{data.office.socialSecurityNumber}</dd>
-                              </div>
-                            )}
-                            {data.office.guaranteeExpiryDate && (
-                              <div className="flex justify-between">
-                                <dt className="text-muted-foreground">{t("adminOffice.guaranteeExpiry")}</dt>
-                                <dd className="text-right">{data.office.guaranteeExpiryDate}</dd>
-                              </div>
-                            )}
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.tradeNameEn")}</dt>
+                              <dd className="font-medium text-right">{data.office.tradeNameEn || "-"}</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.legalNameAr")}</dt>
+                              <dd className="font-medium text-right">{data.office.legalNameAr || "-"}</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.legalName")}</dt>
+                              <dd className="font-medium text-right">{data.office.legalNameRegistrar || "-"}</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.nationalEntityNo")}</dt>
+                              <dd className="font-mono text-right">{data.office.nationalEntityNo || "-"}</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.establishmentNo")}</dt>
+                              <dd className="font-mono text-right">{data.office.nationalEstablishmentNumber || "-"}</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.trademark")}</dt>
+                              <dd className="font-medium text-right">{data.office.trademark || "-"}</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.awqafApprovalNo")}</dt>
+                              <dd className="font-mono text-right">{data.office.awqafApprovalNo || "-"}</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.ssn")}</dt>
+                              <dd className="font-mono text-right">{data.office.socialSecurityNumber || "-"}</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.guaranteeExpiry")}</dt>
+                              <dd className="text-right">{data.office.guaranteeExpiryDate || "-"}</dd>
+                            </div>
                             <div className="flex justify-between">
                               <dt className="text-muted-foreground">{t("adminOffice.registered")}</dt>
                               <dd className="text-right">
@@ -296,18 +278,20 @@ export default function AdminOfficeDetail() {
                             </div>
                           </dl>
 
-                          {data.office.tourismActivities && (data.office.tourismActivities as string[]).length > 0 && (
-                            <div className="mt-4 pt-4 border-t">
-                              <p className="text-sm font-medium mb-2">{t("adminOffice.tourismActivities")}</p>
-                              <div className="flex flex-wrap gap-1">
-                                {(data.office.tourismActivities as string[]).map((activity) => (
+                          <div className="mt-4 pt-4 border-t">
+                            <p className="text-sm font-medium mb-2">{t("adminOffice.tourismActivities")}</p>
+                            <div className="flex flex-wrap gap-1">
+                              {data.office.tourismActivities && (data.office.tourismActivities as string[]).length > 0 ? (
+                                (data.office.tourismActivities as string[]).map((activity) => (
                                   <Badge key={activity} variant="secondary" className="text-xs">
                                     {ACTIVITY_LABELS[activity] || activity}
                                   </Badge>
-                                ))}
-                              </div>
+                                ))
+                              ) : (
+                                <span className="text-muted-foreground text-sm">-</span>
+                              )}
                             </div>
-                          )}
+                          </div>
                         </CardContent>
                       </Card>
 
@@ -317,66 +301,52 @@ export default function AdminOfficeDetail() {
                         </CardHeader>
                         <CardContent>
                           <dl className="space-y-3 text-sm">
-                            {data.office.mainCity && (
-                              <div className="flex items-start gap-2">
-                                <MapPin className="h-4 w-4 mt-0.5 text-muted-foreground shrink-0" />
-                                <div>
-                                  <span className="font-medium">
-                                    {[data.office.mainCity, data.office.mainArea, data.office.mainStreet, data.office.mainBuildingNumber]
-                                      .filter(Boolean)
-                                      .join(", ")}
-                                  </span>
-                                </div>
-                              </div>
-                            )}
-                            {data.office.phone && (
-                              <div className="flex items-center gap-2">
-                                <Phone className="h-4 w-4 text-muted-foreground" />
-                                <span>{data.office.phone}</span>
-                              </div>
-                            )}
-                            {data.office.mobile && (
-                              <div className="flex items-center gap-2">
-                                <Phone className="h-4 w-4 text-muted-foreground" />
-                                <span>{data.office.mobile} ({t("adminOffice.mobile")})</span>
-                              </div>
-                            )}
-                            {data.office.fax && (
-                              <div className="flex items-center gap-2">
-                                <Phone className="h-4 w-4 text-muted-foreground" />
-                                <span>{data.office.fax} ({t("adminOffice.fax")})</span>
-                              </div>
-                            )}
-                            {data.office.mainEmail && (
-                              <div className="flex items-center gap-2">
-                                <Mail className="h-4 w-4 text-muted-foreground" />
-                                <span>{data.office.mainEmail}</span>
-                              </div>
-                            )}
-                            {data.office.extraEmail && (
-                              <div className="flex items-center gap-2">
-                                <Mail className="h-4 w-4 text-muted-foreground" />
-                                <span>{data.office.extraEmail}</span>
-                              </div>
-                            )}
-                            {data.office.website && (
-                              <div className="flex items-center gap-2">
-                                <Globe className="h-4 w-4 text-muted-foreground" />
-                                <a href={data.office.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                                  {data.office.website}
-                                </a>
-                              </div>
-                            )}
-                            {(data.office.poBox || data.office.postalCode) && (
-                              <div className="flex items-center gap-2">
-                                <Mail className="h-4 w-4 text-muted-foreground" />
-                                <span>
-                                  {data.office.poBox && `${t("adminOffice.poBox")}: ${data.office.poBox}`}
-                                  {data.office.poBox && data.office.postalCode && ", "}
-                                  {data.office.postalCode && `${t("adminOffice.postal")}: ${data.office.postalCode}`}
-                                </span>
-                              </div>
-                            )}
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.address")}</dt>
+                              <dd className="font-medium text-right">
+                                {[data.office.mainCity, data.office.mainArea, data.office.mainStreet, data.office.mainBuildingNumber]
+                                  .filter(Boolean)
+                                  .join(", ") || "-"}
+                              </dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.phone")}</dt>
+                              <dd className="text-right">{data.office.phone || "-"}</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.mobile")}</dt>
+                              <dd className="text-right">{data.office.mobile || "-"}</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.fax")}</dt>
+                              <dd className="text-right">{data.office.fax || "-"}</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.mainEmail")}</dt>
+                              <dd className="text-right">{data.office.mainEmail || "-"}</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.extraEmail")}</dt>
+                              <dd className="text-right">{data.office.extraEmail || "-"}</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.website")}</dt>
+                              <dd className="text-right">
+                                {data.office.website ? (
+                                  <a href={data.office.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                    {data.office.website}
+                                  </a>
+                                ) : "-"}
+                              </dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.poBox")}</dt>
+                              <dd className="text-right">{data.office.poBox || "-"}</dd>
+                            </div>
+                            <div className="flex justify-between">
+                              <dt className="text-muted-foreground">{t("adminOffice.postal")}</dt>
+                              <dd className="text-right">{data.office.postalCode || "-"}</dd>
+                            </div>
                           </dl>
                         </CardContent>
                       </Card>
