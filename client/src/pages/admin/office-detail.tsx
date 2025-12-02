@@ -366,40 +366,34 @@ export default function AdminOfficeDetail() {
                             </CardHeader>
                             <CardContent>
                               <dl className="space-y-2 text-sm">
-                                {branch.city && (
-                                  <div className="flex justify-between">
-                                    <dt className="text-muted-foreground">{t("adminOffice.location")}</dt>
-                                    <dd className="text-right">
-                                      {[branch.city, branch.area].filter(Boolean).join(", ")}
-                                    </dd>
-                                  </div>
-                                )}
-                                {branch.street && (
-                                  <div className="flex justify-between">
-                                    <dt className="text-muted-foreground">{t("adminOffice.address")}</dt>
-                                    <dd className="text-right">
-                                      {[branch.street, branch.buildingNumber].filter(Boolean).join(", ")}
-                                    </dd>
-                                  </div>
-                                )}
-                                {branch.managerName && (
-                                  <div className="flex justify-between">
-                                    <dt className="text-muted-foreground">{t("adminOffice.manager")}</dt>
-                                    <dd className="text-right">{branch.managerName}</dd>
-                                  </div>
-                                )}
-                                {branch.managerMobile && (
-                                  <div className="flex justify-between">
-                                    <dt className="text-muted-foreground">{t("adminOffice.managerMobile")}</dt>
-                                    <dd className="text-right">{branch.managerMobile}</dd>
-                                  </div>
-                                )}
-                                {branch.phone && (
-                                  <div className="flex justify-between">
-                                    <dt className="text-muted-foreground">{t("adminOffice.phone")}</dt>
-                                    <dd className="text-right">{branch.phone}</dd>
-                                  </div>
-                                )}
+                                <div className="flex justify-between">
+                                  <dt className="text-muted-foreground">{t("adminOffice.city")}</dt>
+                                  <dd className="text-right">{branch.city || "-"}</dd>
+                                </div>
+                                <div className="flex justify-between">
+                                  <dt className="text-muted-foreground">{t("adminOffice.area")}</dt>
+                                  <dd className="text-right">{branch.area || "-"}</dd>
+                                </div>
+                                <div className="flex justify-between">
+                                  <dt className="text-muted-foreground">{t("adminOffice.street")}</dt>
+                                  <dd className="text-right">{branch.street || "-"}</dd>
+                                </div>
+                                <div className="flex justify-between">
+                                  <dt className="text-muted-foreground">{t("adminOffice.buildingNumber")}</dt>
+                                  <dd className="text-right">{branch.buildingNumber || "-"}</dd>
+                                </div>
+                                <div className="flex justify-between">
+                                  <dt className="text-muted-foreground">{t("adminOffice.manager")}</dt>
+                                  <dd className="text-right">{branch.managerName || "-"}</dd>
+                                </div>
+                                <div className="flex justify-between">
+                                  <dt className="text-muted-foreground">{t("adminOffice.managerMobile")}</dt>
+                                  <dd className="text-right">{branch.managerMobile || "-"}</dd>
+                                </div>
+                                <div className="flex justify-between">
+                                  <dt className="text-muted-foreground">{t("adminOffice.phone")}</dt>
+                                  <dd className="text-right">{branch.phone || "-"}</dd>
+                                </div>
                               </dl>
                             </CardContent>
                           </Card>
