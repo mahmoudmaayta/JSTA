@@ -44,8 +44,8 @@ export default function LandingPage() {
             }}
           >
             <div 
-              className="mb-8 flex ml-[0px] mr-[0px]"
-              style={{ justifyContent: isRTL ? 'flex-end' : 'flex-start' }}
+              className="mb-8 flex"
+              style={{ justifyContent: 'flex-start' }}
             >
               <img 
                 src={logoImage} 
@@ -64,8 +64,8 @@ export default function LandingPage() {
             </p>
             
             <div 
-              className="flex flex-col sm:flex-row gap-4 text-right ml-[0px] mr-[0px]"
-              style={{ justifyContent: isRTL ? 'flex-end' : 'flex-start' }}
+              className="flex flex-col sm:flex-row gap-4"
+              style={{ justifyContent: 'flex-start' }}
             >
               <Link href="/register">
                 <Button size="lg" className="w-full sm:w-auto gap-2" data-testid="button-hero-register">
