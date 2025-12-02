@@ -78,16 +78,11 @@ export default function LandingPage() {
       <footer className="border-t py-6">
         <div className="container mx-auto px-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <img 
-                src={logoImage} 
-                alt="JSTA Logo" 
-                className="h-6 w-auto object-contain"
-              />
-              <span className="text-sm text-muted-foreground">
-                JSTA Portal
-              </span>
-            </div>
+            <img 
+              src={logoImage} 
+              alt="JSTA Logo" 
+              className="h-6 w-auto object-contain"
+            />
             <p className="text-sm text-muted-foreground">
               &copy; {new Date().getFullYear()} {t("landing.heroTitle")}
             </p>
