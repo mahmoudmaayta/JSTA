@@ -13,7 +13,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { LogOut, User, Menu, X } from "lucide-react";
 import { useState } from "react";
-import logoImage from "@assets/logo-0 (1)_1764114456004.png";
+import logoImage from "@assets/Logo jsta new 2 app_1764684493958.png";
 
 export function Header() {
   const { user, logout, isAuthenticated } = useAuth();

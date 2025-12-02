@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Header } from "@/components/layout/header";
 import { useTranslation } from "@/lib/i18n";
 import { ArrowRight } from "lucide-react";
-import logoImage from "@assets/logo-0 (1)_1764114456004.png";
+import logoImage from "@assets/Logo jsta new 2 app_1764684493958.png";
 import heroImage from "@assets/login-jsta-image.jpg";
 
 export default function LandingPage() {
