@@ -69,9 +69,8 @@ export default function LandingPage() {
             >
               <Link href="/register">
                 <Button size="lg" className="w-full sm:w-auto gap-2" data-testid="button-hero-register">
-                  {isRTL && <ArrowRight className="h-4 w-4 rotate-180" />}
                   {t("landing.getStarted")}
-                  {!isRTL && <ArrowRight className="h-4 w-4" />}
+                  <ArrowRight className={`h-4 w-4 ${isRTL ? 'rotate-180' : ''}`} />
                 </Button>
               </Link>
               <Link href="/login">
