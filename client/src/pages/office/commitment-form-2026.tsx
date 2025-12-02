@@ -158,22 +158,8 @@ export default function CommitmentForm2026() {
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.officeName.trim()) {
-      newErrors.officeName = language === "ar" ? "اسم المكتب مطلوب" : "Office name is required";
-    }
-    if (!formData.licenseNo.trim()) {
-      newErrors.licenseNo = language === "ar" ? "رقم الترخيص مطلوب" : "License number is required";
-    }
     if (!formData.contactName.trim()) {
       newErrors.contactName = language === "ar" ? "اسم المسؤول مطلوب" : "Contact name is required";
-    }
-    if (!formData.contactEmail.trim()) {
-      newErrors.contactEmail = language === "ar" ? "البريد الإلكتروني مطلوب" : "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.contactEmail)) {
-      newErrors.contactEmail = language === "ar" ? "البريد الإلكتروني غير صالح" : "Invalid email address";
-    }
-    if (!formData.contactMobile.trim()) {
-      newErrors.contactMobile = language === "ar" ? "رقم الموبايل مطلوب" : "Mobile number is required";
     }
 
     if (formData.hasComplaints && formData.complaints.length > 0) {
@@ -281,46 +267,43 @@ export default function CommitmentForm2026() {
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="p-3 bg-muted/50 rounded-lg border mb-2">
+              <p className="text-xs text-muted-foreground">
+                {language === "ar" 
+                  ? "هذه البيانات معبأة تلقائياً من ملف المكتب ولا يمكن تعديلها هنا"
+                  : "This information is auto-filled from your office profile and cannot be edited here"
+                }
+              </p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="officeName">
-                  {t("commitmentForm2026.officeInfo.officeName")} <span className="text-red-500">*</span>
+                <Label className="text-muted-foreground">
+                  {t("commitmentForm2026.officeInfo.officeName")}
                 </Label>
-                <Input
-                  id="officeName"
-                  value={formData.officeName}
-                  onChange={(e) => setFormData(prev => ({ ...prev, officeName: e.target.value }))}
-                  data-testid="input-office-name"
-                />
-                {errors.officeName && (
-                  <p className="text-sm text-destructive">{errors.officeName}</p>
-                )}
+                <div className="p-3 bg-muted/30 rounded-lg border" data-testid="display-office-name">
+                  <span className="font-medium">{formData.officeName || "-"}</span>
+                </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="licenseNo">
-                  {t("commitmentForm2026.officeInfo.licenseNo")} <span className="text-red-500">*</span>
+                <Label className="text-muted-foreground">
+                  {t("commitmentForm2026.officeInfo.licenseNo")}
                 </Label>
-                <Input
-                  id="licenseNo"
-                  value={formData.licenseNo}
-                  onChange={(e) => setFormData(prev => ({ ...prev, licenseNo: e.target.value }))}
-                  data-testid="input-license-no"
-                />
-                {errors.licenseNo && (
-                  <p className="text-sm text-destructive">{errors.licenseNo}</p>
-                )}
+                <div className="p-3 bg-muted/30 rounded-lg border" data-testid="display-license-no">
+                  <span className="font-medium font-mono">{formData.licenseNo || "-"}</span>
+                </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="contactName">
+                <Label className="text-muted-foreground">
                   <User className="w-4 h-4 inline me-1" />
-                  {t("commitmentForm2026.officeInfo.contactName")} <span className="text-red-500">*</span>
+                  {t("commitmentForm2026.officeInfo.contactName")}
                 </Label>
                 <Input
                   id="contactName"
                   value={formData.contactName}
                   onChange={(e) => setFormData(prev => ({ ...prev, contactName: e.target.value }))}
+                  placeholder={language === "ar" ? "أدخل اسم المسؤول / المالك / المفوض" : "Enter owner/authorized person name"}
                   data-testid="input-contact-name"
                 />
                 {errors.contactName && (
@@ -329,37 +312,23 @@ export default function CommitmentForm2026() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="contactEmail">
+                <Label className="text-muted-foreground">
                   <Mail className="w-4 h-4 inline me-1" />
-                  {t("commitmentForm2026.officeInfo.contactEmail")} <span className="text-red-500">*</span>
+                  {t("commitmentForm2026.officeInfo.contactEmail")}
                 </Label>
-                <Input
-                  id="contactEmail"
-                  type="email"
-                  value={formData.contactEmail}
-                  onChange={(e) => setFormData(prev => ({ ...prev, contactEmail: e.target.value }))}
-                  data-testid="input-contact-email"
-                />
-                {errors.contactEmail && (
-                  <p className="text-sm text-destructive">{errors.contactEmail}</p>
-                )}
+                <div className="p-3 bg-muted/30 rounded-lg border" data-testid="display-contact-email">
+                  <span className="font-medium">{formData.contactEmail || "-"}</span>
+                </div>
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="contactMobile">
+                <Label className="text-muted-foreground">
                   <Phone className="w-4 h-4 inline me-1" />
-                  {t("commitmentForm2026.officeInfo.contactMobile")} <span className="text-red-500">*</span>
+                  {t("commitmentForm2026.officeInfo.contactMobile")}
                 </Label>
-                <Input
-                  id="contactMobile"
-                  value={formData.contactMobile}
-                  onChange={(e) => setFormData(prev => ({ ...prev, contactMobile: e.target.value }))}
-                  className="md:w-1/2"
-                  data-testid="input-contact-mobile"
-                />
-                {errors.contactMobile && (
-                  <p className="text-sm text-destructive">{errors.contactMobile}</p>
-                )}
+                <div className="p-3 bg-muted/30 rounded-lg border md:w-1/2" data-testid="display-contact-mobile">
+                  <span className="font-medium">{formData.contactMobile || "-"}</span>
+                </div>
               </div>
             </div>
           </CardContent>
