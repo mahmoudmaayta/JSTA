@@ -77,7 +77,8 @@
     "featureDocuments": "Document Management",
     "featureDocumentsDesc": "Secure upload and storage of all required documents",
     "featureTracking": "Status Tracking",
-    "featureTrackingDesc": "Real-time tracking of applications and renewals"
+    "featureTrackingDesc": "Real-time tracking of applications and renewals",
+    "imagePlaceholder": "Hero Image"
   },
   "registration": {
     "title": "Office Registration",
