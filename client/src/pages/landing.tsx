@@ -44,7 +44,7 @@ export default function LandingPage() {
             }}
           >
             <div 
-              className="mb-8 flex ml-[2px] mr-[2px]"
+              className="mb-8 flex ml-[0px] mr-[0px]"
               style={{ justifyContent: isRTL ? 'flex-end' : 'flex-start' }}
             >
               <img 
