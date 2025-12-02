@@ -91,7 +91,7 @@ export default function RegisterPage() {
       legalNameRegistrar: "",
       nationalEstablishmentNumber: "",
       trademark: "",
-      awqafAccreditationNumber: "",
+      awqafApprovalNo: "",
       socialSecurityNumber: "",
       guaranteeExpiryDate: "",
       tourismActivities: [],
@@ -479,7 +479,7 @@ export default function RegisterPage() {
                       <div className="grid gap-4 sm:grid-cols-2">
                         <FormField
                           control={officeForm.control}
-                          name="awqafAccreditationNumber"
+                          name="awqafApprovalNo"
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>{t("forms.officeStep.awqafAccreditation")}</FormLabel>
