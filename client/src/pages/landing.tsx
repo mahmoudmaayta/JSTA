@@ -11,14 +11,14 @@ export default function LandingPage() {
   const isRTL = language === "ar";
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="h-screen flex flex-col bg-background overflow-hidden">
       <Header />
       
-      <main className="flex-1 flex">
-        <section className="flex-1 grid lg:grid-cols-2">
+      <main className="flex-1 flex min-h-0">
+        <section className={`flex-1 flex flex-col lg:flex-row ${isRTL ? "lg:flex-row-reverse" : ""}`}>
           <div 
-            className={`flex flex-col justify-center px-8 md:px-12 lg:px-16 py-12 ${
-              isRTL ? "lg:order-2 text-right" : "lg:order-1 text-left"
+            className={`flex-1 flex flex-col justify-center px-8 md:px-12 lg:px-16 py-12 ${
+              isRTL ? "text-right" : "text-left"
             }`}
           >
             <div className={`max-w-xl ${isRTL ? "mr-0 ml-auto" : "ml-0 mr-auto"}`}>
@@ -58,37 +58,16 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div 
-            className={`hidden lg:block ${
-              isRTL ? "lg:order-1" : "lg:order-2"
-            }`}
-          >
-            <div className="w-full h-full">
-              <img 
-                src={heroImage} 
-                alt="JSTA Tourism" 
-                className="w-full h-full object-cover"
-                data-testid="img-hero-image"
-              />
-            </div>
+          <div className="hidden lg:block flex-1">
+            <img 
+              src={heroImage} 
+              alt="JSTA Tourism" 
+              className="w-full h-full object-cover"
+              data-testid="img-hero-image"
+            />
           </div>
         </section>
       </main>
-
-      <footer className="border-t py-6">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <img 
-              src={logoImage} 
-              alt="JSTA Logo" 
-              className="h-6 w-auto object-contain"
-            />
-            <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} {t("landing.heroTitle")}
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
