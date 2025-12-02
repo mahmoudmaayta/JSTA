@@ -1,7 +1,7 @@
 import { 
   users, offices, branches, documents, licenseRenewals, auditLogs,
   people, rolesInOffice, consents, renewalAttachments,
-  complaints, commitmentForms,
+  complaints, commitmentForms, officeInfoForms,
   type User, type InsertUser,
   type Office, type InsertOffice,
   type Branch, type InsertBranch,
@@ -14,6 +14,7 @@ import {
   type RenewalAttachment, type InsertRenewalAttachment,
   type Complaint, type InsertComplaint,
   type CommitmentFormRecord, type InsertCommitmentForm,
+  type OfficeInfoFormRecord, type InsertOfficeInfoForm,
   type OfficeStatusType, type RenewalStatusType, type PersonRoleTypeType,
   type OfficeUpdateForm, type DocumentCategoryType
 } from "@shared/schema";
@@ -115,6 +116,11 @@ export interface IStorage {
   getComplaintsByOffice(officeId: number): Promise<Complaint[]>;
   createComplaint(complaint: InsertComplaint): Promise<Complaint>;
   deleteComplaintsByCommitment(commitmentId: number): Promise<void>;
+  
+  getOfficeInfoForm(id: number): Promise<OfficeInfoFormRecord | undefined>;
+  getOfficeInfoFormByOffice(officeId: number, renewalId?: number): Promise<OfficeInfoFormRecord | undefined>;
+  getAllOfficeInfoForms(): Promise<OfficeInfoFormRecord[]>;
+  createOfficeInfoForm(form: InsertOfficeInfoForm): Promise<OfficeInfoFormRecord>;
   
   seedAdminUser(): Promise<void>;
 }
@@ -514,6 +520,32 @@ export class DatabaseStorage implements IStorage {
 
   async deleteComplaintsByCommitment(commitmentId: number): Promise<void> {
     await db.delete(complaints).where(eq(complaints.commitmentId, commitmentId));
+  }
+
+  async getOfficeInfoForm(id: number): Promise<OfficeInfoFormRecord | undefined> {
+    const [form] = await db.select().from(officeInfoForms).where(eq(officeInfoForms.id, id));
+    return form;
+  }
+
+  async getOfficeInfoFormByOffice(officeId: number, renewalId?: number): Promise<OfficeInfoFormRecord | undefined> {
+    if (renewalId) {
+      const [form] = await db.select().from(officeInfoForms)
+        .where(and(eq(officeInfoForms.officeId, officeId), eq(officeInfoForms.renewalId, renewalId)));
+      return form;
+    }
+    const [form] = await db.select().from(officeInfoForms)
+      .where(eq(officeInfoForms.officeId, officeId))
+      .orderBy(desc(officeInfoForms.createdAt));
+    return form;
+  }
+
+  async getAllOfficeInfoForms(): Promise<OfficeInfoFormRecord[]> {
+    return await db.select().from(officeInfoForms).orderBy(desc(officeInfoForms.createdAt));
+  }
+
+  async createOfficeInfoForm(form: InsertOfficeInfoForm): Promise<OfficeInfoFormRecord> {
+    const [created] = await db.insert(officeInfoForms).values(form).returning();
+    return created;
   }
 }
 
