@@ -64,7 +64,7 @@ export default function LandingPage() {
             </p>
             
             <div 
-              className="flex flex-col sm:flex-row gap-4 text-left"
+              className="flex flex-col sm:flex-row gap-4 text-right ml-[1px] mr-[1px]"
               style={{ justifyContent: isRTL ? 'flex-end' : 'flex-start' }}
             >
               <Link href="/register">
