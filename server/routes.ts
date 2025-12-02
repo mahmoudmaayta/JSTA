@@ -1879,6 +1879,117 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Office Info Form 2026 Routes
+  app.post("/api/office-info-form", ensureOffice, async (req, res) => {
+    try {
+      const user = req.user as User;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "No office linked to user" });
+      }
+
+      const { renewalId, ...formData } = req.body;
+      
+      const form = await storage.createOfficeInfoForm({
+        officeId: user.officeId,
+        renewalId: renewalId || null,
+        ...formData,
+        ipAddress: req.ip || null,
+        userAgent: req.get("User-Agent") || null
+      });
+
+      // Update renewal to mark office form as completed
+      if (renewalId) {
+        await storage.updateRenewal(renewalId, { officeFormCompleted: true });
+      }
+
+      // Create audit log
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "OFFICE_INFO_FORM_SUBMITTED",
+        targetType: "office_info_form",
+        targetId: form.id,
+        details: { officeId: user.officeId, renewalId }
+      });
+
+      res.json(form);
+    } catch (error) {
+      console.error("Create office info form error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.get("/api/office-info-form", ensureOffice, async (req, res) => {
+    try {
+      const user = req.user as User;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "No office linked to user" });
+      }
+
+      const renewalId = req.query.renewalId ? parseInt(req.query.renewalId as string) : undefined;
+      const form = await storage.getOfficeInfoFormByOffice(user.officeId, renewalId);
+      res.json(form || null);
+    } catch (error) {
+      console.error("Get office info form error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get all office info forms
+  app.get("/api/admin/office-info-forms", ensureAdmin, async (req, res) => {
+    try {
+      const forms = await storage.getAllOfficeInfoForms();
+      
+      const formsWithDetails = await Promise.all(
+        forms.map(async (form) => {
+          const office = await storage.getOffice(form.officeId);
+          return { ...form, office };
+        })
+      );
+      
+      res.json(formsWithDetails);
+    } catch (error) {
+      console.error("Get office info forms error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get office info form by ID
+  app.get("/api/admin/office-info-forms/:id", ensureAdmin, async (req, res) => {
+    try {
+      const formId = parseInt(req.params.id);
+      if (isNaN(formId)) {
+        return res.status(400).json({ message: "Invalid form ID" });
+      }
+      
+      const form = await storage.getOfficeInfoForm(formId);
+      if (!form) {
+        return res.status(404).json({ message: "Form not found" });
+      }
+
+      const office = await storage.getOffice(form.officeId);
+      res.json({ ...form, office });
+    } catch (error) {
+      console.error("Get office info form error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get office info form by office ID
+  app.get("/api/admin/offices/:id/office-info-form", ensureAdmin, async (req, res) => {
+    try {
+      const officeId = parseInt(req.params.id);
+      if (isNaN(officeId)) {
+        return res.status(400).json({ message: "Invalid office ID" });
+      }
+      
+      const form = await storage.getOfficeInfoFormByOffice(officeId);
+      res.json(form || null);
+    } catch (error) {
+      console.error("Get office info form error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   // n8n webhook trigger helper function
   async function triggerN8nWebhook(eventType: string, data: any) {
     const webhookUrl = process.env.N8N_WEBHOOK_URL;
