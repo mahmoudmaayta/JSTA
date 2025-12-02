@@ -231,19 +231,49 @@ export default function AdminOfficeDetail() {
                         <CardContent>
                           <dl className="space-y-3 text-sm">
                             <div className="flex justify-between">
-                              <dt className="text-muted-foreground">{t("adminOffice.tradeName")}</dt>
+                              <dt className="text-muted-foreground">{t("adminOffice.tradeNameAr")}</dt>
                               <dd className="font-medium text-right">{data.office.tradeNameAr}</dd>
                             </div>
+                            {data.office.tradeNameEn && (
+                              <div className="flex justify-between">
+                                <dt className="text-muted-foreground">{t("adminOffice.tradeNameEn")}</dt>
+                                <dd className="font-medium text-right">{data.office.tradeNameEn}</dd>
+                              </div>
+                            )}
+                            {data.office.legalNameAr && (
+                              <div className="flex justify-between">
+                                <dt className="text-muted-foreground">{t("adminOffice.legalNameAr")}</dt>
+                                <dd className="font-medium text-right">{data.office.legalNameAr}</dd>
+                              </div>
+                            )}
                             {data.office.legalNameRegistrar && (
                               <div className="flex justify-between">
                                 <dt className="text-muted-foreground">{t("adminOffice.legalName")}</dt>
                                 <dd className="font-medium text-right">{data.office.legalNameRegistrar}</dd>
                               </div>
                             )}
+                            {data.office.nationalEntityNo && (
+                              <div className="flex justify-between">
+                                <dt className="text-muted-foreground">{t("adminOffice.nationalEntityNo")}</dt>
+                                <dd className="font-mono text-right">{data.office.nationalEntityNo}</dd>
+                              </div>
+                            )}
                             {data.office.nationalEstablishmentNumber && (
                               <div className="flex justify-between">
                                 <dt className="text-muted-foreground">{t("adminOffice.establishmentNo")}</dt>
                                 <dd className="font-mono text-right">{data.office.nationalEstablishmentNumber}</dd>
+                              </div>
+                            )}
+                            {data.office.trademark && (
+                              <div className="flex justify-between">
+                                <dt className="text-muted-foreground">{t("adminOffice.trademark")}</dt>
+                                <dd className="font-medium text-right">{data.office.trademark}</dd>
+                              </div>
+                            )}
+                            {data.office.awqafApprovalNo && (
+                              <div className="flex justify-between">
+                                <dt className="text-muted-foreground">{t("adminOffice.awqafApprovalNo")}</dt>
+                                <dd className="font-mono text-right">{data.office.awqafApprovalNo}</dd>
                               </div>
                             )}
                             {data.office.socialSecurityNumber && (
@@ -309,6 +339,12 @@ export default function AdminOfficeDetail() {
                               <div className="flex items-center gap-2">
                                 <Phone className="h-4 w-4 text-muted-foreground" />
                                 <span>{data.office.mobile} ({t("adminOffice.mobile")})</span>
+                              </div>
+                            )}
+                            {data.office.fax && (
+                              <div className="flex items-center gap-2">
+                                <Phone className="h-4 w-4 text-muted-foreground" />
+                                <span>{data.office.fax} ({t("adminOffice.fax")})</span>
                               </div>
                             )}
                             {data.office.mainEmail && (
