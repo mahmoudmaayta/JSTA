@@ -399,110 +399,173 @@ export default function CommitmentForm2026() {
           </CardHeader>
           
           {formData.hasComplaints && (
-            <CardContent>
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="min-w-[120px]">{t("commitmentForm2026.complaintsSection.tableHeaders.complaintNumber")}</TableHead>
-                      <TableHead className="min-w-[120px]">{t("commitmentForm2026.complaintsSection.tableHeaders.authority")}</TableHead>
-                      <TableHead className="min-w-[140px]">{t("commitmentForm2026.complaintsSection.tableHeaders.notifiedAt")}</TableHead>
-                      <TableHead className="min-w-[200px]">{t("commitmentForm2026.complaintsSection.tableHeaders.summary")}</TableHead>
-                      <TableHead className="min-w-[200px]">{t("commitmentForm2026.complaintsSection.tableHeaders.proposedAction")}</TableHead>
-                      <TableHead className="w-[60px]"></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {formData.complaints.map((complaint, index) => (
-                      <TableRow key={index}>
-                        <TableCell>
-                          <Input
-                            value={complaint.complaintNumber}
-                            onChange={(e) => updateComplaint(index, "complaintNumber", e.target.value)}
-                            className={errors[`complaint_${index}_number`] ? "border-destructive" : ""}
-                            data-testid={`input-complaint-number-${index}`}
-                          />
-                          {errors[`complaint_${index}_number`] && (
-                            <p className="text-xs text-destructive mt-1">{errors[`complaint_${index}_number`]}</p>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <Select
-                            value={complaint.authority}
-                            onValueChange={(value) => updateComplaint(index, "authority", value as any)}
-                          >
-                            <SelectTrigger data-testid={`select-authority-${index}`}>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {authorityOptions.map((opt) => (
-                                <SelectItem key={opt} value={opt}>{opt}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </TableCell>
-                        <TableCell>
-                          <Input
-                            type="date"
-                            value={complaint.notifiedAt}
-                            onChange={(e) => updateComplaint(index, "notifiedAt", e.target.value)}
-                            className={errors[`complaint_${index}_date`] ? "border-destructive" : ""}
-                            data-testid={`input-notified-at-${index}`}
-                          />
-                          {errors[`complaint_${index}_date`] && (
-                            <p className="text-xs text-destructive mt-1">{errors[`complaint_${index}_date`]}</p>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <Textarea
-                            value={complaint.summary || ""}
-                            onChange={(e) => updateComplaint(index, "summary", e.target.value)}
-                            className={`resize-none ${errors[`complaint_${index}_summary`] ? "border-destructive" : ""}`}
-                            rows={2}
-                            data-testid={`input-summary-${index}`}
-                          />
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {(complaint.summary?.length || 0)}/200
-                          </p>
-                          {errors[`complaint_${index}_summary`] && (
-                            <p className="text-xs text-destructive">{errors[`complaint_${index}_summary`]}</p>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <Textarea
-                            value={complaint.proposedAction || ""}
-                            onChange={(e) => updateComplaint(index, "proposedAction", e.target.value)}
-                            className="resize-none"
-                            rows={2}
-                            data-testid={`input-proposed-action-${index}`}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => removeComplaint(index)}
-                            className="text-destructive hover:text-destructive"
-                            data-testid={`button-remove-complaint-${index}`}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+            <CardContent className="space-y-6">
+              {/* Pledge Section - Auto-filled with office data */}
+              <div className="p-4 bg-amber-50 dark:bg-amber-950/30 rounded-lg border border-amber-200 dark:border-amber-800">
+                <div className="flex items-center gap-2 mb-3">
+                  <FileText className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                  <h3 className="font-semibold text-amber-800 dark:text-amber-300">
+                    {language === "ar" ? "تعهد" : "Pledge"}
+                  </h3>
+                </div>
+                <p className="text-base leading-relaxed text-amber-900 dark:text-amber-200" data-testid="pledge-text">
+                  {language === "ar" ? (
+                    <>
+                      أتعهد أنا <span className="font-bold text-primary bg-primary/10 px-1 rounded">{formData.contactName || "(المالك/المفوّض)"}</span> عن مكتب <span className="font-bold text-primary bg-primary/10 px-1 rounded">{formData.officeName || "(اسم المكتب)"}</span> ببذل أقصى جهد ممكن من قبلي لتسوية الشكوى أو الشكاوي المقدّمة إلى الجمعية/الوزارة بحق المكتب العائد لي، وتزويد الجمعية/الوزارة بما يثبت ذلك خلال مدة أقصاها نهاية شهر آذار، وتحت طائلة الإحالة إلى المجلس التأديبي في حال وجود أي شكوى محقّقة بقرار من لجنة الشكاوي المشكّلة بالجمعية.
+                    </>
+                  ) : (
+                    <>
+                      I, <span className="font-bold text-primary bg-primary/10 px-1 rounded">{formData.contactName || "(Owner/Agent)"}</span>, on behalf of <span className="font-bold text-primary bg-primary/10 px-1 rounded">{formData.officeName || "(Office Name)"}</span>, pledge to make every possible effort to settle the complaint(s) submitted to the Association/Ministry against my office, and to provide the Association/Ministry with proof of this by the end of March at the latest, under penalty of referral to the Disciplinary Council in case of any verified complaint by decision of the Complaints Committee formed by the Association.
+                    </>
+                  )}
+                </p>
+                
+                {/* Show complaint summary in pledge if complaints exist */}
+                {formData.complaints.length > 0 && formData.complaints.some(c => c.complaintNumber || c.summary) && (
+                  <div className="mt-4 pt-4 border-t border-amber-200 dark:border-amber-700">
+                    <p className="text-sm font-medium text-amber-800 dark:text-amber-300 mb-2">
+                      {language === "ar" ? "الشكاوى المسجلة:" : "Registered Complaints:"}
+                    </p>
+                    <ul className="space-y-2">
+                      {formData.complaints.map((complaint, index) => (
+                        complaint.complaintNumber && (
+                          <li key={index} className="text-sm text-amber-800 dark:text-amber-200 bg-amber-100 dark:bg-amber-900/30 p-2 rounded">
+                            <span className="font-medium">
+                              {language === "ar" ? `شكوى رقم ${complaint.complaintNumber}` : `Complaint #${complaint.complaintNumber}`}
+                            </span>
+                            {complaint.authority && (
+                              <span className="mx-2">-</span>
+                            )}
+                            {complaint.authority && (
+                              <span>{complaint.authority}</span>
+                            )}
+                            {complaint.notifiedAt && (
+                              <>
+                                <span className="mx-2">-</span>
+                                <span>{new Date(complaint.notifiedAt).toLocaleDateString(language === "ar" ? "ar-JO" : "en-US")}</span>
+                              </>
+                            )}
+                            {complaint.summary && (
+                              <p className="mt-1 text-xs text-amber-700 dark:text-amber-300">{complaint.summary}</p>
+                            )}
+                          </li>
+                        )
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
 
-              <Button
-                variant="outline"
-                onClick={addComplaint}
-                className="mt-4"
-                data-testid="button-add-complaint"
-              >
-                <Plus className="w-4 h-4 me-2" />
-                {t("commitmentForm2026.complaintsSection.addComplaint")}
-              </Button>
+              {/* Complaint Details Table */}
+              <div>
+                <h4 className="font-medium mb-3 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-amber-500" />
+                  {language === "ar" ? "تفاصيل الشكاوى" : "Complaint Details"}
+                </h4>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="min-w-[120px]">{t("commitmentForm2026.complaintsSection.tableHeaders.complaintNumber")}</TableHead>
+                        <TableHead className="min-w-[120px]">{t("commitmentForm2026.complaintsSection.tableHeaders.authority")}</TableHead>
+                        <TableHead className="min-w-[140px]">{t("commitmentForm2026.complaintsSection.tableHeaders.notifiedAt")}</TableHead>
+                        <TableHead className="min-w-[200px]">{t("commitmentForm2026.complaintsSection.tableHeaders.summary")}</TableHead>
+                        <TableHead className="min-w-[200px]">{t("commitmentForm2026.complaintsSection.tableHeaders.proposedAction")}</TableHead>
+                        <TableHead className="w-[60px]"></TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {formData.complaints.map((complaint, index) => (
+                        <TableRow key={index}>
+                          <TableCell>
+                            <Input
+                              value={complaint.complaintNumber}
+                              onChange={(e) => updateComplaint(index, "complaintNumber", e.target.value)}
+                              className={errors[`complaint_${index}_number`] ? "border-destructive" : ""}
+                              data-testid={`input-complaint-number-${index}`}
+                            />
+                            {errors[`complaint_${index}_number`] && (
+                              <p className="text-xs text-destructive mt-1">{errors[`complaint_${index}_number`]}</p>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <Select
+                              value={complaint.authority}
+                              onValueChange={(value) => updateComplaint(index, "authority", value as any)}
+                            >
+                              <SelectTrigger data-testid={`select-authority-${index}`}>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {authorityOptions.map((opt) => (
+                                  <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </TableCell>
+                          <TableCell>
+                            <Input
+                              type="date"
+                              value={complaint.notifiedAt}
+                              onChange={(e) => updateComplaint(index, "notifiedAt", e.target.value)}
+                              className={errors[`complaint_${index}_date`] ? "border-destructive" : ""}
+                              data-testid={`input-notified-at-${index}`}
+                            />
+                            {errors[`complaint_${index}_date`] && (
+                              <p className="text-xs text-destructive mt-1">{errors[`complaint_${index}_date`]}</p>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <Textarea
+                              value={complaint.summary || ""}
+                              onChange={(e) => updateComplaint(index, "summary", e.target.value)}
+                              className={`resize-none ${errors[`complaint_${index}_summary`] ? "border-destructive" : ""}`}
+                              rows={2}
+                              data-testid={`input-summary-${index}`}
+                            />
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {(complaint.summary?.length || 0)}/200
+                            </p>
+                            {errors[`complaint_${index}_summary`] && (
+                              <p className="text-xs text-destructive">{errors[`complaint_${index}_summary`]}</p>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <Textarea
+                              value={complaint.proposedAction || ""}
+                              onChange={(e) => updateComplaint(index, "proposedAction", e.target.value)}
+                              className="resize-none"
+                              rows={2}
+                              data-testid={`input-proposed-action-${index}`}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => removeComplaint(index)}
+                              className="text-destructive hover:text-destructive"
+                              data-testid={`button-remove-complaint-${index}`}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+
+                <Button
+                  variant="outline"
+                  onClick={addComplaint}
+                  className="mt-4"
+                  data-testid="button-add-complaint"
+                >
+                  <Plus className="w-4 h-4 me-2" />
+                  {t("commitmentForm2026.complaintsSection.addComplaint")}
+                </Button>
+              </div>
             </CardContent>
           )}
         </Card>
