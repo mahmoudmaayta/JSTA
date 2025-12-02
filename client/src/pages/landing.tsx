@@ -2,8 +2,9 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/layout/header";
 import { useTranslation } from "@/lib/i18n";
-import { ArrowRight, ImageIcon } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import logoImage from "@assets/logo-0 (1)_1764114456004.png";
+import heroImage from "@assets/login-jsta-image.jpg";
 
 export default function LandingPage() {
   const { t, language } = useTranslation();
@@ -58,20 +59,17 @@ export default function LandingPage() {
           </div>
 
           <div 
-            className={`hidden lg:flex items-center justify-center bg-muted/30 ${
+            className={`hidden lg:block ${
               isRTL ? "lg:order-1" : "lg:order-2"
             }`}
           >
-            <div className="w-full h-full flex items-center justify-center p-12">
-              <div 
-                className="w-full h-full max-w-lg max-h-[500px] rounded-2xl bg-muted/50 border-2 border-dashed border-muted-foreground/20 flex flex-col items-center justify-center gap-4"
-                data-testid="img-hero-placeholder"
-              >
-                <ImageIcon className="h-16 w-16 text-muted-foreground/40" />
-                <p className="text-muted-foreground/60 text-sm text-center px-4">
-                  {t("landing.imagePlaceholder") || "Hero Image"}
-                </p>
-              </div>
+            <div className="w-full h-full">
+              <img 
+                src={heroImage} 
+                alt="JSTA Tourism" 
+                className="w-full h-full object-cover"
+                data-testid="img-hero-image"
+              />
             </div>
           </div>
         </section>
