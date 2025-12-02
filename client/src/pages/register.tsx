@@ -87,8 +87,11 @@ export default function RegisterPage() {
     resolver: zodResolver(officeInfoSchema),
     defaultValues: {
       tradeNameAr: "",
+      tradeNameEn: "",
       legalNameRegistrar: "",
       nationalEstablishmentNumber: "",
+      trademark: "",
+      awqafAccreditationNumber: "",
       socialSecurityNumber: "",
       guaranteeExpiryDate: "",
       tourismActivities: [],
@@ -399,19 +402,35 @@ export default function RegisterPage() {
                     <div className="space-y-4">
                       <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">{t("forms.officeStep.basicInfo")}</h3>
                       
-                      <FormField
-                        control={officeForm.control}
-                        name="tradeNameAr"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>{t("forms.officeStep.tradeNameAr")} <span className="text-red-500">*</span></FormLabel>
-                            <FormControl>
-                              <Input placeholder={t("forms.officeStep.tradeNamePlaceholder")} data-testid="input-trade-name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <FormField
+                          control={officeForm.control}
+                          name="tradeNameAr"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>{t("forms.officeStep.tradeNameAr")} <span className="text-red-500">*</span></FormLabel>
+                              <FormControl>
+                                <Input placeholder={t("forms.officeStep.tradeNamePlaceholder")} data-testid="input-trade-name" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={officeForm.control}
+                          name="tradeNameEn"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>{t("forms.officeStep.tradeNameEn")}</FormLabel>
+                              <FormControl>
+                                <Input placeholder={t("forms.officeStep.tradeNameEnPlaceholder")} data-testid="input-trade-name-en" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
 
                       <FormField
                         control={officeForm.control}
@@ -436,6 +455,36 @@ export default function RegisterPage() {
                               <FormLabel>{t("forms.officeStep.nationalNumber")}</FormLabel>
                               <FormControl>
                                 <Input placeholder={t("forms.officeStep.nationalNumberPlaceholder")} data-testid="input-national-number" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={officeForm.control}
+                          name="trademark"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>{t("forms.officeStep.trademark")}</FormLabel>
+                              <FormControl>
+                                <Input placeholder={t("forms.officeStep.trademarkPlaceholder")} data-testid="input-trademark" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <FormField
+                          control={officeForm.control}
+                          name="awqafAccreditationNumber"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>{t("forms.officeStep.awqafAccreditation")}</FormLabel>
+                              <FormControl>
+                                <Input placeholder={t("forms.officeStep.awqafAccreditationPlaceholder")} data-testid="input-awqaf" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
