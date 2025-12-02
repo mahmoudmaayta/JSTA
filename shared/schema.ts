@@ -218,6 +218,25 @@ export const complaints = pgTable("complaints", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+export const officeInfoForms = pgTable("office_info_forms", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  officeId: integer("office_id").notNull(),
+  renewalId: integer("renewal_id"),
+  establishmentNameCommercialReg: text("establishment_name_commercial_reg").notNull(),
+  tradeNameAr: text("trade_name_ar").notNull(),
+  tradeNameEn: text("trade_name_en"),
+  nationalEstablishmentNumber: text("national_establishment_number").notNull(),
+  trademark: text("trademark"),
+  awqafAccreditationNumber: text("awqaf_accreditation_number"),
+  socialSecurityNumber: text("social_security_number"),
+  guaranteeExpiryDate: text("guarantee_expiry_date"),
+  consentAccepted: boolean("consent_accepted").default(false),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  submittedAt: timestamp("submitted_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
 export const commitmentForms = pgTable("commitment_forms", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   officeId: integer("office_id").notNull(),
@@ -247,6 +266,7 @@ export const AuditAction = {
   PERSON_DELETED: 'PERSON_DELETED',
   ROLE_ASSIGNED: 'ROLE_ASSIGNED',
   COMMITMENT_FORM_SUBMITTED: 'COMMITMENT_FORM_SUBMITTED',
+  OFFICE_INFO_FORM_SUBMITTED: 'OFFICE_INFO_FORM_SUBMITTED',
 } as const;
 
 export type AuditActionType = typeof AuditAction[keyof typeof AuditAction];
@@ -562,6 +582,34 @@ export const insertCommitmentFormSchema = z.object({
   userAgent: z.string().nullable().optional()
 });
 
+export const officeInfoFormSchema = z.object({
+  establishmentNameCommercialReg: z.string().min(1, "اسم المنشأة حسب السجل التجاري مطلوب"),
+  tradeNameAr: z.string().min(1, "الاسم التجاري بالعربية مطلوب"),
+  tradeNameEn: z.string().optional(),
+  nationalEstablishmentNumber: z.string().min(1, "رقم المنشأة الوطني مطلوب"),
+  trademark: z.string().optional(),
+  awqafAccreditationNumber: z.string().optional(),
+  socialSecurityNumber: z.string().optional(),
+  guaranteeExpiryDate: z.string().optional(),
+  consentAccepted: z.boolean().refine(val => val === true, "يجب الموافقة على صحة البيانات")
+});
+
+export const insertOfficeInfoFormSchema = z.object({
+  officeId: z.number(),
+  renewalId: z.number().nullable().optional(),
+  establishmentNameCommercialReg: z.string(),
+  tradeNameAr: z.string(),
+  tradeNameEn: z.string().nullable().optional(),
+  nationalEstablishmentNumber: z.string(),
+  trademark: z.string().nullable().optional(),
+  awqafAccreditationNumber: z.string().nullable().optional(),
+  socialSecurityNumber: z.string().nullable().optional(),
+  guaranteeExpiryDate: z.string().nullable().optional(),
+  consentAccepted: z.boolean(),
+  ipAddress: z.string().nullable().optional(),
+  userAgent: z.string().nullable().optional()
+});
+
 export type OfficeForm2026 = z.infer<typeof officeForm2026Schema>;
 export type PersonFormData = z.infer<typeof personSchema>;
 export type StaffForm2026 = z.infer<typeof staffForm2026Schema>;
@@ -571,3 +619,6 @@ export type InsertComplaint = z.infer<typeof insertComplaintSchema>;
 export type Complaint = typeof complaints.$inferSelect;
 export type InsertCommitmentForm = z.infer<typeof insertCommitmentFormSchema>;
 export type CommitmentFormRecord = typeof commitmentForms.$inferSelect;
+export type OfficeInfoFormData = z.infer<typeof officeInfoFormSchema>;
+export type InsertOfficeInfoForm = z.infer<typeof insertOfficeInfoFormSchema>;
+export type OfficeInfoFormRecord = typeof officeInfoForms.$inferSelect;
