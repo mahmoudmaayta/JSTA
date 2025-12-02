@@ -27,7 +27,6 @@ import {
   Users,
   FileWarning,
 } from "lucide-react";
-import logoImage from "@assets/logo-0 (1)_1764114456004.png";
 
 export function OfficeSidebar() {
   const { user, logout } = useAuth();
@@ -82,19 +81,15 @@ export function OfficeSidebar() {
   };
 
   return (
-    <Sidebar>
-      <SidebarHeader className="border-b">
+    <Sidebar className="bg-emerald-50/50 dark:bg-emerald-950/20">
+      <SidebarHeader className="border-b border-emerald-200/50 dark:border-emerald-800/30">
         <div className="flex items-center gap-3 px-2 py-3">
-          <img 
-            src={logoImage} 
-            alt="JSTA Logo" 
-            className="h-10 w-auto object-contain"
-            data-testid="img-office-logo"
-          />
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-600 dark:bg-emerald-700">
+            <Briefcase className="h-5 w-5 text-white" />
+          </div>
           <div className="flex flex-col">
             <span className="font-semibold text-sm">JSTA Portal</span>
-            <span className="text-xs text-muted-foreground flex items-center gap-1">
-              <Briefcase className="h-3 w-3" />
+            <span className="text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
               {t("office.dashboard")}
             </span>
           </div>

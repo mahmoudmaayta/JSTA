@@ -26,7 +26,6 @@ import {
   Users,
   FileWarning,
 } from "lucide-react";
-import logoImage from "@assets/logo-0 (1)_1764114456004.png";
 
 export function AdminSidebar() {
   const { user, logout } = useAuth();
@@ -76,19 +75,15 @@ export function AdminSidebar() {
   };
 
   return (
-    <Sidebar>
-      <SidebarHeader className="border-b">
+    <Sidebar className="bg-indigo-50/50 dark:bg-indigo-950/20">
+      <SidebarHeader className="border-b border-indigo-200/50 dark:border-indigo-800/30">
         <div className="flex items-center gap-3 px-2 py-3">
-          <img 
-            src={logoImage} 
-            alt="JSTA Logo" 
-            className="h-10 w-auto object-contain"
-            data-testid="img-admin-logo"
-          />
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600 dark:bg-indigo-700">
+            <Shield className="h-5 w-5 text-white" />
+          </div>
           <div className="flex flex-col">
             <span className="font-semibold text-sm">JSTA Portal</span>
-            <span className="text-xs text-muted-foreground flex items-center gap-1">
-              <Shield className="h-3 w-3" />
+            <span className="text-xs text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
               {t("navigation.adminPanel")}
             </span>
           </div>
