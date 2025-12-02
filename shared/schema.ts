@@ -422,7 +422,7 @@ export const officeInfoSchema = z.object({
   legalNameRegistrar: z.string().optional(),
   nationalEstablishmentNumber: z.string().optional(),
   trademark: z.string().optional(),
-  awqafAccreditationNumber: z.string().optional(),
+  awqafApprovalNo: z.string().optional(),
   socialSecurityNumber: z.string().optional(),
   guaranteeExpiryDate: z.string().optional(),
   tourismActivities: z.array(z.string()).optional(),
