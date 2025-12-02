@@ -12,7 +12,6 @@ export default function LandingPage() {
   return (
     <div className="h-screen flex flex-col bg-background overflow-hidden">
       <Header />
-      
       <main className="flex-1 relative">
         <div 
           className="absolute inset-y-0 w-1/2 hidden lg:block"
@@ -65,7 +64,7 @@ export default function LandingPage() {
             </p>
             
             <div 
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex flex-col sm:flex-row gap-4 text-left"
               style={{ justifyContent: isRTL ? 'flex-end' : 'flex-start' }}
             >
               <Link href="/register">
