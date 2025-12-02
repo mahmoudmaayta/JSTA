@@ -77,7 +77,8 @@
     "featureDocuments": "إدارة المستندات",
     "featureDocumentsDesc": "رفع وتخزين آمن لجميع المستندات المطلوبة",
     "featureTracking": "تتبع الحالة",
-    "featureTrackingDesc": "تتبع فوري للطلبات والتجديدات"
+    "featureTrackingDesc": "تتبع فوري للطلبات والتجديدات",
+    "imagePlaceholder": "صورة الواجهة"
   },
   "registration": {
     "title": "تسجيل المكتب",
