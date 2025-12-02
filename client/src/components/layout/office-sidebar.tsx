@@ -1,6 +1,7 @@
 import { Link, useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth";
-import { useTranslation } from "@/lib/i18n";
+import { useTranslation, useLanguage } from "@/lib/i18n";
 import {
   Sidebar,
   SidebarContent,
@@ -15,7 +16,9 @@ import {
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   Building2,
   LayoutDashboard,
@@ -26,12 +29,26 @@ import {
   UserCog,
   Users,
   FileWarning,
+  Lock,
+  CheckCircle2,
 } from "lucide-react";
+
+interface FormCompletionStatus {
+  officeInfoFormCompleted: boolean;
+  staffFormCompleted: boolean;
+  commitmentFormCompleted: boolean;
+  allFormsCompleted: boolean;
+}
 
 export function OfficeSidebar() {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
   const { t } = useTranslation();
+  const { language } = useLanguage();
+
+  const { data: formStatus } = useQuery<FormCompletionStatus>({
+    queryKey: ["/api/office/form-completion-status"],
+  });
 
   const officeMenuItems = [
     {
@@ -45,24 +62,32 @@ export function OfficeSidebar() {
       icon: FileText,
     },
     {
-      title: t("navigation.renewals"),
-      url: "/office/renewals",
-      icon: RefreshCw,
-    },
-    {
       title: t("navigation.officeInfoForm2026"),
       url: "/office/office-info-form-2026",
       icon: Building2,
+      showStatus: true,
+      completed: formStatus?.officeInfoFormCompleted,
     },
     {
       title: t("navigation.staffForm2026"),
       url: "/office/staff-form-2026",
       icon: Users,
+      showStatus: true,
+      completed: formStatus?.staffFormCompleted,
     },
     {
       title: t("navigation.commitmentForm"),
       url: "/office/commitment-form-2026",
       icon: FileWarning,
+      showStatus: true,
+      completed: formStatus?.commitmentFormCompleted,
+    },
+    {
+      title: t("navigation.renewals"),
+      url: "/office/renewals",
+      icon: RefreshCw,
+      requiresAllForms: true,
+      locked: !formStatus?.allFormsCompleted,
     },
     {
       title: t("navigation.profile"),
@@ -100,19 +125,54 @@ export function OfficeSidebar() {
           <SidebarGroupLabel>{t("navigation.home")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {officeMenuItems.map((item) => (
-                <SidebarMenuItem key={item.url}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={location === item.url || (item.url !== "/office/dashboard" && location.startsWith(item.url))}
-                  >
-                    <Link href={item.url} data-testid={`nav-${item.url.split("/").pop()}`}>
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {officeMenuItems.map((item) => {
+                const isLocked = 'locked' in item && item.locked;
+                const showStatus = 'showStatus' in item && item.showStatus;
+                const isCompleted = 'completed' in item && item.completed;
+                
+                if (isLocked) {
+                  return (
+                    <SidebarMenuItem key={item.url}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <SidebarMenuButton
+                            className="opacity-50 cursor-not-allowed"
+                            data-testid={`nav-${item.url.split("/").pop()}-locked`}
+                          >
+                            <Lock className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-muted-foreground">{item.title}</span>
+                          </SidebarMenuButton>
+                        </TooltipTrigger>
+                        <TooltipContent side="right" className="max-w-[200px]">
+                          <p className="text-xs">
+                            {language === "ar" 
+                              ? "يجب إكمال نماذج المكتب والعاملين والتعهد أولاً"
+                              : "Complete Office Info, Staff Form, and Commitment Form first"
+                            }
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </SidebarMenuItem>
+                  );
+                }
+                
+                return (
+                  <SidebarMenuItem key={item.url}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={location === item.url || (item.url !== "/office/dashboard" && location.startsWith(item.url))}
+                    >
+                      <Link href={item.url} data-testid={`nav-${item.url.split("/").pop()}`}>
+                        <item.icon className="h-4 w-4" />
+                        <span className="flex-1">{item.title}</span>
+                        {showStatus && isCompleted && (
+                          <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                        )}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
