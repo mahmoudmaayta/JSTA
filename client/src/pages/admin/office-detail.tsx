@@ -354,9 +354,9 @@ export default function AdminOfficeDetail() {
                   </TabsContent>
 
                   <TabsContent value="branches" className="mt-4">
-                    {data.branches.length > 0 ? (
-                      <div className="grid gap-4 md:grid-cols-2">
-                        {data.branches.map((branch, index) => (
+                    <div className="grid gap-4 md:grid-cols-2">
+                      {data.branches.length > 0 ? (
+                        data.branches.map((branch, index) => (
                           <Card key={branch.id}>
                             <CardHeader className="pb-2">
                               <CardTitle className="text-base flex items-center gap-2">
@@ -394,82 +394,122 @@ export default function AdminOfficeDetail() {
                                   <dt className="text-muted-foreground">{t("adminOffice.phone")}</dt>
                                   <dd className="text-right">{branch.phone || "-"}</dd>
                                 </div>
+                                <div className="flex justify-between">
+                                  <dt className="text-muted-foreground">{t("adminOffice.fax")}</dt>
+                                  <dd className="text-right">{branch.fax || "-"}</dd>
+                                </div>
                               </dl>
                             </CardContent>
                           </Card>
-                        ))}
-                      </div>
-                    ) : (
-                      <Card>
-                        <CardContent className="py-12">
-                          <EmptyState
-                            icon={MapPin}
-                            title={t("adminOffice.noBranches")}
-                            description={t("adminOffice.noBranchesDesc")}
-                          />
-                        </CardContent>
-                      </Card>
-                    )}
+                        ))
+                      ) : (
+                        <Card className="md:col-span-2">
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-base flex items-center gap-2">
+                              <MapPin className="h-4 w-4" />
+                              {t("adminOffice.branchFields")}
+                            </CardTitle>
+                            <CardDescription>{t("adminOffice.noBranchesRegistered")}</CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <dl className="space-y-2 text-sm">
+                              <div className="flex justify-between">
+                                <dt className="text-muted-foreground">{t("adminOffice.city")}</dt>
+                                <dd className="text-right">-</dd>
+                              </div>
+                              <div className="flex justify-between">
+                                <dt className="text-muted-foreground">{t("adminOffice.area")}</dt>
+                                <dd className="text-right">-</dd>
+                              </div>
+                              <div className="flex justify-between">
+                                <dt className="text-muted-foreground">{t("adminOffice.street")}</dt>
+                                <dd className="text-right">-</dd>
+                              </div>
+                              <div className="flex justify-between">
+                                <dt className="text-muted-foreground">{t("adminOffice.buildingNumber")}</dt>
+                                <dd className="text-right">-</dd>
+                              </div>
+                              <div className="flex justify-between">
+                                <dt className="text-muted-foreground">{t("adminOffice.manager")}</dt>
+                                <dd className="text-right">-</dd>
+                              </div>
+                              <div className="flex justify-between">
+                                <dt className="text-muted-foreground">{t("adminOffice.managerMobile")}</dt>
+                                <dd className="text-right">-</dd>
+                              </div>
+                              <div className="flex justify-between">
+                                <dt className="text-muted-foreground">{t("adminOffice.phone")}</dt>
+                                <dd className="text-right">-</dd>
+                              </div>
+                              <div className="flex justify-between">
+                                <dt className="text-muted-foreground">{t("adminOffice.fax")}</dt>
+                                <dd className="text-right">-</dd>
+                              </div>
+                            </dl>
+                          </CardContent>
+                        </Card>
+                      )}
+                    </div>
                   </TabsContent>
 
                   <TabsContent value="documents" className="mt-4">
-                    {Object.keys(groupedDocuments).length > 0 ? (
-                      <div className="space-y-4">
-                        {Object.entries(groupedDocuments).map(([category, docs]) => (
+                    <div className="space-y-4">
+                      {["INITIAL_FIRST_FORMS", "INITIAL_SECOND_LEGAL", "INITIAL_THIRD_PERSONAL"].map((category) => {
+                        const docs = groupedDocuments[category] || [];
+                        return (
                           <Card key={category}>
                             <CardHeader className="pb-2">
                               <CardTitle className="text-base flex items-center gap-2">
                                 <FolderOpen className="h-4 w-4" />
                                 {CATEGORY_LABELS[category] || category}
                               </CardTitle>
-                              <CardDescription>{docs.length} {t("adminOffice.files")}</CardDescription>
+                              <CardDescription>
+                                {docs.length > 0 
+                                  ? `${docs.length} ${t("adminOffice.files")}`
+                                  : t("adminOffice.noFilesUploaded")
+                                }
+                              </CardDescription>
                             </CardHeader>
                             <CardContent>
-                              <div className="space-y-2">
-                                {docs.map((doc) => (
-                                  <div
-                                    key={doc.id}
-                                    className="flex items-center justify-between rounded-lg border p-3"
-                                  >
-                                    <div className="flex items-center gap-3 min-w-0">
-                                      <FileText className="h-5 w-5 shrink-0 text-muted-foreground" />
-                                      <div className="min-w-0">
-                                        <p className="font-medium truncate text-sm">{doc.originalFilename}</p>
-                                        <p className="text-xs text-muted-foreground">
-                                          {t("adminOffice.uploaded")} {new Date(doc.uploadedAt).toLocaleDateString()}
-                                        </p>
+                              {docs.length > 0 ? (
+                                <div className="space-y-2">
+                                  {docs.map((doc) => (
+                                    <div
+                                      key={doc.id}
+                                      className="flex items-center justify-between rounded-lg border p-3"
+                                    >
+                                      <div className="flex items-center gap-3 min-w-0">
+                                        <FileText className="h-5 w-5 shrink-0 text-muted-foreground" />
+                                        <div className="min-w-0">
+                                          <p className="font-medium truncate text-sm">{doc.originalFilename}</p>
+                                          <p className="text-xs text-muted-foreground">
+                                            {t("adminOffice.uploaded")} {new Date(doc.uploadedAt).toLocaleDateString()}
+                                          </p>
+                                        </div>
+                                      </div>
+                                      <div className="flex gap-2">
+                                        <DocumentPreviewButton
+                                          documentId={doc.id}
+                                          filename={doc.originalFilename}
+                                        />
+                                        <a href={`/api/documents/${doc.id}/download`} data-testid={`button-download-${doc.id}`}>
+                                          <Button variant="outline" size="sm" className="gap-2">
+                                            <Download className="h-4 w-4" />
+                                            {t("common.download")}
+                                          </Button>
+                                        </a>
                                       </div>
                                     </div>
-                                    <div className="flex gap-2">
-                                      <DocumentPreviewButton
-                                        documentId={doc.id}
-                                        filename={doc.originalFilename}
-                                      />
-                                      <a href={`/api/documents/${doc.id}/download`} data-testid={`button-download-${doc.id}`}>
-                                        <Button variant="outline" size="sm" className="gap-2">
-                                          <Download className="h-4 w-4" />
-                                          {t("common.download")}
-                                        </Button>
-                                      </a>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <p className="text-sm text-muted-foreground">-</p>
+                              )}
                             </CardContent>
                           </Card>
-                        ))}
-                      </div>
-                    ) : (
-                      <Card>
-                        <CardContent className="py-12">
-                          <EmptyState
-                            icon={FileText}
-                            title={t("adminOffice.noDocuments")}
-                            description={t("adminOffice.noDocumentsDesc")}
-                          />
-                        </CardContent>
-                      </Card>
-                    )}
+                        );
+                      })}
+                    </div>
                   </TabsContent>
                 </Tabs>
               </div>
