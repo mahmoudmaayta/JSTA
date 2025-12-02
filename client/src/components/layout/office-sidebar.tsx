@@ -51,6 +51,11 @@ export function OfficeSidebar() {
       icon: RefreshCw,
     },
     {
+      title: t("navigation.officeInfoForm2026"),
+      url: "/office/office-info-form-2026",
+      icon: Building2,
+    },
+    {
       title: t("navigation.staffForm2026"),
       url: "/office/staff-form-2026",
       icon: Users,

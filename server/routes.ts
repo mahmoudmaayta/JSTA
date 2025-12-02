@@ -1882,7 +1882,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Office Info Form 2026 Routes
   app.post("/api/office-info-form", ensureOffice, async (req, res) => {
     try {
-      const user = req.user as User;
+      const user = (req as any).user;
       if (!user.officeId) {
         return res.status(400).json({ message: "No office linked to user" });
       }
@@ -1920,7 +1920,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/office-info-form", ensureOffice, async (req, res) => {
     try {
-      const user = req.user as User;
+      const user = (req as any).user;
       if (!user.officeId) {
         return res.status(400).json({ message: "No office linked to user" });
       }

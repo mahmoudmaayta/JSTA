@@ -590,6 +590,7 @@
     "settings": "Settings",
     "management": "Management",
     "adminPanel": "Admin Panel",
+    "officeInfoForm2026": "Office Info Form 2026",
     "staffForm2026": "Staff Form 2026",
     "staffDashboard": "Staff Dashboard",
     "commitmentForm": "Commitment Form",
@@ -1069,6 +1070,46 @@
     "status": {
       "alreadySubmitted": "Form Already Submitted",
       "submittedAt": "This form was submitted on {{date}}"
+    }
+  },
+  "officeInfoForm2026": {
+    "title": "Office Information Form 2026",
+    "subtitle": "Enter your office's basic establishment information for the 2026 renewal",
+    "basicInfo": {
+      "title": "Office Basic Information"
+    },
+    "fields": {
+      "establishmentNameCommercialReg": "Establishment Name (as per Commercial Register)",
+      "tradeNameAr": "Trade Name (Arabic)",
+      "tradeNameEn": "Trade Name (English)",
+      "nationalEstablishmentNumber": "National Establishment Number",
+      "trademark": "Trademark (if applicable)",
+      "awqafAccreditationNumber": "Ministry of Awqaf Accreditation Number (Current Year)",
+      "socialSecurityNumber": "Social Security Number",
+      "guaranteeExpiryDate": "Guarantee Expiry Date"
+    },
+    "consent": {
+      "title": "Data Accuracy Confirmation",
+      "text": "I confirm that all information provided in this form is accurate and complete to the best of my knowledge. I understand that providing false information may result in the rejection of my renewal application.",
+      "accept": "I confirm the accuracy of the information above"
+    },
+    "buttons": {
+      "save": "Submit Form",
+      "saving": "Submitting...",
+      "back": "Back to Dashboard"
+    },
+    "errors": {
+      "establishmentNameRequired": "Establishment name is required",
+      "tradeNameArRequired": "Trade name in Arabic is required",
+      "nationalEstablishmentNumberRequired": "National establishment number is required",
+      "consentRequired": "You must confirm the accuracy of the information"
+    },
+    "messages": {
+      "savedSuccess": "Form Submitted Successfully",
+      "savedDesc": "Your office information form has been submitted",
+      "saveError": "Submission Error",
+      "alreadySubmitted": "Form Already Submitted",
+      "submittedAt": "Submitted on"
     }
   }
 }

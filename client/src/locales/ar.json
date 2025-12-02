@@ -590,6 +590,7 @@
     "settings": "الإعدادات",
     "management": "الإدارة",
     "adminPanel": "لوحة الإدارة",
+    "officeInfoForm2026": "نموذج معلومات المنشأة 2026",
     "staffForm2026": "نموذج العاملين 2026",
     "staffDashboard": "لوحة العاملين",
     "commitmentForm": "إقرار والتزام",
@@ -1069,6 +1070,46 @@
     "status": {
       "alreadySubmitted": "تم تقديم النموذج مسبقاً",
       "submittedAt": "تم تقديم هذا النموذج في {{date}}"
+    }
+  },
+  "officeInfoForm2026": {
+    "title": "نموذج معلومات المنشأة 2026",
+    "subtitle": "أدخل المعلومات الأساسية للمنشأة لتجديد 2026",
+    "basicInfo": {
+      "title": "المعلومات الأساسية للمنشأة"
+    },
+    "fields": {
+      "establishmentNameCommercialReg": "اسم المنشأة حسب السجل التجاري",
+      "tradeNameAr": "الاسم التجاري باللغة العربية",
+      "tradeNameEn": "الاسم باللغة الإنجليزية",
+      "nationalEstablishmentNumber": "رقم المنشأة الوطني",
+      "trademark": "العلامة التجارية (إن وجدت)",
+      "awqafAccreditationNumber": "رقم اعتماد وزارة الأوقاف للعام الحالي",
+      "socialSecurityNumber": "رقم الضمان الاجتماعي",
+      "guaranteeExpiryDate": "تاريخ انتهاء الكفالة"
+    },
+    "consent": {
+      "title": "تأكيد صحة البيانات",
+      "text": "أُقرّ بأن جميع المعلومات المقدمة في هذا النموذج صحيحة وكاملة على حد علمي. وأُدرك أن تقديم معلومات غير صحيحة قد يؤدي إلى رفض طلب التجديد.",
+      "accept": "أؤكد صحة المعلومات أعلاه"
+    },
+    "buttons": {
+      "save": "تقديم النموذج",
+      "saving": "جاري التقديم...",
+      "back": "العودة للوحة التحكم"
+    },
+    "errors": {
+      "establishmentNameRequired": "اسم المنشأة حسب السجل التجاري مطلوب",
+      "tradeNameArRequired": "الاسم التجاري بالعربية مطلوب",
+      "nationalEstablishmentNumberRequired": "رقم المنشأة الوطني مطلوب",
+      "consentRequired": "يجب الموافقة على صحة البيانات"
+    },
+    "messages": {
+      "savedSuccess": "تم تقديم النموذج بنجاح",
+      "savedDesc": "تم تقديم نموذج معلومات المنشأة الخاص بك",
+      "saveError": "خطأ في التقديم",
+      "alreadySubmitted": "تم تقديم النموذج مسبقاً",
+      "submittedAt": "تم التقديم في"
     }
   }
 }
