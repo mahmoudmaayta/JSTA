@@ -418,8 +418,11 @@ export const loginSchema = z.object({
 
 export const officeInfoSchema = z.object({
   tradeNameAr: z.string().min(1, "Trade name is required"),
+  tradeNameEn: z.string().optional(),
   legalNameRegistrar: z.string().optional(),
   nationalEstablishmentNumber: z.string().optional(),
+  trademark: z.string().optional(),
+  awqafAccreditationNumber: z.string().optional(),
   socialSecurityNumber: z.string().optional(),
   guaranteeExpiryDate: z.string().optional(),
   tourismActivities: z.array(z.string()).optional(),
