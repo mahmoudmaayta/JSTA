@@ -279,6 +279,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(office);
   });
 
+  app.get("/api/office/form-completion-status", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(404).json({ message: "No office associated" });
+      }
+
+      const officeInfoForm = await storage.getOfficeInfoFormByOffice(user.officeId);
+      const people = await storage.getPeopleByOffice(user.officeId);
+      const roles = await storage.getRolesInOffice(user.officeId);
+      const commitmentForm = await storage.getCommitmentFormByOffice(user.officeId);
+
+      const officeInfoFormCompleted = !!officeInfoForm;
+      const staffFormCompleted = people.length > 0 && roles.length > 0;
+      const commitmentFormCompleted = !!commitmentForm;
+      const allFormsCompleted = officeInfoFormCompleted && staffFormCompleted && commitmentFormCompleted;
+
+      res.json({
+        officeInfoFormCompleted,
+        staffFormCompleted,
+        commitmentFormCompleted,
+        allFormsCompleted,
+      });
+    } catch (error) {
+      console.error("Form status check error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   app.patch("/api/office/profile", ensureOffice, async (req, res) => {
     try {
       const user = (req as any).user;
