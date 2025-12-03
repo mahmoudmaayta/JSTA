@@ -159,7 +159,10 @@
     "phone": "الهاتف",
     "noInfoAvailable": "لا تتوفر معلومات عن المكتب.",
     "recentDocuments": "المستندات الأخيرة",
-    "uploadedDocuments": "المستندات المرفوعة"
+    "uploadedDocuments": "المستندات المرفوعة",
+    "statusPendingApproval": "قيد الموافقة",
+    "statusActive": "نشط",
+    "statusRejected": "مرفوض"
   },
   "renewal": {
     "title": "تجديد الترخيص",

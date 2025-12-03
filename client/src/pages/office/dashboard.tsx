@@ -58,6 +58,16 @@ export default function OfficeDashboard() {
 
   const canRequestRenewal = formStatus?.staffFormCompleted && formStatus?.commitmentFormCompleted;
 
+  const getOfficeStatusLabel = (status?: string): string => {
+    if (!status) return t("common.unknown");
+    const statusMap: Record<string, string> = {
+      "PENDING_APPROVAL": t("office.statusPendingApproval"),
+      "ACTIVE": t("office.statusActive"),
+      "REJECTED": t("office.statusRejected"),
+    };
+    return statusMap[status] || status.toLowerCase().replace("_", " ");
+  };
+
   const createRenewalMutation = useMutation({
     mutationFn: async () => {
       const response = await apiRequest("POST", "/api/office/renewals");
@@ -144,7 +154,7 @@ export default function OfficeDashboard() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold capitalize" data-testid="text-status">
-                        {office?.status?.toLowerCase().replace("_", " ") || t("common.unknown")}
+                        {getOfficeStatusLabel(office?.status)}
                       </div>
                     </CardContent>
                   </Card>
