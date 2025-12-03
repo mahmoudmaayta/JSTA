@@ -194,11 +194,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Helper function to sanitize strings by removing null bytes
+  function sanitizeString(str: string | null | undefined): string {
+    if (str === null || str === undefined) return '';
+    // Remove null bytes and other problematic characters for UTF8
+    return String(str).replace(/\x00/g, '');
+  }
+
+  function sanitizeObject<T extends Record<string, any>>(obj: T): T {
+    const result: Record<string, any> = {};
+    for (const [key, value] of Object.entries(obj)) {
+      if (typeof value === 'string') {
+        result[key] = sanitizeString(value);
+      } else if (value === null || value === undefined) {
+        result[key] = value;
+      } else if (typeof value === 'object' && !Array.isArray(value)) {
+        result[key] = sanitizeObject(value);
+      } else if (Array.isArray(value)) {
+        result[key] = value.map(item => 
+          typeof item === 'object' && item !== null ? sanitizeObject(item) : 
+          typeof item === 'string' ? sanitizeString(item) : item
+        );
+      } else {
+        result[key] = value;
+      }
+    }
+    return result as T;
+  }
+
   app.post("/api/auth/register", initialUpload.array("documents", 20), async (req, res) => {
     try {
-      const accountData = JSON.parse(req.body.account);
-      const officeData = JSON.parse(req.body.office);
-      const branchesData = JSON.parse(req.body.branches || "[]");
+      // Sanitize raw body strings before parsing to remove null bytes
+      const sanitizedAccount = (req.body.account || '').replace(/\x00/g, '');
+      const sanitizedOffice = (req.body.office || '').replace(/\x00/g, '');
+      const sanitizedBranches = (req.body.branches || '[]').replace(/\x00/g, '');
+      
+      const accountData = sanitizeObject(JSON.parse(sanitizedAccount));
+      const officeData = sanitizeObject(JSON.parse(sanitizedOffice));
+      const branchesData = JSON.parse(sanitizedBranches).map((b: any) => sanitizeObject(b));
       const documentCategories = req.body.documentCategories 
         ? (Array.isArray(req.body.documentCategories) ? req.body.documentCategories : [req.body.documentCategories])
         : [];
@@ -210,7 +243,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const officeParsed = officeInfoSchema.safeParse(officeData);
       if (!officeParsed.success) {
-        return res.status(400).json({ message: "Invalid office data", errors: officeParsed.error.errors });
+        console.log("[Registration] Office validation failed:", JSON.stringify(officeParsed.error.errors, null, 2));
+        console.log("[Registration] Office data received:", JSON.stringify(officeData, null, 2));
+        return res.status(400).json({ 
+          message: "Invalid office data", 
+          errors: officeParsed.error.errors,
+          details: officeParsed.error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ')
+        });
       }
 
       const existingUser = await storage.getUserByEmail(accountParsed.data.email);
@@ -1183,7 +1222,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         if (!row.fullNameEn || !row.fullNameEn.trim()) {
           errors.push(`${section}: الاسم باللغة الإنجليزية مطلوب`);
-        } else if (!/^[a-zA-Z\s]+$/.test(row.fullNameEn)) {
+        } else if (!/^[a-zA-Z\s.',-]+$/.test(row.fullNameEn)) {
           errors.push(`${section}: يرجى إدخال الاسم بالإنجليزية`);
         }
 
