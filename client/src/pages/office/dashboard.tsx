@@ -242,7 +242,7 @@ export default function OfficeDashboard() {
                             {!formStatus?.staffFormCompleted && (
                               <Link href="/office/staff-form-2026">
                                 <Button variant="outline" size="sm" className="gap-1 border-amber-300 hover:bg-amber-100 dark:border-amber-700 dark:hover:bg-amber-900/40">
-                                  {t("sidebar.staffForm2026")}
+                                  {t("navigation.staffForm2026")}
                                   <ArrowRight className="h-3 w-3 rtl-flip" />
                                 </Button>
                               </Link>
@@ -250,7 +250,7 @@ export default function OfficeDashboard() {
                             {!formStatus?.commitmentFormCompleted && (
                               <Link href="/office/commitment-form-2026">
                                 <Button variant="outline" size="sm" className="gap-1 border-amber-300 hover:bg-amber-100 dark:border-amber-700 dark:hover:bg-amber-900/40">
-                                  {t("sidebar.commitmentForm")}
+                                  {t("navigation.commitmentForm")}
                                   <ArrowRight className="h-3 w-3 rtl-flip" />
                                 </Button>
                               </Link>
