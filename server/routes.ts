@@ -1,11 +1,12 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
 import bcrypt from "bcryptjs";
-import { storage } from "./storage";
+import { storage, pool } from "./storage";
 import { generateRenewalPDF } from "./pdf";
 import {
   sendAccountApprovedEmail,
@@ -106,15 +107,26 @@ async function ensureOffice(req: Request, res: Response, next: NextFunction) {
 export async function registerRoutes(app: Express): Promise<Server> {
   await storage.seedAdminUser();
 
+  // Initialize PostgreSQL session store
+  const PgStore = connectPgSimple(session);
+
   app.use(
     session({
+      store: new PgStore({
+        pool: pool,
+        tableName: 'session',
+        createTableIfMissing: true,
+        // Cleanup expired sessions every hour
+        pruneSessionInterval: 60 * 60, // 1 hour in seconds
+      }),
       secret: process.env.SESSION_SECRET || "tourism-portal-secret-key-change-in-production",
       resave: false,
       saveUninitialized: false,
       cookie: {
-        secure: false,
+        secure: process.env.NODE_ENV === 'production', // HTTP in dev, HTTPS in production
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: 'lax', // Same-origin requests
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
       },
     })
   );

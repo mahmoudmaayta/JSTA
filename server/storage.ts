@@ -24,7 +24,7 @@ const { Pool } = pkg;
 import { eq, desc, inArray, sql, and, gte, lte, count, avg } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 export const db = drizzle(pool);
 
 export interface IStorage {

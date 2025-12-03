@@ -22,6 +22,10 @@ export function log(message: string, source = "express") {
 
 export const app = express();
 
+// Trust proxy for Coolify/reverse proxy deployments
+// This allows secure cookies to work correctly behind a proxy
+app.set('trust proxy', 1);
+
 declare module 'http' {
   interface IncomingMessage {
     rawBody: unknown
