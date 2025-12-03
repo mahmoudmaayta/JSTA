@@ -159,7 +159,10 @@
     "phone": "Phone",
     "noInfoAvailable": "No office information available.",
     "recentDocuments": "Recent Documents",
-    "uploadedDocuments": "Your uploaded documents"
+    "uploadedDocuments": "Your uploaded documents",
+    "statusPendingApproval": "Pending Approval",
+    "statusActive": "Active",
+    "statusRejected": "Rejected"
   },
   "renewal": {
     "title": "License Renewal",
