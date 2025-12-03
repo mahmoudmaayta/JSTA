@@ -95,7 +95,7 @@ export function StatusBadge({ status, size = "default", showIcon = true }: Statu
   }
 
   const Icon = config.icon;
-  const label = typeof config.label === 'string' ? config.label : config.label[language];
+  const label = config.label[language] || config.label.en;
 
   return (
     <Badge
