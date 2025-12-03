@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { LoadingPage, LoadingSpinner } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { Office, LicenseRenewal, Document } from "@shared/schema";
@@ -23,7 +24,15 @@ import {
   Plus,
   ArrowRight,
   Files,
+  AlertCircle,
 } from "lucide-react";
+
+interface FormCompletionStatus {
+  officeInfoFormCompleted: boolean;
+  staffFormCompleted: boolean;
+  commitmentFormCompleted: boolean;
+  allFormsCompleted: boolean;
+}
 
 export default function OfficeDashboard() {
   const { user } = useAuth();
@@ -42,6 +51,12 @@ export default function OfficeDashboard() {
   const { data: documents, isLoading: documentsLoading } = useQuery<Document[]>({
     queryKey: ["/api/office/documents"],
   });
+
+  const { data: formStatus } = useQuery<FormCompletionStatus>({
+    queryKey: ["/api/office/form-completion-status"],
+  });
+
+  const canRequestRenewal = formStatus?.staffFormCompleted && formStatus?.commitmentFormCompleted;
 
   const createRenewalMutation = useMutation({
     mutationFn: async () => {
@@ -189,7 +204,7 @@ export default function OfficeDashboard() {
                           {t("renewal.requestAndManage")}
                         </CardDescription>
                       </div>
-                      {!hasActiveRenewal && (
+                      {canRequestRenewal && !hasActiveRenewal && (
                         <Button 
                           className="gap-2" 
                           data-testid="button-new-renewal"
@@ -207,7 +222,33 @@ export default function OfficeDashboard() {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    {renewals && renewals.length > 0 ? (
+                    {!canRequestRenewal ? (
+                      <Alert className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20">
+                        <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                        <AlertDescription className="text-amber-800 dark:text-amber-300">
+                          <p className="font-medium mb-2">{t("renewal.formsRequiredTitle")}</p>
+                          <p className="text-sm mb-3">{t("renewal.formsRequiredDesc")}</p>
+                          <div className="flex flex-wrap gap-2">
+                            {!formStatus?.staffFormCompleted && (
+                              <Link href="/office/staff-form-2026">
+                                <Button variant="outline" size="sm" className="gap-1 border-amber-300 hover:bg-amber-100 dark:border-amber-700 dark:hover:bg-amber-900/40">
+                                  {t("sidebar.staffForm2026")}
+                                  <ArrowRight className="h-3 w-3 rtl-flip" />
+                                </Button>
+                              </Link>
+                            )}
+                            {!formStatus?.commitmentFormCompleted && (
+                              <Link href="/office/commitment-form-2026">
+                                <Button variant="outline" size="sm" className="gap-1 border-amber-300 hover:bg-amber-100 dark:border-amber-700 dark:hover:bg-amber-900/40">
+                                  {t("sidebar.commitmentForm")}
+                                  <ArrowRight className="h-3 w-3 rtl-flip" />
+                                </Button>
+                              </Link>
+                            )}
+                          </div>
+                        </AlertDescription>
+                      </Alert>
+                    ) : renewals && renewals.length > 0 ? (
                       <div className="space-y-3">
                         {renewals.slice(0, 3).map((renewal) => (
                           <div

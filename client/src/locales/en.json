@@ -195,7 +195,11 @@
     "submitted": "Submitted",
     "viewAllRenewals": "View All Renewals",
     "noRequests": "No Renewal Requests",
-    "noRequestsDesc": "You haven't submitted any license renewal requests yet."
+    "noRequestsDesc": "You haven't submitted any license renewal requests yet.",
+    "formsRequiredTitle": "Required Forms Must Be Completed First",
+    "formsRequiredDesc": "To request a license renewal, you must first complete the 2026 Staff Form and Commitment Form. Please complete the following forms:",
+    "renewalRequested": "Renewal Requested",
+    "renewalRequestedDesc": "Your license renewal request has been submitted successfully."
   },
   "renewals": {
     "title": "License Renewals",
