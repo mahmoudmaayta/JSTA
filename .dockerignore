@@ -1,0 +1,66 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+package-lock.json
+# pnpm-lock.yaml - KEEP THIS! Needed for pnpm install --frozen-lockfile
+
+# Build output
+dist
+.next
+out
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation (not needed in container)
+README.md
+REFACTORING_GUIDE.md
+CHANGES.md
+WEBSOCKET_FIX.md
+DASHBOARD_FIX.md
+DEPLOYMENT_COOLIFY.md
+docs/
+
+# Logs
+logs
+*.log
+
+# Uploads (will be created in container)
+uploads/
+
+# Testing
+coverage
+.nyc_output
+
+# Temporary files
+tmp
+temp
+*.tmp
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Replit files (not needed for deployment)
+.replit
+replit.md
+replit.nix
