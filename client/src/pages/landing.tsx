@@ -61,8 +61,7 @@ export default function LandingPage() {
               
               {/* CTA Buttons */}
               <div 
-                className="flex flex-col sm:flex-row gap-4 mb-12"
-                style={{ justifyContent: isRTL ? 'flex-end' : 'flex-start' }}
+                className="flex flex-col sm:flex-row gap-4 mb-12 justify-start"
               >
                 <Link href="/register">
                   <Button size="lg" className="w-full sm:w-auto gap-2 shadow-md" data-testid="button-hero-register">
