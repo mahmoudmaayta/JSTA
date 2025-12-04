@@ -143,15 +143,15 @@ export default function AdminCommitmentDashboard() {
         <SidebarInset className="flex-1 overflow-auto">
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-trigger" />
-            <div className="flex items-center gap-2">
-              <FileWarning className="h-5 w-5 text-primary" />
-              <h1 className="font-semibold text-lg">
+            <div className="flex-1">
+              <h1 className="text-lg font-semibold flex items-center gap-2">
+                <FileWarning className="h-5 w-5 text-primary" />
                 {language === "ar" ? "لوحة الالتزامات والشكاوى" : "Commitment Forms Dashboard"}
               </h1>
             </div>
           </header>
 
-          <main className="p-4 space-y-6">
+          <main className="flex-1 p-4 sm:p-6 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Card>
                 <CardContent className="pt-6">
