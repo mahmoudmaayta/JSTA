@@ -660,7 +660,8 @@
     "staffForm2026": "Staff Info",
     "staffDashboard": "Staff Dashboard",
     "commitmentForm": "Commitment Form",
-    "commitmentsDashboard": "Pledges"
+    "commitmentsDashboard": "Pledges",
+    "payment": "Payment"
   },
   "forms": {
     "continue": "Continue",

@@ -660,7 +660,8 @@
     "staffForm2026": "معلومات العاملين",
     "staffDashboard": "لوحة العاملين",
     "commitmentForm": "إقرار والتزام",
-    "commitmentsDashboard": "التعهدات"
+    "commitmentsDashboard": "التعهدات",
+    "payment": "الدفع"
   },
   "forms": {
     "continue": "متابعة",

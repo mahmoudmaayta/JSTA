@@ -31,6 +31,7 @@ import {
   FileWarning,
   Lock,
   CheckCircle2,
+  CreditCard,
 } from "lucide-react";
 
 interface FormCompletionStatus {
@@ -81,6 +82,11 @@ export function OfficeSidebar({ side = "left" }: { side?: "left" | "right" }) {
       icon: FileWarning,
       showStatus: true,
       completed: formStatus?.commitmentFormCompleted,
+    },
+    {
+      title: t("navigation.payment"),
+      url: "/office/payment",
+      icon: CreditCard,
     },
     {
       title: t("navigation.renewals"),
