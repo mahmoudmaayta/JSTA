@@ -1,5 +1,5 @@
 # Nixpacks configuration for JSTA Tourism Portal
-# This ensures proper build and deployment on Coolify
+# Keep node_modules for runtime since we use --external for packages
 
 [phases.setup]
 nixPkgs = ['nodejs_20', 'pnpm']
@@ -13,13 +13,6 @@ cmds = [
 
 [phases.build]
 cmds = ['pnpm run build']
-
-# Install only runtime dependencies needed for bundled app
-[phases.postBuild]
-cmds = [
-  'pnpm install --prod --frozen-lockfile',
-  'pnpm add pg @neondatabase/serverless drizzle-kit'
-]
 
 [start]
 cmd = 'pnpm run db:push && node dist/index.js'
