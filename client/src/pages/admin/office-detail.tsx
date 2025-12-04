@@ -83,6 +83,7 @@ export default function AdminOfficeDetail() {
   const { toast } = useToast();
   const { t, language } = useLanguage();
   const sidebarSide = language === 'ar' ? 'right' : 'left';
+  const dir = language === 'ar' ? 'rtl' : 'ltr';
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
   const [rejectComment, setRejectComment] = useState("");
 
@@ -194,7 +195,7 @@ export default function AdminOfficeDetail() {
 
   return (
     <SidebarProvider style={sidebarStyle as React.CSSProperties}>
-      <div className="flex min-h-screen w-full">
+      <div className="flex min-h-screen w-full" dir={dir}>
         <AdminSidebar key={`sidebar-${language}`} side={sidebarSide} />
         <SidebarInset className="flex-1">
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
