@@ -73,6 +73,7 @@ const authorityOptions = ["الجمعية", "الوزارة", "أخرى"] as con
 export default function CommitmentForm2026() {
   const { t } = useTranslation();
   const { language } = useLanguage();
+  const sidebarSide = language === 'ar' ? 'right' : 'left';
   const dir = language === "ar" ? "rtl" : "ltr";
   const [, navigate] = useLocation();
   const { toast } = useToast();
@@ -222,7 +223,7 @@ export default function CommitmentForm2026() {
     return (
       <SidebarProvider>
         <div className="flex h-screen w-full" dir={dir}>
-          <OfficeSidebar />
+          <OfficeSidebar key={`sidebar-${language}`} side={sidebarSide} />
           <SidebarInset className="flex-1 overflow-auto">
             <div className="flex items-center justify-center min-h-screen">
               <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -236,7 +237,7 @@ export default function CommitmentForm2026() {
   return (
     <SidebarProvider>
       <div className="flex h-screen w-full" dir={dir}>
-        <OfficeSidebar />
+        <OfficeSidebar key={`sidebar-${language}`} side={sidebarSide} />
         <SidebarInset className="flex-1 overflow-auto">
           <header className="sticky top-0 z-10 flex items-center gap-2 border-b bg-background px-4 h-14">
             <SidebarTrigger data-testid="button-sidebar-trigger" />

@@ -22,7 +22,8 @@ interface RenewalWithOffice extends LicenseRenewal {
 export default function AdminRenewals() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const sidebarSide = language === 'ar' ? 'right' : 'left';
 
   const { data: renewals, isLoading } = useQuery<RenewalWithOffice[]>({
     queryKey: ["/api/admin/renewals"],
@@ -44,7 +45,7 @@ export default function AdminRenewals() {
   return (
     <SidebarProvider style={sidebarStyle as React.CSSProperties}>
       <div className="flex min-h-screen w-full">
-        <AdminSidebar />
+        <AdminSidebar key={`sidebar-${language}`} side={sidebarSide} />
         <SidebarInset className="flex-1">
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-toggle" />

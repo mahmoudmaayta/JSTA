@@ -27,7 +27,7 @@ import {
   FileWarning,
 } from "lucide-react";
 
-export function AdminSidebar() {
+export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
   const { t } = useTranslation();
@@ -74,8 +74,10 @@ export function AdminSidebar() {
     return email.substring(0, 2).toUpperCase();
   };
 
+  const borderClass = side === "right" ? "border-l" : "border-r";
+
   return (
-    <Sidebar className="bg-indigo-50/50 dark:bg-indigo-950/20">
+    <Sidebar side={side} className="bg-indigo-50/50 dark:bg-indigo-950/20">
       <SidebarHeader className="border-b border-indigo-200/50 dark:border-indigo-800/30">
         <div className="flex items-center gap-3 px-2 py-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600 dark:bg-indigo-700">

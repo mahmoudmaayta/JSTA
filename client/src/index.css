@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Cairo font directly */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap');
+
 /* LIGHT MODE */
 :root {
   --button-outline: rgba(0,0,0, .10);
@@ -438,12 +441,12 @@ html[dir="rtl"] .rounded-r {
 }
 
 /* RTL positioning */
-html[dir="rtl"] .left-0 {
+html[dir="rtl"] .left-0:not([data-slot="sidebar-container"]) {
   left: auto;
   right: 0;
 }
 
-html[dir="rtl"] .right-0 {
+html[dir="rtl"] .right-0:not([data-slot="sidebar-container"]) {
   right: auto;
   left: 0;
 }

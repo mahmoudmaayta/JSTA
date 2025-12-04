@@ -56,6 +56,7 @@ export default function AdminStaffDashboard() {
   const { t } = useTranslation();
   const { language, isRTL } = useLanguage();
   const dir = isRTL ? "rtl" : "ltr";
+  const sidebarSide = language === 'ar' ? 'right' : 'left';
   const { toast } = useToast();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -208,7 +209,7 @@ export default function AdminStaffDashboard() {
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full" dir={dir}>
-        <AdminSidebar />
+        <AdminSidebar key={`sidebar-${language}`} side={sidebarSide} />
         <SidebarInset className="flex-1 overflow-auto">
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-toggle" />

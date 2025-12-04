@@ -22,7 +22,8 @@ import {
 export default function OfficeRenewals() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const sidebarSide = language === 'ar' ? 'right' : 'left';
 
   const { data: renewals, isLoading } = useQuery<LicenseRenewal[]>({
     queryKey: ["/api/office/renewals"],
@@ -68,7 +69,7 @@ export default function OfficeRenewals() {
   return (
     <SidebarProvider style={sidebarStyle as React.CSSProperties}>
       <div className="flex min-h-screen w-full">
-        <OfficeSidebar />
+        <OfficeSidebar key={`sidebar-${language}`} side={sidebarSide} />
         <SidebarInset className="flex-1">
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-toggle" />

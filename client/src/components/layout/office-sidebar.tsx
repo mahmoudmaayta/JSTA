@@ -40,7 +40,7 @@ interface FormCompletionStatus {
   allFormsCompleted: boolean;
 }
 
-export function OfficeSidebar() {
+export function OfficeSidebar({ side = "left" }: { side?: "left" | "right" }) {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
   const { t } = useTranslation();
@@ -105,8 +105,10 @@ export function OfficeSidebar() {
     return email.substring(0, 2).toUpperCase();
   };
 
+  const borderClass = side === "right" ? "border-l" : "border-r";
+
   return (
-    <Sidebar className="bg-emerald-50/50 dark:bg-emerald-950/20">
+    <Sidebar side={side} className="bg-emerald-50/50 dark:bg-emerald-950/20">
       <SidebarHeader className="border-b border-emerald-200/50 dark:border-emerald-800/30">
         <div className="flex items-center gap-3 px-2 py-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-600 dark:bg-emerald-700">

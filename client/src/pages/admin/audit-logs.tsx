@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useTranslation } from "@/lib/i18n";
+import { useTranslation, useLanguage } from "@/lib/i18n";
 import { format } from "date-fns";
 import { ChevronLeft, ChevronRight, History, Building2, RefreshCw, CheckCircle, XCircle, Download, FileCheck } from "lucide-react";
 import type { AuditLog } from "@shared/schema";
@@ -39,6 +39,8 @@ const actionColors: Record<string, string> = {
 
 export default function AdminAuditLogs() {
   const { t } = useTranslation();
+  const { language } = useLanguage();
+  const sidebarSide = language === 'ar' ? 'right' : 'left';
 
   const actionLabels: Record<string, string> = {
     OFFICE_APPROVED: t("auditLogs.officeApproved"),
@@ -100,7 +102,7 @@ export default function AdminAuditLogs() {
   return (
     <SidebarProvider style={sidebarStyle as React.CSSProperties}>
       <div className="flex min-h-screen w-full">
-        <AdminSidebar />
+        <AdminSidebar key={`sidebar-${language}`} side={sidebarSide} />
         <SidebarInset className="flex-1">
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-toggle" />

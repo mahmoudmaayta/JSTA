@@ -134,6 +134,7 @@ interface StaffFormData {
 export default function StaffForm2026() {
   const { t } = useTranslation();
   const { language, isRTL } = useLanguage();
+  const sidebarSide = language === 'ar' ? 'right' : 'left';
   const dir = isRTL ? "rtl" : "ltr";
   const { toast } = useToast();
   const [, navigate] = useLocation();
@@ -406,7 +407,7 @@ export default function StaffForm2026() {
     return (
       <SidebarProvider>
         <div className="flex h-screen w-full" dir={dir}>
-          <OfficeSidebar />
+          <OfficeSidebar key={`sidebar-${language}`} side={sidebarSide} />
           <SidebarInset className="flex-1 overflow-auto">
             <div className="flex items-center justify-center min-h-screen">
               <div className="text-center">
@@ -425,7 +426,7 @@ export default function StaffForm2026() {
   return (
     <SidebarProvider>
       <div className="flex h-screen w-full" dir={dir}>
-        <OfficeSidebar />
+        <OfficeSidebar key={`sidebar-${language}`} side={sidebarSide} />
         <SidebarInset className="flex-1 overflow-auto">
           <header className="sticky top-0 z-10 flex items-center gap-2 border-b bg-background px-4 h-14">
             <SidebarTrigger data-testid="button-sidebar-trigger" />

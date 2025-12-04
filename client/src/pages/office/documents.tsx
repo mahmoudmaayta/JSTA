@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button";
 import { LoadingPage } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Badge } from "@/components/ui/badge";
-import { useTranslation } from "@/lib/i18n";
+import { useTranslation, useLanguage } from "@/lib/i18n";
 import type { Document } from "@shared/schema";
 import { FileText, Download, Calendar, FolderOpen } from "lucide-react";
 
 export default function OfficeDocuments() {
   const { t } = useTranslation();
+  const { language } = useLanguage();
+  const sidebarSide = language === 'ar' ? 'right' : 'left';
 
   const CATEGORY_LABELS: Record<string, string> = {
     INITIAL_FIRST_FORMS: t("documents.categoryMembership"),
@@ -43,7 +45,7 @@ export default function OfficeDocuments() {
   return (
     <SidebarProvider style={sidebarStyle as React.CSSProperties}>
       <div className="flex min-h-screen w-full">
-        <OfficeSidebar />
+        <OfficeSidebar key={`sidebar-${language}`} side={sidebarSide} />
         <SidebarInset className="flex-1">
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-toggle" />

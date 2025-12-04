@@ -8,7 +8,7 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { LoadingPage } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Progress } from "@/components/ui/progress";
-import { useTranslation } from "@/lib/i18n";
+import { useTranslation, useLanguage } from "@/lib/i18n";
 import type { Office, LicenseRenewal } from "@shared/schema";
 import {
   Building,
@@ -53,7 +53,9 @@ interface RenewalKPIs {
 
 export default function AdminDashboard() {
   const { t } = useTranslation();
-  
+  const { language } = useLanguage();
+  const sidebarSide = language === 'ar' ? 'right' : 'left';
+
   const { data: stats, isLoading: statsLoading } = useQuery<DashboardStats>({
     queryKey: ["/api/admin/stats"],
   });
@@ -80,7 +82,7 @@ export default function AdminDashboard() {
   return (
     <SidebarProvider style={sidebarStyle as React.CSSProperties}>
       <div className="flex min-h-screen w-full">
-        <AdminSidebar />
+        <AdminSidebar key={`sidebar-${language}`} side={sidebarSide} />
         <SidebarInset className="flex-1">
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-toggle" />

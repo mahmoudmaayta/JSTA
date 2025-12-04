@@ -53,6 +53,7 @@ export default function AdminCommitmentDashboard() {
   const { t } = useTranslation();
   const { language, isRTL } = useLanguage();
   const dir = isRTL ? "rtl" : "ltr";
+  const sidebarSide = language === 'ar' ? 'right' : 'left';
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedHasComplaints, setSelectedHasComplaints] = useState<string>("all");
@@ -138,7 +139,7 @@ export default function AdminCommitmentDashboard() {
   return (
     <SidebarProvider>
       <div className="flex h-screen w-full" dir={dir}>
-        <AdminSidebar />
+        <AdminSidebar key={`sidebar-${language}`} side={sidebarSide} />
         <SidebarInset className="flex-1 overflow-auto">
           <header className="sticky top-0 z-10 flex items-center gap-2 border-b bg-background px-4 h-14">
             <SidebarTrigger data-testid="button-sidebar-trigger" />
