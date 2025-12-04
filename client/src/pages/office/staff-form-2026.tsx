@@ -490,18 +490,7 @@ export default function StaffForm2026() {
         </div>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between gap-4">
-            <div>
-              <CardTitle>
-                {sections.find(s => s.key === activeSection)?.label}
-              </CardTitle>
-              <CardDescription>
-                {activeSection === "owners" && "أدخل بيانات المالك أو الشركاء كما هو مدوّن في السجل التجاري"}
-                {activeSection === "authorized" && "أدخل بيانات المفوّضين بالتوقيع حسب السجل التجاري"}
-                {activeSection === "managers" && "أدخل بيانات المدير المتفرّغ للمكتب (مطلوب صف واحد على الأقل)"}
-                {activeSection === "employees" && "أدخل بيانات الموظفين العاملين في المكتب وفروعه"}
-              </CardDescription>
-            </div>
+          <CardHeader className="flex flex-row items-center justify-end gap-4">
             <Button 
               onClick={() => handleAddRow(currentSection)}
               className="flex items-center gap-2"
