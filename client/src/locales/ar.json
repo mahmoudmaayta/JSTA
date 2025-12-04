@@ -356,7 +356,7 @@
     "trademark": "العلامة التجارية",
     "awqafApprovalNo": "رقم اعتماد الأوقاف",
     "ssn": "رقم الضمان الاجتماعي",
-    "guaranteeExpiry": "انتهاء الضمان",
+    "guaranteeExpiry": "انتهاء الكفالة",
     "registered": "تاريخ التسجيل",
     "tourismActivities": "الأنشطة السياحية",
     "mobile": "الجوال",
@@ -717,7 +717,7 @@
       "awqafAccreditationPlaceholder": "أدخل رقم اعتماد الأوقاف",
       "socialSecurity": "رقم الضمان الاجتماعي",
       "socialSecurityPlaceholder": "أدخل رقم الضمان",
-      "guaranteeExpiry": "تاريخ انتهاء الضمان",
+      "guaranteeExpiry": "تاريخ انتهاء الكفالة",
       "tourismActivities": "الأنشطة السياحية",
       "activities": {
         "all": "جميع الفئات",
