@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Header } from "@/components/layout/header";
 import { useTranslation } from "@/lib/i18n";
 import { ArrowRight, Shield, FileText, RefreshCw } from "lucide-react";
-import logoImage from "@assets/Logo jsta new 2 app_1764684493958.png";
 import heroImage from "@assets/login-jsta-image.jpg";
 
 export default function LandingPage() {
@@ -50,19 +49,6 @@ export default function LandingPage() {
                 marginRight: isRTL ? 0 : 'auto'
               }}
             >
-              {/* Logo with animation */}
-              <div 
-                className="mb-8 flex animate-fade-in"
-                style={{ justifyContent: isRTL ? 'flex-end' : 'flex-start' }}
-              >
-                <img 
-                  src={logoImage} 
-                  alt="JSTA Logo" 
-                  className="h-20 sm:h-24 w-auto object-contain drop-shadow-sm"
-                  data-testid="img-hero-logo"
-                />
-              </div>
-              
               {/* Main heading with gradient text effect */}
               <h1 className="mb-6 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl text-foreground leading-tight">
                 {t("landing.heroTitle")}
