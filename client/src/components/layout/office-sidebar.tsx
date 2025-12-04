@@ -41,6 +41,11 @@ interface FormCompletionStatus {
   allFormsCompleted: boolean;
 }
 
+interface Payment {
+  id: number;
+  status: 'PENDING' | 'UPLOADED' | 'APPROVED' | 'REJECTED';
+}
+
 export function OfficeSidebar({ side = "left" }: { side?: "left" | "right" }) {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
@@ -50,6 +55,12 @@ export function OfficeSidebar({ side = "left" }: { side?: "left" | "right" }) {
   const { data: formStatus } = useQuery<FormCompletionStatus>({
     queryKey: ["/api/office/form-completion-status"],
   });
+
+  const { data: payment } = useQuery<Payment | null>({
+    queryKey: ["/api/payments/current"],
+  });
+
+  const isPaymentApproved = payment?.status === 'APPROVED';
 
   const officeMenuItems = [
     {
@@ -87,13 +98,15 @@ export function OfficeSidebar({ side = "left" }: { side?: "left" | "right" }) {
       title: t("navigation.payment"),
       url: "/office/payment",
       icon: CreditCard,
+      showStatus: true,
+      completed: isPaymentApproved,
     },
     {
       title: t("navigation.renewals"),
       url: "/office/renewals",
       icon: RefreshCw,
-      requiresAllForms: true,
-      locked: !formStatus?.allFormsCompleted,
+      requiresPayment: true,
+      locked: !formStatus?.allFormsCompleted || !isPaymentApproved,
     },
     {
       title: t("navigation.profile"),
@@ -151,11 +164,11 @@ export function OfficeSidebar({ side = "left" }: { side?: "left" | "right" }) {
                             <span className="text-muted-foreground">{item.title}</span>
                           </SidebarMenuButton>
                         </TooltipTrigger>
-                        <TooltipContent side="right" className="max-w-[200px]">
+                        <TooltipContent side="right" className="max-w-[220px]">
                           <p className="text-xs">
                             {language === "ar" 
-                              ? "يجب إكمال نماذج المكتب والعاملين والتعهد أولاً"
-                              : "Complete Office Info, Staff Form, and Commitment Form first"
+                              ? "يجب إكمال جميع النماذج والموافقة على الدفع أولاً"
+                              : "Complete all forms and get payment approved first"
                             }
                           </p>
                         </TooltipContent>
