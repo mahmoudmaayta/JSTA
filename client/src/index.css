@@ -191,6 +191,7 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    line-height: 1.7;
   }
 
   /* Smooth transitions for theme changes and interactions */
@@ -347,6 +348,7 @@ html[dir="rtl"] * {
 
 html[dir="rtl"] body {
   text-align: right;
+  line-height: 1.8;
 }
 
 /* Flip flex directions for RTL */
