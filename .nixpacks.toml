@@ -14,6 +14,13 @@ cmds = [
 [phases.build]
 cmds = ['pnpm run build']
 
+# Install only runtime dependencies needed for bundled app
+[phases.postBuild]
+cmds = [
+  'pnpm install --prod --frozen-lockfile',
+  'pnpm add pg @neondatabase/serverless drizzle-kit'
+]
+
 [start]
 cmd = 'pnpm run db:push && node dist/index.js'
 

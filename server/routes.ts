@@ -9,6 +9,15 @@ import bcrypt from "bcryptjs";
 import { storage, pool } from "./storage";
 import { generateRenewalPDF } from "./pdf";
 import {
+  loginRateLimiter,
+  uploadRateLimiter,
+  rateLimitMiddleware,
+  getClientIp,
+  validateFileMimeType,
+  sanitizeFileName,
+} from "./middleware/security";
+import { env } from "./config/env";
+import {
   sendAccountApprovedEmail,
   sendAccountRejectedEmail,
   sendRenewalRequestedEmail,
@@ -119,13 +128,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Cleanup expired sessions every hour
         pruneSessionInterval: 60 * 60, // 1 hour in seconds
       }),
-      secret: process.env.SESSION_SECRET || "tourism-portal-secret-key-change-in-production",
+      secret: env.SESSION_SECRET, // From validated environment
       resave: false,
       saveUninitialized: false,
       cookie: {
-        secure: process.env.NODE_ENV === 'production', // HTTP in dev, HTTPS in production
+        secure: env.isProduction, // HTTP in dev, HTTPS in production
         httpOnly: true,
-        sameSite: 'lax', // Same-origin requests
+        sameSite: 'strict', // Strict CSRF protection
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
       },
     })
@@ -155,7 +164,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  app.post("/api/auth/login", async (req, res) => {
+  app.post("/api/auth/login", rateLimitMiddleware(loginRateLimiter), async (req, res) => {
     try {
       const parsed = loginSchema.safeParse(req.body);
       if (!parsed.success) {
@@ -165,25 +174,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { email, password } = parsed.data;
       const user = await storage.getUserByEmail(email);
 
-      if (!user) {
-        return res.status(401).json({ message: "Invalid email or password" });
+      // Always perform bcrypt comparison to prevent timing attacks
+      // Use a fake hash if user doesn't exist to maintain consistent timing
+      const isValid = user
+        ? await bcrypt.compare(password, user.passwordHash)
+        : await bcrypt.compare(password, "$2a$10$invalidhashxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+
+      if (!user || !isValid) {
+        // Log failed attempt for security monitoring
+        await storage.createAuditLog({
+          userId: user?.id || 0,
+          action: "LOGIN_FAILED",
+          targetType: "user",
+          targetId: user?.id || 0,
+          details: {
+            email,
+            ip: getClientIp(req),
+            timestamp: new Date().toISOString(),
+            userAgent: req.headers['user-agent'] || 'unknown'
+          }
+        });
+
+        return res.status(401).json({ message: "Invalid credentials" });
       }
 
-      const isValid = await bcrypt.compare(password, user.passwordHash);
-      if (!isValid) {
-        return res.status(401).json({ message: "Invalid email or password" });
-      }
-
+      // Check office status for OFFICE role users
       if (user.role === "OFFICE" && user.officeId) {
         const office = await storage.getOffice(user.officeId);
         if (office?.status !== "ACTIVE") {
-          return res.status(403).json({ 
-            message: "Your account is pending approval. Please wait for the association to activate your account." 
+          await storage.createAuditLog({
+            userId: user.id,
+            action: "LOGIN_FAILED",
+            targetType: "user",
+            targetId: user.id,
+            details: {
+              email,
+              ip: getClientIp(req),
+              reason: "Office not active",
+              officeStatus: office?.status,
+              timestamp: new Date().toISOString()
+            }
+          });
+
+          return res.status(403).json({
+            message: "Your account is pending approval. Please wait for the association to activate your account."
           });
         }
       }
 
       req.session.userId = user.id;
+
+      // Log successful login
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "LOGIN_SUCCESS",
+        targetType: "user",
+        targetId: user.id,
+        details: {
+          email,
+          ip: getClientIp(req),
+          timestamp: new Date().toISOString(),
+          userAgent: req.headers['user-agent'] || 'unknown'
+        }
+      });
 
       let office = null;
       if (user.officeId) {
@@ -234,7 +287,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return result as T;
   }
 
-  app.post("/api/auth/register", initialUpload.array("documents", 20), async (req, res) => {
+  app.post("/api/auth/register", rateLimitMiddleware(uploadRateLimiter), initialUpload.array("documents", 20), async (req, res) => {
     try {
       // Sanitize raw body strings before parsing to remove null bytes
       const sanitizedAccount = (req.body.account || '').replace(/\x00/g, '');
@@ -290,13 +343,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (files && files.length > 0) {
         for (let i = 0; i < files.length; i++) {
           const file = files[i];
+
+          // Validate MIME type matches file extension
+          if (!validateFileMimeType(file.originalname, file.mimetype)) {
+            // Delete already uploaded files
+            files.forEach(f => {
+              if (fs.existsSync(f.path)) fs.unlinkSync(f.path);
+            });
+            return res.status(400).json({
+              message: `Invalid file type: ${file.originalname}. File extension doesn't match content type.`
+            });
+          }
+
           const category = documentCategories[i] || "INITIAL_FIRST_FORMS";
           await storage.createDocument({
             officeId: office.id,
             renewalId: null,
             category: category as DocumentCategoryType,
             filePath: file.path,
-            originalFilename: file.originalname,
+            originalFilename: sanitizeFileName(file.originalname),
             uploadedByUserId: user.id,
           });
         }
@@ -405,6 +470,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const hashedPassword = await bcrypt.hash(newPassword, 10);
       await storage.updateUserPassword(user.id, hashedPassword);
 
+      // Log password change for security monitoring
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "PASSWORD_CHANGED",
+        targetType: "user",
+        targetId: user.id,
+        details: {
+          ip: getClientIp(req),
+          timestamp: new Date().toISOString(),
+          userAgent: req.headers['user-agent'] || 'unknown'
+        }
+      });
+
       res.json({ message: "Password changed successfully" });
     } catch (error) {
       console.error("Password change error:", error);
@@ -496,7 +574,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     pdfStream.pipe(res);
   });
 
-  app.post("/api/office/renewals/:id/upload-ministry-doc", ensureOffice, ministryUpload.single("document"), async (req, res) => {
+  app.post("/api/office/renewals/:id/upload-ministry-doc", ensureOffice, rateLimitMiddleware(uploadRateLimiter), ministryUpload.single("document"), async (req, res) => {
     const user = (req as any).user;
     const renewalId = parseInt(req.params.id);
     
@@ -1540,7 +1618,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Upload renewal attachment
-  app.post("/api/office/renewals-2026/:id/attachments", ensureOffice, renewalUpload.single("file"), async (req, res) => {
+  app.post("/api/office/renewals-2026/:id/attachments", ensureOffice, rateLimitMiddleware(uploadRateLimiter), renewalUpload.single("file"), async (req, res) => {
     try {
       const user = (req as any).user;
       const renewalId = parseInt(req.params.id);
@@ -1559,10 +1637,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "No file uploaded" });
       }
 
+      // Validate MIME type matches file extension
+      if (!validateFileMimeType(file.originalname, file.mimetype)) {
+        fs.unlinkSync(file.path);
+        return res.status(400).json({
+          message: `Invalid file type: ${file.originalname}. File extension doesn't match content type.`
+        });
+      }
+
       const { category } = req.body;
       const validCategories = [
         "PACK_1_FINANCIAL_DOCS",
-        "PACK_2_LEGAL_DOCS", 
+        "PACK_2_LEGAL_DOCS",
         "PACK_3_INSURANCE_DOCS",
         "PACK_4_EMPLOYEE_DOCS",
         "PACK_5_OTHER_DOCS",
@@ -1579,7 +1665,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         officeId: user.officeId,
         category: category as DocumentCategoryType,
         fileUrl: file.path,
-        fileName: file.originalname,
+        fileName: sanitizeFileName(file.originalname),
         fileSize: file.size,
         mimeType: file.mimetype,
         uploadedByUserId: user.id,
@@ -1651,7 +1737,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Submit renewal (final submission triggers n8n webhook)
+  // Submit renewal (final submission)
   app.post("/api/office/renewals-2026/:id/submit", ensureOffice, async (req, res) => {
     try {
       const user = (req as any).user;
@@ -1702,16 +1788,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const office = await storage.getOffice(user.officeId);
       const peopleData = await storage.getPeopleByRenewal(renewalId);
-
-      // Trigger n8n webhook for new submission
-      await triggerN8nWebhook("renewal_submitted", {
-        renewalId: renewal.id,
-        officeId: renewal.officeId,
-        officeName: office?.tradeNameAr,
-        year: renewal.year,
-        staffCount: peopleData.length,
-        submittedAt: new Date().toISOString(),
-      });
 
       // Create audit log
       await storage.createAuditLog({
@@ -1871,21 +1947,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         action: "COMMITMENT_FORM_SUBMITTED",
         targetType: "commitment_form",
         targetId: form.id,
-        details: { 
-          officeName: office.tradeNameAr, 
-          hasComplaints, 
-          complaintsCount: complaints?.length || 0 
+        details: {
+          officeName: office.tradeNameAr,
+          hasComplaints,
+          complaintsCount: complaints?.length || 0
         }
-      });
-
-      // Trigger n8n webhook
-      await triggerN8nWebhook("commitment_form_submitted", {
-        formId: form.id,
-        officeId: user.officeId,
-        officeName: office.tradeNameAr,
-        hasComplaints,
-        complaintsCount: complaints?.length || 0,
-        submittedAt: new Date().toISOString(),
       });
 
       res.json({ ok: true, data: { commitmentId: form.id } });
@@ -2070,36 +2136,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // n8n webhook trigger helper function
-  async function triggerN8nWebhook(eventType: string, data: any) {
-    const webhookUrl = process.env.N8N_WEBHOOK_URL;
-    if (!webhookUrl) {
-      console.log(`[n8n] Webhook not configured. Event: ${eventType}`, data);
-      return;
-    }
-
+  // Health check endpoint for monitoring
+  app.get("/api/health", async (req, res) => {
     try {
-      const response = await fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          eventType,
-          timestamp: new Date().toISOString(),
-          ...data,
-        }),
+      // Check database connectivity
+      await pool.query('SELECT 1');
+
+      res.json({
+        status: "healthy",
+        timestamp: new Date().toISOString(),
+        uptime: Math.floor(process.uptime()),
+        database: "connected",
+        environment: env.NODE_ENV,
+        version: "1.0.0"
       });
-      
-      if (!response.ok) {
-        console.error(`[n8n] Webhook failed: ${response.status}`);
-      } else {
-        console.log(`[n8n] Webhook sent: ${eventType}`);
-      }
     } catch (error) {
-      console.error(`[n8n] Webhook error:`, error);
+      console.error("Health check failed:", error);
+      res.status(503).json({
+        status: "unhealthy",
+        timestamp: new Date().toISOString(),
+        database: "disconnected",
+        error: "Database connection failed"
+      });
     }
-  }
+  });
 
   const httpServer = createServer(app);
   return httpServer;
