@@ -286,8 +286,8 @@ export default function AdminOfficeDetail() {
                   </TabsList>
 
                   <TabsContent value="info" className="mt-4">
-                    <div className="grid gap-6 lg:grid-cols-2">
-                      <Card>
+                    <div className={`flex flex-col gap-6 lg:flex-row ${language === 'ar' ? 'lg:flex-row-reverse' : ''}`}>
+                      <Card className="flex-1">
                         <CardHeader>
                           <CardTitle className="text-lg">{t("adminOffice.basicInfo")}</CardTitle>
                         </CardHeader>
@@ -358,7 +358,7 @@ export default function AdminOfficeDetail() {
                         </CardContent>
                       </Card>
 
-                      <Card>
+                      <Card className="flex-1">
                         <CardHeader>
                           <CardTitle className="text-lg">{t("adminOffice.contactInfo")}</CardTitle>
                         </CardHeader>
