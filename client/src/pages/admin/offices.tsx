@@ -17,6 +17,7 @@ import { Building, Search, Eye, FolderOpen } from "lucide-react";
 
 export default function AdminOffices() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const { t, language } = useLanguage();
   const sidebarSide = language === 'ar' ? 'right' : 'left';
@@ -30,13 +31,24 @@ export default function AdminOffices() {
     "--sidebar-width-icon": "3rem",
   };
 
+  const serviceCategories = [
+    { value: "tickets", labelKey: "adminOffice.activityTickets" },
+    { value: "inbound", labelKey: "adminOffice.activityInbound" },
+    { value: "outbound", labelKey: "adminOffice.activityOutbound" },
+    { value: "hajj_umrah", labelKey: "adminOffice.activityHajjUmrah" },
+    { value: "domestic", labelKey: "adminOffice.activityDomestic" },
+  ];
+
   const filteredOffices = offices?.filter((office) => {
     const matchesStatus = statusFilter === "all" || office.status === statusFilter;
+    const matchesCategory = categoryFilter === "all" || 
+      (office.tourismActivities && Array.isArray(office.tourismActivities) && 
+       office.tourismActivities.includes(categoryFilter));
     const matchesSearch = 
       office.tradeNameAr?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       office.legalNameRegistrar?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       office.mainEmail?.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesStatus && matchesSearch;
+    return matchesStatus && matchesCategory && matchesSearch;
   }) || [];
 
   return (
@@ -85,6 +97,19 @@ export default function AdminOffices() {
                           <SelectItem value="PENDING_APPROVAL">{t("status.pendingApproval")}</SelectItem>
                           <SelectItem value="ACTIVE">{t("status.active")}</SelectItem>
                           <SelectItem value="REJECTED">{t("status.rejected")}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                        <SelectTrigger className="w-full sm:w-[180px]" data-testid="select-category">
+                          <SelectValue placeholder={t("adminOffices.filterByCategory")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">{t("adminOffices.allCategories")}</SelectItem>
+                          {serviceCategories.map((category) => (
+                            <SelectItem key={category.value} value={category.value}>
+                              {t(category.labelKey)}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>
@@ -144,7 +169,7 @@ export default function AdminOffices() {
                         icon={FolderOpen}
                         title={t("adminOffices.noOffices")}
                         description={
-                          searchQuery || statusFilter !== "all"
+                          searchQuery || statusFilter !== "all" || categoryFilter !== "all"
                             ? t("adminOffices.noMatchingOffices")
                             : t("adminOffices.noRegisteredOffices")
                         }

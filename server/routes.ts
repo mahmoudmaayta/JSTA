@@ -697,6 +697,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
 
     const { comment } = req.body;
+    
+    // Rejection note is mandatory
+    if (!comment || !comment.trim()) {
+      return res.status(400).json({ message: "Rejection reason is required" });
+    }
+    
     await storage.updateOfficeStatus(office.id, "REJECTED", comment);
 
     await storage.createAuditLog({
@@ -858,6 +864,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
 
     const { comment } = req.body;
+    
+    // Rejection note is mandatory
+    if (!comment || !comment.trim()) {
+      return res.status(400).json({ message: "Rejection reason is required" });
+    }
+    
     await storage.updateRenewalStatus(renewal.id, "REJECTED", comment);
 
     const office = await storage.getOffice(renewal.officeId);
@@ -1313,15 +1325,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "يجب الموافقة على صحة البيانات قبل الحفظ" });
       }
 
-      // Validate required managers
+      // Validate required managers (at least one full-time manager)
       if (dedicatedManagers.length === 0) {
-        return res.status(400).json({ message: "مطلوب صف واحد على الأقل في مقطع المدير المتفرّغ" });
+        return res.status(400).json({ message: "مطلوب مدير متفرّغ واحد على الأقل" });
       }
 
       // Validate at least one owner/partner or authorized signatory
       if (ownersPartners.length === 0 && authorizedSignatories.length === 0) {
         return res.status(400).json({ 
           message: "مطلوب صف واحد على الأقل في مقطع المالك/الشركاء أو المفوّضين" 
+        });
+      }
+
+      // Validate minimum 3 employees total (across all categories)
+      const totalStaff = ownersPartners.length + authorizedSignatories.length + dedicatedManagers.length + employees.length;
+      if (totalStaff < 3) {
+        return res.status(400).json({ 
+          message: "مطلوب 3 موظفين على الأقل في المجموع (بما في ذلك المدير المتفرّغ)" 
         });
       }
 
@@ -2171,6 +2191,277 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(form || null);
     } catch (error) {
       console.error("Get office info form error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // ========== PAYMENT ROUTES ==========
+
+  // Setup payment uploads directory
+  const paymentDir = path.join(uploadsDir, "payment_proofs");
+  if (!fs.existsSync(paymentDir)) fs.mkdirSync(paymentDir, { recursive: true });
+
+  const paymentUpload = multer({
+    storage: multer.diskStorage({
+      destination: paymentDir,
+      filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        cb(null, uniqueSuffix + "-" + sanitizeFileName(file.originalname));
+      },
+    }),
+    limits: { fileSize: 10 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+      const allowedMimeTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "application/pdf",
+      ];
+      if (allowedMimeTypes.includes(file.mimetype)) {
+        cb(null, true);
+      } else {
+        cb(new Error("Invalid file type. Only images and PDF allowed."));
+      }
+    },
+  });
+
+  // Get current payment for office
+  app.get("/api/payments/current", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "No office linked to user" });
+      }
+      
+      const renewalId = req.query.renewalId ? parseInt(req.query.renewalId as string) : undefined;
+      const payment = await storage.getPaymentByOffice(user.officeId, renewalId);
+      res.json(payment || null);
+    } catch (error) {
+      console.error("Get payment error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Get all payments for office
+  app.get("/api/payments", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "No office linked to user" });
+      }
+      
+      const payments = await storage.getPaymentsByOffice(user.officeId);
+      res.json(payments);
+    } catch (error) {
+      console.error("Get payments error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Create or initialize a payment
+  app.post("/api/payments", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "No office linked to user" });
+      }
+      
+      const { renewalId, amount } = req.body;
+      
+      // Check if payment already exists
+      const existingPayment = await storage.getPaymentByOffice(user.officeId, renewalId);
+      if (existingPayment) {
+        return res.json(existingPayment);
+      }
+      
+      const payment = await storage.createPayment({
+        officeId: user.officeId,
+        renewalId: renewalId || null,
+        amount: amount || 350, // Default JSTA membership fee
+        status: 'PENDING',
+      });
+      
+      res.json(payment);
+    } catch (error) {
+      console.error("Create payment error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Upload payment proof
+  app.post("/api/payments/:id/upload-proof", ensureOffice, paymentUpload.single("file"), async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "No office linked to user" });
+      }
+      
+      const paymentId = parseInt(req.params.id);
+      if (isNaN(paymentId)) {
+        return res.status(400).json({ message: "Invalid payment ID" });
+      }
+      
+      const payment = await storage.getPayment(paymentId);
+      if (!payment) {
+        return res.status(404).json({ message: "Payment not found" });
+      }
+      
+      if (payment.officeId !== user.officeId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+      
+      const file = req.file;
+      if (!file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+      
+      // Update payment with proof file
+      const updatedPayment = await storage.updatePayment(paymentId, {
+        proofFileUrl: `/uploads/payment_proofs/${file.filename}`,
+        proofFileName: file.originalname,
+        status: 'UPLOADED',
+      });
+      
+      // Create audit log
+      await storage.createAuditLog({
+        userId: user.id,
+        action: 'PAYMENT_PROOF_UPLOADED',
+        targetType: 'payment',
+        targetId: paymentId,
+        details: { fileName: file.originalname },
+      });
+      
+      res.json(updatedPayment);
+    } catch (error) {
+      console.error("Upload payment proof error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get all payments
+  app.get("/api/admin/payments", ensureAdmin, async (req, res) => {
+    try {
+      const allPayments = await storage.getAllPayments();
+      
+      const paymentsWithDetails = await Promise.all(
+        allPayments.map(async (payment) => {
+          const office = await storage.getOffice(payment.officeId);
+          return { ...payment, office };
+        })
+      );
+      
+      res.json(paymentsWithDetails);
+    } catch (error) {
+      console.error("Get all payments error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get payment by ID
+  app.get("/api/admin/payments/:id", ensureAdmin, async (req, res) => {
+    try {
+      const paymentId = parseInt(req.params.id);
+      if (isNaN(paymentId)) {
+        return res.status(400).json({ message: "Invalid payment ID" });
+      }
+      
+      const payment = await storage.getPayment(paymentId);
+      if (!payment) {
+        return res.status(404).json({ message: "Payment not found" });
+      }
+      
+      const office = await storage.getOffice(payment.officeId);
+      res.json({ ...payment, office });
+    } catch (error) {
+      console.error("Get payment error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get payment for specific office
+  app.get("/api/admin/offices/:id/payment", ensureAdmin, async (req, res) => {
+    try {
+      const officeId = parseInt(req.params.id);
+      if (isNaN(officeId)) {
+        return res.status(400).json({ message: "Invalid office ID" });
+      }
+      
+      const renewalId = req.query.renewalId ? parseInt(req.query.renewalId as string) : undefined;
+      const payment = await storage.getPaymentByOffice(officeId, renewalId);
+      res.json(payment || null);
+    } catch (error) {
+      console.error("Get office payment error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Approve payment
+  app.post("/api/admin/payments/:id/approve", ensureAdmin, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const paymentId = parseInt(req.params.id);
+      if (isNaN(paymentId)) {
+        return res.status(400).json({ message: "Invalid payment ID" });
+      }
+      
+      const payment = await storage.getPayment(paymentId);
+      if (!payment) {
+        return res.status(404).json({ message: "Payment not found" });
+      }
+      
+      await storage.updatePaymentStatus(paymentId, 'APPROVED', undefined, user.id);
+      
+      // Create audit log
+      await storage.createAuditLog({
+        userId: user.id,
+        action: 'PAYMENT_APPROVED',
+        targetType: 'payment',
+        targetId: paymentId,
+        details: { officeId: payment.officeId },
+      });
+      
+      const updatedPayment = await storage.getPayment(paymentId);
+      res.json(updatedPayment);
+    } catch (error) {
+      console.error("Approve payment error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Reject payment
+  app.post("/api/admin/payments/:id/reject", ensureAdmin, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const paymentId = parseInt(req.params.id);
+      if (isNaN(paymentId)) {
+        return res.status(400).json({ message: "Invalid payment ID" });
+      }
+      
+      const { reason } = req.body;
+      if (!reason || typeof reason !== 'string' || reason.trim().length === 0) {
+        return res.status(400).json({ message: "Rejection reason is required" });
+      }
+      
+      const payment = await storage.getPayment(paymentId);
+      if (!payment) {
+        return res.status(404).json({ message: "Payment not found" });
+      }
+      
+      await storage.updatePaymentStatus(paymentId, 'REJECTED', reason.trim());
+      
+      // Create audit log
+      await storage.createAuditLog({
+        userId: user.id,
+        action: 'PAYMENT_REJECTED',
+        targetType: 'payment',
+        targetId: paymentId,
+        details: { officeId: payment.officeId, reason: reason.trim() },
+      });
+      
+      const updatedPayment = await storage.getPayment(paymentId);
+      res.json(updatedPayment);
+    } catch (error) {
+      console.error("Reject payment error:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   });

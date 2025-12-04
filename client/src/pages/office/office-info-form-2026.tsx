@@ -154,18 +154,6 @@ export default function OfficeInfoForm2026() {
                 </Alert>
               )}
 
-              <Alert className="mb-6 border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/30">
-                <Info className="h-4 w-4 text-green-600 dark:text-green-400" />
-                <AlertTitle className="text-green-700 dark:text-green-400">
-                  {language === "ar" ? "البيانات محدّثة تلقائياً" : "Data Auto-Updated"}
-                </AlertTitle>
-                <AlertDescription className="text-green-600 dark:text-green-500">
-                  {language === "ar" 
-                    ? "هذه البيانات مأخوذة من معلومات التسجيل الخاصة بكم ويتم تحديثها تلقائياً."
-                    : "This data is automatically populated from your registration information."}
-                </AlertDescription>
-              </Alert>
-
               <Card className="mb-6">
                 <CardHeader>
                   <div className="flex items-center gap-2">

@@ -1,7 +1,7 @@
 import { 
   users, offices, branches, documents, licenseRenewals, auditLogs,
   people, rolesInOffice, consents, renewalAttachments,
-  complaints, commitmentForms, officeInfoForms,
+  complaints, commitmentForms, officeInfoForms, payments,
   type User, type InsertUser,
   type Office, type InsertOffice,
   type Branch, type InsertBranch,
@@ -15,6 +15,7 @@ import {
   type Complaint, type InsertComplaint,
   type CommitmentFormRecord, type InsertCommitmentForm,
   type OfficeInfoFormRecord, type InsertOfficeInfoForm,
+  type Payment, type InsertPayment, type PaymentStatusType,
   type OfficeStatusType, type RenewalStatusType, type PersonRoleTypeType,
   type OfficeUpdateForm, type DocumentCategoryType
 } from "@shared/schema";
@@ -121,6 +122,14 @@ export interface IStorage {
   getOfficeInfoFormByOffice(officeId: number, renewalId?: number): Promise<OfficeInfoFormRecord | undefined>;
   getAllOfficeInfoForms(): Promise<OfficeInfoFormRecord[]>;
   createOfficeInfoForm(form: InsertOfficeInfoForm): Promise<OfficeInfoFormRecord>;
+  
+  getPayment(id: number): Promise<Payment | undefined>;
+  getPaymentByOffice(officeId: number, renewalId?: number): Promise<Payment | undefined>;
+  getPaymentsByOffice(officeId: number): Promise<Payment[]>;
+  getAllPayments(): Promise<Payment[]>;
+  createPayment(payment: InsertPayment): Promise<Payment>;
+  updatePayment(id: number, data: Partial<Payment>): Promise<Payment | undefined>;
+  updatePaymentStatus(id: number, status: PaymentStatusType, rejectionReason?: string, approvedByUserId?: number): Promise<void>;
   
   seedAdminUser(): Promise<void>;
 }
@@ -546,6 +555,61 @@ export class DatabaseStorage implements IStorage {
   async createOfficeInfoForm(form: InsertOfficeInfoForm): Promise<OfficeInfoFormRecord> {
     const [created] = await db.insert(officeInfoForms).values(form).returning();
     return created;
+  }
+
+  async getPayment(id: number): Promise<Payment | undefined> {
+    const [payment] = await db.select().from(payments).where(eq(payments.id, id));
+    return payment;
+  }
+
+  async getPaymentByOffice(officeId: number, renewalId?: number): Promise<Payment | undefined> {
+    if (renewalId) {
+      const [payment] = await db.select().from(payments)
+        .where(and(eq(payments.officeId, officeId), eq(payments.renewalId, renewalId)));
+      return payment;
+    }
+    const [payment] = await db.select().from(payments)
+      .where(eq(payments.officeId, officeId))
+      .orderBy(desc(payments.createdAt));
+    return payment;
+  }
+
+  async getPaymentsByOffice(officeId: number): Promise<Payment[]> {
+    return await db.select().from(payments)
+      .where(eq(payments.officeId, officeId))
+      .orderBy(desc(payments.createdAt));
+  }
+
+  async getAllPayments(): Promise<Payment[]> {
+    return await db.select().from(payments).orderBy(desc(payments.createdAt));
+  }
+
+  async createPayment(payment: InsertPayment): Promise<Payment> {
+    const [created] = await db.insert(payments).values(payment as any).returning();
+    return created;
+  }
+
+  async updatePayment(id: number, data: Partial<Payment>): Promise<Payment | undefined> {
+    const [updated] = await db.update(payments)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(payments.id, id))
+      .returning();
+    return updated;
+  }
+
+  async updatePaymentStatus(id: number, status: PaymentStatusType, rejectionReason?: string, approvedByUserId?: number): Promise<void> {
+    const updates: Partial<Payment> = { 
+      status, 
+      updatedAt: new Date() 
+    };
+    if (rejectionReason !== undefined) {
+      updates.rejectionReason = rejectionReason;
+    }
+    if (approvedByUserId !== undefined) {
+      updates.approvedByUserId = approvedByUserId;
+      updates.approvedAt = new Date();
+    }
+    await db.update(payments).set(updates).where(eq(payments.id, id));
   }
 }
 

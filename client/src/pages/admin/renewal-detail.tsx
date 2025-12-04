@@ -403,7 +403,7 @@ export default function AdminRenewalDetail() {
             <Button
               variant="destructive"
               onClick={() => rejectMutation.mutate(rejectComment)}
-              disabled={rejectMutation.isPending}
+              disabled={rejectMutation.isPending || !rejectComment.trim()}
               data-testid="button-confirm-reject"
             >
               {rejectMutation.isPending ? <LoadingSpinner size="sm" /> : t("adminRenewalDetail.rejectRenewal")}

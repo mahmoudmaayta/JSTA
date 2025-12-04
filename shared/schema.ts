@@ -33,7 +33,8 @@ export const DocumentCategory = {
   PACK_2_LEGAL_DOCS: 'PACK_2_LEGAL_DOCS',
   PACK_3_INSURANCE_DOCS: 'PACK_3_INSURANCE_DOCS',
   PACK_4_EMPLOYEE_DOCS: 'PACK_4_EMPLOYEE_DOCS',
-  PACK_5_OTHER_DOCS: 'PACK_5_OTHER_DOCS'
+  PACK_5_OTHER_DOCS: 'PACK_5_OTHER_DOCS',
+  PAYMENT_PROOF: 'PAYMENT_PROOF'
 } as const;
 
 export const PersonRoleType = {
@@ -53,12 +54,20 @@ export const UserRole = {
   OFFICE: 'OFFICE'
 } as const;
 
+export const PaymentStatus = {
+  PENDING: 'PENDING',
+  UPLOADED: 'UPLOADED',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const;
+
 export type OfficeStatusType = typeof OfficeStatus[keyof typeof OfficeStatus];
 export type RenewalStatusType = typeof RenewalStatus[keyof typeof RenewalStatus];
 export type DocumentCategoryType = typeof DocumentCategory[keyof typeof DocumentCategory];
 export type PersonRoleTypeType = typeof PersonRoleType[keyof typeof PersonRoleType];
 export type ConsentTypeType = typeof ConsentType[keyof typeof ConsentType];
 export type UserRoleType = typeof UserRole[keyof typeof UserRole];
+export type PaymentStatusType = typeof PaymentStatus[keyof typeof PaymentStatus];
 
 export const users = pgTable("users", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
@@ -270,6 +279,9 @@ export const AuditAction = {
   LOGIN_FAILED: 'LOGIN_FAILED',
   LOGIN_SUCCESS: 'LOGIN_SUCCESS',
   PASSWORD_CHANGED: 'PASSWORD_CHANGED',
+  PAYMENT_PROOF_UPLOADED: 'PAYMENT_PROOF_UPLOADED',
+  PAYMENT_APPROVED: 'PAYMENT_APPROVED',
+  PAYMENT_REJECTED: 'PAYMENT_REJECTED',
 } as const;
 
 export type AuditActionType = typeof AuditAction[keyof typeof AuditAction];
@@ -289,6 +301,21 @@ export const session = pgTable("session", {
   sid: varchar("sid").primaryKey(),
   sess: jsonb("sess").notNull(),
   expire: timestamp("expire").notNull()
+});
+
+export const payments = pgTable("payments", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  officeId: integer("office_id").notNull(),
+  renewalId: integer("renewal_id"),
+  amount: integer("amount").notNull(),
+  status: text("status").notNull().$type<PaymentStatusType>().default('PENDING'),
+  proofFileUrl: text("proof_file_url"),
+  proofFileName: text("proof_file_name"),
+  rejectionReason: text("rejection_reason"),
+  approvedByUserId: integer("approved_by_user_id"),
+  approvedAt: timestamp("approved_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
 
 export const insertUserSchema = z.object({
@@ -411,6 +438,17 @@ export const insertAuditLogSchema = z.object({
   details: z.record(z.any()).nullable().optional()
 });
 
+export const insertPaymentSchema = z.object({
+  officeId: z.number(),
+  renewalId: z.number().nullable().optional(),
+  amount: z.number(),
+  status: z.enum(['PENDING', 'UPLOADED', 'APPROVED', 'REJECTED']).optional(),
+  proofFileUrl: z.string().nullable().optional(),
+  proofFileName: z.string().nullable().optional(),
+  rejectionReason: z.string().nullable().optional(),
+  approvedByUserId: z.number().nullable().optional()
+});
+
 export const registerSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string()
@@ -506,6 +544,8 @@ export type BranchForm = z.infer<typeof branchSchema>;
 export type OfficeUpdateForm = z.infer<typeof officeUpdateSchema>;
 export type InsertAuditLog = z.infer<typeof insertAuditLogSchema>;
 export type AuditLog = typeof auditLogs.$inferSelect;
+export type InsertPayment = z.infer<typeof insertPaymentSchema>;
+export type Payment = typeof payments.$inferSelect;
 
 export const officeForm2026Schema = z.object({
   legalNameAr: z.string().min(1, "الاسم القانوني مطلوب"),

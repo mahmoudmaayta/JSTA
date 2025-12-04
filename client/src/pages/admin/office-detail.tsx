@@ -1028,7 +1028,7 @@ export default function AdminOfficeDetail() {
             <Button
               variant="destructive"
               onClick={() => rejectMutation.mutate(rejectComment)}
-              disabled={rejectMutation.isPending}
+              disabled={rejectMutation.isPending || !rejectComment.trim()}
               data-testid="button-confirm-reject"
             >
               {rejectMutation.isPending ? <LoadingSpinner size="sm" /> : t("adminOffice.rejectOffice")}

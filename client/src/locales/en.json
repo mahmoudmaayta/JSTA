@@ -201,7 +201,7 @@
     "noRequests": "No Renewal Requests",
     "noRequestsDesc": "You haven't submitted any license renewal requests yet.",
     "formsRequiredTitle": "Required Forms Must Be Completed First",
-    "formsRequiredDesc": "To request a license renewal, you must first complete the 2026 Staff Form and Commitment Form. Please complete the following forms:",
+    "formsRequiredDesc": "To request a license renewal, you must first complete the Staff Form and Commitment Form. Please complete the following forms:",
     "renewalRequested": "Renewal Requested",
     "renewalRequestedDesc": "Your license renewal request has been submitted successfully."
   },
@@ -404,7 +404,7 @@
     "complaintNotifiedAt": "Notified At",
     "complaintSummary": "Summary",
     "complaintProposedAction": "Proposed Action",
-    "tabStaffForm": "Staff Form 2026",
+    "tabStaffForm": "Staff Form",
     "staffFormDescription": "Staff details for the office organized by role category",
     "staffSectionPartners": "Owners / Partners (per Commercial Registration)",
     "staffSectionAuthorized": "Authorized Signatories (per Commercial Registration)",
@@ -456,7 +456,9 @@
     "actions": "Actions",
     "noOffices": "No Offices Found",
     "noMatchingOffices": "No offices match your search criteria.",
-    "noRegisteredOffices": "No tourism offices have registered yet."
+    "noRegisteredOffices": "No tourism offices have registered yet.",
+    "filterByCategory": "Filter by Category",
+    "allCategories": "All Categories"
   },
   "adminRenewals": {
     "title": "License Renewals",
@@ -654,8 +656,8 @@
     "settings": "Settings",
     "management": "Management",
     "adminPanel": "Admin Panel",
-    "officeInfoForm2026": "Office Info 2026",
-    "staffForm2026": "Staff Info 2026",
+    "officeInfoForm2026": "Office Info",
+    "staffForm2026": "Staff Info",
     "staffDashboard": "Staff Dashboard",
     "commitmentForm": "Commitment Form",
     "commitmentsDashboard": "Pledges"
@@ -957,7 +959,7 @@
     }
   },
   "staffForm2026": {
-    "title": "Staff Information Form 2026",
+    "title": "Staff Information Form",
     "subtitle": "Enter details of all staff members in the office and its branches",
     "loading": "Loading data...",
     "sections": {
@@ -1055,7 +1057,8 @@
       "consentRequiredDesc": "You must accept the consent before saving",
       "missingData": "Missing Data",
       "ownersOrAuthorizedRequired": "At least one row is required in Owners/Partners or Authorized section",
-      "managersRequired": "At least one row is required in Dedicated Manager section",
+      "managersRequired": "At least one full-time manager is required",
+      "minimumStaffRequired": "At least 3 employees are required in total (including the dedicated manager)",
       "cannotDelete": "Cannot Delete",
       "noData": "No data. Click \"Add Row\" to add new data."
     },
@@ -1083,7 +1086,7 @@
     }
   },
   "commitmentForm2026": {
-    "pageTitle": "Electronic Commitment (Complaints) Form 2026",
+    "pageTitle": "Electronic Commitment (Complaints) Form",
     "title": "Electronic Commitment and Acknowledgement Form",
     "subtitle": "Submit your office commitment statement and complaints information",
     "loading": "Loading data...",
@@ -1143,8 +1146,8 @@
     }
   },
   "officeInfoForm2026": {
-    "title": "Office Information Form 2026",
-    "subtitle": "Enter your office's basic establishment information for the 2026 renewal",
+    "title": "Office Information Form",
+    "subtitle": "Enter your office's basic establishment information for the renewal",
     "basicInfo": {
       "title": "Office Basic Information"
     },
@@ -1185,5 +1188,49 @@
       "title": "Form Locked for Editing",
       "description": "This form cannot be modified after submission. If you need to make changes, please contact the association."
     }
+  },
+  "payment": {
+    "title": "Payment",
+    "subtitle": "Complete your membership fee payment",
+    "bankDetails": "Bank Details",
+    "bankDetailsDesc": "Transfer the membership fee to the following account",
+    "bankName": "Bank Name",
+    "accountName": "Account Name",
+    "iban": "IBAN",
+    "ibanCopied": "IBAN copied to clipboard",
+    "amount": "Amount Due",
+    "currency": "JOD",
+    "proofUpload": "Payment Proof",
+    "proofUploadDesc": "Upload a screenshot or photo of your payment transfer confirmation",
+    "statusPending": "Pending Payment",
+    "statusUploaded": "Pending Review",
+    "statusApproved": "Approved",
+    "statusRejected": "Rejected",
+    "rejectionReason": "Rejection Reason",
+    "paymentApproved": "Payment Approved",
+    "paymentApprovedDesc": "Your membership fee has been received and verified. You can now proceed with license renewal.",
+    "uploadedFile": "Uploaded File",
+    "view": "View",
+    "dropzoneText": "Drag and drop your payment proof here, or click to select",
+    "selectFile": "Select File",
+    "removeFile": "Remove",
+    "allowedFormats": "Allowed formats: JPEG, PNG, GIF, PDF (Max 10MB)",
+    "pendingReview": "Payment Under Review",
+    "pendingReviewDesc": "Your payment proof has been submitted and is being reviewed by our team. This usually takes 1-2 business days.",
+    "uploading": "Uploading...",
+    "uploadProof": "Upload Payment Proof",
+    "invalidFileType": "Invalid File Type",
+    "allowedFileTypes": "Only images (JPEG, PNG, GIF) and PDF files are allowed",
+    "fileTooLarge": "File Too Large",
+    "maxFileSize": "Maximum file size is 10MB",
+    "uploadSuccess": "Upload Successful",
+    "uploadSuccessDesc": "Your payment proof has been uploaded and is pending review",
+    "uploadError": "Upload Failed",
+    "uploadErrorDesc": "An error occurred while uploading. Please try again.",
+    "instructions": "Payment Instructions",
+    "step1": "Transfer the membership fee amount to the bank account provided above",
+    "step2": "Take a screenshot or photo of your transfer confirmation",
+    "step3": "Upload the proof of payment using the form above",
+    "step4": "Wait for approval from the JSTA team (1-2 business days)"
   }
 }
