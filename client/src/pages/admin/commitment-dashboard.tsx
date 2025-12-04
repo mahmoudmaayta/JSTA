@@ -141,7 +141,7 @@ export default function AdminCommitmentDashboard() {
       <div className="flex h-screen w-full" dir={dir}>
         <AdminSidebar key={`sidebar-${language}`} side={sidebarSide} />
         <SidebarInset className="flex-1 overflow-auto">
-          <header className="sticky top-0 z-10 flex items-center gap-2 border-b bg-background px-4 h-14 pl-[24px] pr-[24px]">
+          <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-trigger" />
             <div className="flex items-center gap-2">
               <FileWarning className="h-5 w-5 text-primary" />
