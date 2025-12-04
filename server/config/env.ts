@@ -1,7 +1,10 @@
 import { config } from "dotenv";
 
-// Load environment variables
-config();
+// Load environment variables from .env file in development
+// In production (Coolify, etc.), env vars are set by the platform
+if (process.env.NODE_ENV !== 'production') {
+  config();
+}
 
 /**
  * Validate required environment variables at startup

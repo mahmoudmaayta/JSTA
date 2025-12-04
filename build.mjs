@@ -17,6 +17,8 @@ await esbuild.build({
     '@neondatabase/serverless',
     'bufferutil',
     'utf-8-validate',
+    // dotenv - only used in development, keep external to avoid dynamic require issues
+    'dotenv',
   ],
   minify: false,
   sourcemap: false,
