@@ -1,0 +1,21 @@
+# Nixpacks configuration for JSTA Tourism Portal
+# This ensures proper build and deployment on Coolify
+
+[phases.setup]
+nixPkgs = ['nodejs_20', 'pnpm']
+
+[phases.install]
+cmds = [
+  'corepack enable',
+  'corepack prepare pnpm@latest --activate',
+  'pnpm install --frozen-lockfile'
+]
+
+[phases.build]
+cmds = ['pnpm run build']
+
+[start]
+cmd = 'pnpm run db:push && node dist/index.js'
+
+[variables]
+NODE_ENV = 'production'
