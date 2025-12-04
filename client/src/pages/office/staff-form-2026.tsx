@@ -10,6 +10,7 @@ import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/s
 import { OfficeSidebar } from "@/components/layout/office-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -386,13 +387,16 @@ export default function StaffForm2026() {
   const getSectionData = () => {
     switch (activeSection) {
       case "owners":
-        return { data: ownersPartners, section: "owners" };
+        return { data: ownersPartners, section: "owners", managersCount: 0 };
       case "authorized":
-        return { data: authorizedSignatories, section: "authorized" };
+        return { data: authorizedSignatories, section: "authorized", managersCount: 0 };
       case "managers":
-        return { data: dedicatedManagers, section: "managers" };
+        return { data: dedicatedManagers, section: "managers", managersCount: 0 };
       case "employees":
-        return { data: employees, section: "employees" };
+        // Combine managers (shown first, read-only) with employees
+        const validManagers = dedicatedManagers.filter(m => m.fullNameAr.trim());
+        const combinedData = [...validManagers, ...employees];
+        return { data: combinedData, section: "employees", managersCount: validManagers.length };
     }
   };
 
@@ -421,7 +425,7 @@ export default function StaffForm2026() {
     );
   }
 
-  const { data: currentData, section: currentSection } = getSectionData();
+  const { data: currentData, section: currentSection, managersCount } = getSectionData();
 
   return (
     <SidebarProvider>
@@ -535,51 +539,68 @@ export default function StaffForm2026() {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    currentData.map((row, index) => (
-                      <TableRow key={index}>
+                    currentData.map((row, index) => {
+                      const isManagerRow = activeSection === "employees" && index < managersCount;
+                      const actualIndex = isManagerRow ? index : (activeSection === "employees" ? index - managersCount : index);
+                      const actualSection = isManagerRow ? "managers" : currentSection;
+                      
+                      return (
+                      <TableRow key={index} className={isManagerRow ? "bg-primary/5" : ""}>
                         <TableCell>
-                          <Input
-                            value={row.fullNameAr}
-                            onChange={(e) => handleInlineUpdate(currentSection, index, "fullNameAr", e.target.value)}
-                            placeholder="أحمد محمد علي خالد"
-                            className="min-w-[150px]"
-                            data-testid={`input-fullNameAr-${index}`}
-                          />
+                          <div className="flex items-center gap-2">
+                            <Input
+                              value={row.fullNameAr}
+                              onChange={(e) => handleInlineUpdate(actualSection, actualIndex, "fullNameAr", e.target.value)}
+                              placeholder="أحمد محمد علي خالد"
+                              className="min-w-[150px]"
+                              disabled={isManagerRow}
+                              data-testid={`input-fullNameAr-${index}`}
+                            />
+                            {isManagerRow && (
+                              <Badge variant="secondary" className="whitespace-nowrap text-xs">
+                                مدير
+                              </Badge>
+                            )}
+                          </div>
                         </TableCell>
                         <TableCell>
                           <Input
                             value={row.fullNameEn}
-                            onChange={(e) => handleInlineUpdate(currentSection, index, "fullNameEn", e.target.value)}
+                            onChange={(e) => handleInlineUpdate(actualSection, actualIndex, "fullNameEn", e.target.value)}
                             placeholder="Ahmad M. Ali"
                             className="min-w-[150px]"
                             dir="ltr"
+                            disabled={isManagerRow}
                             data-testid={`input-fullNameEn-${index}`}
                           />
                         </TableCell>
                         <TableCell>
                           <Input
                             value={row.nationalId}
-                            onChange={(e) => handleInlineUpdate(currentSection, index, "nationalId", e.target.value)}
+                            onChange={(e) => handleInlineUpdate(actualSection, actualIndex, "nationalId", e.target.value)}
                             placeholder="1234567890"
                             className="min-w-[120px]"
                             dir="ltr"
+                            disabled={isManagerRow}
                             data-testid={`input-nationalId-${index}`}
                           />
                         </TableCell>
                         <TableCell>
                           <Input
                             value={row.socialSecurityNo || ""}
-                            onChange={(e) => handleInlineUpdate(currentSection, index, "socialSecurityNo", e.target.value)}
+                            onChange={(e) => handleInlineUpdate(actualSection, actualIndex, "socialSecurityNo", e.target.value)}
                             placeholder="اختياري"
                             className="min-w-[120px]"
                             dir="ltr"
+                            disabled={isManagerRow}
                             data-testid={`input-socialSecurityNo-${index}`}
                           />
                         </TableCell>
                         <TableCell>
                           <Select
                             value={row.nationality}
-                            onValueChange={(value) => handleInlineUpdate(currentSection, index, "nationality", value)}
+                            onValueChange={(value) => handleInlineUpdate(actualSection, actualIndex, "nationality", value)}
+                            disabled={isManagerRow}
                           >
                             <SelectTrigger className="min-w-[100px]" data-testid={`select-nationality-${index}`}>
                               <SelectValue placeholder="اختر" />
@@ -594,33 +615,36 @@ export default function StaffForm2026() {
                         <TableCell>
                           <Select
                             value={row.gender}
-                            onValueChange={(value) => handleInlineUpdate(currentSection, index, "gender", value)}
+                            onValueChange={(value) => handleInlineUpdate(actualSection, actualIndex, "gender", value)}
+                            disabled={isManagerRow}
                           >
                             <SelectTrigger className="min-w-[80px]" data-testid={`select-gender-${index}`}>
                               <SelectValue placeholder="اختر" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="ذكر">♂ ذكر</SelectItem>
-                              <SelectItem value="أنثى">♀ أنثى</SelectItem>
+                              <SelectItem value="ذكر">ذكر</SelectItem>
+                              <SelectItem value="أنثى">أنثى</SelectItem>
                             </SelectContent>
                           </Select>
                         </TableCell>
                         <TableCell>
                           <Input
                             value={row.motherName}
-                            onChange={(e) => handleInlineUpdate(currentSection, index, "motherName", e.target.value)}
+                            onChange={(e) => handleInlineUpdate(actualSection, actualIndex, "motherName", e.target.value)}
                             placeholder="اسم الأم"
                             className="min-w-[120px]"
+                            disabled={isManagerRow}
                             data-testid={`input-motherName-${index}`}
                           />
                         </TableCell>
                         <TableCell>
                           <Input
                             value={row.mobile}
-                            onChange={(e) => handleInlineUpdate(currentSection, index, "mobile", e.target.value)}
+                            onChange={(e) => handleInlineUpdate(actualSection, actualIndex, "mobile", e.target.value)}
                             placeholder="07XXXXXXXX"
                             className="min-w-[120px]"
                             dir="ltr"
+                            disabled={isManagerRow}
                             data-testid={`input-mobile-${index}`}
                           />
                         </TableCell>
@@ -628,17 +652,19 @@ export default function StaffForm2026() {
                           <Input
                             type="date"
                             value={row.birthDate}
-                            onChange={(e) => handleInlineUpdate(currentSection, index, "birthDate", e.target.value)}
+                            onChange={(e) => handleInlineUpdate(actualSection, actualIndex, "birthDate", e.target.value)}
                             className="min-w-[120px]"
                             dir="ltr"
                             max={new Date().toISOString().split("T")[0]}
+                            disabled={isManagerRow}
                             data-testid={`input-birthDate-${index}`}
                           />
                         </TableCell>
                         <TableCell>
                           <Select
                             value={row.currentPosition}
-                            onValueChange={(value) => handleInlineUpdate(currentSection, index, "currentPosition", value)}
+                            onValueChange={(value) => handleInlineUpdate(actualSection, actualIndex, "currentPosition", value)}
+                            disabled={isManagerRow}
                           >
                             <SelectTrigger className="min-w-[120px]" data-testid={`select-position-${index}`}>
                               <SelectValue placeholder="اختر" />
@@ -654,17 +680,19 @@ export default function StaffForm2026() {
                           <Input
                             type="date"
                             value={row.startDate}
-                            onChange={(e) => handleInlineUpdate(currentSection, index, "startDate", e.target.value)}
+                            onChange={(e) => handleInlineUpdate(actualSection, actualIndex, "startDate", e.target.value)}
                             className="min-w-[120px]"
                             dir="ltr"
                             max={new Date().toISOString().split("T")[0]}
+                            disabled={isManagerRow}
                             data-testid={`input-startDate-${index}`}
                           />
                         </TableCell>
                         <TableCell>
                           <Select
                             value={row.branch}
-                            onValueChange={(value) => handleInlineUpdate(currentSection, index, "branch", value)}
+                            onValueChange={(value) => handleInlineUpdate(actualSection, actualIndex, "branch", value)}
+                            disabled={isManagerRow}
                           >
                             <SelectTrigger className="min-w-[120px]" data-testid={`select-branch-${index}`}>
                               <SelectValue placeholder="اختر" />
@@ -678,20 +706,26 @@ export default function StaffForm2026() {
                           </Select>
                         </TableCell>
                         <TableCell>
-                          <div className="flex items-center gap-1">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => setDeleteConfirm({ section: currentSection, index })}
-                              className="text-destructive hover:text-destructive"
-                              data-testid={`button-delete-${index}`}
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          </div>
+                          {isManagerRow ? (
+                            <span className="text-xs text-muted-foreground whitespace-nowrap">
+                              من قسم المدراء
+                            </span>
+                          ) : (
+                            <div className="flex items-center gap-1">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => setDeleteConfirm({ section: currentSection, index: actualIndex })}
+                                className="text-destructive hover:text-destructive"
+                                data-testid={`button-delete-${index}`}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          )}
                         </TableCell>
                       </TableRow>
-                    ))
+                    );})
                   )}
                 </TableBody>
               </Table>
