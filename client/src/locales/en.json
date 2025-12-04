@@ -78,6 +78,7 @@
     "featureDocumentsDesc": "Secure upload and storage of all required documents",
     "featureTracking": "Status Tracking",
     "featureTrackingDesc": "Real-time tracking of applications and renewals",
+    "featureSecure": "Secure Platform",
     "imagePlaceholder": "Hero Image"
   },
   "registration": {

@@ -1,52 +1,56 @@
+/* Import Cairo font first - must come before @tailwind directives */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Import Cairo font directly */
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap');
-
-/* LIGHT MODE */
+/* LIGHT MODE - Professional Tourism Portal Theme */
 :root {
   --button-outline: rgba(0,0,0, .10);
   --badge-outline: rgba(0,0,0, .05);
   --opaque-button-border-intensity: -8;
   --elevate-1: rgba(0,0,0, .03);
   --elevate-2: rgba(0,0,0, .08);
-  --background: 0 0% 100%;
-  --foreground: 0 0% 9%;
-  --border: 0 0% 90%;
-  --card: 0 0% 98%;
-  --card-foreground: 0 0% 9%;
-  --card-border: 0 0% 94%;
-  --sidebar: 0 0% 96%;
-  --sidebar-foreground: 0 0% 9%;
-  --sidebar-border: 0 0% 92%;
-  --sidebar-primary: 210 85% 45%;
-  --sidebar-primary-foreground: 210 85% 98%;
-  --sidebar-accent: 0 0% 92%;
-  --sidebar-accent-foreground: 0 0% 9%;
-  --sidebar-ring: 210 85% 45%;
-  --popover: 0 0% 94%;
-  --popover-foreground: 0 0% 9%;
-  --popover-border: 0 0% 90%;
-  --primary: 210 85% 45%;
-  --primary-foreground: 210 85% 98%;
-  --secondary: 0 0% 91%;
-  --secondary-foreground: 0 0% 9%;
-  --muted: 0 0% 93%;
-  --muted-foreground: 0 0% 35%;
-  --accent: 210 15% 92%;
-  --accent-foreground: 210 15% 9%;
-  --destructive: 0 72% 42%;
-  --destructive-foreground: 0 72% 98%;
-  --input: 0 0% 75%;
-  --ring: 210 85% 45%;
-  --chart-1: 210 85% 35%;
-  --chart-2: 200 75% 40%;
-  --chart-3: 195 70% 38%;
-  --chart-4: 185 65% 42%;
-  --chart-5: 175 60% 45%;
-  --font-sans: Open Sans, sans-serif;
+  --background: 210 20% 99%;
+  --foreground: 215 25% 15%;
+  --border: 210 15% 88%;
+  --card: 0 0% 100%;
+  --card-foreground: 215 25% 15%;
+  --card-border: 210 15% 92%;
+  --sidebar: 215 25% 97%;
+  --sidebar-foreground: 215 25% 15%;
+  --sidebar-border: 210 15% 90%;
+  --sidebar-primary: 199 89% 38%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 210 20% 93%;
+  --sidebar-accent-foreground: 215 25% 15%;
+  --sidebar-ring: 199 89% 38%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 215 25% 15%;
+  --popover-border: 210 15% 88%;
+  --primary: 199 89% 38%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 15% 93%;
+  --secondary-foreground: 215 25% 15%;
+  --muted: 210 15% 95%;
+  --muted-foreground: 215 15% 45%;
+  --accent: 35 85% 50%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 72% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --input: 210 15% 80%;
+  --ring: 199 89% 38%;
+  --success: 142 72% 35%;
+  --success-foreground: 0 0% 100%;
+  --warning: 35 92% 50%;
+  --warning-foreground: 0 0% 100%;
+  --chart-1: 199 89% 38%;
+  --chart-2: 35 85% 50%;
+  --chart-3: 142 72% 35%;
+  --chart-4: 262 60% 50%;
+  --chart-5: 340 75% 55%;
+  --font-sans: "Cairo", "Open Sans", system-ui, sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
   --radius: .5rem;
@@ -96,40 +100,44 @@
   --opaque-button-border-intensity: 9;
   --elevate-1: rgba(255,255,255, .04);
   --elevate-2: rgba(255,255,255, .09);
-  --background: 0 0% 7%;
-  --foreground: 0 0% 95%;
-  --border: 0 0% 16%;
-  --card: 0 0% 9%;
-  --card-foreground: 0 0% 95%;
-  --card-border: 0 0% 12%;
-  --sidebar: 0 0% 11%;
-  --sidebar-foreground: 0 0% 95%;
-  --sidebar-border: 0 0% 14%;
-  --sidebar-primary: 210 85% 55%;
-  --sidebar-primary-foreground: 210 85% 98%;
-  --sidebar-accent: 0 0% 14%;
-  --sidebar-accent-foreground: 0 0% 95%;
-  --sidebar-ring: 210 85% 55%;
-  --popover: 0 0% 13%;
-  --popover-foreground: 0 0% 95%;
-  --popover-border: 0 0% 16%;
-  --primary: 210 85% 30%;
-  --primary-foreground: 210 85% 98%;
-  --secondary: 0 0% 16%;
-  --secondary-foreground: 0 0% 95%;
-  --muted: 0 0% 15%;
-  --muted-foreground: 0 0% 65%;
-  --accent: 210 15% 14%;
-  --accent-foreground: 210 15% 95%;
-  --destructive: 0 72% 32%;
-  --destructive-foreground: 0 72% 98%;
-  --input: 0 0% 28%;
-  --ring: 210 85% 55%;
-  --chart-1: 210 85% 65%;
-  --chart-2: 200 75% 60%;
-  --chart-3: 195 70% 62%;
-  --chart-4: 185 65% 58%;
-  --chart-5: 175 60% 55%;
+  --background: 215 25% 9%;
+  --foreground: 210 15% 95%;
+  --border: 215 20% 18%;
+  --card: 215 25% 11%;
+  --card-foreground: 210 15% 95%;
+  --card-border: 215 20% 15%;
+  --sidebar: 215 25% 12%;
+  --sidebar-foreground: 210 15% 95%;
+  --sidebar-border: 215 20% 16%;
+  --sidebar-primary: 199 89% 48%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 215 25% 16%;
+  --sidebar-accent-foreground: 210 15% 95%;
+  --sidebar-ring: 199 89% 48%;
+  --popover: 215 25% 13%;
+  --popover-foreground: 210 15% 95%;
+  --popover-border: 215 20% 18%;
+  --primary: 199 89% 48%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 215 20% 18%;
+  --secondary-foreground: 210 15% 95%;
+  --muted: 215 20% 16%;
+  --muted-foreground: 210 15% 60%;
+  --accent: 35 85% 55%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 72% 45%;
+  --destructive-foreground: 0 0% 100%;
+  --input: 215 20% 25%;
+  --ring: 199 89% 48%;
+  --success: 142 72% 42%;
+  --success-foreground: 0 0% 100%;
+  --warning: 35 92% 55%;
+  --warning-foreground: 0 0% 100%;
+  --chart-1: 199 89% 55%;
+  --chart-2: 35 85% 55%;
+  --chart-3: 142 72% 45%;
+  --chart-4: 262 60% 55%;
+  --chart-5: 340 75% 60%;
   --shadow-2xs: 0px 2px 0px 0px hsl(0 0% 0% / 0.00);
   --shadow-xs: 0px 2px 0px 0px hsl(0 0% 0% / 0.00);
   --shadow-sm: 0px 2px 0px 0px hsl(0 0% 0% / 0.00), 0px 1px 2px -1px hsl(0 0% 0% / 0.00);
@@ -173,8 +181,48 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply font-sans antialiased bg-background text-foreground;
+    font-feature-settings: "liga" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Smooth transitions for theme changes and interactions */
+  button,
+  a,
+  input,
+  textarea,
+  select,
+  [role="button"] {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  /* Enhanced focus states for accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Remove focus outline on mouse click, keep for keyboard */
+  :focus:not(:focus-visible) {
+    @apply outline-none ring-0;
+  }
+
+  /* Improve input focus states */
+  input:focus,
+  textarea:focus,
+  select:focus {
+    @apply border-primary;
+  }
+
+  /* Card hover enhancement */
+  .card-interactive {
+    @apply transition-all duration-200 hover:shadow-md;
   }
 }
 
