@@ -9,18 +9,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useToast } from "@/hooks/use-toast";
 import { 
-  Save, 
   ArrowRight,
   Building2,
   CheckCircle2,
   Loader2,
   FileText,
   CalendarDays,
-  Lock,
   Info
 } from "lucide-react";
 import type { Office, OfficeInfoFormRecord } from "@shared/schema";
@@ -34,7 +30,6 @@ interface OfficeInfoFormData {
   awqafAccreditationNumber: string;
   socialSecurityNumber: string;
   guaranteeExpiryDate: string;
-  consentAccepted: boolean;
 }
 
 export default function OfficeInfoForm2026() {
@@ -43,7 +38,6 @@ export default function OfficeInfoForm2026() {
   const sidebarSide = language === 'ar' ? 'right' : 'left';
   const dir = language === "ar" ? "rtl" : "ltr";
   const [, navigate] = useLocation();
-  const { toast } = useToast();
 
   const [formData, setFormData] = useState<OfficeInfoFormData>({
     establishmentNameCommercialReg: "",
@@ -54,10 +48,9 @@ export default function OfficeInfoForm2026() {
     awqafAccreditationNumber: "",
     socialSecurityNumber: "",
     guaranteeExpiryDate: "",
-    consentAccepted: false,
   });
 
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [autoSaved, setAutoSaved] = useState(false);
 
   const { data: office, isLoading: officeLoading } = useQuery<Office>({
     queryKey: ["/api/office/profile"],
@@ -70,21 +63,6 @@ export default function OfficeInfoForm2026() {
   const isFormLocked = !!existingForm;
 
   useEffect(() => {
-    if (office && !existingForm) {
-      setFormData(prev => ({
-        ...prev,
-        tradeNameAr: office.tradeNameAr || "",
-        tradeNameEn: office.tradeNameEn || "",
-        nationalEstablishmentNumber: office.nationalEstablishmentNumber || "",
-        trademark: office.trademark || "",
-        awqafAccreditationNumber: office.awqafApprovalNo || "",
-        socialSecurityNumber: office.socialSecurityNumber || "",
-        guaranteeExpiryDate: office.guaranteeExpiryDate || "",
-      }));
-    }
-  }, [office, existingForm]);
-
-  useEffect(() => {
     if (existingForm) {
       setFormData({
         establishmentNameCommercialReg: existingForm.establishmentNameCommercialReg || "",
@@ -95,10 +73,23 @@ export default function OfficeInfoForm2026() {
         awqafAccreditationNumber: existingForm.awqafAccreditationNumber || "",
         socialSecurityNumber: existingForm.socialSecurityNumber || "",
         guaranteeExpiryDate: existingForm.guaranteeExpiryDate || "",
-        consentAccepted: false,
       });
+    } else if (office && !autoSaved) {
+      const autoFormData: OfficeInfoFormData = {
+        establishmentNameCommercialReg: office.legalNameAr || office.tradeNameAr || "",
+        tradeNameAr: office.tradeNameAr || "",
+        tradeNameEn: office.tradeNameEn || "",
+        nationalEstablishmentNumber: office.nationalEstablishmentNumber || "",
+        trademark: office.trademark || "",
+        awqafAccreditationNumber: office.awqafApprovalNo || "",
+        socialSecurityNumber: office.socialSecurityNumber || "",
+        guaranteeExpiryDate: office.guaranteeExpiryDate || "",
+      };
+      setFormData(autoFormData);
+      setAutoSaved(true);
+      saveMutation.mutate(autoFormData);
     }
-  }, [existingForm]);
+  }, [office, existingForm, autoSaved]);
 
   const saveMutation = useMutation({
     mutationFn: async (data: OfficeInfoFormData) => {
@@ -107,46 +98,11 @@ export default function OfficeInfoForm2026() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/office-info-form"] });
-      toast({
-        title: t("officeInfoForm2026.messages.savedSuccess"),
-        description: t("officeInfoForm2026.messages.savedDesc"),
-      });
-      navigate("/office/dashboard");
     },
     onError: (error: any) => {
-      toast({
-        title: t("common.error"),
-        description: error.message || t("officeInfoForm2026.messages.saveError"),
-        variant: "destructive",
-      });
+      console.error("Auto-save error:", error);
     },
   });
-
-  const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.establishmentNameCommercialReg.trim()) {
-      newErrors.establishmentNameCommercialReg = t("officeInfoForm2026.errors.establishmentNameRequired");
-    }
-    if (!formData.tradeNameAr.trim()) {
-      newErrors.tradeNameAr = t("officeInfoForm2026.errors.tradeNameArRequired");
-    }
-    if (!formData.nationalEstablishmentNumber.trim()) {
-      newErrors.nationalEstablishmentNumber = t("officeInfoForm2026.errors.nationalEstablishmentNumberRequired");
-    }
-    if (!formData.consentAccepted) {
-      newErrors.consent = t("officeInfoForm2026.errors.consentRequired");
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = () => {
-    if (validateForm()) {
-      saveMutation.mutate(formData);
-    }
-  };
 
   if (officeLoading || formLoading) {
     return (
@@ -189,62 +145,61 @@ export default function OfficeInfoForm2026() {
                 </CardHeader>
               </Card>
 
-              {isFormLocked && (
-                <Alert className="mb-6 border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30">
-                  <Lock className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-                  <AlertTitle className="text-amber-700 dark:text-amber-400">
-                    {t("officeInfoForm2026.locked.title")}
+              {saveMutation.isPending && (
+                <Alert className="mb-6 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30">
+                  <Loader2 className="h-4 w-4 text-blue-600 dark:text-blue-400 animate-spin" />
+                  <AlertTitle className="text-blue-700 dark:text-blue-400">
+                    {language === "ar" ? "جاري الحفظ التلقائي..." : "Auto-saving..."}
                   </AlertTitle>
-                  <AlertDescription className="text-amber-600 dark:text-amber-500">
-                    {t("officeInfoForm2026.locked.description")}
-                  </AlertDescription>
                 </Alert>
               )}
+
+              <Alert className="mb-6 border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/30">
+                <Info className="h-4 w-4 text-green-600 dark:text-green-400" />
+                <AlertTitle className="text-green-700 dark:text-green-400">
+                  {language === "ar" ? "البيانات محدّثة تلقائياً" : "Data Auto-Updated"}
+                </AlertTitle>
+                <AlertDescription className="text-green-600 dark:text-green-500">
+                  {language === "ar" 
+                    ? "هذه البيانات مأخوذة من معلومات التسجيل الخاصة بكم ويتم تحديثها تلقائياً."
+                    : "This data is automatically populated from your registration information."}
+                </AlertDescription>
+              </Alert>
 
               <Card className="mb-6">
                 <CardHeader>
                   <div className="flex items-center gap-2">
                     <FileText className="w-5 h-5 text-primary" />
                     <CardTitle className="text-lg">{t("officeInfoForm2026.basicInfo.title")}</CardTitle>
-                    {isFormLocked && (
-                      <Lock className="w-4 h-4 text-muted-foreground ms-auto" />
-                    )}
+                    <CheckCircle2 className="w-4 h-4 text-green-500 ms-auto" />
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2 md:col-span-2">
                       <Label htmlFor="establishmentNameCommercialReg">
-                        {t("officeInfoForm2026.fields.establishmentNameCommercialReg")} {!isFormLocked && <span className="text-red-500">*</span>}
+                        {t("officeInfoForm2026.fields.establishmentNameCommercialReg")}
                       </Label>
                       <Input
                         id="establishmentNameCommercialReg"
                         value={formData.establishmentNameCommercialReg}
-                        onChange={(e) => setFormData(prev => ({ ...prev, establishmentNameCommercialReg: e.target.value }))}
-                        disabled={isFormLocked}
-                        className={isFormLocked ? "bg-muted cursor-not-allowed" : ""}
+                        readOnly
+                        className="bg-muted cursor-default"
                         data-testid="input-establishment-name"
                       />
-                      {errors.establishmentNameCommercialReg && (
-                        <p className="text-sm text-destructive">{errors.establishmentNameCommercialReg}</p>
-                      )}
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="tradeNameAr">
-                        {t("officeInfoForm2026.fields.tradeNameAr")} {!isFormLocked && <span className="text-red-500">*</span>}
+                        {t("officeInfoForm2026.fields.tradeNameAr")}
                       </Label>
                       <Input
                         id="tradeNameAr"
                         value={formData.tradeNameAr}
-                        onChange={(e) => setFormData(prev => ({ ...prev, tradeNameAr: e.target.value }))}
-                        disabled={isFormLocked}
-                        className={isFormLocked ? "bg-muted cursor-not-allowed" : ""}
+                        readOnly
+                        className="bg-muted cursor-default"
                         data-testid="input-trade-name-ar"
                       />
-                      {errors.tradeNameAr && (
-                        <p className="text-sm text-destructive">{errors.tradeNameAr}</p>
-                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -254,28 +209,23 @@ export default function OfficeInfoForm2026() {
                       <Input
                         id="tradeNameEn"
                         value={formData.tradeNameEn}
-                        onChange={(e) => setFormData(prev => ({ ...prev, tradeNameEn: e.target.value }))}
-                        disabled={isFormLocked}
-                        className={isFormLocked ? "bg-muted cursor-not-allowed" : ""}
+                        readOnly
+                        className="bg-muted cursor-default"
                         data-testid="input-trade-name-en"
                       />
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="nationalEstablishmentNumber">
-                        {t("officeInfoForm2026.fields.nationalEstablishmentNumber")} {!isFormLocked && <span className="text-red-500">*</span>}
+                        {t("officeInfoForm2026.fields.nationalEstablishmentNumber")}
                       </Label>
                       <Input
                         id="nationalEstablishmentNumber"
                         value={formData.nationalEstablishmentNumber}
-                        onChange={(e) => setFormData(prev => ({ ...prev, nationalEstablishmentNumber: e.target.value }))}
-                        disabled={isFormLocked}
-                        className={isFormLocked ? "bg-muted cursor-not-allowed" : ""}
+                        readOnly
+                        className="bg-muted cursor-default"
                         data-testid="input-national-establishment-number"
                       />
-                      {errors.nationalEstablishmentNumber && (
-                        <p className="text-sm text-destructive">{errors.nationalEstablishmentNumber}</p>
-                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -285,9 +235,8 @@ export default function OfficeInfoForm2026() {
                       <Input
                         id="trademark"
                         value={formData.trademark}
-                        onChange={(e) => setFormData(prev => ({ ...prev, trademark: e.target.value }))}
-                        disabled={isFormLocked}
-                        className={isFormLocked ? "bg-muted cursor-not-allowed" : ""}
+                        readOnly
+                        className="bg-muted cursor-default"
                         data-testid="input-trademark"
                       />
                     </div>
@@ -299,9 +248,8 @@ export default function OfficeInfoForm2026() {
                       <Input
                         id="awqafAccreditationNumber"
                         value={formData.awqafAccreditationNumber}
-                        onChange={(e) => setFormData(prev => ({ ...prev, awqafAccreditationNumber: e.target.value }))}
-                        disabled={isFormLocked}
-                        className={isFormLocked ? "bg-muted cursor-not-allowed" : ""}
+                        readOnly
+                        className="bg-muted cursor-default"
                         data-testid="input-awqaf-accreditation"
                       />
                     </div>
@@ -313,9 +261,8 @@ export default function OfficeInfoForm2026() {
                       <Input
                         id="socialSecurityNumber"
                         value={formData.socialSecurityNumber}
-                        onChange={(e) => setFormData(prev => ({ ...prev, socialSecurityNumber: e.target.value }))}
-                        disabled={isFormLocked}
-                        className={isFormLocked ? "bg-muted cursor-not-allowed" : ""}
+                        readOnly
+                        className="bg-muted cursor-default"
                         data-testid="input-social-security"
                       />
                     </div>
@@ -329,9 +276,8 @@ export default function OfficeInfoForm2026() {
                         id="guaranteeExpiryDate"
                         type="date"
                         value={formData.guaranteeExpiryDate}
-                        onChange={(e) => setFormData(prev => ({ ...prev, guaranteeExpiryDate: e.target.value }))}
-                        disabled={isFormLocked}
-                        className={isFormLocked ? "bg-muted cursor-not-allowed" : ""}
+                        readOnly
+                        className="bg-muted cursor-default"
                         data-testid="input-guarantee-expiry"
                       />
                     </div>
@@ -339,96 +285,16 @@ export default function OfficeInfoForm2026() {
                 </CardContent>
               </Card>
 
-              {!isFormLocked ? (
-                <Card className="mb-6">
-                  <CardHeader>
-                    <div className="flex items-center gap-2">
-                      <FileText className="w-5 h-5 text-primary" />
-                      <CardTitle className="text-lg">{t("officeInfoForm2026.consent.title")}</CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="p-4 bg-muted/50 rounded-lg border mb-6">
-                      <p className="text-base leading-relaxed">
-                        {t("officeInfoForm2026.consent.text")}
-                      </p>
-                    </div>
-
-                    <div className="flex items-start gap-3 p-4 border rounded-lg bg-card">
-                      <Checkbox
-                        id="consent"
-                        checked={formData.consentAccepted}
-                        onCheckedChange={(checked) => setFormData(prev => ({ ...prev, consentAccepted: checked === true }))}
-                        data-testid="checkbox-consent"
-                      />
-                      <div className="space-y-1">
-                        <Label htmlFor="consent" className="text-base font-medium cursor-pointer">
-                          {t("officeInfoForm2026.consent.accept")}
-                        </Label>
-                        {errors.consent && (
-                          <p className="text-sm text-destructive">{errors.consent}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between mt-6 rtl:flex-row-reverse">
-                      <Button
-                        variant="outline"
-                        onClick={() => navigate("/office/dashboard")}
-                        data-testid="button-back"
-                      >
-                        <ArrowRight className="w-4 h-4 ms-2 rtl:rotate-180" />
-                        {t("officeInfoForm2026.buttons.back")}
-                      </Button>
-                      
-                      <Button
-                        onClick={handleSubmit}
-                        disabled={saveMutation.isPending}
-                        className="flex items-center gap-2"
-                        data-testid="button-submit"
-                      >
-                        {saveMutation.isPending ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <Save className="w-4 h-4" />
-                        )}
-                        {saveMutation.isPending 
-                          ? t("officeInfoForm2026.buttons.saving")
-                          : t("officeInfoForm2026.buttons.save")
-                        }
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ) : (
-                <Card className="mb-6 border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/30">
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
-                      <CheckCircle2 className="w-5 h-5" />
-                      <span className="font-medium">{t("officeInfoForm2026.messages.alreadySubmitted")}</span>
-                    </div>
-                    <p className="text-sm text-green-600 dark:text-green-500 mt-2">
-                      {t("officeInfoForm2026.messages.submittedAt")}: {new Date(existingForm!.submittedAt).toLocaleDateString(language === "ar" ? "ar-JO" : "en-US", { 
-                        year: "numeric", 
-                        month: "long", 
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit"
-                      })}
-                    </p>
-                    <div className="flex justify-start mt-4">
-                      <Button
-                        variant="outline"
-                        onClick={() => navigate("/office/dashboard")}
-                        data-testid="button-back-locked"
-                      >
-                        <ArrowRight className="w-4 h-4 ms-2 rtl:rotate-180" />
-                        {t("officeInfoForm2026.buttons.back")}
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+              <div className="flex justify-start">
+                <Button
+                  variant="outline"
+                  onClick={() => navigate("/office/dashboard")}
+                  data-testid="button-back"
+                >
+                  <ArrowRight className="w-4 h-4 ms-2 rtl:rotate-180" />
+                  {t("officeInfoForm2026.buttons.back")}
+                </Button>
+              </div>
             </div>
           </main>
         </SidebarInset>
