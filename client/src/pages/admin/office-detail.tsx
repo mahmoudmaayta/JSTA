@@ -269,7 +269,7 @@ export default function AdminOfficeDetail() {
                 )}
 
                 <Tabs defaultValue="info">
-                  <TabsList className={`flex flex-wrap ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
+                  <TabsList className="flex flex-wrap">
                     <TabsTrigger value="info" data-testid="tab-info">{t("adminOffice.tabInfo")}</TabsTrigger>
                     <TabsTrigger value="branches" data-testid="tab-branches">
                       {t("adminOffice.tabBranches")} ({data.branches.length})
