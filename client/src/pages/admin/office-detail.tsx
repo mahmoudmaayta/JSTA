@@ -293,49 +293,49 @@ export default function AdminOfficeDetail() {
                         </CardHeader>
                         <CardContent>
                           <dl className="space-y-3 text-sm">
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.tradeNameAr")}</dt>
-                              <dd className="font-medium text-right">{data.office.tradeNameAr || "-"}</dd>
+                              <dd className="font-medium">{data.office.tradeNameAr || "-"}</dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.tradeNameEn")}</dt>
-                              <dd className="font-medium text-right">{data.office.tradeNameEn || "-"}</dd>
+                              <dd className="font-medium">{data.office.tradeNameEn || "-"}</dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.legalNameAr")}</dt>
-                              <dd className="font-medium text-right">{data.office.legalNameAr || "-"}</dd>
+                              <dd className="font-medium">{data.office.legalNameAr || "-"}</dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.legalName")}</dt>
-                              <dd className="font-medium text-right">{data.office.legalNameRegistrar || "-"}</dd>
+                              <dd className="font-medium">{data.office.legalNameRegistrar || "-"}</dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.nationalEntityNo")}</dt>
-                              <dd className="font-mono text-right">{data.office.nationalEntityNo || "-"}</dd>
+                              <dd className="font-mono">{data.office.nationalEntityNo || "-"}</dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.establishmentNo")}</dt>
-                              <dd className="font-mono text-right">{data.office.nationalEstablishmentNumber || "-"}</dd>
+                              <dd className="font-mono">{data.office.nationalEstablishmentNumber || "-"}</dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.trademark")}</dt>
-                              <dd className="font-medium text-right">{data.office.trademark || "-"}</dd>
+                              <dd className="font-medium">{data.office.trademark || "-"}</dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.awqafApprovalNo")}</dt>
-                              <dd className="font-mono text-right">{data.office.awqafApprovalNo || "-"}</dd>
+                              <dd className="font-mono">{data.office.awqafApprovalNo || "-"}</dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.ssn")}</dt>
-                              <dd className="font-mono text-right">{data.office.socialSecurityNumber || "-"}</dd>
+                              <dd className="font-mono">{data.office.socialSecurityNumber || "-"}</dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.guaranteeExpiry")}</dt>
-                              <dd className="text-right">{data.office.guaranteeExpiryDate || "-"}</dd>
+                              <dd>{data.office.guaranteeExpiryDate || "-"}</dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.registered")}</dt>
-                              <dd className="text-right">
+                              <dd>
                                 {new Date(data.office.createdAt).toLocaleDateString()}
                               </dd>
                             </div>
@@ -364,37 +364,37 @@ export default function AdminOfficeDetail() {
                         </CardHeader>
                         <CardContent>
                           <dl className="space-y-3 text-sm">
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.address")}</dt>
-                              <dd className="font-medium text-right">
+                              <dd className="font-medium">
                                 {[data.office.mainCity, data.office.mainArea, data.office.mainStreet, data.office.mainBuildingNumber]
                                   .filter(Boolean)
                                   .join(", ") || "-"}
                               </dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.phone")}</dt>
-                              <dd className="text-right">{data.office.phone || "-"}</dd>
+                              <dd>{data.office.phone || "-"}</dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.mobile")}</dt>
-                              <dd className="text-right">{data.office.mobile || "-"}</dd>
+                              <dd>{data.office.mobile || "-"}</dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.fax")}</dt>
-                              <dd className="text-right">{data.office.fax || "-"}</dd>
+                              <dd>{data.office.fax || "-"}</dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.mainEmail")}</dt>
-                              <dd className="text-right">{data.office.mainEmail || "-"}</dd>
+                              <dd>{data.office.mainEmail || "-"}</dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.extraEmail")}</dt>
-                              <dd className="text-right">{data.office.extraEmail || "-"}</dd>
+                              <dd>{data.office.extraEmail || "-"}</dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.website")}</dt>
-                              <dd className="text-right">
+                              <dd>
                                 {data.office.website ? (
                                   <a href={data.office.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                                     {data.office.website}
@@ -402,13 +402,13 @@ export default function AdminOfficeDetail() {
                                 ) : "-"}
                               </dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.poBox")}</dt>
-                              <dd className="text-right">{data.office.poBox || "-"}</dd>
+                              <dd>{data.office.poBox || "-"}</dd>
                             </div>
-                            <div className="flex justify-between">
+                            <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                               <dt className="text-muted-foreground">{t("adminOffice.postal")}</dt>
-                              <dd className="text-right">{data.office.postalCode || "-"}</dd>
+                              <dd>{data.office.postalCode || "-"}</dd>
                             </div>
                           </dl>
                         </CardContent>
@@ -429,37 +429,37 @@ export default function AdminOfficeDetail() {
                             </CardHeader>
                             <CardContent>
                               <dl className="space-y-2 text-sm">
-                                <div className="flex justify-between">
+                                <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                   <dt className="text-muted-foreground">{t("adminOffice.city")}</dt>
-                                  <dd className="text-right">{branch.city || "-"}</dd>
+                                  <dd>{branch.city || "-"}</dd>
                                 </div>
-                                <div className="flex justify-between">
+                                <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                   <dt className="text-muted-foreground">{t("adminOffice.area")}</dt>
-                                  <dd className="text-right">{branch.area || "-"}</dd>
+                                  <dd>{branch.area || "-"}</dd>
                                 </div>
-                                <div className="flex justify-between">
+                                <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                   <dt className="text-muted-foreground">{t("adminOffice.street")}</dt>
-                                  <dd className="text-right">{branch.street || "-"}</dd>
+                                  <dd>{branch.street || "-"}</dd>
                                 </div>
-                                <div className="flex justify-between">
+                                <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                   <dt className="text-muted-foreground">{t("adminOffice.buildingNumber")}</dt>
-                                  <dd className="text-right">{branch.buildingNumber || "-"}</dd>
+                                  <dd>{branch.buildingNumber || "-"}</dd>
                                 </div>
-                                <div className="flex justify-between">
+                                <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                   <dt className="text-muted-foreground">{t("adminOffice.manager")}</dt>
-                                  <dd className="text-right">{branch.managerName || "-"}</dd>
+                                  <dd>{branch.managerName || "-"}</dd>
                                 </div>
-                                <div className="flex justify-between">
+                                <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                   <dt className="text-muted-foreground">{t("adminOffice.managerMobile")}</dt>
-                                  <dd className="text-right">{branch.managerMobile || "-"}</dd>
+                                  <dd>{branch.managerMobile || "-"}</dd>
                                 </div>
-                                <div className="flex justify-between">
+                                <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                   <dt className="text-muted-foreground">{t("adminOffice.phone")}</dt>
-                                  <dd className="text-right">{branch.phone || "-"}</dd>
+                                  <dd>{branch.phone || "-"}</dd>
                                 </div>
-                                <div className="flex justify-between">
+                                <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                   <dt className="text-muted-foreground">{t("adminOffice.fax")}</dt>
-                                  <dd className="text-right">{branch.fax || "-"}</dd>
+                                  <dd>{branch.fax || "-"}</dd>
                                 </div>
                               </dl>
                             </CardContent>
@@ -476,37 +476,37 @@ export default function AdminOfficeDetail() {
                           </CardHeader>
                           <CardContent>
                             <dl className="space-y-2 text-sm">
-                              <div className="flex justify-between">
+                              <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                 <dt className="text-muted-foreground">{t("adminOffice.city")}</dt>
-                                <dd className="text-right">-</dd>
+                                <dd>-</dd>
                               </div>
-                              <div className="flex justify-between">
+                              <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                 <dt className="text-muted-foreground">{t("adminOffice.area")}</dt>
-                                <dd className="text-right">-</dd>
+                                <dd>-</dd>
                               </div>
-                              <div className="flex justify-between">
+                              <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                 <dt className="text-muted-foreground">{t("adminOffice.street")}</dt>
-                                <dd className="text-right">-</dd>
+                                <dd>-</dd>
                               </div>
-                              <div className="flex justify-between">
+                              <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                 <dt className="text-muted-foreground">{t("adminOffice.buildingNumber")}</dt>
-                                <dd className="text-right">-</dd>
+                                <dd>-</dd>
                               </div>
-                              <div className="flex justify-between">
+                              <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                 <dt className="text-muted-foreground">{t("adminOffice.manager")}</dt>
-                                <dd className="text-right">-</dd>
+                                <dd>-</dd>
                               </div>
-                              <div className="flex justify-between">
+                              <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                 <dt className="text-muted-foreground">{t("adminOffice.managerMobile")}</dt>
-                                <dd className="text-right">-</dd>
+                                <dd>-</dd>
                               </div>
-                              <div className="flex justify-between">
+                              <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                 <dt className="text-muted-foreground">{t("adminOffice.phone")}</dt>
-                                <dd className="text-right">-</dd>
+                                <dd>-</dd>
                               </div>
-                              <div className="flex justify-between">
+                              <div className={`flex justify-between gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
                                 <dt className="text-muted-foreground">{t("adminOffice.fax")}</dt>
-                                <dd className="text-right">-</dd>
+                                <dd>-</dd>
                               </div>
                             </dl>
                           </CardContent>
