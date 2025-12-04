@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { LoadingPage } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Badge } from "@/components/ui/badge";
+import { DocumentPreviewButton } from "@/components/ui/document-preview";
 import { useTranslation, useLanguage } from "@/lib/i18n";
 import type { Document } from "@shared/schema";
 import { FileText, Download, Calendar, FolderOpen } from "lucide-react";
@@ -100,15 +101,21 @@ export default function OfficeDocuments() {
                                 </div>
                               </div>
                             </div>
-                            <a
-                              href={`/api/documents/${doc.id}/download`}
-                              data-testid={`button-download-${doc.id}`}
-                            >
-                              <Button variant="outline" size="sm" className="gap-2">
-                                <Download className="h-4 w-4" />
-                                {t("common.download")}
-                              </Button>
-                            </a>
+                            <div className="flex gap-2">
+                              <DocumentPreviewButton
+                                documentId={doc.id}
+                                filename={doc.originalFilename}
+                              />
+                              <a
+                                href={`/api/documents/${doc.id}/download`}
+                                data-testid={`button-download-${doc.id}`}
+                              >
+                                <Button variant="outline" size="sm" className="gap-2">
+                                  <Download className="h-4 w-4" />
+                                  {t("common.download")}
+                                </Button>
+                              </a>
+                            </div>
                           </div>
                         ))}
                       </div>

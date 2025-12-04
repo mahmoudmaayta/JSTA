@@ -960,6 +960,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.download(renewal.ministryDocumentPath);
   });
 
+  // Preview ministry document
+  app.get("/api/documents/ministry/:renewalId/preview", ensureAuthenticated, async (req, res) => {
+    const renewalId = parseInt(req.params.renewalId);
+    if (isNaN(renewalId)) {
+      return res.status(400).json({ message: "Invalid renewal ID" });
+    }
+    
+    const renewal = await storage.getRenewal(renewalId);
+    if (!renewal || !renewal.ministryDocumentPath) {
+      return res.status(404).json({ message: "Ministry document not found" });
+    }
+
+    const user = (req as any).user;
+    if (user.role !== "ADMIN" && renewal.officeId !== user.officeId) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    if (!fs.existsSync(renewal.ministryDocumentPath)) {
+      return res.status(404).json({ message: "File not found on server" });
+    }
+
+    const ext = path.extname(renewal.ministryDocumentPath).toLowerCase().replace(".", "");
+    const mimeTypes: Record<string, string> = {
+      pdf: "application/pdf",
+      jpg: "image/jpeg",
+      jpeg: "image/jpeg",
+      png: "image/png",
+      gif: "image/gif",
+      webp: "image/webp",
+    };
+    
+    const contentType = mimeTypes[ext] || "application/octet-stream";
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("Content-Disposition", `inline; filename="ministry-document.${ext}"`);
+    
+    const fileStream = fs.createReadStream(renewal.ministryDocumentPath);
+    fileStream.pipe(res);
+  });
+
   // ==========================================
   // 2026 RENEWAL SYSTEM - Arabic Forms & New Workflow
   // ==========================================

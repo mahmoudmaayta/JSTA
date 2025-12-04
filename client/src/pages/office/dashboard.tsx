@@ -13,6 +13,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { Office, LicenseRenewal, Document } from "@shared/schema";
+import { DocumentPreviewButton } from "@/components/ui/document-preview";
 import {
   Building2,
   FileText,
@@ -25,6 +26,7 @@ import {
   ArrowRight,
   Files,
   AlertCircle,
+  Eye,
 } from "lucide-react";
 
 interface FormCompletionStatus {
@@ -399,15 +401,20 @@ export default function OfficeDashboard() {
                                 <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
                                 <span className="text-sm truncate">{doc.originalFilename}</span>
                               </div>
-                              <a
-                                href={`/api/documents/${doc.id}/download`}
-                                className="shrink-0"
-                                data-testid={`button-download-${doc.id}`}
-                              >
-                                <Button variant="ghost" size="icon" className="h-8 w-8">
-                                  <Download className="h-4 w-4" />
-                                </Button>
-                              </a>
+                              <div className="flex gap-1 shrink-0">
+                                <DocumentPreviewButton
+                                  documentId={doc.id}
+                                  filename={doc.originalFilename}
+                                />
+                                <a
+                                  href={`/api/documents/${doc.id}/download`}
+                                  data-testid={`button-download-${doc.id}`}
+                                >
+                                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                                    <Download className="h-4 w-4" />
+                                  </Button>
+                                </a>
+                              </div>
                             </div>
                           ))}
                         </div>

@@ -24,6 +24,7 @@ import {
   Building,
   AlertCircle,
   Clock,
+  Eye,
 } from "lucide-react";
 
 interface RenewalDetailResponse {
@@ -253,12 +254,20 @@ export default function AdminRenewalDetail() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <a href={`/api/documents/ministry/${data.renewal.id}/download`} data-testid="button-download-ministry">
-                        <Button variant="outline" className="gap-2">
-                          <Download className="h-4 w-4" />
-                          {t("adminRenewalDetail.downloadMinistryDoc")}
-                        </Button>
-                      </a>
+                      <div className="flex gap-2 flex-wrap">
+                        <a href={`/api/documents/ministry/${data.renewal.id}/preview`} target="_blank" rel="noopener noreferrer" data-testid="button-view-ministry">
+                          <Button variant="ghost" className="gap-2">
+                            <Eye className="h-4 w-4" />
+                            {t("common.view")}
+                          </Button>
+                        </a>
+                        <a href={`/api/documents/ministry/${data.renewal.id}/download`} data-testid="button-download-ministry">
+                          <Button variant="outline" className="gap-2">
+                            <Download className="h-4 w-4" />
+                            {t("adminRenewalDetail.downloadMinistryDoc")}
+                          </Button>
+                        </a>
+                      </div>
                     </CardContent>
                   </Card>
                 )}
