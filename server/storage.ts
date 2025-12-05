@@ -1,7 +1,7 @@
 import { 
   users, offices, branches, documents, licenseRenewals, auditLogs,
   people, rolesInOffice, consents, renewalAttachments,
-  complaints, commitmentForms, officeInfoForms, payments,
+  complaints, commitmentForms, officeInfoForms, payments, promoCodes,
   type User, type InsertUser,
   type Office, type InsertOffice,
   type Branch, type InsertBranch,
@@ -16,6 +16,7 @@ import {
   type CommitmentFormRecord, type InsertCommitmentForm,
   type OfficeInfoFormRecord, type InsertOfficeInfoForm,
   type Payment, type InsertPayment, type PaymentStatusType,
+  type PromoCode, type InsertPromoCode,
   type OfficeStatusType, type RenewalStatusType, type PersonRoleTypeType,
   type OfficeUpdateForm, type DocumentCategoryType
 } from "@shared/schema";
@@ -130,6 +131,13 @@ export interface IStorage {
   createPayment(payment: InsertPayment): Promise<Payment>;
   updatePayment(id: number, data: Partial<Payment>): Promise<Payment | undefined>;
   updatePaymentStatus(id: number, status: PaymentStatusType, rejectionReason?: string, approvedByUserId?: number): Promise<void>;
+  
+  getPromoCode(id: number): Promise<PromoCode | undefined>;
+  getPromoCodeByCode(code: string): Promise<PromoCode | undefined>;
+  getAllPromoCodes(): Promise<PromoCode[]>;
+  createPromoCode(promoCode: InsertPromoCode): Promise<PromoCode>;
+  updatePromoCode(id: number, data: Partial<PromoCode>): Promise<PromoCode | undefined>;
+  incrementPromoCodeUses(id: number): Promise<void>;
   
   seedAdminUser(): Promise<void>;
 }
@@ -610,6 +618,40 @@ export class DatabaseStorage implements IStorage {
       updates.approvedAt = new Date();
     }
     await db.update(payments).set(updates).where(eq(payments.id, id));
+  }
+
+  async getPromoCode(id: number): Promise<PromoCode | undefined> {
+    const [promoCode] = await db.select().from(promoCodes).where(eq(promoCodes.id, id));
+    return promoCode;
+  }
+
+  async getPromoCodeByCode(code: string): Promise<PromoCode | undefined> {
+    const [promoCode] = await db.select().from(promoCodes)
+      .where(sql`UPPER(${promoCodes.code}) = UPPER(${code})`);
+    return promoCode;
+  }
+
+  async getAllPromoCodes(): Promise<PromoCode[]> {
+    return await db.select().from(promoCodes).orderBy(desc(promoCodes.createdAt));
+  }
+
+  async createPromoCode(promoCode: InsertPromoCode): Promise<PromoCode> {
+    const [created] = await db.insert(promoCodes).values(promoCode as any).returning();
+    return created;
+  }
+
+  async updatePromoCode(id: number, data: Partial<PromoCode>): Promise<PromoCode | undefined> {
+    const [updated] = await db.update(promoCodes)
+      .set(data)
+      .where(eq(promoCodes.id, id))
+      .returning();
+    return updated;
+  }
+
+  async incrementPromoCodeUses(id: number): Promise<void> {
+    await db.update(promoCodes)
+      .set({ currentUses: sql`${promoCodes.currentUses} + 1` })
+      .where(eq(promoCodes.id, id));
   }
 }
 

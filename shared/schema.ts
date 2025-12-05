@@ -61,6 +61,12 @@ export const PaymentStatus = {
   REJECTED: 'REJECTED'
 } as const;
 
+export const DiscountType = {
+  PERCENT: 'PERCENT',
+  FIXED: 'FIXED',
+  FREE: 'FREE'
+} as const;
+
 export type OfficeStatusType = typeof OfficeStatus[keyof typeof OfficeStatus];
 export type RenewalStatusType = typeof RenewalStatus[keyof typeof RenewalStatus];
 export type DocumentCategoryType = typeof DocumentCategory[keyof typeof DocumentCategory];
@@ -68,6 +74,7 @@ export type PersonRoleTypeType = typeof PersonRoleType[keyof typeof PersonRoleTy
 export type ConsentTypeType = typeof ConsentType[keyof typeof ConsentType];
 export type UserRoleType = typeof UserRole[keyof typeof UserRole];
 export type PaymentStatusType = typeof PaymentStatus[keyof typeof PaymentStatus];
+export type DiscountTypeType = typeof DiscountType[keyof typeof DiscountType];
 
 export const users = pgTable("users", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
@@ -303,11 +310,27 @@ export const session = pgTable("session", {
   expire: timestamp("expire").notNull()
 });
 
+export const promoCodes = pgTable("promo_codes", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  code: text("code").notNull().unique(),
+  discountType: text("discount_type").notNull().$type<DiscountTypeType>(),
+  discountValue: integer("discount_value").notNull(),
+  maxUses: integer("max_uses"),
+  currentUses: integer("current_uses").default(0).notNull(),
+  validFrom: timestamp("valid_from"),
+  validUntil: timestamp("valid_until"),
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
 export const payments = pgTable("payments", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   officeId: integer("office_id").notNull(),
   renewalId: integer("renewal_id"),
   amount: integer("amount").notNull(),
+  promoCodeId: integer("promo_code_id"),
+  discountAmount: integer("discount_amount").default(0),
+  finalAmount: integer("final_amount"),
   status: text("status").notNull().$type<PaymentStatusType>().default('PENDING'),
   proofFileUrl: text("proof_file_url"),
   proofFileName: text("proof_file_name"),
@@ -438,10 +461,23 @@ export const insertAuditLogSchema = z.object({
   details: z.record(z.any()).nullable().optional()
 });
 
+export const insertPromoCodeSchema = z.object({
+  code: z.string().min(1),
+  discountType: z.enum(['PERCENT', 'FIXED', 'FREE']),
+  discountValue: z.number(),
+  maxUses: z.number().nullable().optional(),
+  validFrom: z.date().nullable().optional(),
+  validUntil: z.date().nullable().optional(),
+  isActive: z.boolean().optional()
+});
+
 export const insertPaymentSchema = z.object({
   officeId: z.number(),
   renewalId: z.number().nullable().optional(),
   amount: z.number(),
+  promoCodeId: z.number().nullable().optional(),
+  discountAmount: z.number().nullable().optional(),
+  finalAmount: z.number().nullable().optional(),
   status: z.enum(['PENDING', 'UPLOADED', 'APPROVED', 'REJECTED']).optional(),
   proofFileUrl: z.string().nullable().optional(),
   proofFileName: z.string().nullable().optional(),
@@ -544,6 +580,8 @@ export type BranchForm = z.infer<typeof branchSchema>;
 export type OfficeUpdateForm = z.infer<typeof officeUpdateSchema>;
 export type InsertAuditLog = z.infer<typeof insertAuditLogSchema>;
 export type AuditLog = typeof auditLogs.$inferSelect;
+export type InsertPromoCode = z.infer<typeof insertPromoCodeSchema>;
+export type PromoCode = typeof promoCodes.$inferSelect;
 export type InsertPayment = z.infer<typeof insertPaymentSchema>;
 export type Payment = typeof payments.$inferSelect;
 

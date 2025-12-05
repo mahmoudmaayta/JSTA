@@ -2466,6 +2466,278 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Promo code validation endpoint
+  app.post("/api/promo-codes/validate", ensureOffice, async (req, res) => {
+    try {
+      const { code, amount } = req.body;
+      
+      if (!code || typeof code !== 'string') {
+        return res.status(400).json({ message: "Promo code is required", valid: false });
+      }
+      
+      const promoCode = await storage.getPromoCodeByCode(code.trim());
+      
+      if (!promoCode) {
+        return res.status(404).json({ message: "Invalid promo code", valid: false });
+      }
+      
+      // Check if promo code is active
+      if (!promoCode.isActive) {
+        return res.status(400).json({ message: "This promo code is no longer active", valid: false });
+      }
+      
+      // Check max uses
+      if (promoCode.maxUses !== null && promoCode.currentUses >= promoCode.maxUses) {
+        return res.status(400).json({ message: "This promo code has reached its usage limit", valid: false });
+      }
+      
+      // Check validity dates
+      const now = new Date();
+      if (promoCode.validFrom && new Date(promoCode.validFrom) > now) {
+        return res.status(400).json({ message: "This promo code is not yet valid", valid: false });
+      }
+      if (promoCode.validUntil && new Date(promoCode.validUntil) < now) {
+        return res.status(400).json({ message: "This promo code has expired", valid: false });
+      }
+      
+      // Calculate discount
+      const baseAmount = amount || 350;
+      let discountAmount = 0;
+      let finalAmount = baseAmount;
+      
+      switch (promoCode.discountType) {
+        case 'PERCENT':
+          discountAmount = Math.round((baseAmount * promoCode.discountValue) / 100);
+          finalAmount = baseAmount - discountAmount;
+          break;
+        case 'FIXED':
+          discountAmount = Math.min(promoCode.discountValue, baseAmount);
+          finalAmount = baseAmount - discountAmount;
+          break;
+        case 'FREE':
+          discountAmount = baseAmount;
+          finalAmount = 0;
+          break;
+      }
+      
+      res.json({
+        valid: true,
+        promoCodeId: promoCode.id,
+        code: promoCode.code,
+        discountType: promoCode.discountType,
+        discountValue: promoCode.discountValue,
+        discountAmount,
+        originalAmount: baseAmount,
+        finalAmount,
+      });
+    } catch (error) {
+      console.error("Validate promo code error:", error);
+      res.status(500).json({ message: "Internal server error", valid: false });
+    }
+  });
+
+  // Apply promo code to payment
+  app.post("/api/payments/:id/apply-promo", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "No office linked to user" });
+      }
+      
+      const paymentId = parseInt(req.params.id);
+      if (isNaN(paymentId)) {
+        return res.status(400).json({ message: "Invalid payment ID" });
+      }
+      
+      const { code } = req.body;
+      if (!code || typeof code !== 'string') {
+        return res.status(400).json({ message: "Promo code is required" });
+      }
+      
+      const payment = await storage.getPayment(paymentId);
+      if (!payment) {
+        return res.status(404).json({ message: "Payment not found" });
+      }
+      
+      if (payment.officeId !== user.officeId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+      
+      // Can't change promo if already approved
+      if (payment.status === 'APPROVED') {
+        return res.status(400).json({ message: "Cannot modify an approved payment" });
+      }
+      
+      const promoCode = await storage.getPromoCodeByCode(code.trim());
+      if (!promoCode || !promoCode.isActive) {
+        return res.status(400).json({ message: "Invalid or inactive promo code" });
+      }
+      
+      // Check max uses
+      if (promoCode.maxUses !== null && promoCode.currentUses >= promoCode.maxUses) {
+        return res.status(400).json({ message: "This promo code has reached its usage limit" });
+      }
+      
+      // Check validity dates
+      const now = new Date();
+      if (promoCode.validFrom && new Date(promoCode.validFrom) > now) {
+        return res.status(400).json({ message: "This promo code is not yet valid" });
+      }
+      if (promoCode.validUntil && new Date(promoCode.validUntil) < now) {
+        return res.status(400).json({ message: "This promo code has expired" });
+      }
+      
+      // Calculate discount
+      const baseAmount = payment.amount;
+      let discountAmount = 0;
+      let finalAmount = baseAmount;
+      
+      switch (promoCode.discountType) {
+        case 'PERCENT':
+          discountAmount = Math.round((baseAmount * promoCode.discountValue) / 100);
+          finalAmount = baseAmount - discountAmount;
+          break;
+        case 'FIXED':
+          discountAmount = Math.min(promoCode.discountValue, baseAmount);
+          finalAmount = baseAmount - discountAmount;
+          break;
+        case 'FREE':
+          discountAmount = baseAmount;
+          finalAmount = 0;
+          break;
+      }
+      
+      // Update payment with promo code
+      const updatedPayment = await storage.updatePayment(paymentId, {
+        promoCodeId: promoCode.id,
+        discountAmount,
+        finalAmount,
+      });
+      
+      // Increment promo code usage
+      await storage.incrementPromoCodeUses(promoCode.id);
+      
+      res.json(updatedPayment);
+    } catch (error) {
+      console.error("Apply promo code error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Remove promo code from payment
+  app.post("/api/payments/:id/remove-promo", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "No office linked to user" });
+      }
+      
+      const paymentId = parseInt(req.params.id);
+      if (isNaN(paymentId)) {
+        return res.status(400).json({ message: "Invalid payment ID" });
+      }
+      
+      const payment = await storage.getPayment(paymentId);
+      if (!payment) {
+        return res.status(404).json({ message: "Payment not found" });
+      }
+      
+      if (payment.officeId !== user.officeId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+      
+      if (payment.status === 'APPROVED') {
+        return res.status(400).json({ message: "Cannot modify an approved payment" });
+      }
+      
+      // Remove promo code and reset amounts
+      const updatedPayment = await storage.updatePayment(paymentId, {
+        promoCodeId: null,
+        discountAmount: 0,
+        finalAmount: payment.amount,
+      });
+      
+      res.json(updatedPayment);
+    } catch (error) {
+      console.error("Remove promo code error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get all promo codes
+  app.get("/api/admin/promo-codes", ensureAdmin, async (req, res) => {
+    try {
+      const promoCodes = await storage.getAllPromoCodes();
+      res.json(promoCodes);
+    } catch (error) {
+      console.error("Get promo codes error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Create promo code
+  app.post("/api/admin/promo-codes", ensureAdmin, async (req, res) => {
+    try {
+      const { code, discountType, discountValue, maxUses, validFrom, validUntil, isActive } = req.body;
+      
+      if (!code || !discountType || discountValue === undefined) {
+        return res.status(400).json({ message: "Code, discount type, and discount value are required" });
+      }
+      
+      // Check if code already exists
+      const existingCode = await storage.getPromoCodeByCode(code);
+      if (existingCode) {
+        return res.status(400).json({ message: "Promo code already exists" });
+      }
+      
+      const promoCode = await storage.createPromoCode({
+        code: code.toUpperCase(),
+        discountType,
+        discountValue,
+        maxUses: maxUses || null,
+        validFrom: validFrom ? new Date(validFrom) : null,
+        validUntil: validUntil ? new Date(validUntil) : null,
+        isActive: isActive !== false,
+      });
+      
+      res.json(promoCode);
+    } catch (error) {
+      console.error("Create promo code error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Update promo code
+  app.patch("/api/admin/promo-codes/:id", ensureAdmin, async (req, res) => {
+    try {
+      const promoCodeId = parseInt(req.params.id);
+      if (isNaN(promoCodeId)) {
+        return res.status(400).json({ message: "Invalid promo code ID" });
+      }
+      
+      const existingCode = await storage.getPromoCode(promoCodeId);
+      if (!existingCode) {
+        return res.status(404).json({ message: "Promo code not found" });
+      }
+      
+      const updates: any = {};
+      const { discountType, discountValue, maxUses, validFrom, validUntil, isActive } = req.body;
+      
+      if (discountType !== undefined) updates.discountType = discountType;
+      if (discountValue !== undefined) updates.discountValue = discountValue;
+      if (maxUses !== undefined) updates.maxUses = maxUses;
+      if (validFrom !== undefined) updates.validFrom = validFrom ? new Date(validFrom) : null;
+      if (validUntil !== undefined) updates.validUntil = validUntil ? new Date(validUntil) : null;
+      if (isActive !== undefined) updates.isActive = isActive;
+      
+      const updatedCode = await storage.updatePromoCode(promoCodeId, updates);
+      res.json(updatedCode);
+    } catch (error) {
+      console.error("Update promo code error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   // Health check endpoint for monitoring
   app.get("/api/health", async (req, res) => {
     try {

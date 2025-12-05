@@ -1232,6 +1232,22 @@
     "step1": "Transfer the membership fee amount to the bank account provided above",
     "step2": "Take a screenshot or photo of your transfer confirmation",
     "step3": "Upload the proof of payment using the form above",
-    "step4": "Wait for approval from the JSTA team (1-2 business days)"
+    "step4": "Wait for approval from the JSTA team (1-2 business days)",
+    "promoCode": "Promo Code",
+    "enterPromoCode": "Enter promo code",
+    "check": "Check",
+    "promoValid": "Valid promo code!",
+    "promoInvalid": "Invalid promo code",
+    "promoApplied": "Promo Code Applied",
+    "promoAppliedDesc": "Your discount has been applied to the payment",
+    "promoRemoved": "Promo Code Removed",
+    "promoApplyError": "Could not apply promo code",
+    "applyPromo": "Apply Promo Code",
+    "discount": "Discount",
+    "youSave": "You save",
+    "finalAmount": "Final Amount",
+    "freeDiscount": "Free",
+    "membershipFee": "Membership Fee",
+    "totalAmount": "Total Amount"
   }
 }

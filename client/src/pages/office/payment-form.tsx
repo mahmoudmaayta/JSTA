@@ -7,6 +7,7 @@ import { OfficeSidebar } from "@/components/layout/office-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Upload,
@@ -19,7 +20,10 @@ import {
   Clock,
   X,
   FileImage,
-  Building2
+  Building2,
+  Tag,
+  Percent,
+  Gift
 } from "lucide-react";
 import type { Payment, Office } from "@shared/schema";
 
@@ -27,6 +31,18 @@ const JSTA_IBAN = "JO71ARAB1310000000114100306009";
 const JSTA_BANK = "Arab Bank";
 const JSTA_ACCOUNT_NAME = "Jordan Society of Tourism and Travel Agents";
 const MEMBERSHIP_FEE = 350;
+
+interface PromoValidation {
+  valid: boolean;
+  promoCodeId?: number;
+  code?: string;
+  discountType?: string;
+  discountValue?: number;
+  discountAmount?: number;
+  originalAmount?: number;
+  finalAmount?: number;
+  message?: string;
+}
 
 export default function PaymentForm() {
   const { t } = useTranslation();
@@ -38,6 +54,10 @@ export default function PaymentForm() {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [promoCode, setPromoCode] = useState("");
+  const [promoValidation, setPromoValidation] = useState<PromoValidation | null>(null);
+  const [isValidatingPromo, setIsValidatingPromo] = useState(false);
+  const [isApplyingPromo, setIsApplyingPromo] = useState(false);
 
   const { data: office, isLoading: officeLoading } = useQuery<Office>({
     queryKey: ["/api/office/profile"],
@@ -62,6 +82,81 @@ export default function PaymentForm() {
       createPaymentMutation.mutate();
     }
   }, [payment, paymentLoading, office]);
+
+  const validatePromoCode = async () => {
+    if (!promoCode.trim()) return;
+    
+    setIsValidatingPromo(true);
+    try {
+      const response = await apiRequest("POST", "/api/promo-codes/validate", { 
+        code: promoCode.trim(),
+        amount: MEMBERSHIP_FEE 
+      });
+      const data = await response.json();
+      setPromoValidation(data);
+    } catch (error: any) {
+      const errorData = await error.json?.() || { message: t("payment.promoInvalid") };
+      setPromoValidation({ valid: false, message: errorData.message });
+    } finally {
+      setIsValidatingPromo(false);
+    }
+  };
+
+  const applyPromoCode = async () => {
+    if (!payment || !promoCode.trim()) return;
+    
+    setIsApplyingPromo(true);
+    try {
+      await apiRequest("POST", `/api/payments/${payment.id}/apply-promo`, { code: promoCode.trim() });
+      toast({
+        title: t("payment.promoApplied"),
+        description: t("payment.promoAppliedDesc"),
+      });
+      setPromoCode("");
+      setPromoValidation(null);
+      refetchPayment();
+    } catch (error: any) {
+      const errorData = await error.json?.() || { message: t("payment.promoApplyError") };
+      toast({
+        title: t("payment.promoApplyError"),
+        description: errorData.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsApplyingPromo(false);
+    }
+  };
+
+  const removePromoCode = async () => {
+    if (!payment) return;
+    
+    try {
+      await apiRequest("POST", `/api/payments/${payment.id}/remove-promo`, {});
+      toast({
+        title: t("payment.promoRemoved"),
+      });
+      refetchPayment();
+    } catch (error: any) {
+      toast({
+        title: t("common.error"),
+        variant: "destructive",
+      });
+    }
+  };
+
+  const getDiscountLabel = (discountType?: string, discountValue?: number) => {
+    if (!discountType || discountValue === undefined) return "";
+    switch (discountType) {
+      case 'PERCENT':
+        return `${discountValue}%`;
+      case 'FIXED':
+        return `${discountValue} ${t("payment.currency")}`;
+      case 'FREE':
+        return t("payment.freeDiscount");
+      default:
+        return "";
+    }
+  };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -204,13 +299,131 @@ export default function PaymentForm() {
                           </Button>
                         </div>
                       </div>
-                      <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-sm text-muted-foreground">{t("payment.amount")}</p>
-                            <p className="text-2xl font-bold text-primary" data-testid="text-amount">{MEMBERSHIP_FEE} {t("payment.currency")}</p>
+                      <div className="space-y-4">
+                        {payment?.status !== 'APPROVED' && (
+                          <div className="space-y-2">
+                            <p className="text-sm font-medium flex items-center gap-2">
+                              <Tag className="h-4 w-4" />
+                              {t("payment.promoCode")}
+                            </p>
+                            {payment?.promoCodeId ? (
+                              <div className="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-900">
+                                <Gift className="h-5 w-5 text-green-600" />
+                                <div className="flex-1">
+                                  <p className="text-sm font-medium text-green-700 dark:text-green-400">
+                                    {t("payment.promoApplied")}
+                                  </p>
+                                  <p className="text-xs text-green-600 dark:text-green-500">
+                                    {t("payment.youSave")} {payment.discountAmount} {t("payment.currency")}
+                                  </p>
+                                </div>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={removePromoCode}
+                                  className="text-green-700 hover:text-green-800"
+                                  data-testid="button-remove-promo"
+                                >
+                                  <X className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            ) : (
+                              <div className="space-y-2">
+                                <div className="flex gap-2">
+                                  <Input
+                                    placeholder={t("payment.enterPromoCode")}
+                                    value={promoCode}
+                                    onChange={(e) => {
+                                      setPromoCode(e.target.value.toUpperCase());
+                                      setPromoValidation(null);
+                                    }}
+                                    className="flex-1"
+                                    data-testid="input-promo-code"
+                                  />
+                                  <Button
+                                    variant="outline"
+                                    onClick={validatePromoCode}
+                                    disabled={!promoCode.trim() || isValidatingPromo}
+                                    data-testid="button-validate-promo"
+                                  >
+                                    {isValidatingPromo ? (
+                                      <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : (
+                                      t("payment.check")
+                                    )}
+                                  </Button>
+                                </div>
+                                {promoValidation && (
+                                  <div className={`p-3 rounded-lg border ${
+                                    promoValidation.valid 
+                                      ? 'bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-900' 
+                                      : 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-900'
+                                  }`}>
+                                    {promoValidation.valid ? (
+                                      <div className="space-y-2">
+                                        <div className="flex items-center gap-2">
+                                          <CheckCircle2 className="h-4 w-4 text-green-600" />
+                                          <span className="text-sm font-medium text-green-700 dark:text-green-400">
+                                            {t("payment.promoValid")}
+                                          </span>
+                                        </div>
+                                        <div className="text-xs text-green-600 dark:text-green-500 space-y-1">
+                                          <p>{t("payment.discount")}: {getDiscountLabel(promoValidation.discountType, promoValidation.discountValue)}</p>
+                                          <p>{t("payment.youSave")}: {promoValidation.discountAmount} {t("payment.currency")}</p>
+                                          <p className="font-medium">{t("payment.finalAmount")}: {promoValidation.finalAmount} {t("payment.currency")}</p>
+                                        </div>
+                                        <Button
+                                          size="sm"
+                                          onClick={applyPromoCode}
+                                          disabled={isApplyingPromo}
+                                          className="w-full mt-2"
+                                          data-testid="button-apply-promo"
+                                        >
+                                          {isApplyingPromo ? (
+                                            <Loader2 className="h-4 w-4 animate-spin me-2" />
+                                          ) : (
+                                            <CheckCircle2 className="h-4 w-4 me-2" />
+                                          )}
+                                          {t("payment.applyPromo")}
+                                        </Button>
+                                      </div>
+                                    ) : (
+                                      <div className="flex items-center gap-2">
+                                        <AlertCircle className="h-4 w-4 text-red-600" />
+                                        <span className="text-sm text-red-700 dark:text-red-400">
+                                          {promoValidation.message || t("payment.promoInvalid")}
+                                        </span>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </div>
-                          <CreditCard className="h-8 w-8 text-primary" />
+                        )}
+
+                        <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <p className="text-sm text-muted-foreground">{t("payment.membershipFee")}</p>
+                              <p className="font-medium" data-testid="text-base-amount">{MEMBERSHIP_FEE} {t("payment.currency")}</p>
+                            </div>
+                            {payment?.promoCodeId && payment.discountAmount && payment.discountAmount > 0 && (
+                              <div className="flex items-center justify-between text-green-600 dark:text-green-400">
+                                <p className="text-sm flex items-center gap-1">
+                                  <Percent className="h-3 w-3" />
+                                  {t("payment.discount")}
+                                </p>
+                                <p className="font-medium">-{payment.discountAmount} {t("payment.currency")}</p>
+                              </div>
+                            )}
+                            <div className="border-t pt-2 flex items-center justify-between">
+                              <p className="text-sm font-medium">{t("payment.totalAmount")}</p>
+                              <p className="text-2xl font-bold text-primary" data-testid="text-amount">
+                                {payment?.finalAmount ?? payment?.amount ?? MEMBERSHIP_FEE} {t("payment.currency")}
+                              </p>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </CardContent>
