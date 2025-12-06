@@ -29,6 +29,7 @@ import AdminOffices from "@/pages/admin/offices";
 import AdminOfficeDetail from "@/pages/admin/office-detail";
 import AdminRenewals from "@/pages/admin/renewals";
 import AdminRenewalDetail from "@/pages/admin/renewal-detail";
+import AdminPayments from "@/pages/admin/payments";
 import AdminAuditLogs from "@/pages/admin/audit-logs";
 import AdminStaffDashboard from "@/pages/admin/staff-dashboard";
 import AdminCommitmentDashboard from "@/pages/admin/commitment-dashboard";
@@ -190,6 +191,12 @@ function Router() {
       <Route path="/admin/renewals/:id">
         <ProtectedRoute allowedRoles={['ADMIN']}>
           <AdminRenewalDetail />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/payments">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminPayments />
         </ProtectedRoute>
       </Route>
       
