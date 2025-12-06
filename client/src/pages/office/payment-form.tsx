@@ -241,8 +241,8 @@ export default function PaymentForm() {
 
   return (
     <SidebarProvider>
-      <div className="flex h-screen w-full" dir={dir}>
-        <OfficeSidebar side={sidebarSide} />
+      <div className={`flex h-screen w-full ${language === 'ar' ? 'flex-row-reverse' : ''}`} dir={dir}>
+        <OfficeSidebar key={`sidebar-${language}`} side={sidebarSide} />
         <SidebarInset className="flex-1 flex flex-col overflow-hidden">
           <header className="flex items-center justify-between gap-2 px-4 py-2 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
             <SidebarTrigger data-testid="button-sidebar-toggle" />

@@ -120,6 +120,7 @@ export default function Renewal2026Page() {
   const [notes, setNotes] = useState("");
 
   const isRtl = language === "ar";
+  const sidebarSide = language === 'ar' ? 'right' : 'left';
 
   // Fetch renewal data
   const { data: renewal, isLoading } = useQuery<LicenseRenewal>({
@@ -384,8 +385,8 @@ export default function Renewal2026Page() {
   if (isLoading) {
     return (
       <SidebarProvider style={sidebarStyle as React.CSSProperties}>
-        <div className="flex min-h-screen w-full">
-          <OfficeSidebar />
+        <div className={`flex min-h-screen w-full ${isRtl ? 'flex-row-reverse' : ''}`} dir={isRtl ? "rtl" : "ltr"}>
+          <OfficeSidebar key={`sidebar-${language}`} side={sidebarSide} />
           <SidebarInset className="flex-1">
             <LoadingPage message={t("renewal2026.loading")} />
           </SidebarInset>
@@ -397,8 +398,8 @@ export default function Renewal2026Page() {
   if (!renewal) {
     return (
       <SidebarProvider style={sidebarStyle as React.CSSProperties}>
-        <div className="flex min-h-screen w-full">
-          <OfficeSidebar />
+        <div className={`flex min-h-screen w-full ${isRtl ? 'flex-row-reverse' : ''}`} dir={isRtl ? "rtl" : "ltr"}>
+          <OfficeSidebar key={`sidebar-${language}`} side={sidebarSide} />
           <SidebarInset className="flex-1">
             <div className="flex flex-col items-center justify-center h-screen gap-4">
               <AlertCircle className="h-12 w-12 text-muted-foreground" />
@@ -415,8 +416,8 @@ export default function Renewal2026Page() {
 
   return (
     <SidebarProvider style={sidebarStyle as React.CSSProperties}>
-      <div className="flex min-h-screen w-full" dir={isRtl ? "rtl" : "ltr"}>
-        <OfficeSidebar />
+      <div className={`flex min-h-screen w-full ${isRtl ? 'flex-row-reverse' : ''}`} dir={isRtl ? "rtl" : "ltr"}>
+        <OfficeSidebar key={`sidebar-${language}`} side={sidebarSide} />
         <SidebarInset className="flex-1">
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger data-testid="button-sidebar-toggle" />

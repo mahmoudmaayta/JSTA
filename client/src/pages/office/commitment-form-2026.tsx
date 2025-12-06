@@ -222,7 +222,7 @@ export default function CommitmentForm2026() {
   if (officeLoading || formLoading) {
     return (
       <SidebarProvider>
-        <div className="flex h-screen w-full" dir={dir}>
+        <div className={`flex h-screen w-full ${language === 'ar' ? 'flex-row-reverse' : ''}`} dir={dir}>
           <OfficeSidebar key={`sidebar-${language}`} side={sidebarSide} />
           <SidebarInset className="flex-1 overflow-auto">
             <div className="flex items-center justify-center min-h-screen">
@@ -236,7 +236,7 @@ export default function CommitmentForm2026() {
 
   return (
     <SidebarProvider>
-      <div className="flex h-screen w-full" dir={dir}>
+      <div className={`flex h-screen w-full ${language === 'ar' ? 'flex-row-reverse' : ''}`} dir={dir}>
         <OfficeSidebar key={`sidebar-${language}`} side={sidebarSide} />
         <SidebarInset className="flex-1 overflow-auto">
           <header className="sticky top-0 z-10 flex items-center gap-2 border-b bg-background px-4 h-14">
