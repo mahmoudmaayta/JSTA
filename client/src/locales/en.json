@@ -321,6 +321,9 @@
     "pendingRenewalRequests": "Pending Renewal Requests",
     "renewalsAwaitingAction": "Renewals awaiting your action",
     "noPendingRenewals": "No pending renewal requests to review.",
+    "pendingPayments": "Pending Payment Approvals",
+    "paymentsAwaitingApproval": "Payments awaiting your review",
+    "noPendingPayments": "No pending payments to review.",
     "renewalKpis": {
       "title": "2026 Renewal KPIs",
       "description": "Overview of license renewal progress for year 2026",

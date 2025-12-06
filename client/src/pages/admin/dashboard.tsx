@@ -9,7 +9,7 @@ import { LoadingPage } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Progress } from "@/components/ui/progress";
 import { useTranslation, useLanguage } from "@/lib/i18n";
-import type { Office, LicenseRenewal } from "@shared/schema";
+import type { Office, LicenseRenewal, Payment } from "@shared/schema";
 import {
   Building,
   FileCheck,
@@ -22,6 +22,7 @@ import {
   AlertCircle,
   XCircle,
   Send,
+  CreditCard,
 } from "lucide-react";
 
 interface DashboardStats {
@@ -51,6 +52,10 @@ interface RenewalKPIs {
   avgCompletionRate: number;
 }
 
+interface PaymentWithOffice extends Payment {
+  office?: Office;
+}
+
 export default function AdminDashboard() {
   const { t } = useTranslation();
   const { language } = useLanguage();
@@ -68,11 +73,17 @@ export default function AdminDashboard() {
     queryKey: ["/api/admin/renewals", { pending: true }],
   });
 
+  const { data: allPayments, isLoading: paymentsLoading } = useQuery<PaymentWithOffice[]>({
+    queryKey: ["/api/admin/payments"],
+  });
+
+  const pendingPayments = allPayments?.filter(p => p.status === 'UPLOADED') || [];
+
   const { data: kpis } = useQuery<RenewalKPIs>({
     queryKey: ["/api/admin/renewals/kpis"],
   });
 
-  const isLoading = statsLoading || officesLoading || renewalsLoading;
+  const isLoading = statsLoading || officesLoading || renewalsLoading || paymentsLoading;
 
   const sidebarStyle = {
     "--sidebar-width": "16rem",
@@ -344,6 +355,66 @@ export default function AdminDashboard() {
                           icon={CheckCircle2}
                           title={t("admin.allCaughtUp")}
                           description={t("admin.noPendingRenewals")}
+                        />
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <CardTitle className="flex items-center gap-2">
+                            <CreditCard className="h-5 w-5" />
+                            {t("admin.pendingPayments")}
+                          </CardTitle>
+                          <CardDescription>
+                            {t("admin.paymentsAwaitingApproval")}
+                          </CardDescription>
+                        </div>
+                        <Link href="/admin/payments">
+                          <Button variant="outline" size="sm" className="gap-1" data-testid="link-all-payments">
+                            {t("common.viewAll")}
+                            <ArrowRight className="h-3 w-3 rtl-flip" />
+                          </Button>
+                        </Link>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      {pendingPayments.length > 0 ? (
+                        <div className="space-y-3">
+                          {pendingPayments.slice(0, 5).map((payment) => (
+                            <div
+                              key={payment.id}
+                              className="flex items-center justify-between rounded-lg border p-3"
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
+                                  <CreditCard className="h-5 w-5 text-green-600 dark:text-green-400" />
+                                </div>
+                                <div>
+                                  <p className="font-medium">
+                                    {payment.office?.tradeNameAr || `${t("adminPayments.officeIdFallback")}${payment.officeId}`}
+                                  </p>
+                                  <p className="text-xs text-muted-foreground">
+                                    {payment.finalAmount ?? payment.amount} {t("adminPayments.jod")}
+                                  </p>
+                                </div>
+                              </div>
+                              <Link href="/admin/payments">
+                                <Button variant="ghost" size="sm" className="gap-1" data-testid={`link-payment-${payment.id}`}>
+                                  {t("common.review")}
+                                  <ArrowRight className="h-3 w-3 rtl-flip" />
+                                </Button>
+                              </Link>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <EmptyState
+                          icon={CheckCircle2}
+                          title={t("admin.allCaughtUp")}
+                          description={t("admin.noPendingPayments")}
                         />
                       )}
                     </CardContent>

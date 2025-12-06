@@ -321,6 +321,9 @@
     "pendingRenewalRequests": "طلبات التجديد المعلقة",
     "renewalsAwaitingAction": "تجديدات بانتظار إجراءك",
     "noPendingRenewals": "لا توجد طلبات تجديد معلقة للمراجعة.",
+    "pendingPayments": "مدفوعات في انتظار الموافقة",
+    "paymentsAwaitingApproval": "مدفوعات بانتظار مراجعتك",
+    "noPendingPayments": "لا توجد مدفوعات معلقة للمراجعة.",
     "renewalKpis": {
       "title": "مؤشرات أداء تجديد 2026",
       "description": "نظرة عامة على تقدم تجديد التراخيص لعام 2026",
