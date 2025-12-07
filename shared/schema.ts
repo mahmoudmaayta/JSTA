@@ -67,6 +67,176 @@ export const DiscountType = {
   FREE: 'FREE'
 } as const;
 
+// ============================================
+// NEW MODULE ENUMS - Member Services
+// ============================================
+
+export const MembershipCardStatus = {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  SUSPENDED: 'SUSPENDED',
+  EXPIRED: 'EXPIRED',
+  REVOKED: 'REVOKED'
+} as const;
+
+export const InspectionStatus = {
+  SCHEDULED: 'SCHEDULED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const;
+
+export const InspectionType = {
+  INITIAL: 'INITIAL',
+  ROUTINE: 'ROUTINE',
+  FOLLOW_UP: 'FOLLOW_UP',
+  COMPLAINT_BASED: 'COMPLAINT_BASED'
+} as const;
+
+export const InspectionOutcome = {
+  COMPLIANT: 'COMPLIANT',
+  NON_COMPLIANT: 'NON_COMPLIANT',
+  PARTIALLY_COMPLIANT: 'PARTIALLY_COMPLIANT',
+  PENDING_REVIEW: 'PENDING_REVIEW'
+} as const;
+
+export const AdvocacyCaseStatus = {
+  OPEN: 'OPEN',
+  IN_PROGRESS: 'IN_PROGRESS',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED'
+} as const;
+
+export const AdvocacyCaseType = {
+  DISPUTE: 'DISPUTE',
+  REGULATORY: 'REGULATORY',
+  MINISTRY: 'MINISTRY',
+  LEGAL: 'LEGAL',
+  OTHER: 'OTHER'
+} as const;
+
+export const AdvocacyPriority = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  URGENT: 'URGENT'
+} as const;
+
+export const OversightLicenseStatus = {
+  LICENSED: 'LICENSED',
+  UNLICENSED: 'UNLICENSED',
+  SUSPENDED: 'SUSPENDED',
+  UNKNOWN: 'UNKNOWN'
+} as const;
+
+export const OversightStatus = {
+  NEW: 'NEW',
+  UNDER_INVESTIGATION: 'UNDER_INVESTIGATION',
+  ACTION_REQUIRED: 'ACTION_REQUIRED',
+  RESOLVED: 'RESOLVED'
+} as const;
+
+export const OversightSource = {
+  MINISTRY: 'MINISTRY',
+  CITIZEN: 'CITIZEN',
+  INTERNAL: 'INTERNAL',
+  COMPLAINT: 'COMPLAINT',
+  INSPECTION: 'INSPECTION'
+} as const;
+
+export const StaffCertificationStatus = {
+  SUBMITTED: 'SUBMITTED',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const;
+
+export const StaffCertificationRole = {
+  GUIDE: 'GUIDE',
+  OPERATIONS: 'OPERATIONS',
+  SALES: 'SALES',
+  MANAGER: 'MANAGER',
+  OTHER: 'OTHER'
+} as const;
+
+export const ComplianceCheckStatus = {
+  OPEN: 'OPEN',
+  IN_PROGRESS: 'IN_PROGRESS',
+  CLOSED: 'CLOSED'
+} as const;
+
+export const ComplianceCheckType = {
+  LICENSE: 'LICENSE',
+  INSURANCE: 'INSURANCE',
+  EMPLOYEE_STATUS: 'EMPLOYEE_STATUS',
+  FINANCIAL: 'FINANCIAL',
+  SAFETY: 'SAFETY',
+  OTHER: 'OTHER'
+} as const;
+
+export const ComplianceSeverity = {
+  INFO: 'INFO',
+  WARNING: 'WARNING',
+  CRITICAL: 'CRITICAL'
+} as const;
+
+export const OfficeComplianceStatus = {
+  COMPLIANT: 'COMPLIANT',
+  WARNING: 'WARNING',
+  NON_COMPLIANT: 'NON_COMPLIANT'
+} as const;
+
+export const OfficeCategory = {
+  A: 'A',
+  B: 'B',
+  C: 'C'
+} as const;
+
+export const EnhancedComplaintStatus = {
+  RECEIVED: 'RECEIVED',
+  INVESTIGATING: 'INVESTIGATING',
+  RESOLVED: 'RESOLVED',
+  ESCALATED: 'ESCALATED',
+  CLOSED: 'CLOSED'
+} as const;
+
+export const ComplainantType = {
+  CUSTOMER: 'CUSTOMER',
+  OFFICE: 'OFFICE',
+  EMPLOYEE: 'EMPLOYEE',
+  AUTHORITY: 'AUTHORITY',
+  INTERNAL: 'INTERNAL'
+} as const;
+
+export const EnhancedComplaintType = {
+  SERVICE: 'SERVICE',
+  FINANCIAL: 'FINANCIAL',
+  SAFETY: 'SAFETY',
+  LEGAL: 'LEGAL',
+  OTHER: 'OTHER'
+} as const;
+
+export type MembershipCardStatusType = typeof MembershipCardStatus[keyof typeof MembershipCardStatus];
+export type InspectionStatusType = typeof InspectionStatus[keyof typeof InspectionStatus];
+export type InspectionTypeType = typeof InspectionType[keyof typeof InspectionType];
+export type InspectionOutcomeType = typeof InspectionOutcome[keyof typeof InspectionOutcome];
+export type AdvocacyCaseStatusType = typeof AdvocacyCaseStatus[keyof typeof AdvocacyCaseStatus];
+export type AdvocacyCaseTypeType = typeof AdvocacyCaseType[keyof typeof AdvocacyCaseType];
+export type AdvocacyPriorityType = typeof AdvocacyPriority[keyof typeof AdvocacyPriority];
+export type OversightLicenseStatusType = typeof OversightLicenseStatus[keyof typeof OversightLicenseStatus];
+export type OversightStatusType = typeof OversightStatus[keyof typeof OversightStatus];
+export type OversightSourceType = typeof OversightSource[keyof typeof OversightSource];
+export type StaffCertificationStatusType = typeof StaffCertificationStatus[keyof typeof StaffCertificationStatus];
+export type StaffCertificationRoleType = typeof StaffCertificationRole[keyof typeof StaffCertificationRole];
+export type ComplianceCheckStatusType = typeof ComplianceCheckStatus[keyof typeof ComplianceCheckStatus];
+export type ComplianceCheckTypeType = typeof ComplianceCheckType[keyof typeof ComplianceCheckType];
+export type ComplianceSeverityType = typeof ComplianceSeverity[keyof typeof ComplianceSeverity];
+export type OfficeComplianceStatusType = typeof OfficeComplianceStatus[keyof typeof OfficeComplianceStatus];
+export type OfficeCategoryType = typeof OfficeCategory[keyof typeof OfficeCategory];
+export type EnhancedComplaintStatusType = typeof EnhancedComplaintStatus[keyof typeof EnhancedComplaintStatus];
+export type ComplainantTypeType = typeof ComplainantType[keyof typeof ComplainantType];
+export type EnhancedComplaintTypeType = typeof EnhancedComplaintType[keyof typeof EnhancedComplaintType];
+
 export type OfficeStatusType = typeof OfficeStatus[keyof typeof OfficeStatus];
 export type RenewalStatusType = typeof RenewalStatus[keyof typeof RenewalStatus];
 export type DocumentCategoryType = typeof DocumentCategory[keyof typeof DocumentCategory];
@@ -112,6 +282,9 @@ export const offices = pgTable("offices", {
   postalCode: text("postal_code"),
   status: text("status").notNull().$type<OfficeStatusType>().default('PENDING_APPROVAL'),
   adminComment: text("admin_comment"),
+  officeCategory: text("office_category").$type<OfficeCategoryType>(),
+  complianceStatus: text("compliance_status").$type<OfficeComplianceStatusType>().default('COMPLIANT'),
+  lastComplianceReviewAt: timestamp("last_compliance_review_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
@@ -289,6 +462,37 @@ export const AuditAction = {
   PAYMENT_PROOF_UPLOADED: 'PAYMENT_PROOF_UPLOADED',
   PAYMENT_APPROVED: 'PAYMENT_APPROVED',
   PAYMENT_REJECTED: 'PAYMENT_REJECTED',
+  // Membership Cards
+  MEMBERSHIP_CARD_ISSUED: 'MEMBERSHIP_CARD_ISSUED',
+  MEMBERSHIP_CARD_SUSPENDED: 'MEMBERSHIP_CARD_SUSPENDED',
+  MEMBERSHIP_CARD_REVOKED: 'MEMBERSHIP_CARD_REVOKED',
+  MEMBERSHIP_CARD_RENEWED: 'MEMBERSHIP_CARD_RENEWED',
+  // Inspections
+  INSPECTION_SCHEDULED: 'INSPECTION_SCHEDULED',
+  INSPECTION_COMPLETED: 'INSPECTION_COMPLETED',
+  INSPECTION_CANCELLED: 'INSPECTION_CANCELLED',
+  // Advocacy
+  ADVOCACY_CASE_OPENED: 'ADVOCACY_CASE_OPENED',
+  ADVOCACY_CASE_UPDATED: 'ADVOCACY_CASE_UPDATED',
+  ADVOCACY_CASE_RESOLVED: 'ADVOCACY_CASE_RESOLVED',
+  ADVOCACY_CASE_CLOSED: 'ADVOCACY_CASE_CLOSED',
+  // Oversight
+  OVERSIGHT_TARGET_CREATED: 'OVERSIGHT_TARGET_CREATED',
+  OVERSIGHT_TARGET_UPDATED: 'OVERSIGHT_TARGET_UPDATED',
+  OVERSIGHT_VISIT_LOGGED: 'OVERSIGHT_VISIT_LOGGED',
+  // Staff Certifications
+  STAFF_CERT_SUBMITTED: 'STAFF_CERT_SUBMITTED',
+  STAFF_CERT_APPROVED: 'STAFF_CERT_APPROVED',
+  STAFF_CERT_REJECTED: 'STAFF_CERT_REJECTED',
+  // Compliance
+  COMPLIANCE_CHECK_CREATED: 'COMPLIANCE_CHECK_CREATED',
+  COMPLIANCE_CHECK_UPDATED: 'COMPLIANCE_CHECK_UPDATED',
+  COMPLIANCE_CHECK_CLOSED: 'COMPLIANCE_CHECK_CLOSED',
+  // Enhanced Complaints
+  COMPLAINT_CREATED: 'COMPLAINT_CREATED',
+  COMPLAINT_UPDATED: 'COMPLAINT_UPDATED',
+  COMPLAINT_RESOLVED: 'COMPLAINT_RESOLVED',
+  COMPLAINT_ESCALATED: 'COMPLAINT_ESCALATED',
 } as const;
 
 export type AuditActionType = typeof AuditAction[keyof typeof AuditAction];
@@ -339,6 +543,193 @@ export const payments = pgTable("payments", {
   approvedAt: timestamp("approved_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// ============================================
+// NEW MODULE TABLES - Member Services
+// ============================================
+
+// 1. Membership Cards - إصدار بطاقات العضوية
+export const membershipCards = pgTable("membership_cards", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  officeId: integer("office_id").notNull(),
+  cardNumber: text("card_number").notNull().unique(),
+  status: text("status").notNull().$type<MembershipCardStatusType>().default('PENDING'),
+  issuedAt: timestamp("issued_at"),
+  expiresAt: timestamp("expires_at"),
+  issuedByUserId: integer("issued_by_user_id"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// 2. Inspections - الكشف الحسي على المكاتب
+export const inspections = pgTable("inspections", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  officeId: integer("office_id").notNull(),
+  inspectorUserId: integer("inspector_user_id"),
+  inspectorName: text("inspector_name"),
+  scheduledAt: timestamp("scheduled_at"),
+  completedAt: timestamp("completed_at"),
+  inspectionType: text("inspection_type").notNull().$type<InspectionTypeType>().default('ROUTINE'),
+  status: text("status").notNull().$type<InspectionStatusType>().default('SCHEDULED'),
+  outcome: text("outcome").$type<InspectionOutcomeType>(),
+  findings: text("findings"),
+  violations: jsonb("violations").$type<string[]>(),
+  actionsRequired: text("actions_required"),
+  followUpRequired: boolean("follow_up_required").default(false),
+  followUpDate: timestamp("follow_up_date"),
+  attachmentPath: text("attachment_path"),
+  createdByUserId: integer("created_by_user_id"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// 3. Advocacy Cases - مناصرة الأعضاء
+export const advocacyCases = pgTable("advocacy_cases", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  officeId: integer("office_id").notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+  caseType: text("case_type").notNull().$type<AdvocacyCaseTypeType>().default('OTHER'),
+  status: text("status").notNull().$type<AdvocacyCaseStatusType>().default('OPEN'),
+  priority: text("priority").$type<AdvocacyPriorityType>().default('MEDIUM'),
+  assignedToUserId: integer("assigned_to_user_id"),
+  internalNotes: text("internal_notes"),
+  openedAt: timestamp("opened_at").defaultNow().notNull(),
+  closedAt: timestamp("closed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// Advocacy Case Events (timeline)
+export const advocacyEvents = pgTable("advocacy_events", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  caseId: integer("case_id").notNull(),
+  eventType: text("event_type").notNull(),
+  details: text("details"),
+  attachmentPath: text("attachment_path"),
+  createdByUserId: integer("created_by_user_id"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+// 4. Oversight Records - دور الرقابة والتفتيش (unlicensed offices)
+export const oversightTargets = pgTable("oversight_targets", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  officeId: integer("office_id"),
+  officeName: text("office_name").notNull(),
+  location: jsonb("location").$type<{ city?: string; area?: string; address?: string }>(),
+  contactInfo: jsonb("contact_info").$type<{ phone?: string; mobile?: string; email?: string }>(),
+  licenseStatus: text("license_status").notNull().$type<OversightLicenseStatusType>().default('UNKNOWN'),
+  reportSource: text("report_source").$type<OversightSourceType>().default('INTERNAL'),
+  status: text("status").notNull().$type<OversightStatusType>().default('NEW'),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// Oversight Visits
+export const oversightVisits = pgTable("oversight_visits", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  targetId: integer("target_id").notNull(),
+  inspectorUserId: integer("inspector_user_id"),
+  visitDate: timestamp("visit_date").notNull(),
+  result: text("result").$type<OversightLicenseStatusType>(),
+  actionsTaken: text("actions_taken"),
+  referralMade: boolean("referral_made").default(false),
+  referralDetails: text("referral_details"),
+  attachmentPath: text("attachment_path"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+// 5. Staff Certifications - مصادقة خبرات موظفي المكاتب السياحية
+export const staffCertifications = pgTable("staff_certifications", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  officeId: integer("office_id").notNull(),
+  personId: integer("person_id"),
+  fullNameAr: text("full_name_ar").notNull(),
+  fullNameEn: text("full_name_en"),
+  nationalId: text("national_id"),
+  roleApplied: text("role_applied").$type<StaffCertificationRoleType>().default('OTHER'),
+  yearsExperience: text("years_experience"),
+  status: text("status").notNull().$type<StaffCertificationStatusType>().default('SUBMITTED'),
+  submittedAt: timestamp("submitted_at").defaultNow().notNull(),
+  decidedAt: timestamp("decided_at"),
+  decidedByUserId: integer("decided_by_user_id"),
+  certificateUrl: text("certificate_url"),
+  adminNotes: text("admin_notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// Staff Certification Documents
+export const staffCertDocuments = pgTable("staff_cert_documents", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  certificationId: integer("certification_id").notNull(),
+  category: text("category").notNull(),
+  filePath: text("file_path").notNull(),
+  fileName: text("file_name").notNull(),
+  uploadedAt: timestamp("uploaded_at").defaultNow().notNull(),
+  uploadedByUserId: integer("uploaded_by_user_id")
+});
+
+// 6. Compliance Checks - تنظيم أعمال مكاتب السياحة والسفر
+export const complianceChecks = pgTable("compliance_checks", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  officeId: integer("office_id").notNull(),
+  checkType: text("check_type").notNull().$type<ComplianceCheckTypeType>().default('OTHER'),
+  status: text("status").notNull().$type<ComplianceCheckStatusType>().default('OPEN'),
+  severity: text("severity").$type<ComplianceSeverityType>().default('INFO'),
+  summary: text("summary"),
+  dueDate: timestamp("due_date"),
+  assignedToUserId: integer("assigned_to_user_id"),
+  resolutionNotes: text("resolution_notes"),
+  resolvedAt: timestamp("resolved_at"),
+  initiatedAt: timestamp("initiated_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// Compliance Actions (timeline)
+export const complianceActions = pgTable("compliance_actions", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  checkId: integer("check_id").notNull(),
+  actionType: text("action_type").notNull(),
+  details: text("details"),
+  attachmentPath: text("attachment_path"),
+  createdByUserId: integer("created_by_user_id"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+// 7. Enhanced Complaints - شكاوى مكاتب السياحة
+export const enhancedComplaints = pgTable("enhanced_complaints", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  officeId: integer("office_id"),
+  complainantType: text("complainant_type").$type<ComplainantTypeType>().default('CUSTOMER'),
+  complainantName: text("complainant_name"),
+  complainantContact: text("complainant_contact"),
+  complaintType: text("complaint_type").$type<EnhancedComplaintTypeType>().default('OTHER'),
+  subject: text("subject").notNull(),
+  description: text("description"),
+  status: text("status").notNull().$type<EnhancedComplaintStatusType>().default('RECEIVED'),
+  priority: text("priority").$type<AdvocacyPriorityType>().default('MEDIUM'),
+  handlerUserId: integer("handler_user_id"),
+  resolution: text("resolution"),
+  resolvedAt: timestamp("resolved_at"),
+  attachments: jsonb("attachments").$type<string[]>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// Complaint Updates (timeline)
+export const complaintUpdates = pgTable("complaint_updates", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  complaintId: integer("complaint_id").notNull(),
+  updateType: text("update_type").notNull(),
+  details: text("details"),
+  attachmentPath: text("attachment_path"),
+  createdByUserId: integer("created_by_user_id"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
 export const insertUserSchema = z.object({
@@ -483,6 +874,148 @@ export const insertPaymentSchema = z.object({
   proofFileName: z.string().nullable().optional(),
   rejectionReason: z.string().nullable().optional(),
   approvedByUserId: z.number().nullable().optional()
+});
+
+// ============================================
+// NEW MODULE INSERT SCHEMAS
+// ============================================
+
+export const insertMembershipCardSchema = z.object({
+  officeId: z.number(),
+  cardNumber: z.string(),
+  status: z.enum(['PENDING', 'ACTIVE', 'SUSPENDED', 'EXPIRED', 'REVOKED']).optional(),
+  issuedAt: z.date().nullable().optional(),
+  expiresAt: z.date().nullable().optional(),
+  issuedByUserId: z.number().nullable().optional(),
+  notes: z.string().nullable().optional()
+});
+
+export const insertInspectionSchema = z.object({
+  officeId: z.number(),
+  inspectorUserId: z.number().nullable().optional(),
+  inspectorName: z.string().nullable().optional(),
+  scheduledAt: z.date().nullable().optional(),
+  completedAt: z.date().nullable().optional(),
+  inspectionType: z.enum(['INITIAL', 'ROUTINE', 'FOLLOW_UP', 'COMPLAINT_BASED']).optional(),
+  status: z.enum(['SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED']).optional(),
+  outcome: z.enum(['COMPLIANT', 'NON_COMPLIANT', 'PARTIALLY_COMPLIANT', 'PENDING_REVIEW']).nullable().optional(),
+  findings: z.string().nullable().optional(),
+  violations: z.array(z.string()).nullable().optional(),
+  actionsRequired: z.string().nullable().optional(),
+  followUpRequired: z.boolean().optional(),
+  followUpDate: z.date().nullable().optional(),
+  attachmentPath: z.string().nullable().optional(),
+  createdByUserId: z.number().nullable().optional()
+});
+
+export const insertAdvocacyCaseSchema = z.object({
+  officeId: z.number(),
+  title: z.string(),
+  description: z.string().nullable().optional(),
+  caseType: z.enum(['DISPUTE', 'REGULATORY', 'MINISTRY', 'LEGAL', 'OTHER']).optional(),
+  status: z.enum(['OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED']).optional(),
+  priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']).optional(),
+  assignedToUserId: z.number().nullable().optional(),
+  internalNotes: z.string().nullable().optional()
+});
+
+export const insertAdvocacyEventSchema = z.object({
+  caseId: z.number(),
+  eventType: z.string(),
+  details: z.string().nullable().optional(),
+  attachmentPath: z.string().nullable().optional(),
+  createdByUserId: z.number().nullable().optional()
+});
+
+export const insertOversightTargetSchema = z.object({
+  officeId: z.number().nullable().optional(),
+  officeName: z.string(),
+  location: z.object({
+    city: z.string().optional(),
+    area: z.string().optional(),
+    address: z.string().optional()
+  }).nullable().optional(),
+  contactInfo: z.object({
+    phone: z.string().optional(),
+    mobile: z.string().optional(),
+    email: z.string().optional()
+  }).nullable().optional(),
+  licenseStatus: z.enum(['LICENSED', 'UNLICENSED', 'SUSPENDED', 'UNKNOWN']).optional(),
+  reportSource: z.enum(['MINISTRY', 'CITIZEN', 'INTERNAL', 'COMPLAINT', 'INSPECTION']).optional(),
+  status: z.enum(['NEW', 'UNDER_INVESTIGATION', 'ACTION_REQUIRED', 'RESOLVED']).optional(),
+  notes: z.string().nullable().optional()
+});
+
+export const insertOversightVisitSchema = z.object({
+  targetId: z.number(),
+  inspectorUserId: z.number().nullable().optional(),
+  visitDate: z.date(),
+  result: z.enum(['LICENSED', 'UNLICENSED', 'SUSPENDED', 'UNKNOWN']).nullable().optional(),
+  actionsTaken: z.string().nullable().optional(),
+  referralMade: z.boolean().optional(),
+  referralDetails: z.string().nullable().optional(),
+  attachmentPath: z.string().nullable().optional()
+});
+
+export const insertStaffCertificationSchema = z.object({
+  officeId: z.number(),
+  personId: z.number().nullable().optional(),
+  fullNameAr: z.string(),
+  fullNameEn: z.string().nullable().optional(),
+  nationalId: z.string().nullable().optional(),
+  roleApplied: z.enum(['GUIDE', 'OPERATIONS', 'SALES', 'MANAGER', 'OTHER']).optional(),
+  yearsExperience: z.string().nullable().optional(),
+  status: z.enum(['SUBMITTED', 'UNDER_REVIEW', 'APPROVED', 'REJECTED']).optional(),
+  adminNotes: z.string().nullable().optional()
+});
+
+export const insertStaffCertDocumentSchema = z.object({
+  certificationId: z.number(),
+  category: z.string(),
+  filePath: z.string(),
+  fileName: z.string(),
+  uploadedByUserId: z.number().nullable().optional()
+});
+
+export const insertComplianceCheckSchema = z.object({
+  officeId: z.number(),
+  checkType: z.enum(['LICENSE', 'INSURANCE', 'EMPLOYEE_STATUS', 'FINANCIAL', 'SAFETY', 'OTHER']).optional(),
+  status: z.enum(['OPEN', 'IN_PROGRESS', 'CLOSED']).optional(),
+  severity: z.enum(['INFO', 'WARNING', 'CRITICAL']).optional(),
+  summary: z.string().nullable().optional(),
+  dueDate: z.date().nullable().optional(),
+  assignedToUserId: z.number().nullable().optional(),
+  resolutionNotes: z.string().nullable().optional()
+});
+
+export const insertComplianceActionSchema = z.object({
+  checkId: z.number(),
+  actionType: z.string(),
+  details: z.string().nullable().optional(),
+  attachmentPath: z.string().nullable().optional(),
+  createdByUserId: z.number().nullable().optional()
+});
+
+export const insertEnhancedComplaintSchema = z.object({
+  officeId: z.number().nullable().optional(),
+  complainantType: z.enum(['CUSTOMER', 'OFFICE', 'EMPLOYEE', 'AUTHORITY', 'INTERNAL']).optional(),
+  complainantName: z.string().nullable().optional(),
+  complainantContact: z.string().nullable().optional(),
+  complaintType: z.enum(['SERVICE', 'FINANCIAL', 'SAFETY', 'LEGAL', 'OTHER']).optional(),
+  subject: z.string(),
+  description: z.string().nullable().optional(),
+  status: z.enum(['RECEIVED', 'INVESTIGATING', 'RESOLVED', 'ESCALATED', 'CLOSED']).optional(),
+  priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']).optional(),
+  handlerUserId: z.number().nullable().optional(),
+  attachments: z.array(z.string()).nullable().optional()
+});
+
+export const insertComplaintUpdateSchema = z.object({
+  complaintId: z.number(),
+  updateType: z.string(),
+  details: z.string().nullable().optional(),
+  attachmentPath: z.string().nullable().optional(),
+  createdByUserId: z.number().nullable().optional()
 });
 
 export const registerSchema = z.object({
@@ -718,3 +1251,43 @@ export type CommitmentFormRecord = typeof commitmentForms.$inferSelect;
 export type OfficeInfoFormData = z.infer<typeof officeInfoFormSchema>;
 export type InsertOfficeInfoForm = z.infer<typeof insertOfficeInfoFormSchema>;
 export type OfficeInfoFormRecord = typeof officeInfoForms.$inferSelect;
+
+// ============================================
+// NEW MODULE TYPES
+// ============================================
+
+export type InsertMembershipCard = z.infer<typeof insertMembershipCardSchema>;
+export type MembershipCard = typeof membershipCards.$inferSelect;
+
+export type InsertInspection = z.infer<typeof insertInspectionSchema>;
+export type Inspection = typeof inspections.$inferSelect;
+
+export type InsertAdvocacyCase = z.infer<typeof insertAdvocacyCaseSchema>;
+export type AdvocacyCase = typeof advocacyCases.$inferSelect;
+
+export type InsertAdvocacyEvent = z.infer<typeof insertAdvocacyEventSchema>;
+export type AdvocacyEvent = typeof advocacyEvents.$inferSelect;
+
+export type InsertOversightTarget = z.infer<typeof insertOversightTargetSchema>;
+export type OversightTarget = typeof oversightTargets.$inferSelect;
+
+export type InsertOversightVisit = z.infer<typeof insertOversightVisitSchema>;
+export type OversightVisit = typeof oversightVisits.$inferSelect;
+
+export type InsertStaffCertification = z.infer<typeof insertStaffCertificationSchema>;
+export type StaffCertification = typeof staffCertifications.$inferSelect;
+
+export type InsertStaffCertDocument = z.infer<typeof insertStaffCertDocumentSchema>;
+export type StaffCertDocument = typeof staffCertDocuments.$inferSelect;
+
+export type InsertComplianceCheck = z.infer<typeof insertComplianceCheckSchema>;
+export type ComplianceCheck = typeof complianceChecks.$inferSelect;
+
+export type InsertComplianceAction = z.infer<typeof insertComplianceActionSchema>;
+export type ComplianceAction = typeof complianceActions.$inferSelect;
+
+export type InsertEnhancedComplaint = z.infer<typeof insertEnhancedComplaintSchema>;
+export type EnhancedComplaint = typeof enhancedComplaints.$inferSelect;
+
+export type InsertComplaintUpdate = z.infer<typeof insertComplaintUpdateSchema>;
+export type ComplaintUpdate = typeof complaintUpdates.$inferSelect;
