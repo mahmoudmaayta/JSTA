@@ -2738,6 +2738,908 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ============================================
+  // NEW MODULE ROUTES - MEMBER SERVICES
+  // ============================================
+
+  // -------------------- MEMBERSHIP CARDS --------------------
+  
+  // Admin: Get all membership cards
+  app.get("/api/admin/membership-cards", ensureAdmin, async (req, res) => {
+    try {
+      const cards = await storage.getAllMembershipCards();
+      res.json(cards);
+    } catch (error) {
+      console.error("Get membership cards error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get single membership card
+  app.get("/api/admin/membership-cards/:id", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const card = await storage.getMembershipCard(id);
+      if (!card) return res.status(404).json({ message: "Card not found" });
+      
+      res.json(card);
+    } catch (error) {
+      console.error("Get membership card error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Create membership card
+  app.post("/api/admin/membership-cards", ensureAdmin, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const { officeId, cardNumber, status, expiresAt, notes } = req.body;
+      
+      const card = await storage.createMembershipCard({
+        officeId,
+        cardNumber,
+        status: status || 'PENDING',
+        issuedAt: new Date(),
+        expiresAt: expiresAt ? new Date(expiresAt) : null,
+        issuedByUserId: user.id,
+        notes
+      });
+      
+      await storage.createAuditLog({
+        userId: user.id,
+        action: 'MEMBERSHIP_CARD_ISSUED',
+        targetType: 'MEMBERSHIP_CARD',
+        targetId: card.id,
+        details: { officeId, cardNumber }
+      });
+      
+      res.status(201).json(card);
+    } catch (error) {
+      console.error("Create membership card error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Update membership card
+  app.patch("/api/admin/membership-cards/:id", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const user = (req as any).user;
+      const { status, expiresAt, notes } = req.body;
+      
+      const updates: any = {};
+      if (status !== undefined) updates.status = status;
+      if (expiresAt !== undefined) updates.expiresAt = expiresAt ? new Date(expiresAt) : null;
+      if (notes !== undefined) updates.notes = notes;
+      
+      const card = await storage.updateMembershipCard(id, updates);
+      if (!card) return res.status(404).json({ message: "Card not found" });
+      
+      if (status) {
+        const auditAction = status === 'SUSPENDED' ? 'MEMBERSHIP_CARD_SUSPENDED' : 
+                           status === 'REVOKED' ? 'MEMBERSHIP_CARD_REVOKED' :
+                           status === 'ACTIVE' ? 'MEMBERSHIP_CARD_RENEWED' : 'MEMBERSHIP_CARD_ISSUED';
+        await storage.createAuditLog({
+          userId: user.id,
+          action: auditAction,
+          targetType: 'MEMBERSHIP_CARD',
+          targetId: id,
+          details: { status }
+        });
+      }
+      
+      res.json(card);
+    } catch (error) {
+      console.error("Update membership card error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // -------------------- INSPECTIONS --------------------
+  
+  // Admin: Get all inspections
+  app.get("/api/admin/inspections", ensureAdmin, async (req, res) => {
+    try {
+      const allInspections = await storage.getAllInspections();
+      res.json(allInspections);
+    } catch (error) {
+      console.error("Get inspections error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get single inspection
+  app.get("/api/admin/inspections/:id", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const inspection = await storage.getInspection(id);
+      if (!inspection) return res.status(404).json({ message: "Inspection not found" });
+      
+      res.json(inspection);
+    } catch (error) {
+      console.error("Get inspection error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Create inspection
+  app.post("/api/admin/inspections", ensureAdmin, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const { officeId, inspectorUserId, inspectorName, scheduledAt, inspectionType } = req.body;
+      
+      const inspection = await storage.createInspection({
+        officeId,
+        inspectorUserId,
+        inspectorName,
+        scheduledAt: scheduledAt ? new Date(scheduledAt) : null,
+        inspectionType: inspectionType || 'ROUTINE',
+        status: 'SCHEDULED',
+        createdByUserId: user.id
+      });
+      
+      await storage.createAuditLog({
+        userId: user.id,
+        action: 'INSPECTION_SCHEDULED',
+        targetType: 'INSPECTION',
+        targetId: inspection.id,
+        details: { officeId, inspectionType }
+      });
+      
+      res.status(201).json(inspection);
+    } catch (error) {
+      console.error("Create inspection error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Update inspection
+  app.patch("/api/admin/inspections/:id", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const user = (req as any).user;
+      const updates: any = {};
+      const body = req.body;
+      
+      if (body.status !== undefined) updates.status = body.status;
+      if (body.outcome !== undefined) updates.outcome = body.outcome;
+      if (body.findings !== undefined) updates.findings = body.findings;
+      if (body.violations !== undefined) updates.violations = body.violations;
+      if (body.actionsRequired !== undefined) updates.actionsRequired = body.actionsRequired;
+      if (body.followUpRequired !== undefined) updates.followUpRequired = body.followUpRequired;
+      if (body.followUpDate !== undefined) updates.followUpDate = body.followUpDate ? new Date(body.followUpDate) : null;
+      if (body.completedAt !== undefined) updates.completedAt = body.completedAt ? new Date(body.completedAt) : null;
+      
+      const inspection = await storage.updateInspection(id, updates);
+      if (!inspection) return res.status(404).json({ message: "Inspection not found" });
+      
+      if (body.status === 'COMPLETED') {
+        await storage.createAuditLog({
+          userId: user.id,
+          action: 'INSPECTION_COMPLETED',
+          targetType: 'INSPECTION',
+          targetId: id,
+          details: { outcome: body.outcome }
+        });
+      }
+      
+      res.json(inspection);
+    } catch (error) {
+      console.error("Update inspection error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // -------------------- ADVOCACY CASES --------------------
+  
+  // Admin: Get all advocacy cases
+  app.get("/api/admin/advocacy-cases", ensureAdmin, async (req, res) => {
+    try {
+      const cases = await storage.getAllAdvocacyCases();
+      res.json(cases);
+    } catch (error) {
+      console.error("Get advocacy cases error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get single advocacy case with events
+  app.get("/api/admin/advocacy-cases/:id", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const advocacyCase = await storage.getAdvocacyCase(id);
+      if (!advocacyCase) return res.status(404).json({ message: "Case not found" });
+      
+      const events = await storage.getAdvocacyEventsByCase(id);
+      
+      res.json({ ...advocacyCase, events });
+    } catch (error) {
+      console.error("Get advocacy case error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Create advocacy case
+  app.post("/api/admin/advocacy-cases", ensureAdmin, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const { officeId, title, description, caseType, priority, assignedToUserId } = req.body;
+      
+      const advocacyCase = await storage.createAdvocacyCase({
+        officeId,
+        title,
+        description,
+        caseType: caseType || 'OTHER',
+        status: 'OPEN',
+        priority: priority || 'MEDIUM',
+        assignedToUserId
+      });
+      
+      await storage.createAuditLog({
+        userId: user.id,
+        action: 'ADVOCACY_CASE_OPENED',
+        targetType: 'ADVOCACY_CASE',
+        targetId: advocacyCase.id,
+        details: { officeId, title }
+      });
+      
+      res.status(201).json(advocacyCase);
+    } catch (error) {
+      console.error("Create advocacy case error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Update advocacy case
+  app.patch("/api/admin/advocacy-cases/:id", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const user = (req as any).user;
+      const updates: any = {};
+      const body = req.body;
+      
+      if (body.status !== undefined) updates.status = body.status;
+      if (body.priority !== undefined) updates.priority = body.priority;
+      if (body.assignedToUserId !== undefined) updates.assignedToUserId = body.assignedToUserId;
+      if (body.internalNotes !== undefined) updates.internalNotes = body.internalNotes;
+      if (body.resolvedAt !== undefined) updates.resolvedAt = body.resolvedAt ? new Date(body.resolvedAt) : null;
+      
+      const advocacyCase = await storage.updateAdvocacyCase(id, updates);
+      if (!advocacyCase) return res.status(404).json({ message: "Case not found" });
+      
+      const auditAction = body.status === 'RESOLVED' ? 'ADVOCACY_CASE_RESOLVED' :
+                         body.status === 'CLOSED' ? 'ADVOCACY_CASE_CLOSED' : 'ADVOCACY_CASE_UPDATED';
+      await storage.createAuditLog({
+        userId: user.id,
+        action: auditAction,
+        targetType: 'ADVOCACY_CASE',
+        targetId: id,
+        details: updates
+      });
+      
+      res.json(advocacyCase);
+    } catch (error) {
+      console.error("Update advocacy case error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Add event to advocacy case
+  app.post("/api/admin/advocacy-cases/:id/events", ensureAdmin, async (req, res) => {
+    try {
+      const caseId = parseInt(req.params.id);
+      if (isNaN(caseId)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const user = (req as any).user;
+      const { eventType, details, attachmentPath } = req.body;
+      
+      const event = await storage.createAdvocacyEvent({
+        caseId,
+        eventType,
+        details,
+        attachmentPath,
+        createdByUserId: user.id
+      });
+      
+      res.status(201).json(event);
+    } catch (error) {
+      console.error("Create advocacy event error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // -------------------- OVERSIGHT (UNLICENSED OFFICES) --------------------
+  
+  // Admin: Get all oversight targets
+  app.get("/api/admin/oversight-targets", ensureAdmin, async (req, res) => {
+    try {
+      const targets = await storage.getAllOversightTargets();
+      res.json(targets);
+    } catch (error) {
+      console.error("Get oversight targets error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get single oversight target with visits
+  app.get("/api/admin/oversight-targets/:id", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const target = await storage.getOversightTarget(id);
+      if (!target) return res.status(404).json({ message: "Target not found" });
+      
+      const visits = await storage.getOversightVisitsByTarget(id);
+      
+      res.json({ ...target, visits });
+    } catch (error) {
+      console.error("Get oversight target error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Create oversight target
+  app.post("/api/admin/oversight-targets", ensureAdmin, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const { officeId, officeName, location, contactInfo, licenseStatus, reportSource, notes } = req.body;
+      
+      const target = await storage.createOversightTarget({
+        officeId,
+        officeName,
+        location,
+        contactInfo,
+        licenseStatus: licenseStatus || 'UNKNOWN',
+        reportSource: reportSource || 'INTERNAL',
+        status: 'NEW',
+        notes
+      });
+      
+      await storage.createAuditLog({
+        userId: user.id,
+        action: 'OVERSIGHT_TARGET_CREATED',
+        targetType: 'OVERSIGHT_TARGET',
+        targetId: target.id,
+        details: { officeName, licenseStatus }
+      });
+      
+      res.status(201).json(target);
+    } catch (error) {
+      console.error("Create oversight target error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Update oversight target
+  app.patch("/api/admin/oversight-targets/:id", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const user = (req as any).user;
+      const updates: any = {};
+      const body = req.body;
+      
+      if (body.status !== undefined) updates.status = body.status;
+      if (body.licenseStatus !== undefined) updates.licenseStatus = body.licenseStatus;
+      if (body.notes !== undefined) updates.notes = body.notes;
+      if (body.location !== undefined) updates.location = body.location;
+      if (body.contactInfo !== undefined) updates.contactInfo = body.contactInfo;
+      
+      const target = await storage.updateOversightTarget(id, updates);
+      if (!target) return res.status(404).json({ message: "Target not found" });
+      
+      await storage.createAuditLog({
+        userId: user.id,
+        action: 'OVERSIGHT_TARGET_UPDATED',
+        targetType: 'OVERSIGHT_TARGET',
+        targetId: id,
+        details: updates
+      });
+      
+      res.json(target);
+    } catch (error) {
+      console.error("Update oversight target error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Add visit to oversight target
+  app.post("/api/admin/oversight-targets/:id/visits", ensureAdmin, async (req, res) => {
+    try {
+      const targetId = parseInt(req.params.id);
+      if (isNaN(targetId)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const user = (req as any).user;
+      const { visitDate, result, actionsTaken, referralMade, referralDetails, attachmentPath } = req.body;
+      
+      const visit = await storage.createOversightVisit({
+        targetId,
+        inspectorUserId: user.id,
+        visitDate: new Date(visitDate),
+        result,
+        actionsTaken,
+        referralMade: referralMade || false,
+        referralDetails,
+        attachmentPath
+      });
+      
+      await storage.createAuditLog({
+        userId: user.id,
+        action: 'OVERSIGHT_VISIT_LOGGED',
+        targetType: 'OVERSIGHT_VISIT',
+        targetId: visit.id,
+        details: { targetId, result }
+      });
+      
+      res.status(201).json(visit);
+    } catch (error) {
+      console.error("Create oversight visit error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // -------------------- STAFF CERTIFICATIONS --------------------
+  
+  // Admin: Get all staff certifications
+  app.get("/api/admin/staff-certifications", ensureAdmin, async (req, res) => {
+    try {
+      const certifications = await storage.getAllStaffCertifications();
+      res.json(certifications);
+    } catch (error) {
+      console.error("Get staff certifications error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get single staff certification with documents
+  app.get("/api/admin/staff-certifications/:id", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const certification = await storage.getStaffCertification(id);
+      if (!certification) return res.status(404).json({ message: "Certification not found" });
+      
+      const documents = await storage.getStaffCertDocuments(id);
+      
+      res.json({ ...certification, documents });
+    } catch (error) {
+      console.error("Get staff certification error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Update staff certification (approve/reject)
+  app.patch("/api/admin/staff-certifications/:id", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const user = (req as any).user;
+      const updates: any = {};
+      const body = req.body;
+      
+      if (body.status !== undefined) updates.status = body.status;
+      if (body.adminNotes !== undefined) updates.adminNotes = body.adminNotes;
+      if (body.approvedAt !== undefined) updates.approvedAt = body.approvedAt ? new Date(body.approvedAt) : null;
+      if (body.approvedByUserId !== undefined) updates.approvedByUserId = body.approvedByUserId;
+      
+      const certification = await storage.updateStaffCertification(id, updates);
+      if (!certification) return res.status(404).json({ message: "Certification not found" });
+      
+      if (body.status) {
+        const auditAction = body.status === 'APPROVED' ? 'STAFF_CERT_APPROVED' : 
+                           body.status === 'REJECTED' ? 'STAFF_CERT_REJECTED' : 'STAFF_CERT_SUBMITTED';
+        await storage.createAuditLog({
+          userId: user.id,
+          action: auditAction,
+          targetType: 'STAFF_CERTIFICATION',
+          targetId: id,
+          details: { status: body.status }
+        });
+      }
+      
+      res.json(certification);
+    } catch (error) {
+      console.error("Update staff certification error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Office: Submit staff certification
+  app.post("/api/office/staff-certifications", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "Office not found" });
+      }
+      
+      const { personId, fullNameAr, fullNameEn, nationalId, roleApplied, yearsExperience } = req.body;
+      
+      const certification = await storage.createStaffCertification({
+        officeId: user.officeId,
+        personId,
+        fullNameAr,
+        fullNameEn,
+        nationalId,
+        roleApplied: roleApplied || 'OTHER',
+        yearsExperience,
+        status: 'SUBMITTED'
+      });
+      
+      await storage.createAuditLog({
+        userId: user.id,
+        action: 'STAFF_CERT_SUBMITTED',
+        targetType: 'STAFF_CERTIFICATION',
+        targetId: certification.id,
+        details: { fullNameAr, roleApplied }
+      });
+      
+      res.status(201).json(certification);
+    } catch (error) {
+      console.error("Create staff certification error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Office: Get own staff certifications
+  app.get("/api/office/staff-certifications", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "Office not found" });
+      }
+      
+      const certifications = await storage.getStaffCertificationsByOffice(user.officeId);
+      res.json(certifications);
+    } catch (error) {
+      console.error("Get office staff certifications error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // -------------------- COMPLIANCE CHECKS --------------------
+  
+  // Admin: Get all compliance checks
+  app.get("/api/admin/compliance-checks", ensureAdmin, async (req, res) => {
+    try {
+      const checks = await storage.getAllComplianceChecks();
+      res.json(checks);
+    } catch (error) {
+      console.error("Get compliance checks error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get single compliance check with actions
+  app.get("/api/admin/compliance-checks/:id", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const check = await storage.getComplianceCheck(id);
+      if (!check) return res.status(404).json({ message: "Check not found" });
+      
+      const actions = await storage.getComplianceActionsByCheck(id);
+      
+      res.json({ ...check, actions });
+    } catch (error) {
+      console.error("Get compliance check error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Create compliance check
+  app.post("/api/admin/compliance-checks", ensureAdmin, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const { officeId, checkType, severity, summary, dueDate, assignedToUserId } = req.body;
+      
+      const check = await storage.createComplianceCheck({
+        officeId,
+        checkType: checkType || 'OTHER',
+        status: 'OPEN',
+        severity: severity || 'INFO',
+        summary,
+        dueDate: dueDate ? new Date(dueDate) : null,
+        assignedToUserId
+      });
+      
+      await storage.createAuditLog({
+        userId: user.id,
+        action: 'COMPLIANCE_CHECK_CREATED',
+        targetType: 'COMPLIANCE_CHECK',
+        targetId: check.id,
+        details: { officeId, checkType, severity }
+      });
+      
+      res.status(201).json(check);
+    } catch (error) {
+      console.error("Create compliance check error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Update compliance check
+  app.patch("/api/admin/compliance-checks/:id", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const user = (req as any).user;
+      const updates: any = {};
+      const body = req.body;
+      
+      if (body.status !== undefined) updates.status = body.status;
+      if (body.severity !== undefined) updates.severity = body.severity;
+      if (body.resolutionNotes !== undefined) updates.resolutionNotes = body.resolutionNotes;
+      if (body.assignedToUserId !== undefined) updates.assignedToUserId = body.assignedToUserId;
+      if (body.closedAt !== undefined) updates.closedAt = body.closedAt ? new Date(body.closedAt) : null;
+      
+      const check = await storage.updateComplianceCheck(id, updates);
+      if (!check) return res.status(404).json({ message: "Check not found" });
+      
+      const auditAction = body.status === 'CLOSED' ? 'COMPLIANCE_CHECK_CLOSED' : 'COMPLIANCE_CHECK_UPDATED';
+      await storage.createAuditLog({
+        userId: user.id,
+        action: auditAction,
+        targetType: 'COMPLIANCE_CHECK',
+        targetId: id,
+        details: updates
+      });
+      
+      res.json(check);
+    } catch (error) {
+      console.error("Update compliance check error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Add action to compliance check
+  app.post("/api/admin/compliance-checks/:id/actions", ensureAdmin, async (req, res) => {
+    try {
+      const checkId = parseInt(req.params.id);
+      if (isNaN(checkId)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const user = (req as any).user;
+      const { actionType, details, attachmentPath } = req.body;
+      
+      const action = await storage.createComplianceAction({
+        checkId,
+        actionType,
+        details,
+        attachmentPath,
+        createdByUserId: user.id
+      });
+      
+      res.status(201).json(action);
+    } catch (error) {
+      console.error("Create compliance action error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // -------------------- ENHANCED COMPLAINTS --------------------
+  
+  // Admin: Get all enhanced complaints
+  app.get("/api/admin/enhanced-complaints", ensureAdmin, async (req, res) => {
+    try {
+      const complaints = await storage.getAllEnhancedComplaints();
+      res.json(complaints);
+    } catch (error) {
+      console.error("Get enhanced complaints error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get single enhanced complaint with updates
+  app.get("/api/admin/enhanced-complaints/:id", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const complaint = await storage.getEnhancedComplaint(id);
+      if (!complaint) return res.status(404).json({ message: "Complaint not found" });
+      
+      const updates = await storage.getComplaintUpdatesByComplaint(id);
+      
+      res.json({ ...complaint, updates });
+    } catch (error) {
+      console.error("Get enhanced complaint error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Create enhanced complaint
+  app.post("/api/admin/enhanced-complaints", ensureAdmin, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const { officeId, complainantType, complainantName, complainantContact, complaintType, subject, description, priority, handlerUserId, attachments } = req.body;
+      
+      const complaint = await storage.createEnhancedComplaint({
+        officeId,
+        complainantType: complainantType || 'INTERNAL',
+        complainantName,
+        complainantContact,
+        complaintType: complaintType || 'OTHER',
+        subject,
+        description,
+        status: 'RECEIVED',
+        priority: priority || 'MEDIUM',
+        handlerUserId,
+        attachments
+      });
+      
+      await storage.createAuditLog({
+        userId: user.id,
+        action: 'COMPLAINT_CREATED',
+        targetType: 'ENHANCED_COMPLAINT',
+        targetId: complaint.id,
+        details: { officeId, subject, priority }
+      });
+      
+      res.status(201).json(complaint);
+    } catch (error) {
+      console.error("Create enhanced complaint error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Update enhanced complaint
+  app.patch("/api/admin/enhanced-complaints/:id", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const user = (req as any).user;
+      const updates: any = {};
+      const body = req.body;
+      
+      if (body.status !== undefined) updates.status = body.status;
+      if (body.priority !== undefined) updates.priority = body.priority;
+      if (body.handlerUserId !== undefined) updates.handlerUserId = body.handlerUserId;
+      if (body.resolvedAt !== undefined) updates.resolvedAt = body.resolvedAt ? new Date(body.resolvedAt) : null;
+      
+      const complaint = await storage.updateEnhancedComplaint(id, updates);
+      if (!complaint) return res.status(404).json({ message: "Complaint not found" });
+      
+      const auditAction = body.status === 'RESOLVED' ? 'COMPLAINT_RESOLVED' :
+                         body.status === 'ESCALATED' ? 'COMPLAINT_ESCALATED' : 'COMPLAINT_UPDATED';
+      await storage.createAuditLog({
+        userId: user.id,
+        action: auditAction,
+        targetType: 'ENHANCED_COMPLAINT',
+        targetId: id,
+        details: updates
+      });
+      
+      res.json(complaint);
+    } catch (error) {
+      console.error("Update enhanced complaint error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Add update to enhanced complaint
+  app.post("/api/admin/enhanced-complaints/:id/updates", ensureAdmin, async (req, res) => {
+    try {
+      const complaintId = parseInt(req.params.id);
+      if (isNaN(complaintId)) return res.status(400).json({ message: "Invalid ID" });
+      
+      const user = (req as any).user;
+      const { updateType, details, attachmentPath } = req.body;
+      
+      const update = await storage.createComplaintUpdate({
+        complaintId,
+        updateType,
+        details,
+        attachmentPath,
+        createdByUserId: user.id
+      });
+      
+      res.status(201).json(update);
+    } catch (error) {
+      console.error("Create complaint update error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // -------------------- OFFICE READ-ONLY ACCESS TO OWN DATA --------------------
+  
+  // Office: Get own membership card
+  app.get("/api/office/membership-card", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "Office not found" });
+      }
+      
+      const card = await storage.getMembershipCardByOffice(user.officeId);
+      res.json(card || null);
+    } catch (error) {
+      console.error("Get office membership card error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Office: Get own inspections
+  app.get("/api/office/inspections", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "Office not found" });
+      }
+      
+      const officeInspections = await storage.getInspectionsByOffice(user.officeId);
+      res.json(officeInspections);
+    } catch (error) {
+      console.error("Get office inspections error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Office: Get own advocacy cases
+  app.get("/api/office/advocacy-cases", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "Office not found" });
+      }
+      
+      const cases = await storage.getAdvocacyCasesByOffice(user.officeId);
+      res.json(cases);
+    } catch (error) {
+      console.error("Get office advocacy cases error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Office: Get own compliance checks
+  app.get("/api/office/compliance-checks", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "Office not found" });
+      }
+      
+      const checks = await storage.getComplianceChecksByOffice(user.officeId);
+      res.json(checks);
+    } catch (error) {
+      console.error("Get office compliance checks error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Office: Get own enhanced complaints
+  app.get("/api/office/enhanced-complaints", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "Office not found" });
+      }
+      
+      const officeComplaints = await storage.getEnhancedComplaintsByOffice(user.officeId);
+      res.json(officeComplaints);
+    } catch (error) {
+      console.error("Get office enhanced complaints error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   // Health check endpoint for monitoring
   app.get("/api/health", async (req, res) => {
     try {

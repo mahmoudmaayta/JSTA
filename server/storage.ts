@@ -2,6 +2,10 @@ import {
   users, offices, branches, documents, licenseRenewals, auditLogs,
   people, rolesInOffice, consents, renewalAttachments,
   complaints, commitmentForms, officeInfoForms, payments, promoCodes,
+  // New module tables
+  membershipCards, inspections, advocacyCases, advocacyEvents,
+  oversightTargets, oversightVisits, staffCertifications, staffCertDocuments,
+  complianceChecks, complianceActions, enhancedComplaints, complaintUpdates,
   type User, type InsertUser,
   type Office, type InsertOffice,
   type Branch, type InsertBranch,
@@ -18,7 +22,20 @@ import {
   type Payment, type InsertPayment, type PaymentStatusType,
   type PromoCode, type InsertPromoCode,
   type OfficeStatusType, type RenewalStatusType, type PersonRoleTypeType,
-  type OfficeUpdateForm, type DocumentCategoryType
+  type OfficeUpdateForm, type DocumentCategoryType,
+  // New module types
+  type MembershipCard, type InsertMembershipCard,
+  type Inspection, type InsertInspection,
+  type AdvocacyCase, type InsertAdvocacyCase,
+  type AdvocacyEvent, type InsertAdvocacyEvent,
+  type OversightTarget, type InsertOversightTarget,
+  type OversightVisit, type InsertOversightVisit,
+  type StaffCertification, type InsertStaffCertification,
+  type StaffCertDocument, type InsertStaffCertDocument,
+  type ComplianceCheck, type InsertComplianceCheck,
+  type ComplianceAction, type InsertComplianceAction,
+  type EnhancedComplaint, type InsertEnhancedComplaint,
+  type ComplaintUpdate, type InsertComplaintUpdate
 } from "@shared/schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import pkg from "pg";
@@ -138,6 +155,78 @@ export interface IStorage {
   createPromoCode(promoCode: InsertPromoCode): Promise<PromoCode>;
   updatePromoCode(id: number, data: Partial<PromoCode>): Promise<PromoCode | undefined>;
   incrementPromoCodeUses(id: number): Promise<void>;
+  
+  // ============================================
+  // NEW MODULE METHODS
+  // ============================================
+  
+  // Membership Cards
+  getMembershipCard(id: number): Promise<MembershipCard | undefined>;
+  getMembershipCardByOffice(officeId: number): Promise<MembershipCard | undefined>;
+  getAllMembershipCards(): Promise<MembershipCard[]>;
+  createMembershipCard(card: InsertMembershipCard): Promise<MembershipCard>;
+  updateMembershipCard(id: number, data: Partial<MembershipCard>): Promise<MembershipCard | undefined>;
+  
+  // Inspections
+  getInspection(id: number): Promise<Inspection | undefined>;
+  getInspectionsByOffice(officeId: number): Promise<Inspection[]>;
+  getAllInspections(): Promise<Inspection[]>;
+  createInspection(inspection: InsertInspection): Promise<Inspection>;
+  updateInspection(id: number, data: Partial<Inspection>): Promise<Inspection | undefined>;
+  
+  // Advocacy Cases
+  getAdvocacyCase(id: number): Promise<AdvocacyCase | undefined>;
+  getAdvocacyCasesByOffice(officeId: number): Promise<AdvocacyCase[]>;
+  getAllAdvocacyCases(): Promise<AdvocacyCase[]>;
+  createAdvocacyCase(advocacyCase: InsertAdvocacyCase): Promise<AdvocacyCase>;
+  updateAdvocacyCase(id: number, data: Partial<AdvocacyCase>): Promise<AdvocacyCase | undefined>;
+  
+  // Advocacy Events
+  getAdvocacyEventsByCase(caseId: number): Promise<AdvocacyEvent[]>;
+  createAdvocacyEvent(event: InsertAdvocacyEvent): Promise<AdvocacyEvent>;
+  
+  // Oversight Targets
+  getOversightTarget(id: number): Promise<OversightTarget | undefined>;
+  getAllOversightTargets(): Promise<OversightTarget[]>;
+  createOversightTarget(target: InsertOversightTarget): Promise<OversightTarget>;
+  updateOversightTarget(id: number, data: Partial<OversightTarget>): Promise<OversightTarget | undefined>;
+  
+  // Oversight Visits
+  getOversightVisitsByTarget(targetId: number): Promise<OversightVisit[]>;
+  createOversightVisit(visit: InsertOversightVisit): Promise<OversightVisit>;
+  
+  // Staff Certifications
+  getStaffCertification(id: number): Promise<StaffCertification | undefined>;
+  getStaffCertificationsByOffice(officeId: number): Promise<StaffCertification[]>;
+  getAllStaffCertifications(): Promise<StaffCertification[]>;
+  createStaffCertification(cert: InsertStaffCertification): Promise<StaffCertification>;
+  updateStaffCertification(id: number, data: Partial<StaffCertification>): Promise<StaffCertification | undefined>;
+  
+  // Staff Certification Documents
+  getStaffCertDocuments(certificationId: number): Promise<StaffCertDocument[]>;
+  createStaffCertDocument(doc: InsertStaffCertDocument): Promise<StaffCertDocument>;
+  
+  // Compliance Checks
+  getComplianceCheck(id: number): Promise<ComplianceCheck | undefined>;
+  getComplianceChecksByOffice(officeId: number): Promise<ComplianceCheck[]>;
+  getAllComplianceChecks(): Promise<ComplianceCheck[]>;
+  createComplianceCheck(check: InsertComplianceCheck): Promise<ComplianceCheck>;
+  updateComplianceCheck(id: number, data: Partial<ComplianceCheck>): Promise<ComplianceCheck | undefined>;
+  
+  // Compliance Actions
+  getComplianceActionsByCheck(checkId: number): Promise<ComplianceAction[]>;
+  createComplianceAction(action: InsertComplianceAction): Promise<ComplianceAction>;
+  
+  // Enhanced Complaints
+  getEnhancedComplaint(id: number): Promise<EnhancedComplaint | undefined>;
+  getEnhancedComplaintsByOffice(officeId: number): Promise<EnhancedComplaint[]>;
+  getAllEnhancedComplaints(): Promise<EnhancedComplaint[]>;
+  createEnhancedComplaint(complaint: InsertEnhancedComplaint): Promise<EnhancedComplaint>;
+  updateEnhancedComplaint(id: number, data: Partial<EnhancedComplaint>): Promise<EnhancedComplaint | undefined>;
+  
+  // Complaint Updates
+  getComplaintUpdatesByComplaint(complaintId: number): Promise<ComplaintUpdate[]>;
+  createComplaintUpdate(update: InsertComplaintUpdate): Promise<ComplaintUpdate>;
   
   seedAdminUser(): Promise<void>;
 }
@@ -652,6 +741,268 @@ export class DatabaseStorage implements IStorage {
     await db.update(promoCodes)
       .set({ currentUses: sql`${promoCodes.currentUses} + 1` })
       .where(eq(promoCodes.id, id));
+  }
+
+  // ============================================
+  // NEW MODULE IMPLEMENTATIONS
+  // ============================================
+
+  // Membership Cards
+  async getMembershipCard(id: number): Promise<MembershipCard | undefined> {
+    const [card] = await db.select().from(membershipCards).where(eq(membershipCards.id, id));
+    return card;
+  }
+
+  async getMembershipCardByOffice(officeId: number): Promise<MembershipCard | undefined> {
+    const [card] = await db.select().from(membershipCards)
+      .where(eq(membershipCards.officeId, officeId))
+      .orderBy(desc(membershipCards.createdAt));
+    return card;
+  }
+
+  async getAllMembershipCards(): Promise<MembershipCard[]> {
+    return await db.select().from(membershipCards).orderBy(desc(membershipCards.createdAt));
+  }
+
+  async createMembershipCard(card: InsertMembershipCard): Promise<MembershipCard> {
+    const [created] = await db.insert(membershipCards).values(card as any).returning();
+    return created;
+  }
+
+  async updateMembershipCard(id: number, data: Partial<MembershipCard>): Promise<MembershipCard | undefined> {
+    const [updated] = await db.update(membershipCards)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(membershipCards.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Inspections
+  async getInspection(id: number): Promise<Inspection | undefined> {
+    const [inspection] = await db.select().from(inspections).where(eq(inspections.id, id));
+    return inspection;
+  }
+
+  async getInspectionsByOffice(officeId: number): Promise<Inspection[]> {
+    return await db.select().from(inspections)
+      .where(eq(inspections.officeId, officeId))
+      .orderBy(desc(inspections.createdAt));
+  }
+
+  async getAllInspections(): Promise<Inspection[]> {
+    return await db.select().from(inspections).orderBy(desc(inspections.createdAt));
+  }
+
+  async createInspection(inspection: InsertInspection): Promise<Inspection> {
+    const [created] = await db.insert(inspections).values(inspection as any).returning();
+    return created;
+  }
+
+  async updateInspection(id: number, data: Partial<Inspection>): Promise<Inspection | undefined> {
+    const [updated] = await db.update(inspections)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(inspections.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Advocacy Cases
+  async getAdvocacyCase(id: number): Promise<AdvocacyCase | undefined> {
+    const [advocacyCase] = await db.select().from(advocacyCases).where(eq(advocacyCases.id, id));
+    return advocacyCase;
+  }
+
+  async getAdvocacyCasesByOffice(officeId: number): Promise<AdvocacyCase[]> {
+    return await db.select().from(advocacyCases)
+      .where(eq(advocacyCases.officeId, officeId))
+      .orderBy(desc(advocacyCases.createdAt));
+  }
+
+  async getAllAdvocacyCases(): Promise<AdvocacyCase[]> {
+    return await db.select().from(advocacyCases).orderBy(desc(advocacyCases.createdAt));
+  }
+
+  async createAdvocacyCase(advocacyCase: InsertAdvocacyCase): Promise<AdvocacyCase> {
+    const [created] = await db.insert(advocacyCases).values(advocacyCase as any).returning();
+    return created;
+  }
+
+  async updateAdvocacyCase(id: number, data: Partial<AdvocacyCase>): Promise<AdvocacyCase | undefined> {
+    const [updated] = await db.update(advocacyCases)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(advocacyCases.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Advocacy Events
+  async getAdvocacyEventsByCase(caseId: number): Promise<AdvocacyEvent[]> {
+    return await db.select().from(advocacyEvents)
+      .where(eq(advocacyEvents.caseId, caseId))
+      .orderBy(desc(advocacyEvents.createdAt));
+  }
+
+  async createAdvocacyEvent(event: InsertAdvocacyEvent): Promise<AdvocacyEvent> {
+    const [created] = await db.insert(advocacyEvents).values(event as any).returning();
+    return created;
+  }
+
+  // Oversight Targets
+  async getOversightTarget(id: number): Promise<OversightTarget | undefined> {
+    const [target] = await db.select().from(oversightTargets).where(eq(oversightTargets.id, id));
+    return target;
+  }
+
+  async getAllOversightTargets(): Promise<OversightTarget[]> {
+    return await db.select().from(oversightTargets).orderBy(desc(oversightTargets.createdAt));
+  }
+
+  async createOversightTarget(target: InsertOversightTarget): Promise<OversightTarget> {
+    const [created] = await db.insert(oversightTargets).values(target as any).returning();
+    return created;
+  }
+
+  async updateOversightTarget(id: number, data: Partial<OversightTarget>): Promise<OversightTarget | undefined> {
+    const [updated] = await db.update(oversightTargets)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(oversightTargets.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Oversight Visits
+  async getOversightVisitsByTarget(targetId: number): Promise<OversightVisit[]> {
+    return await db.select().from(oversightVisits)
+      .where(eq(oversightVisits.targetId, targetId))
+      .orderBy(desc(oversightVisits.createdAt));
+  }
+
+  async createOversightVisit(visit: InsertOversightVisit): Promise<OversightVisit> {
+    const [created] = await db.insert(oversightVisits).values(visit as any).returning();
+    return created;
+  }
+
+  // Staff Certifications
+  async getStaffCertification(id: number): Promise<StaffCertification | undefined> {
+    const [cert] = await db.select().from(staffCertifications).where(eq(staffCertifications.id, id));
+    return cert;
+  }
+
+  async getStaffCertificationsByOffice(officeId: number): Promise<StaffCertification[]> {
+    return await db.select().from(staffCertifications)
+      .where(eq(staffCertifications.officeId, officeId))
+      .orderBy(desc(staffCertifications.createdAt));
+  }
+
+  async getAllStaffCertifications(): Promise<StaffCertification[]> {
+    return await db.select().from(staffCertifications).orderBy(desc(staffCertifications.createdAt));
+  }
+
+  async createStaffCertification(cert: InsertStaffCertification): Promise<StaffCertification> {
+    const [created] = await db.insert(staffCertifications).values(cert as any).returning();
+    return created;
+  }
+
+  async updateStaffCertification(id: number, data: Partial<StaffCertification>): Promise<StaffCertification | undefined> {
+    const [updated] = await db.update(staffCertifications)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(staffCertifications.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Staff Certification Documents
+  async getStaffCertDocuments(certificationId: number): Promise<StaffCertDocument[]> {
+    return await db.select().from(staffCertDocuments)
+      .where(eq(staffCertDocuments.certificationId, certificationId))
+      .orderBy(desc(staffCertDocuments.uploadedAt));
+  }
+
+  async createStaffCertDocument(doc: InsertStaffCertDocument): Promise<StaffCertDocument> {
+    const [created] = await db.insert(staffCertDocuments).values(doc as any).returning();
+    return created;
+  }
+
+  // Compliance Checks
+  async getComplianceCheck(id: number): Promise<ComplianceCheck | undefined> {
+    const [check] = await db.select().from(complianceChecks).where(eq(complianceChecks.id, id));
+    return check;
+  }
+
+  async getComplianceChecksByOffice(officeId: number): Promise<ComplianceCheck[]> {
+    return await db.select().from(complianceChecks)
+      .where(eq(complianceChecks.officeId, officeId))
+      .orderBy(desc(complianceChecks.createdAt));
+  }
+
+  async getAllComplianceChecks(): Promise<ComplianceCheck[]> {
+    return await db.select().from(complianceChecks).orderBy(desc(complianceChecks.createdAt));
+  }
+
+  async createComplianceCheck(check: InsertComplianceCheck): Promise<ComplianceCheck> {
+    const [created] = await db.insert(complianceChecks).values(check as any).returning();
+    return created;
+  }
+
+  async updateComplianceCheck(id: number, data: Partial<ComplianceCheck>): Promise<ComplianceCheck | undefined> {
+    const [updated] = await db.update(complianceChecks)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(complianceChecks.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Compliance Actions
+  async getComplianceActionsByCheck(checkId: number): Promise<ComplianceAction[]> {
+    return await db.select().from(complianceActions)
+      .where(eq(complianceActions.checkId, checkId))
+      .orderBy(desc(complianceActions.createdAt));
+  }
+
+  async createComplianceAction(action: InsertComplianceAction): Promise<ComplianceAction> {
+    const [created] = await db.insert(complianceActions).values(action as any).returning();
+    return created;
+  }
+
+  // Enhanced Complaints
+  async getEnhancedComplaint(id: number): Promise<EnhancedComplaint | undefined> {
+    const [complaint] = await db.select().from(enhancedComplaints).where(eq(enhancedComplaints.id, id));
+    return complaint;
+  }
+
+  async getEnhancedComplaintsByOffice(officeId: number): Promise<EnhancedComplaint[]> {
+    return await db.select().from(enhancedComplaints)
+      .where(eq(enhancedComplaints.officeId, officeId))
+      .orderBy(desc(enhancedComplaints.createdAt));
+  }
+
+  async getAllEnhancedComplaints(): Promise<EnhancedComplaint[]> {
+    return await db.select().from(enhancedComplaints).orderBy(desc(enhancedComplaints.createdAt));
+  }
+
+  async createEnhancedComplaint(complaint: InsertEnhancedComplaint): Promise<EnhancedComplaint> {
+    const [created] = await db.insert(enhancedComplaints).values(complaint as any).returning();
+    return created;
+  }
+
+  async updateEnhancedComplaint(id: number, data: Partial<EnhancedComplaint>): Promise<EnhancedComplaint | undefined> {
+    const [updated] = await db.update(enhancedComplaints)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(enhancedComplaints.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Complaint Updates
+  async getComplaintUpdatesByComplaint(complaintId: number): Promise<ComplaintUpdate[]> {
+    return await db.select().from(complaintUpdates)
+      .where(eq(complaintUpdates.complaintId, complaintId))
+      .orderBy(desc(complaintUpdates.createdAt));
+  }
+
+  async createComplaintUpdate(update: InsertComplaintUpdate): Promise<ComplaintUpdate> {
+    const [created] = await db.insert(complaintUpdates).values(update as any).returning();
+    return created;
   }
 }
 

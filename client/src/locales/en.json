@@ -666,7 +666,15 @@
     "commitmentsDashboard": "Pledges",
     "payment": "Payment",
     "payments": "Payments",
-    "promoCodes": "Promo Codes"
+    "promoCodes": "Promo Codes",
+    "memberServices": "Member Services",
+    "membershipCards": "Membership Cards",
+    "inspections": "Field Inspections",
+    "advocacy": "Member Advocacy",
+    "oversight": "Oversight",
+    "staffCertifications": "Staff Certifications",
+    "compliance": "Compliance",
+    "enhancedComplaints": "Complaints Management"
   },
   "forms": {
     "continue": "Continue",

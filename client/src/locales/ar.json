@@ -666,7 +666,15 @@
     "commitmentsDashboard": "التعهدات",
     "payment": "الدفع",
     "payments": "المدفوعات",
-    "promoCodes": "رموز الخصم"
+    "promoCodes": "رموز الخصم",
+    "memberServices": "خدمات الأعضاء",
+    "membershipCards": "إصدار بطاقات العضوية",
+    "inspections": "الكشف الحسي",
+    "advocacy": "مناصرة الأعضاء",
+    "oversight": "دور الرقابة والتفتيش",
+    "staffCertifications": "مصادقة خبرات الموظفين",
+    "compliance": "تنظيم أعمال المكاتب",
+    "enhancedComplaints": "شكاوى المكاتب"
   },
   "forms": {
     "continue": "متابعة",

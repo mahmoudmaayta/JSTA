@@ -27,6 +27,13 @@ import {
   FileWarning,
   Tag,
   CreditCard,
+  IdCard,
+  ClipboardCheck,
+  Handshake,
+  Eye,
+  BadgeCheck,
+  Scale,
+  MessageSquareWarning,
 } from "lucide-react";
 
 export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
@@ -77,6 +84,44 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
     },
   ];
 
+  const memberServicesMenuItems = [
+    {
+      title: t("navigation.membershipCards"),
+      url: "/admin/membership-cards",
+      icon: IdCard,
+    },
+    {
+      title: t("navigation.inspections"),
+      url: "/admin/inspections",
+      icon: ClipboardCheck,
+    },
+    {
+      title: t("navigation.advocacy"),
+      url: "/admin/advocacy",
+      icon: Handshake,
+    },
+    {
+      title: t("navigation.oversight"),
+      url: "/admin/oversight",
+      icon: Eye,
+    },
+    {
+      title: t("navigation.staffCertifications"),
+      url: "/admin/staff-certifications",
+      icon: BadgeCheck,
+    },
+    {
+      title: t("navigation.compliance"),
+      url: "/admin/compliance",
+      icon: Scale,
+    },
+    {
+      title: t("navigation.enhancedComplaints"),
+      url: "/admin/enhanced-complaints",
+      icon: MessageSquareWarning,
+    },
+  ];
+
   const handleLogout = async () => {
     await logout();
     setLocation("/");
@@ -113,6 +158,26 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
                   <SidebarMenuButton
                     asChild
                     isActive={location === item.url || (item.url !== "/admin" && location.startsWith(item.url))}
+                  >
+                    <Link href={item.url} data-testid={`nav-${item.url.split("/").pop()}`}>
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>{t("navigation.memberServices")}</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {memberServicesMenuItems.map((item) => (
+                <SidebarMenuItem key={item.url}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={location === item.url || location.startsWith(item.url)}
                   >
                     <Link href={item.url} data-testid={`nav-${item.url.split("/").pop()}`}>
                       <item.icon className="h-4 w-4" />
