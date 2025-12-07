@@ -39,7 +39,8 @@
     "to": "to",
     "entries": "entries",
     "welcome": "Welcome",
-    "unknown": "Unknown"
+    "unknown": "Unknown",
+    "notes": "Notes"
   },
   "auth": {
     "login": "Login",
