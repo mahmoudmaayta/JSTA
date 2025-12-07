@@ -58,6 +58,20 @@ Preferred communication style: Simple, everyday language.
 - **documents**: File metadata, category, linked to office or renewal
 - **license_renewals**: Renewal requests, status workflow, ministry document tracking
 
+**Member Services Modules** (Added December 2025):
+- **membership_cards**: Physical membership card requests with production status tracking
+- **inspections**: Field inspection requests and scheduling with inspectors
+- **advocacy_cases**: Member legal/advocacy support cases with linked events
+- **advocacy_events**: Events/hearings linked to advocacy cases
+- **oversight_targets**: Unlicensed office tracking for regulatory oversight
+- **oversight_visits**: Visit records linked to oversight targets
+- **staff_certifications**: Staff experience certification requests with document verification
+- **staff_cert_documents**: Documents attached to certification requests
+- **compliance_checks**: Office compliance issues and action tracking
+- **compliance_actions**: Actions taken on compliance checks
+- **enhanced_complaints**: Enhanced complaints management with priority and handler assignment
+- **complaint_updates**: Update history for enhanced complaints
+
 **Current Implementation**: The codebase uses `DatabaseStorage` class (in `server/storage.ts`) providing PostgreSQL persistence through Drizzle ORM with the node-postgres driver.
 
 **File Storage**: Documents are stored on the filesystem in categorized directories rather than in the database.
