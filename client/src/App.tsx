@@ -34,6 +34,13 @@ import AdminAuditLogs from "@/pages/admin/audit-logs";
 import AdminStaffDashboard from "@/pages/admin/staff-dashboard";
 import AdminCommitmentDashboard from "@/pages/admin/commitment-dashboard";
 import AdminPromoCodes from "@/pages/admin/promo-codes";
+import AdminMembershipCards from "@/pages/admin/membership-cards";
+import AdminInspections from "@/pages/admin/inspections";
+import AdminAdvocacy from "@/pages/admin/advocacy";
+import AdminOversight from "@/pages/admin/oversight";
+import AdminStaffCertifications from "@/pages/admin/staff-certifications";
+import AdminCompliance from "@/pages/admin/compliance";
+import AdminEnhancedComplaints from "@/pages/admin/enhanced-complaints";
 
 function ProtectedRoute({ 
   children, 
@@ -221,6 +228,48 @@ function Router() {
       <Route path="/admin/promo-codes">
         <ProtectedRoute allowedRoles={['ADMIN']}>
           <AdminPromoCodes />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/membership-cards">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminMembershipCards />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/inspections">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminInspections />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/advocacy">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminAdvocacy />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/oversight">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminOversight />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/staff-certifications">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminStaffCertifications />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/compliance">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminCompliance />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/enhanced-complaints">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminEnhancedComplaints />
         </ProtectedRoute>
       </Route>
 
