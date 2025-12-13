@@ -130,9 +130,10 @@ export default function AdminPayments() {
 
   const filteredPayments = payments?.filter((payment) => {
     const matchesStatus = statusFilter === "all" || payment.status === statusFilter;
-    const matchesSearch = 
-      payment.office?.tradeNameAr?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      payment.office?.tradeNameEn?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const searchLower = searchQuery.toLowerCase();
+    const matchesSearch = searchQuery === "" ||
+      (payment.office?.tradeNameAr?.toLowerCase()?.includes(searchLower) ?? false) ||
+      (payment.office?.tradeNameEn?.toLowerCase()?.includes(searchLower) ?? false) ||
       String(payment.id).includes(searchQuery);
     return matchesStatus && matchesSearch;
   }) || [];
