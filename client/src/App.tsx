@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import { LanguageProvider } from "@/lib/i18n";
 import { LoadingPage } from "@/components/ui/loading-spinner";
+import { useAdminTheme } from "@/hooks/use-admin-theme";
 
 import LandingPage from "@/pages/landing";
 import LoginPage from "@/pages/login";
@@ -43,6 +44,10 @@ function ProtectedRoute({
   allowedRoles: ('ADMIN' | 'OFFICE')[];
 }) {
   const { user, isLoading, isAuthenticated } = useAuth();
+  
+  const isAdminRoute = allowedRoles.includes('ADMIN') && !allowedRoles.includes('OFFICE');
+  const isAdminUser = user?.role === 'ADMIN';
+  useAdminTheme(isAdminRoute && isAdminUser);
 
   if (isLoading) {
     return <LoadingPage message="Checking authentication..." />;
