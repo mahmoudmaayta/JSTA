@@ -1,7 +1,7 @@
 import { 
   users, offices, branches, documents, licenseRenewals, auditLogs,
   people, rolesInOffice, consents, renewalAttachments, employeeWorkHistory,
-  complaints, commitmentForms, officeInfoForms, payments, promoCodes,
+  complaints, commitmentForms, officeInfoForms, payments, promoCodes, jobTitles,
   type EmployeeWorkHistory,
   type User, type InsertUser,
   type Office, type InsertOffice,
@@ -527,6 +527,15 @@ export class DatabaseStorage implements IStorage {
     const allOffices = await this.getAllOffices();
     const officeMap = new Map(allOffices.map(o => [o.id, o.tradeNameAr || o.tradeNameEn || `Office #${o.id}`]));
     
+    // Load job titles lookup table (legacy_id -> name)
+    const allJobTitles = await db.select().from(jobTitles);
+    const jobTitleMap = new Map<string, string>();
+    for (const jt of allJobTitles) {
+      if (jt.legacyId) {
+        jobTitleMap.set(String(jt.legacyId), jt.nameAr || jt.name || `Job #${jt.legacyId}`);
+      }
+    }
+    
     // Gender distribution
     const genderBreakdown: Record<string, number> = {};
     for (const person of allPeople) {
@@ -534,11 +543,12 @@ export class DatabaseStorage implements IStorage {
       genderBreakdown[gender] = (genderBreakdown[gender] || 0) + 1;
     }
     
-    // Job title distribution
+    // Job title distribution - look up actual name from job titles table
     const jobTitleBreakdown: Record<string, number> = {};
     for (const person of allPeople) {
       if (person.jobTitle) {
-        jobTitleBreakdown[person.jobTitle] = (jobTitleBreakdown[person.jobTitle] || 0) + 1;
+        const titleName = jobTitleMap.get(person.jobTitle) || person.jobTitle;
+        jobTitleBreakdown[titleName] = (jobTitleBreakdown[titleName] || 0) + 1;
       }
     }
     
