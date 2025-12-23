@@ -21,7 +21,7 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  Legend,
+  LabelList,
 } from "recharts";
 import {
   Building,
@@ -223,35 +223,42 @@ export default function AdminDashboard() {
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="h-[300px]">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <PieChart>
-                              <Pie
-                                data={analytics.byCategory.slice(0, 8)}
-                                cx="50%"
-                                cy="40%"
-                                innerRadius={45}
-                                outerRadius={75}
-                                paddingAngle={2}
-                                dataKey="value"
-                                nameKey="name"
-                              >
-                                {analytics.byCategory.slice(0, 8).map((_, index) => (
-                                  <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
-                                ))}
-                              </Pie>
-                              <Tooltip 
-                                formatter={(value: number) => [value, language === 'ar' ? 'مكاتب' : 'Offices']}
-                                contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))', borderRadius: '6px' }}
-                              />
-                              <Legend 
-                                layout="horizontal" 
-                                verticalAlign="bottom" 
-                                align="center"
-                                wrapperStyle={{ paddingTop: '10px' }}
-                              />
-                            </PieChart>
-                          </ResponsiveContainer>
+                        <div className="flex gap-6">
+                          <div className="h-[200px] w-[200px] flex-shrink-0">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <PieChart>
+                                <Pie
+                                  data={analytics.byCategory.slice(0, 8)}
+                                  cx="50%"
+                                  cy="50%"
+                                  innerRadius={40}
+                                  outerRadius={70}
+                                  paddingAngle={2}
+                                  dataKey="value"
+                                  nameKey="name"
+                                >
+                                  {analytics.byCategory.slice(0, 8).map((_, index) => (
+                                    <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                                  ))}
+                                </Pie>
+                                <Tooltip 
+                                  formatter={(value: number) => [value, language === 'ar' ? 'مكاتب' : 'Offices']}
+                                  contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))', borderRadius: '6px' }}
+                                />
+                              </PieChart>
+                            </ResponsiveContainer>
+                          </div>
+                          <div className="flex-1 space-y-2">
+                            {analytics.byCategory.slice(0, 8).map((cat, i) => (
+                              <div key={cat.name} className="flex items-center justify-between text-sm">
+                                <div className="flex items-center gap-2">
+                                  <span className="w-3 h-3 rounded-sm flex-shrink-0" style={{ backgroundColor: CHART_COLORS[i] }} />
+                                  <span>{language === 'ar' ? `فئة ${cat.name}` : `Category ${cat.name}`}</span>
+                                </div>
+                                <span className="font-medium">{cat.value}</span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </CardContent>
                     </Card>
@@ -264,18 +271,28 @@ export default function AdminDashboard() {
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="h-[300px]">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={analytics.byCity.slice(0, 6)} layout="vertical" margin={{ left: 10 }}>
-                              <XAxis type="number" tick={{ fill: 'hsl(var(--foreground))' }} />
-                              <YAxis dataKey="name" type="category" width={70} tick={{ fontSize: 12, fill: 'hsl(var(--foreground))' }} />
-                              <Tooltip 
-                                formatter={(value: number) => [value, language === 'ar' ? 'مكاتب' : 'Offices']} 
-                                contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))', borderRadius: '6px' }}
-                              />
-                              <Bar dataKey="value" fill="hsl(221, 83%, 53%)" radius={[0, 4, 4, 0]} />
-                            </BarChart>
-                          </ResponsiveContainer>
+                        <div className="space-y-3">
+                          {analytics.byCity.slice(0, 6).map((city, i) => {
+                            const maxValue = Math.max(...analytics.byCity.map(c => c.value));
+                            const percentage = (city.value / maxValue) * 100;
+                            return (
+                              <div key={city.name} className="space-y-1">
+                                <div className="flex items-center justify-between text-sm">
+                                  <span>{city.name}</span>
+                                  <span className="font-medium">{city.value}</span>
+                                </div>
+                                <div className="h-2 bg-muted rounded-full overflow-hidden">
+                                  <div 
+                                    className="h-full rounded-full transition-all"
+                                    style={{ 
+                                      width: `${percentage}%`,
+                                      backgroundColor: CHART_COLORS[i % CHART_COLORS.length]
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })}
                         </div>
                       </CardContent>
                     </Card>
