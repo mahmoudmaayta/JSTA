@@ -21,6 +21,7 @@ export default function AdminOffices() {
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [cityFilter, setCityFilter] = useState<string>("all");
   const [iataFilter, setIataFilter] = useState<string>("all");
+  const [renewalYearFilter, setRenewalYearFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [fileNoQuery, setFileNoQuery] = useState("");
   const { t, language } = useLanguage();
@@ -61,6 +62,8 @@ export default function AdminOffices() {
     const matchesIata = iataFilter === "all" || 
       (iataFilter === "yes" && office.isIata) || 
       (iataFilter === "no" && !office.isIata);
+    const matchesRenewalYear = renewalYearFilter === "all" || 
+      (office.lastRenewalYear?.toString() === renewalYearFilter);
     const matchesFileNo = !fileNoQuery || 
       office.registrationNumber?.toLowerCase().includes(fileNoQuery.toLowerCase());
     const searchLower = searchQuery.toLowerCase();
@@ -71,8 +74,10 @@ export default function AdminOffices() {
       office.registrationNumber?.toLowerCase().includes(searchLower) ||
       office.mainEmail?.toLowerCase().includes(searchLower) ||
       office.iataNumber?.toLowerCase().includes(searchLower);
-    return matchesStatus && matchesCategory && matchesCity && matchesIata && matchesFileNo && matchesSearch;
+    return matchesStatus && matchesCategory && matchesCity && matchesIata && matchesRenewalYear && matchesFileNo && matchesSearch;
   }) || [];
+
+  const renewalYears = offices ? Array.from(new Set(offices.map(o => o.lastRenewalYear).filter(Boolean))).sort((a, b) => (b || 0) - (a || 0)) : [];
 
   const totalCount = offices?.length || 0;
   const activeCount = offices?.filter(o => o.status === 'ACTIVE').length || 0;
@@ -142,7 +147,7 @@ export default function AdminOffices() {
                           />
                         </div>
                       </div>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                         <Select value={statusFilter} onValueChange={setStatusFilter}>
                           <SelectTrigger data-testid="select-status">
                             <SelectValue placeholder={t("admin.filterByStatus")} />
@@ -176,6 +181,19 @@ export default function AdminOffices() {
                             {cities.map((city) => (
                               <SelectItem key={city.value} value={city.value}>
                                 {city.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Select value={renewalYearFilter} onValueChange={setRenewalYearFilter}>
+                          <SelectTrigger data-testid="select-renewal-year">
+                            <SelectValue placeholder={language === 'ar' ? 'سنة التجديد' : 'Renewal Year'} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">{language === 'ar' ? 'كل السنوات' : 'All Years'}</SelectItem>
+                            {renewalYears.map((year) => (
+                              <SelectItem key={year} value={year!.toString()}>
+                                {year}
                               </SelectItem>
                             ))}
                           </SelectContent>
