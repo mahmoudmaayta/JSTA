@@ -22,6 +22,7 @@ export default function AdminOffices() {
   const [cityFilter, setCityFilter] = useState<string>("all");
   const [iataFilter, setIataFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [fileNoQuery, setFileNoQuery] = useState("");
   const { t, language } = useLanguage();
   const sidebarSide = language === 'ar' ? 'right' : 'left';
 
@@ -60,6 +61,8 @@ export default function AdminOffices() {
     const matchesIata = iataFilter === "all" || 
       (iataFilter === "yes" && office.isIata) || 
       (iataFilter === "no" && !office.isIata);
+    const matchesFileNo = !fileNoQuery || 
+      office.registrationNumber?.toLowerCase().includes(fileNoQuery.toLowerCase());
     const searchLower = searchQuery.toLowerCase();
     const matchesSearch = !searchQuery ||
       office.tradeNameAr?.toLowerCase().includes(searchLower) ||
@@ -68,7 +71,7 @@ export default function AdminOffices() {
       office.registrationNumber?.toLowerCase().includes(searchLower) ||
       office.mainEmail?.toLowerCase().includes(searchLower) ||
       office.iataNumber?.toLowerCase().includes(searchLower);
-    return matchesStatus && matchesCategory && matchesCity && matchesIata && matchesSearch;
+    return matchesStatus && matchesCategory && matchesCity && matchesIata && matchesFileNo && matchesSearch;
   }) || [];
 
   const totalCount = offices?.length || 0;
@@ -117,15 +120,27 @@ export default function AdminOffices() {
                 <Card>
                   <CardHeader className="pb-4">
                     <div className="flex flex-col gap-4">
-                      <div className="relative flex-1">
-                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground rtl:left-auto rtl:right-3" />
-                        <Input
-                          placeholder={language === 'ar' ? 'بحث بالاسم أو رقم التسجيل أو البريد الإلكتروني...' : 'Search by name, registration number, email...'}
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          className="pl-9 rtl:pl-3 rtl:pr-9"
-                          data-testid="input-search"
-                        />
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <div className="relative flex-1">
+                          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground rtl:left-auto rtl:right-3" />
+                          <Input
+                            placeholder={language === 'ar' ? 'بحث بالاسم أو البريد الإلكتروني...' : 'Search by name or email...'}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="pl-9 rtl:pl-3 rtl:pr-9"
+                            data-testid="input-search"
+                          />
+                        </div>
+                        <div className="relative sm:w-48">
+                          <FolderOpen className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground rtl:left-auto rtl:right-3" />
+                          <Input
+                            placeholder={language === 'ar' ? 'رقم الملف...' : 'File No...'}
+                            value={fileNoQuery}
+                            onChange={(e) => setFileNoQuery(e.target.value)}
+                            className="pl-9 rtl:pl-3 rtl:pr-9"
+                            data-testid="input-file-no"
+                          />
+                        </div>
                       </div>
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                         <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -257,7 +272,7 @@ export default function AdminOffices() {
                         icon={FolderOpen}
                         title={t("adminOffices.noOffices")}
                         description={
-                          searchQuery || statusFilter !== "all" || categoryFilter !== "all"
+                          searchQuery || fileNoQuery || statusFilter !== "all" || categoryFilter !== "all"
                             ? t("adminOffices.noMatchingOffices")
                             : t("adminOffices.noRegisteredOffices")
                         }
