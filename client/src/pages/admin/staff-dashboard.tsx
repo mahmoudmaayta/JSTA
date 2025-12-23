@@ -47,9 +47,23 @@ import {
 import type { Office, Person, RoleInOffice } from "@shared/schema";
 
 interface StaffDataItem {
-  person: Person;
-  role: RoleInOffice;
-  office: Office;
+  person: Partial<Person>;
+  role: Partial<RoleInOffice> & { description?: string };
+  office: Partial<Office>;
+  workHistory?: {
+    dateIn?: string;
+    dateOut?: string;
+    jobTitle?: number;
+    description?: string;
+  };
+}
+
+interface StaffResponse {
+  data: StaffDataItem[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }
 
 export default function AdminStaffDashboard() {
@@ -65,39 +79,48 @@ export default function AdminStaffDashboard() {
   const [selectedNationality, setSelectedNationality] = useState<string>("all");
   const [selectedPerson, setSelectedPerson] = useState<StaffDataItem | null>(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 50;
+
   const { data: officesData, isLoading: isLoadingOffices } = useQuery<Office[]>({
     queryKey: ["/api/admin/offices"],
   });
 
   const [officeSearchQuery, setOfficeSearchQuery] = useState("");
 
-  const { data: staffData, isLoading: isLoadingStaff } = useQuery<StaffDataItem[]>({
-    queryKey: ["/api/admin/staff"],
+  const { data: staffResponse, isLoading: isLoadingStaff } = useQuery<StaffResponse>({
+    queryKey: ["/api/admin/staff", currentPage, searchQuery, selectedOffice],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: pageSize.toString(),
+      });
+      if (searchQuery) params.set("search", searchQuery);
+      if (selectedOffice !== "all") params.set("officeId", selectedOffice);
+      
+      const response = await fetch(`/api/admin/staff?${params}`);
+      if (!response.ok) throw new Error("Failed to fetch staff");
+      return response.json();
+    },
   });
+
+  const staffData = staffResponse?.data || [];
+  const totalStaff = staffResponse?.total || 0;
+  const totalPages = staffResponse?.totalPages || 1;
 
   const filteredStaff = useMemo(() => {
     if (!staffData) return [];
 
     return staffData.filter((item) => {
-      const matchesSearch =
-        searchQuery === "" ||
-        item.person.fullNameAr?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.person.fullNameEn?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.person.nationalId?.includes(searchQuery) ||
-        item.person.mobile?.includes(searchQuery);
-
-      const matchesOffice =
-        selectedOffice === "all" || item.office.id.toString() === selectedOffice;
-
       const matchesRole =
-        selectedRole === "all" || item.role.roleType === selectedRole;
+        selectedRole === "all" || item.role?.roleType === selectedRole;
 
       const matchesNationality =
         selectedNationality === "all" || item.person.nationality === selectedNationality;
 
-      return matchesSearch && matchesOffice && matchesRole && matchesNationality;
+      return matchesRole && matchesNationality;
     });
-  }, [staffData, searchQuery, selectedOffice, selectedRole, selectedNationality]);
+  }, [staffData, selectedRole, selectedNationality]);
 
   const uniqueNationalities = useMemo(() => {
     if (!staffData) return [];
@@ -192,7 +215,7 @@ export default function AdminStaffDashboard() {
           `"${item.person.currentPosition || ""}"`,
           `"${item.person.startDate || ""}"`,
           `"${item.person.branch || ""}"`,
-          `"${getRoleLabel(item.role.roleType)}"`,
+          `"${getRoleLabel(item.role?.roleType || 'EMPLOYEE')}"`,
         ].join(",")
       ),
     ].join("\n");
@@ -411,10 +434,10 @@ export default function AdminStaffDashboard() {
                             <TableCell dir="ltr">{item.person.fullNameEn}</TableCell>
                             <TableCell dir="ltr">{item.person.nationalId}</TableCell>
                             <TableCell>{item.person.nationality}</TableCell>
-                            <TableCell>{item.person.currentPosition}</TableCell>
+                            <TableCell>{item.person.job || item.workHistory?.description || item.person.currentPosition || "-"}</TableCell>
                             <TableCell>
-                              <Badge variant={getRoleBadgeVariant(item.role.roleType)}>
-                                {getRoleLabel(item.role.roleType)}
+                              <Badge variant={getRoleBadgeVariant(item.role?.roleType || 'EMPLOYEE')}>
+                                {getRoleLabel(item.role?.roleType || 'EMPLOYEE')}
                               </Badge>
                             </TableCell>
                             <TableCell>
@@ -431,6 +454,40 @@ export default function AdminStaffDashboard() {
                         ))}
                       </TableBody>
                     </Table>
+                    
+                    {/* Pagination */}
+                    <div className="flex items-center justify-between mt-4 flex-wrap gap-2">
+                      <div className="text-sm text-muted-foreground">
+                        {language === "ar" 
+                          ? `عرض ${filteredStaff.length} من ${totalStaff} موظف`
+                          : `Showing ${filteredStaff.length} of ${totalStaff} employees`}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          disabled={currentPage <= 1}
+                          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                          data-testid="button-prev-page"
+                        >
+                          {language === "ar" ? "السابق" : "Previous"}
+                        </Button>
+                        <span className="text-sm">
+                          {language === "ar" 
+                            ? `صفحة ${currentPage} من ${totalPages}`
+                            : `Page ${currentPage} of ${totalPages}`}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          disabled={currentPage >= totalPages}
+                          onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                          data-testid="button-next-page"
+                        >
+                          {language === "ar" ? "التالي" : "Next"}
+                        </Button>
+                      </div>
+                    </div>
                   </div>
                 )}
               </CardContent>
@@ -503,8 +560,8 @@ export default function AdminStaffDashboard() {
               <div className="col-span-2">
                 <Label className="text-muted-foreground">{language === "ar" ? "الدور" : "Role"}</Label>
                 <div className="mt-1">
-                  <Badge variant={getRoleBadgeVariant(selectedPerson.role.roleType)} className="text-sm">
-                    {getRoleLabel(selectedPerson.role.roleType)}
+                  <Badge variant={getRoleBadgeVariant(selectedPerson.role?.roleType || 'EMPLOYEE')} className="text-sm">
+                    {getRoleLabel(selectedPerson.role?.roleType || 'EMPLOYEE')}
                   </Badge>
                 </div>
               </div>

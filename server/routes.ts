@@ -807,26 +807,88 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/admin/staff", ensureAdmin, async (req, res) => {
     try {
-      const offices = await storage.getAllOffices();
-      const staffData: any[] = [];
+      // Use pagination for large datasets
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 50;
+      const offset = (page - 1) * limit;
+      const search = (req.query.search as string) || "";
+      const officeId = req.query.officeId ? parseInt(req.query.officeId as string) : null;
+      
+      // Get all employees with work history (legacy imported data) - direct DB query for performance
+      const result = await pool.query(`
+        SELECT DISTINCT ON (p.id)
+          p.*,
+          ewh.date_in, ewh.date_out, ewh.job_title as wh_job_title, ewh.description as wh_description,
+          o.trade_name_ar as office_name_ar, o.trade_name_en as office_name_en, o.registration_number, o.id as office_id
+        FROM people p
+        LEFT JOIN employee_work_history ewh ON p.id = ewh.person_id
+        LEFT JOIN offices o ON ewh.office_id = o.id
+        WHERE p.legacy_id IS NOT NULL
+          ${officeId ? `AND ewh.office_id = $3` : ''}
+          ${search ? `AND (p.full_name_ar ILIKE $${officeId ? 4 : 3} OR p.full_name_en ILIKE $${officeId ? 4 : 3} OR p.national_id ILIKE $${officeId ? 4 : 3} OR p.mobile ILIKE $${officeId ? 4 : 3})` : ''}
+        ORDER BY p.id, ewh.date_in DESC NULLS LAST
+        LIMIT $1 OFFSET $2
+      `, officeId 
+        ? (search ? [limit, offset, officeId, `%${search}%`] : [limit, offset, officeId])
+        : (search ? [limit, offset, `%${search}%`] : [limit, offset])
+      );
+      
+      // Get total count
+      const countResult = await pool.query(`
+        SELECT COUNT(DISTINCT p.id) as total
+        FROM people p
+        LEFT JOIN employee_work_history ewh ON p.id = ewh.person_id
+        WHERE p.legacy_id IS NOT NULL
+          ${officeId ? `AND ewh.office_id = $1` : ''}
+          ${search ? `AND (p.full_name_ar ILIKE $${officeId ? 2 : 1} OR p.full_name_en ILIKE $${officeId ? 2 : 1} OR p.national_id ILIKE $${officeId ? 2 : 1} OR p.mobile ILIKE $${officeId ? 2 : 1})` : ''}
+      `, officeId 
+        ? (search ? [officeId, `%${search}%`] : [officeId])
+        : (search ? [`%${search}%`] : [])
+      );
+      
+      const staffData = result.rows.map(row => ({
+        person: {
+          id: row.id,
+          legacyId: row.legacy_id,
+          fullNameAr: row.full_name_ar,
+          fullNameEn: row.full_name_en,
+          firstName: row.first_name,
+          lastName: row.last_name,
+          nationalId: row.national_id,
+          nationality: row.nationality,
+          gender: row.gender,
+          mobile: row.mobile,
+          email: row.email,
+          job: row.job,
+          qualification: row.qualification,
+          jstaIdNum: row.jsta_id_num,
+          birthDate: row.birth_date,
+        },
+        role: {
+          roleType: row.job || 'EMPLOYEE',
+          description: row.wh_description,
+        },
+        office: {
+          id: row.office_id,
+          tradeNameAr: row.office_name_ar,
+          tradeNameEn: row.office_name_en,
+          registrationNumber: row.registration_number,
+        },
+        workHistory: {
+          dateIn: row.date_in,
+          dateOut: row.date_out,
+          jobTitle: row.wh_job_title,
+          description: row.wh_description,
+        },
+      }));
 
-      for (const office of offices) {
-        const people = await storage.getPeopleByOffice(office.id);
-        
-        for (const person of people) {
-          const roles = await storage.getRolesByPerson(person.id);
-          
-          for (const role of roles) {
-            staffData.push({
-              person,
-              role,
-              office,
-            });
-          }
-        }
-      }
-
-      res.json(staffData);
+      res.json({
+        data: staffData,
+        total: parseInt(countResult.rows[0]?.total || '0'),
+        page,
+        limit,
+        totalPages: Math.ceil(parseInt(countResult.rows[0]?.total || '0') / limit)
+      });
     } catch (error) {
       console.error("Get admin staff error:", error);
       res.status(500).json({ message: "Internal server error" });

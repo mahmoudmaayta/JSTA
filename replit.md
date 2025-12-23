@@ -181,3 +181,40 @@ Preferred communication style: Simple, everyday language.
 - Filter by city
 - Filter by IATA membership status
 - Search by name, registration number, or email
+
+### Employee Data Migration (December 2025)
+
+**Data Source**: employees_1766506496310.sql containing 13,942 employee records
+
+**Migration Scripts**:
+- `scripts/migration/import-employees.cjs` - Imports employee personal information
+- `scripts/migration/import-employee-history.cjs` - Imports work history linking employees to offices
+
+**People Table Fields Added**:
+- legacy_id: Link to original employee ID from legacy system
+- Name parts (Arabic): first_name, second_name, middle_name, last_name
+- Name parts (English): first_name_en, second_name_en, middle_name_en, last_name_en
+- full_name_ar, full_name_en: Computed full names
+- jsta_id_num: JSTA membership number
+- nationality, social_security_no, birth_date, gender, mother_name
+- qualification, qualification_file, job_title, courses, job
+- passport_number, passport_file, location_file, picture, cv
+
+**Employee Work History Table**:
+- Links employees to offices with employment periods (date_in, date_out)
+- Tracks job titles and descriptions for each office assignment
+- Employment documents: letter_appointment, contract_appointment, etc.
+
+**Employee Statistics**:
+- Total Employees Imported: 13,942
+- By Gender: Male (ذكر): 8,992, Female (أنثى): 4,488, Unknown: 462
+- Work History Records: 17,758
+- Employees Linked to Offices: 13,584
+
+**Admin Staff Dashboard Features**:
+- Paginated view (50 employees per page)
+- Server-side search by name, national ID, or mobile
+- Filter by office
+- Filter by role and nationality
+- Export to CSV
+- View detailed employee information in modal

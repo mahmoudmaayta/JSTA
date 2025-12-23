@@ -361,7 +361,7 @@ export class DatabaseStorage implements IStorage {
 
   async getEmployeesByOffice(officeId: number): Promise<{ person: Person; workHistory: EmployeeWorkHistory[] }[]> {
     const workHistory = await this.getWorkHistoryByOffice(officeId);
-    const personIds = [...new Set(workHistory.map(wh => wh.personId))];
+    const personIds = Array.from(new Set(workHistory.map(wh => wh.personId)));
     
     if (personIds.length === 0) {
       return [];
