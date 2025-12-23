@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "name": "AMMAN",
+    "nameAR": "عمان"
+  },
+  {
+    "id": 2,
+    "name": "IRBID",
+    "nameAR": "إربد"
+  },
+  {
+    "id": 3,
+    "name": "Zarqa",
+    "nameAR": "الزرقاء"
+  },
+  {
+    "id": 4,
+    "name": "SALT",
+    "nameAR": "البلقاء"
+  },
+  {
+    "id": 13,
+    "name": "PETRA",
+    "nameAR": "البتراء"
+  },
+  {
+    "id": 5,
+    "name": "JARASH",
+    "nameAR": "جرش"
+  },
+  {
+    "id": 6,
+    "name": "الطفيلة",
+    "nameAR": "الطفيلة"
+  },
+  {
+    "id": 7,
+    "name": "AQABA",
+    "nameAR": "العقبة"
+  },
+  {
+    "id": 8,
+    "name": "الكرك",
+    "nameAR": "الكرك"
+  },
+  {
+    "id": 9,
+    "name": "MADABA",
+    "nameAR": "مادبا"
+  },
+  {
+    "id": 10,
+    "name": "معان",
+    "nameAR": "معان"
+  },
+  {
+    "id": 11,
+    "name": "المفرق",
+    "nameAR": "المفرق"
+  },
+  {
+    "id": 12,
+    "name": "عجلون",
+    "nameAR": "عجلون"
+  },
+  {
+    "id": 14,
+    "name": "WADI RUM",
+    "nameAR": "وادي رم"
+  },
+  {
+    "id": 15,
+    "name": "WADI MOUSA",
+    "nameAR": "وادي موسى"
+  },
+  {
+    "id": 16,
+    "name": "Um Uthaina ",
+    "nameAR": "ام اذينة "
+  }
+]

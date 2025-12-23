@@ -1,0 +1,14 @@
+{
+  "extractedAt": "2025-12-23T13:05:59.252Z",
+  "tables": {
+    "travelagent": 730,
+    "officesbranch": 114,
+    "employees": 13159,
+    "owners": 3027,
+    "annual_renewals": 8742,
+    "cities": 16,
+    "countries": 147,
+    "jobtitle": 53,
+    "tourism_activity": 5
+  }
+}
