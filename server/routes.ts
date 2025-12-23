@@ -662,6 +662,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // Staff analytics endpoint
+  app.get("/api/admin/staff-analytics", ensureAdmin, async (req, res) => {
+    try {
+      const analytics = await storage.getStaffAnalytics();
+      res.json(analytics);
+    } catch (error) {
+      console.error("Staff analytics error:", error);
+      res.status(500).json({ message: "Failed to fetch staff analytics" });
+    }
+  });
+
   app.get("/api/admin/audit-logs", ensureAdmin, async (req, res) => {
     const limit = parseInt(req.query.limit as string) || 50;
     const offset = parseInt(req.query.offset as string) || 0;

@@ -107,6 +107,16 @@ export interface IStorage {
     avgCompletionRate: number;
   }>;
   
+  getStaffAnalytics(): Promise<{
+    totalStaff: number;
+    linkedToOffices: number;
+    workHistoryRecords: number;
+    byGender: { name: string; value: number }[];
+    byJobTitle: { name: string; value: number }[];
+    byNationality: { name: string; value: number }[];
+    byOffice: { name: string; value: number }[];
+  }>;
+  
   createAuditLog(log: InsertAuditLog): Promise<AuditLog>;
   getAuditLogs(limit?: number, offset?: number): Promise<AuditLog[]>;
   getAuditLogsCount(): Promise<number>;
@@ -497,6 +507,83 @@ export class DatabaseStorage implements IStorage {
     const attachmentsUploaded = attachments2026.length;
     
     return { total, draft, submitted, approved, rejected, formsCompleted, attachmentsUploaded, avgCompletionRate };
+  }
+
+  async getStaffAnalytics(): Promise<{
+    totalStaff: number;
+    linkedToOffices: number;
+    workHistoryRecords: number;
+    byGender: { name: string; value: number }[];
+    byJobTitle: { name: string; value: number }[];
+    byNationality: { name: string; value: number }[];
+    byOffice: { name: string; value: number }[];
+  }> {
+    const allPeople = await db.select().from(people);
+    const allWorkHistory = await db.select({
+      personId: employeeWorkHistory.personId,
+      officeId: employeeWorkHistory.officeId
+    }).from(employeeWorkHistory);
+    
+    const allOffices = await this.getAllOffices();
+    const officeMap = new Map(allOffices.map(o => [o.id, o.tradeNameAr || o.tradeNameEn || `Office #${o.id}`]));
+    
+    // Gender distribution
+    const genderBreakdown: Record<string, number> = {};
+    for (const person of allPeople) {
+      const gender = person.gender || 'غير محدد';
+      genderBreakdown[gender] = (genderBreakdown[gender] || 0) + 1;
+    }
+    
+    // Job title distribution
+    const jobTitleBreakdown: Record<string, number> = {};
+    for (const person of allPeople) {
+      if (person.jobTitle) {
+        jobTitleBreakdown[person.jobTitle] = (jobTitleBreakdown[person.jobTitle] || 0) + 1;
+      }
+    }
+    
+    // Nationality distribution
+    const nationalityBreakdown: Record<string, number> = {};
+    for (const person of allPeople) {
+      const nationality = person.nationality || 'غير محدد';
+      nationalityBreakdown[nationality] = (nationalityBreakdown[nationality] || 0) + 1;
+    }
+    
+    // Distinct employees per office (not raw work history counts)
+    const officeEmployees: Record<number, Set<number>> = {};
+    for (const wh of allWorkHistory) {
+      if (!officeEmployees[wh.officeId]) {
+        officeEmployees[wh.officeId] = new Set();
+      }
+      officeEmployees[wh.officeId].add(wh.personId);
+    }
+    
+    // People linked to offices
+    const linkedPersonIds = new Set(allWorkHistory.map(wh => wh.personId));
+    
+    return {
+      totalStaff: allPeople.length,
+      linkedToOffices: linkedPersonIds.size,
+      workHistoryRecords: allWorkHistory.length,
+      byGender: Object.entries(genderBreakdown)
+        .map(([name, value]) => ({ name, value }))
+        .sort((a, b) => b.value - a.value),
+      byJobTitle: Object.entries(jobTitleBreakdown)
+        .map(([name, value]) => ({ name, value }))
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 10),
+      byNationality: Object.entries(nationalityBreakdown)
+        .map(([name, value]) => ({ name, value }))
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 8),
+      byOffice: Object.entries(officeEmployees)
+        .map(([officeIdStr, personSet]) => ({
+          name: officeMap.get(parseInt(officeIdStr)) || `Office #${officeIdStr}`,
+          value: personSet.size
+        }))
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 10)
+    };
   }
 
   async createAuditLog(insertLog: InsertAuditLog): Promise<AuditLog> {
