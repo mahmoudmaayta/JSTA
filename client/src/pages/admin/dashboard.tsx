@@ -223,35 +223,35 @@ export default function AdminDashboard() {
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="h-[250px]">
+                        <div className="h-[300px]">
                           <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                               <Pie
                                 data={analytics.byCategory.slice(0, 8)}
                                 cx="50%"
-                                cy="50%"
-                                innerRadius={50}
-                                outerRadius={90}
+                                cy="40%"
+                                innerRadius={45}
+                                outerRadius={75}
                                 paddingAngle={2}
                                 dataKey="value"
-                                label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
-                                labelLine={false}
+                                nameKey="name"
                               >
                                 {analytics.byCategory.slice(0, 8).map((_, index) => (
                                   <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                                 ))}
                               </Pie>
-                              <Tooltip formatter={(value: number) => [value, language === 'ar' ? 'مكاتب' : 'Offices']} />
+                              <Tooltip 
+                                formatter={(value: number) => [value, language === 'ar' ? 'مكاتب' : 'Offices']}
+                                contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))', borderRadius: '6px' }}
+                              />
+                              <Legend 
+                                layout="horizontal" 
+                                verticalAlign="bottom" 
+                                align="center"
+                                wrapperStyle={{ paddingTop: '10px' }}
+                              />
                             </PieChart>
                           </ResponsiveContainer>
-                        </div>
-                        <div className="flex flex-wrap gap-2 mt-4 justify-center">
-                          {analytics.byCategory.slice(0, 6).map((cat, i) => (
-                            <Badge key={cat.name} variant="outline" className="gap-1">
-                              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: CHART_COLORS[i] }} />
-                              {language === 'ar' ? `فئة ${cat.name}` : `Cat. ${cat.name}`}: {cat.value}
-                            </Badge>
-                          ))}
                         </div>
                       </CardContent>
                     </Card>
@@ -264,12 +264,15 @@ export default function AdminDashboard() {
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="h-[250px]">
+                        <div className="h-[300px]">
                           <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={analytics.byCity.slice(0, 6)} layout="vertical">
-                              <XAxis type="number" />
-                              <YAxis dataKey="name" type="category" width={60} tick={{ fontSize: 12 }} />
-                              <Tooltip formatter={(value: number) => [value, language === 'ar' ? 'مكاتب' : 'Offices']} />
+                            <BarChart data={analytics.byCity.slice(0, 6)} layout="vertical" margin={{ left: 10 }}>
+                              <XAxis type="number" tick={{ fill: 'hsl(var(--foreground))' }} />
+                              <YAxis dataKey="name" type="category" width={70} tick={{ fontSize: 12, fill: 'hsl(var(--foreground))' }} />
+                              <Tooltip 
+                                formatter={(value: number) => [value, language === 'ar' ? 'مكاتب' : 'Offices']} 
+                                contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))', borderRadius: '6px' }}
+                              />
                               <Bar dataKey="value" fill="hsl(221, 83%, 53%)" radius={[0, 4, 4, 0]} />
                             </BarChart>
                           </ResponsiveContainer>
