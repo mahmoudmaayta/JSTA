@@ -271,3 +271,22 @@ Preferred communication style: Simple, everyday language.
 - has_branch: Boolean flag set to true for offices with branches
 - branch_count: Count of branches per office
 - Script automatically updates these flags after importing branch records
+
+### Staff Analytics Dashboard (December 2025)
+
+**API Endpoint**: `/api/admin/staff-analytics`
+- Returns comprehensive staff statistics using storage.getStaffAnalytics()
+- Counts distinct employees (not duplicate work history records)
+
+**Dashboard Components**:
+1. **Summary Cards**: Total Staff (13,942), Linked to Offices (13,584), Work History Records (17,758)
+2. **Gender Distribution Donut Chart**: Male/Female/Unknown breakdown with side legend
+3. **Top 10 Job Titles**: Horizontal progress bars showing job distribution
+4. **Nationality Distribution**: Horizontal progress bars for top 8 nationalities
+5. **Top 10 Offices by Staff**: Bar chart showing offices with most employees
+
+**Implementation Details**:
+- Uses Set for distinct employee counting to avoid duplicates from work history
+- Loading skeleton displays while analytics fetch
+- Arabic placeholder "غير محدد" used for missing gender/nationality data
+- All charts use consistent color palette (CHART_COLORS array)
