@@ -610,6 +610,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(stats);
   });
 
+  app.get("/api/admin/analytics", ensureAdmin, async (req, res) => {
+    const offices = await storage.getAllOffices();
+    
+    const categoryBreakdown: Record<string, number> = {};
+    const cityBreakdown: Record<string, number> = {};
+    let iataCount = 0;
+    let uftaaCount = 0;
+    let astaCount = 0;
+    let wtoCount = 0;
+    
+    for (const office of offices) {
+      const cat = office.licenseCategory || 'Unknown';
+      categoryBreakdown[cat] = (categoryBreakdown[cat] || 0) + 1;
+      
+      const city = office.mainCity || 'Unknown';
+      cityBreakdown[city] = (cityBreakdown[city] || 0) + 1;
+      
+      if (office.isIata) iataCount++;
+      if (office.isUftaa) uftaaCount++;
+      if (office.isAsta) astaCount++;
+      if (office.isWto) wtoCount++;
+    }
+    
+    const renewalYears: Record<number, number> = {};
+    for (const office of offices) {
+      if (office.lastRenewalYear) {
+        renewalYears[office.lastRenewalYear] = (renewalYears[office.lastRenewalYear] || 0) + 1;
+      }
+    }
+    
+    res.json({
+      totalOffices: offices.length,
+      byCategory: Object.entries(categoryBreakdown)
+        .map(([name, value]) => ({ name, value }))
+        .sort((a, b) => b.value - a.value),
+      byCity: Object.entries(cityBreakdown)
+        .map(([name, value]) => ({ name, value }))
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 10),
+      memberships: {
+        iata: iataCount,
+        uftaa: uftaaCount,
+        asta: astaCount,
+        wto: wtoCount
+      },
+      byRenewalYear: Object.entries(renewalYears)
+        .map(([year, count]) => ({ year: parseInt(year), count }))
+        .sort((a, b) => b.year - a.year)
+        .slice(0, 5)
+    });
+  });
+
   app.get("/api/admin/audit-logs", ensureAdmin, async (req, res) => {
     const limit = parseInt(req.query.limit as string) || 50;
     const offset = parseInt(req.query.offset as string) || 0;

@@ -147,3 +147,37 @@ Preferred communication style: Simple, everyday language.
 **Admin Test Credentials**: 
 - Email: atallaabutaha@gmail.com
 - Password: Admin123
+
+### Legacy Data Migration (December 2025)
+
+**Data Source**: travelagent_1766501697477.sql containing 1,701 historical travel agent records
+
+**Migration Script**: scripts/migration/import-legacy-data.cjs
+- Parses multi-line SQL INSERT statements from legacy MySQL dump
+- Maps 56 legacy fields to new schema structure
+- Handles Arabic text, escape sequences, and null values
+- City code mapping (1=Amman, 2=Irbid, 3=Zarqa, etc.)
+
+**Imported Fields Include**:
+- License categories (A, B, C, D and combinations)
+- IATA membership info (number, isIata, isUftaa, isAsta, isWto)
+- Tourism activities (imported, tickets, hajj_umrah, domestic, outbound)
+- Banking info (bank_guarantee, bank_guarantee_end)
+- Manager details (first, second, middle, last names)
+- Registration and operational dates
+
+**Database Statistics**:
+- Total Offices: 1,701
+- By Category: B (806), A (399), D (169), A+B+C+D (107)
+- By City: Amman (1,546), Irbid (92), Zarqa (47)
+
+**Admin Dashboard Analytics**:
+- Pie chart showing license category distribution
+- Bar chart showing office distribution by city
+- International membership statistics (IATA, UFTAA, ASTA, WTO)
+
+**Admin Offices Table Features**:
+- Filter by license category
+- Filter by city
+- Filter by IATA membership status
+- Search by name, registration number, or email

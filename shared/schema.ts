@@ -89,11 +89,21 @@ export const LicenseCategory = {
   A: 'A',
   B: 'B',
   C: 'C',
+  D: 'D',
   AB: 'A+B',
-  ABC: 'A+B+C'
+  AC: 'A+C',
+  AD: 'A+D',
+  BC: 'B+C',
+  BD: 'B+D',
+  CD: 'C+D',
+  ABC: 'A+B+C',
+  ABD: 'A+B+D',
+  ACD: 'A+C+D',
+  BCD: 'B+C+D',
+  ABCD: 'A+B+C+D'
 } as const;
 
-export type LicenseCategoryType = typeof LicenseCategory[keyof typeof LicenseCategory];
+export type LicenseCategoryType = typeof LicenseCategory[keyof typeof LicenseCategory] | string;
 
 export const offices = pgTable("offices", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),

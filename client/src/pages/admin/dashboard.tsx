@@ -4,12 +4,25 @@ import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/s
 import { AdminSidebar } from "@/components/layout/admin-sidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { LoadingPage } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Progress } from "@/components/ui/progress";
 import { useTranslation, useLanguage } from "@/lib/i18n";
 import type { Office, LicenseRenewal, Payment } from "@shared/schema";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
 import {
   Building,
   FileCheck,
@@ -23,6 +36,8 @@ import {
   XCircle,
   Send,
   CreditCard,
+  Plane,
+  MapPin,
 } from "lucide-react";
 
 interface DashboardStats {
@@ -56,6 +71,27 @@ interface PaymentWithOffice extends Payment {
   office?: Office;
 }
 
+interface AnalyticsData {
+  totalOffices: number;
+  byCategory: { name: string; value: number }[];
+  byCity: { name: string; value: number }[];
+  memberships: { iata: number; uftaa: number; asta: number; wto: number };
+  byRenewalYear: { year: number; count: number }[];
+}
+
+const CHART_COLORS = [
+  'hsl(221, 83%, 53%)',
+  'hsl(142, 71%, 45%)',
+  'hsl(38, 92%, 50%)',
+  'hsl(280, 67%, 60%)',
+  'hsl(0, 84%, 60%)',
+  'hsl(195, 74%, 50%)',
+  'hsl(340, 82%, 52%)',
+  'hsl(25, 95%, 53%)',
+  'hsl(262, 83%, 58%)',
+  'hsl(173, 80%, 40%)',
+];
+
 export default function AdminDashboard() {
   const { t } = useTranslation();
   const { language } = useLanguage();
@@ -81,6 +117,10 @@ export default function AdminDashboard() {
 
   const { data: kpis } = useQuery<RenewalKPIs>({
     queryKey: ["/api/admin/renewals/kpis"],
+  });
+
+  const { data: analytics, isLoading: analyticsLoading } = useQuery<AnalyticsData>({
+    queryKey: ["/api/admin/analytics"],
   });
 
   const isLoading = statsLoading || officesLoading || renewalsLoading || paymentsLoading;
@@ -171,6 +211,102 @@ export default function AdminDashboard() {
                     </CardContent>
                   </Card>
                 </div>
+
+                {/* Analytics Charts Section */}
+                {analytics && (
+                  <div className="grid gap-6 lg:grid-cols-2">
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <Building className="h-4 w-4" />
+                          {language === 'ar' ? 'توزيع المكاتب حسب الفئة' : 'Offices by License Category'}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="h-[250px]">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                              <Pie
+                                data={analytics.byCategory.slice(0, 8)}
+                                cx="50%"
+                                cy="50%"
+                                innerRadius={50}
+                                outerRadius={90}
+                                paddingAngle={2}
+                                dataKey="value"
+                                label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                                labelLine={false}
+                              >
+                                {analytics.byCategory.slice(0, 8).map((_, index) => (
+                                  <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                                ))}
+                              </Pie>
+                              <Tooltip formatter={(value: number) => [value, language === 'ar' ? 'مكاتب' : 'Offices']} />
+                            </PieChart>
+                          </ResponsiveContainer>
+                        </div>
+                        <div className="flex flex-wrap gap-2 mt-4 justify-center">
+                          {analytics.byCategory.slice(0, 6).map((cat, i) => (
+                            <Badge key={cat.name} variant="outline" className="gap-1">
+                              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: CHART_COLORS[i] }} />
+                              {language === 'ar' ? `فئة ${cat.name}` : `Cat. ${cat.name}`}: {cat.value}
+                            </Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <MapPin className="h-4 w-4" />
+                          {language === 'ar' ? 'توزيع المكاتب حسب المدينة' : 'Offices by City'}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="h-[250px]">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={analytics.byCity.slice(0, 6)} layout="vertical">
+                              <XAxis type="number" />
+                              <YAxis dataKey="name" type="category" width={60} tick={{ fontSize: 12 }} />
+                              <Tooltip formatter={(value: number) => [value, language === 'ar' ? 'مكاتب' : 'Offices']} />
+                              <Bar dataKey="value" fill="hsl(221, 83%, 53%)" radius={[0, 4, 4, 0]} />
+                            </BarChart>
+                          </ResponsiveContainer>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="lg:col-span-2">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <Plane className="h-4 w-4" />
+                          {language === 'ar' ? 'العضويات الدولية' : 'International Memberships'}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                          <div className="flex flex-col items-center p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20">
+                            <span className="text-2xl font-bold text-blue-600">{analytics.memberships.iata}</span>
+                            <span className="text-sm text-muted-foreground">IATA</span>
+                          </div>
+                          <div className="flex flex-col items-center p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
+                            <span className="text-2xl font-bold text-green-600">{analytics.memberships.uftaa}</span>
+                            <span className="text-sm text-muted-foreground">UFTAA</span>
+                          </div>
+                          <div className="flex flex-col items-center p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20">
+                            <span className="text-2xl font-bold text-purple-600">{analytics.memberships.asta}</span>
+                            <span className="text-sm text-muted-foreground">ASTA</span>
+                          </div>
+                          <div className="flex flex-col items-center p-4 rounded-lg bg-amber-50 dark:bg-amber-900/20">
+                            <span className="text-2xl font-bold text-amber-600">{analytics.memberships.wto}</span>
+                            <span className="text-sm text-muted-foreground">WTO</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                )}
 
                 {/* 2026 Renewal KPIs Section */}
                 {kpis && kpis.total > 0 && (
