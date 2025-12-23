@@ -13,15 +13,15 @@ The migration process:
 
 ```bash
 # Run the full migration pipeline
-node scripts/migration/run-migration.js
+node scripts/migration/run-migration.cjs
 
 # Or run steps individually:
-node scripts/migration/01-extract-data.js
-node scripts/migration/02-transform-offices.js
-node scripts/migration/03-transform-branches.js
-node scripts/migration/04-transform-people.js
-node scripts/migration/05-transform-renewals.js
-node scripts/migration/06-generate-sql.js
+node scripts/migration/01-extract-data.cjs
+node scripts/migration/02-transform-offices.cjs
+node scripts/migration/03-transform-branches.cjs
+node scripts/migration/04-transform-people.cjs
+node scripts/migration/05-transform-renewals.cjs
+node scripts/migration/06-generate-sql.cjs
 ```
 
 ## Output Files
@@ -71,7 +71,7 @@ After running, check the `output/` directory:
 
 ```bash
 # 1. Generate migration files
-node scripts/migration/run-migration.js
+node scripts/migration/run-migration.cjs
 
 # 2. Review the output
 cat scripts/migration/output/migration.sql | head -100
@@ -85,7 +85,7 @@ psql $DATABASE_URL < scripts/migration/output/migration.sql
 
 ## Configuration
 
-Edit `config.js` to customize:
+Edit `config.cjs` to customize:
 - City ID to name mappings
 - Tourism activity mappings
 - Job title mappings
