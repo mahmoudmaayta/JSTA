@@ -453,7 +453,8 @@ export class DatabaseStorage implements IStorage {
       offices: {
         total: officesArray.length,
         pending: officesArray.filter((o) => o.status === "PENDING_APPROVAL").length,
-        active: officesArray.filter((o) => o.status === "ACTIVE").length,
+        // Active offices = those with last renewal in 2025
+        active: officesArray.filter((o) => o.lastRenewalYear === 2025).length,
         rejected: officesArray.filter((o) => o.status === "REJECTED").length,
       },
       renewals: {
