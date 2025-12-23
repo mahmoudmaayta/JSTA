@@ -63,14 +63,14 @@ function generatePeopleSQL(people) {
     sql += `INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   ${person.office_id}, NULL, ${escapeSQL(person.full_name_ar)}, ${escapeSQL(person.full_name_en)},
   ${escapeSQL(person.national_id)}, ${escapeSQL(person.social_security_no)},
   ${escapeSQL(person.nationality)}, ${escapeSQL(person.gender)},
   ${escapeSQL(person.mother_name)}, ${escapeSQL(person.mobile)},
   ${escapeSQL(person.birth_date)}, ${escapeSQL(person.current_position)},
-  ${escapeSQL(person.start_date)}, ${escapeSQL(person.role_type)}
+  ${escapeSQL(person.start_date)}
 );\n\n`;
   }
   

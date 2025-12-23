@@ -1,11 +1,11 @@
 -- JSTA Legacy Data Migration
--- Generated: 2025-12-23T13:06:12.505Z
+-- Generated: 2025-12-23T13:44:36.324Z
 -- WARNING: Review this file before running!
 
 BEGIN;
 
 -- Offices Migration
--- Generated: 2025-12-23T13:06:12.518Z
+-- Generated: 2025-12-23T13:44:36.341Z
 
 INSERT INTO offices (
   trade_name_ar, trade_name_en, legal_name_ar, national_entity_no,
@@ -13584,12117 +13584,12117 @@ INSERT INTO branches (
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   1, NULL, 'هادي ياسر محي الدين ابو السعود', NULL,
   NULL, '9731013704',
   'أردني', NULL,
   NULL, '0795500307',
   NULL, 'شريك',
-  '2009-03-24', 'PARTNER'
+  '2009-03-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   1, NULL, 'زهرة عبدالله عثمان الشهابي', NULL,
   NULL, '9362002666',
   'أردني', NULL,
   NULL, '0795556366',
   NULL, 'شريك',
-  '2009-03-24', 'PARTNER'
+  '2009-03-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   297, NULL, 'محمد محمود ناجي الدميري/ انسحب', NULL,
   NULL, '9801050747',
   'أردني', NULL,
   NULL, '0799944406',
   NULL, 'شريك',
-  '2012-07-23', 'PARTNER'
+  '2012-07-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   297, NULL, 'امنه بديوي عياد العتيبي/انسحب', NULL,
   NULL, '942211285',
   'أردني', NULL,
   NULL, '0799994746',
   NULL, 'شريك',
-  '2012-07-23', 'PARTNER'
+  '2012-07-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   297, NULL, 'حسن اسماعيل محمد الجنيدي الحضرمي/ انسحب', NULL,
   NULL, 'KC9Z22586',
   'إماراتي', NULL,
   NULL, '0797373567',
   NULL, 'شريك',
-  '2017-01-14', 'PARTNER'
+  '2017-01-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   296, NULL, 'هاني محمد ابراهيم الدحلان', NULL,
   NULL, '9651040535',
   'أردني', NULL,
   NULL, '0795535608',
   NULL, 'شريك',
-  '2012-04-11', 'PARTNER'
+  '2012-04-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   295, NULL, 'شركة ادوية الحكمة', NULL,
   NULL, '2000006795',
   'أردني', NULL,
   NULL, '5802900',
   NULL, 'شريك',
-  '2012-11-21', 'PARTNER'
+  '2012-11-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   294, NULL, 'شرف عصام رشيد حجازي', NULL,
   NULL, '9821007876',
   'أردني', NULL,
   NULL, '0799609090',
   NULL, 'شريك',
-  '2013-01-29', 'PARTNER'
+  '2013-01-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   294, NULL, 'محمد فايز محمد الناصر', NULL,
   NULL, '9821023874',
   'أردني', NULL,
   NULL, '0785245249',
   NULL, 'شريك',
-  '2013-01-29', 'PARTNER'
+  '2013-01-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   292, NULL, 'امين محمود مصطفى دلو/ شريك في شركة الوجدان', NULL,
   NULL, '9591001295',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2013-07-20', 'PARTNER'
+  '2013-07-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   292, NULL, 'شركة التحدي للتجارة والاستثمار/ شريك في شركة الوجدان', NULL,
   NULL, '000000000000',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2013-07-20', 'PARTNER'
+  '2013-07-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   291, NULL, 'جهاد نواف محمد نزال', NULL,
   NULL, '9811024864',
   'أردني', NULL,
   NULL, '0790800591',
   NULL, 'شريك',
-  '2010-10-06', 'PARTNER'
+  '2010-10-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   291, NULL, 'تامر نواف محمد نزال', NULL,
   NULL, '9841014554',
   'أردني', NULL,
   NULL, '0799459996',
   NULL, 'شريك',
-  '2010-10-06', 'PARTNER'
+  '2010-10-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   290, NULL, 'مازن محمد احمد بدوان', NULL,
   NULL, '9711027268',
   'أردني', NULL,
   NULL, '0795372377',
   NULL, 'شريك',
-  '2013-02-07', 'PARTNER'
+  '2013-02-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   290, NULL, 'نهى محمد احمد بدوان', NULL,
   NULL, '9792028912',
   'أردني', NULL,
   NULL, '0795410056',
   NULL, 'شريك',
-  '2013-02-07', 'PARTNER'
+  '2013-02-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   293, NULL, 'سليم عبد المطلب سليم صرصور', NULL,
   NULL, '9741025231',
   'أردني', NULL,
   NULL, '0795968213',
   NULL, 'شريك',
-  '2011-01-19', 'PARTNER'
+  '2011-01-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   293, NULL, 'اسلام مرسي عفيفي سلام', NULL,
   NULL, 'A078909748',
   'مصري', NULL,
   NULL, '0795804234',
   NULL, 'شريك',
-  '2011-01-19', 'PARTNER'
+  '2011-01-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   293, NULL, 'عدي منعم غنام الدليمي', NULL,
   NULL, 'A6003869',
   'عراقي', NULL,
   NULL, '0798249249',
   NULL, 'شريك',
-  '2011-01-19', 'PARTNER'
+  '2011-01-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   289, NULL, 'محمد انيس قاسم عمر القاعاتي', NULL,
   NULL, '9421008003',
   'أردني', NULL,
   NULL, '00962795634540',
   NULL, 'شريك',
-  '2013-04-28', 'PARTNER'
+  '2013-04-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   289, NULL, 'احمد محمد انيس قاسم القاعاتي', NULL,
   NULL, '9791032817',
   'أردني', NULL,
   NULL, '00962795051326',
   NULL, 'شريك',
-  '2013-04-28', 'PARTNER'
+  '2013-04-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   288, NULL, 'خالد عبد الله حسن النسور', NULL,
   NULL, '9621012989',
   'أردني', NULL,
   NULL, '0777600033',
   NULL, 'شريك',
-  '2012-11-13', 'PARTNER'
+  '2012-11-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   287, NULL, 'احمد ابراهيم خليل الهلالي', NULL,
   NULL, '9851021643',
   'أردني', NULL,
   NULL, '0775550450',
   NULL, 'شريك',
-  '2012-12-13', 'PARTNER'
+  '2012-12-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   286, NULL, 'عبدالرحمن احمد يوسف فارس/ انسحب', NULL,
   NULL, '9891006998',
   'أردني', NULL,
   NULL, '0798784370',
   NULL, 'شريك',
-  '2012-11-12', 'PARTNER'
+  '2012-11-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   286, NULL, 'محمد امين محمود صالح/انسحب', NULL,
   NULL, '9711040565',
   'أردني', NULL,
   NULL, '0799999725',
   NULL, 'شريك',
-  '2012-11-12', 'PARTNER'
+  '2012-11-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   286, NULL, 'احمد بلال احمد الجغبير/ انسحب', NULL,
   NULL, '9921006445',
   'أردني', NULL,
   NULL, '0799210368',
   NULL, 'شريك',
-  '2012-11-12', 'PARTNER'
+  '2012-11-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   285, NULL, 'قيس عوني جورج مضاعين', NULL,
   NULL, '9911008056',
   'أردني', NULL,
   NULL, '0796652981',
   NULL, 'شريك',
-  '2013-01-13', 'PARTNER'
+  '2013-01-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   285, NULL, 'غيث عوني جورج مضاعين', NULL,
   NULL, '9891061814',
   'أردني', NULL,
   NULL, '0796630405',
   NULL, 'شريك',
-  '2013-01-13', 'PARTNER'
+  '2013-01-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   285, NULL, 'ليث عوني جورج مضاعين', NULL,
   NULL, '9871002045',
   'أردني', NULL,
   NULL, '0795533813',
   NULL, 'شريك',
-  '2013-01-13', 'PARTNER'
+  '2013-01-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   284, NULL, 'محمود محمد احمد داود الدسوقي', NULL,
   NULL, '9871048416',
   'أردني', NULL,
   NULL, '0796868819',
   NULL, 'شريك',
-  '2013-02-04', 'PARTNER'
+  '2013-02-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   283, NULL, 'عبد السلام علي سلمان الخضير', NULL,
   NULL, '9691042191',
   'أردني', NULL,
   NULL, '0772382855',
   NULL, 'شريك',
-  '2008-01-13', 'PARTNER'
+  '2008-01-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   283, NULL, 'عبد الوهاب عليان سلمان الخضير', NULL,
   NULL, '9701043488',
   'أردني', NULL,
   NULL, '0772440459',
   NULL, 'شريك',
-  '2008-01-13', 'PARTNER'
+  '2008-01-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   283, NULL, 'عطا سلمان محمد الخضير', NULL,
   NULL, '9521018122',
   'أردني', NULL,
   NULL, '0777776094',
   NULL, 'شريك',
-  '2008-01-13', 'PARTNER'
+  '2008-01-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   282, NULL, 'فادي بديع كمال صويص', NULL,
   NULL, '976102359',
   'أردني', NULL,
   NULL, '0777851600',
   NULL, 'شريك',
-  '2013-03-14', 'PARTNER'
+  '2013-03-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   281, NULL, 'علاء الدين وليد عبد الله عساف', NULL,
   NULL, '2147483647',
   'أردني', NULL,
   NULL, '0096279979777',
   NULL, 'شريك',
-  '2013-02-11', 'PARTNER'
+  '2013-02-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   280, NULL, 'مقداد احمد نعمت نعمت', NULL,
   NULL, 'G2480685',
   'عراقي', NULL,
   NULL, '0797494123',
   NULL, 'شريك',
-  '2013-01-17', 'PARTNER'
+  '2013-01-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   280, NULL, 'شركة طريق الحرير للتطوير العقاري', NULL,
   NULL, '200113638',
   'أردني', NULL,
   NULL, '0798258888',
   NULL, 'شريك',
-  '2013-01-17', 'PARTNER'
+  '2013-01-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   280, NULL, 'مبدر زهير مبدر محياوي', NULL,
   NULL, 'G1418433',
   'عراقي', NULL,
   NULL, '0795115551',
   NULL, 'شريك',
-  '2013-01-17', 'PARTNER'
+  '2013-01-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   279, NULL, 'عبد القادر فالح عبد القادر الحوري/انسحب', NULL,
   NULL, '9411002451',
   'أردني', NULL,
   NULL, '0799992923',
   NULL, 'شريك',
-  '1987-02-24', 'PARTNER'
+  '1987-02-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   278, NULL, 'ياسين محمد منصور العودة الله/انسحب', NULL,
   NULL, '9921030077',
   'أردني', NULL,
   NULL, '0790073034',
   NULL, 'شريك',
-  '2013-01-29', 'PARTNER'
+  '2013-01-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   278, NULL, 'سائدة عطاالله محمد العويدات/انسحب', NULL,
   NULL, '9832047768',
   'أردني', NULL,
   NULL, '0790073034',
   NULL, 'شريك',
-  '2013-01-29', 'PARTNER'
+  '2013-01-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   277, NULL, 'مهند يوسف محمد بكر/انسحب', NULL,
   NULL, '9841059440',
   'أردني', NULL,
   NULL, '0797147711',
   NULL, 'شريك',
-  '2005-05-19', 'PARTNER'
+  '2005-05-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   277, NULL, 'عليا محمود محمد صيدم/انسحب', NULL,
   NULL, '9602027276',
   'أردني', NULL,
   NULL, '0777888199',
   NULL, 'شريك',
-  '2005-05-19', 'PARTNER'
+  '2005-05-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   277, NULL, 'محمد يوسف محمد بكر/انسحب', NULL,
   NULL, '983105887',
   'أردني', NULL,
   NULL, '0775055576',
   NULL, 'شريك',
-  '2005-05-19', 'PARTNER'
+  '2005-05-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   277, NULL, 'جمانه يوسف محمد بكر/انسحب', NULL,
   NULL, '9872055364',
   'أردني', NULL,
   NULL, '0777888199',
   NULL, 'شريك',
-  '2005-05-19', 'PARTNER'
+  '2005-05-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   277, NULL, 'عمر يوسف محمد بكر/انسحب', NULL,
   NULL, '9931064966',
   'أردني', NULL,
   NULL, '0795899339',
   NULL, 'شريك',
-  '2005-05-19', 'PARTNER'
+  '2005-05-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   277, NULL, 'نايف يوسف محمد بكر/انسحب', NULL,
   NULL, '9971070444',
   'أردني', NULL,
   NULL, '0777888199',
   NULL, 'شريك',
-  '2005-05-19', 'PARTNER'
+  '2005-05-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   275, NULL, 'محمد خير جمال محمد خير العواد', NULL,
   NULL, '9751030530',
   'أردني', NULL,
   NULL, '0795333000',
   NULL, 'شريك',
-  '1994-01-11', 'PARTNER'
+  '1994-01-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   274, NULL, 'موسى محمود احمد الهلالات', NULL,
   NULL, '9661036193',
   'أردني', NULL,
   NULL, '0777681364',
   NULL, 'شريك',
-  '2011-01-02', 'PARTNER'
+  '2011-01-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   274, NULL, 'فارس محمد حسن المشاعله', NULL,
   NULL, '9641031791',
   'أردني', NULL,
   NULL, '0777550254',
   NULL, 'شريك',
-  '2011-01-02', 'PARTNER'
+  '2011-01-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   273, NULL, 'سمير سليمان سلامه النسور/انسحب', NULL,
   NULL, '9631014048',
   'أردني', NULL,
   NULL, '0797620749',
   NULL, 'شريك',
-  '2013-02-21', 'PARTNER'
+  '2013-02-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   272, NULL, 'وسام الدين محمد ابراهيم حسن', NULL,
   NULL, '9511017407',
   'أردني', NULL,
   NULL, '0797108800',
   NULL, 'شريك',
-  '2012-09-16', 'PARTNER'
+  '2012-09-16'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   272, NULL, 'محمد عبد الرزاق احمد قطيش/ انسحب', NULL,
   NULL, '9611002184',
   'أردني', NULL,
   NULL, '0799066020',
   NULL, 'شريك',
-  '2012-09-16', 'PARTNER'
+  '2012-09-16'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   271, NULL, 'ابراهيم حمد طلب الخلايله', NULL,
   NULL, '9601026412',
   'أردني', NULL,
   NULL, '0777312776',
   NULL, 'شريك',
-  '1996-09-24', 'PARTNER'
+  '1996-09-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   270, NULL, 'مخلص عوض محمود الصمادي', NULL,
   NULL, '9741009974',
   'أردني', NULL,
   NULL, '0777432235',
   NULL, 'شريك',
-  '2012-01-10', 'PARTNER'
+  '2012-01-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   269, NULL, 'ماهر احمد محمد حماد/انسحب', NULL,
   NULL, '9781022649',
   'أردني', NULL,
   NULL, '0798929705',
   NULL, 'شريك',
-  '2012-02-26', 'PARTNER'
+  '2012-02-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   269, NULL, 'علي محمود خليل هياجنه/انسحب', NULL,
   NULL, '9671016892',
   'أردني', NULL,
   NULL, '0799494878',
   NULL, 'شريك',
-  '2012-02-26', 'PARTNER'
+  '2012-02-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   268, NULL, 'احمد محمد علي احمد الشحروري/انسحب', NULL,
   NULL, '9581019632',
   'أردني', NULL,
   NULL, '0795572990',
   NULL, 'شريك',
-  '2012-09-11', 'PARTNER'
+  '2012-09-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   268, NULL, 'رياض يوسف موسى ابو قرع/انسحب', NULL,
   NULL, '9631010501',
   'أردني', NULL,
   NULL, '0795614181',
   NULL, 'شريك',
-  '2012-09-11', 'PARTNER'
+  '2012-09-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   268, NULL, 'رامي سهيل لطفي الديك/انسحب', NULL,
   NULL, '9771035812',
   'أردني', NULL,
   NULL, '0795286559',
   NULL, 'شريك',
-  '2012-09-11', 'PARTNER'
+  '2012-09-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   267, NULL, 'غالب عبد الله جابر الزواهره', NULL,
   NULL, '9681033817',
   'أردني', NULL,
   NULL, '0797910793',
   NULL, 'شريك',
-  '2012-09-03', 'PARTNER'
+  '2012-09-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   266, NULL, 'اديب صبحي عبد القادر الحنطي/انسحب', NULL,
   NULL, '9581015245',
   'أردني', NULL,
   NULL, '079/5549080',
   NULL, 'شريك',
-  '2013-01-06', 'PARTNER'
+  '2013-01-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   266, NULL, 'رياض نمر ابراهيم بابيه/انسحب', NULL,
   NULL, '9761015038',
   'أردني', NULL,
   NULL, '00962796812635',
   NULL, 'شريك',
-  '2013-01-06', 'PARTNER'
+  '2013-01-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   266, NULL, 'سامر عبد الحليم محمد الطرخان/انسحب', NULL,
   NULL, '9771036292',
   'أردني', NULL,
   NULL, '0796062647',
   NULL, 'شريك',
-  '2013-01-06', 'PARTNER'
+  '2013-01-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   266, NULL, 'محمد علي محفوظ العزازي/انسحب', NULL,
   NULL, '9811008893',
   'أردني', NULL,
   NULL, '0799888279',
   NULL, 'شريك',
-  '2013-01-06', 'PARTNER'
+  '2013-01-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   265, NULL, 'خالد عبدالله احمد القرعان', NULL,
   NULL, '9681001978',
   'أردني', NULL,
   NULL, '0795094214',
   NULL, 'شريك',
-  '2013-03-11', 'PARTNER'
+  '2013-03-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   264, NULL, 'حميد اكرم حميد النجار', NULL,
   NULL, 'A4946438',
   'عراقي', NULL,
   NULL, '0799555555',
   NULL, 'شريك',
-  '2005-02-08', 'PARTNER'
+  '2005-02-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   264, NULL, 'وسام الدين محمد ابراهيم الحسن/انسحب', NULL,
   NULL, '9511017047',
   'أردني', NULL,
   NULL, '0797108800',
   NULL, 'شريك',
-  '2005-02-08', 'PARTNER'
+  '2005-02-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   165, NULL, 'بهاء هاشم عوض المومني/انسحب', NULL,
   NULL, '9801005872',
   'أردني', NULL,
   NULL, '0796631200',
   NULL, 'شريك',
-  '2012-01-22', 'PARTNER'
+  '2012-01-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   165, NULL, 'ماهر محمد طالب نور الدين دعاس/انسحب', NULL,
   NULL, '9601017723',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2012-01-22', 'PARTNER'
+  '2012-01-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   263, NULL, 'زياد سعيد عيد الطنايب', NULL,
   NULL, '9781030239',
   'أردني', NULL,
   NULL, '0796904144',
   NULL, 'شريك',
-  '2012-06-12', 'PARTNER'
+  '2012-06-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   262, NULL, 'حسين عبد الفتاح اسعد السليحات', NULL,
   NULL, '9591004112',
   'أردني', NULL,
   NULL, '0772266569',
   NULL, 'شريك',
-  '2013-01-15', 'PARTNER'
+  '2013-01-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   262, NULL, 'عطا عيسى احمد المناصير', NULL,
   NULL, '9631006392',
   'أردني', NULL,
   NULL, '0798914820',
   NULL, 'شريك',
-  '2013-01-15', 'PARTNER'
+  '2013-01-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   262, NULL, 'محسن كامل مسلم المحاميد', NULL,
   NULL, '9601005042',
   'أردني', NULL,
   NULL, '0798813506',
   NULL, 'شريك',
-  '2013-01-15', 'PARTNER'
+  '2013-01-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   262, NULL, 'عبد الفتاح ضيف الله عبد الفتاح دبيسيه/انسحب', NULL,
   NULL, '9701005578',
   'أردني', NULL,
   NULL, '00962798756570',
   NULL, 'شريك',
-  '2013-01-15', 'PARTNER'
+  '2013-01-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   261, NULL, 'بلال سمير محمود محمد العيسى/ انسحاب', NULL,
   NULL, '2000962096',
   'أردني', NULL,
   NULL, '0795254707',
   NULL, 'شريك',
-  '2012-10-11', 'PARTNER'
+  '2012-10-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   261, NULL, 'دينا اسماعيل خليل العجلوني', NULL,
   NULL, '9802001778',
   'أردني', NULL,
   NULL, '0795287744',
   NULL, 'شريك',
-  '2012-10-11', 'PARTNER'
+  '2012-10-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   260, NULL, 'عمر حسن جمعه جهامه', NULL,
   NULL, '9801043108',
   'أردني', NULL,
   NULL, '0777777518',
   NULL, 'شريك',
-  '2012-09-03', 'PARTNER'
+  '2012-09-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   259, NULL, 'احمد يوسف نجيب فارس/انسحب', NULL,
   NULL, '9551001157',
   'أردني', NULL,
   NULL, '0798585450',
   NULL, 'شريك',
-  '2011-01-04', 'PARTNER'
+  '2011-01-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   259, NULL, 'عمر محمد سامي ابو ريا/انسحب', NULL,
   NULL, '9911024535',
   'أردني', NULL,
   NULL, '0798585450',
   NULL, 'شريك',
-  '2011-01-04', 'PARTNER'
+  '2011-01-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   259, NULL, 'علاء احمد يوسف فارس/انسحب', NULL,
   NULL, '9841012156',
   'أردني', NULL,
   NULL, '0798585450',
   NULL, 'شريك',
-  '2011-01-04', 'PARTNER'
+  '2011-01-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   257, NULL, 'فريز علي العبد ابو زيد', NULL,
   NULL, '9811013824',
   'أردني', NULL,
   NULL, '077535810',
   NULL, 'شريك',
-  '2012-12-02', 'PARTNER'
+  '2012-12-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   257, NULL, 'محمد بدر محمد الخطيب', NULL,
   NULL, '9851016534',
   'أردني', NULL,
   NULL, '00962795353810',
   NULL, 'شريك',
-  '2012-12-02', 'PARTNER'
+  '2012-12-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   124, NULL, 'زكريا رضا احمد الشريدة/ انسحب', NULL,
   NULL, '9631012445',
   'أردني', NULL,
   NULL, '0795596708',
   NULL, 'شريك',
-  '2009-08-13', 'PARTNER'
+  '2009-08-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   255, NULL, 'محمد حسين محمد العمران', NULL,
   NULL, '9641026739',
   'أردني', NULL,
   NULL, '0787777115',
   NULL, 'شريك',
-  '2012-07-03', 'PARTNER'
+  '2012-07-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   255, NULL, 'اشرف حسين محمد العمران', NULL,
   NULL, '9791040208',
   'أردني', NULL,
   NULL, '0788811112',
   NULL, 'شريك',
-  '2012-07-03', 'PARTNER'
+  '2012-07-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   255, NULL, 'بلال محمد عرفات منصور / انسحب', NULL,
   NULL, '9791057989',
   'أردني', NULL,
   NULL, '0788111190',
   NULL, 'شريك',
-  '2012-07-03', 'PARTNER'
+  '2012-07-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   255, NULL, 'وسام احمد جميل نمر', NULL,
   NULL, '9781003468',
   'أردني', NULL,
   NULL, '0785911133',
   NULL, 'شريك',
-  '2012-07-03', 'PARTNER'
+  '2012-07-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   254, NULL, 'محمد غانم عيسى النوافله/انسحب', NULL,
   NULL, '9671036020',
   'أردني', NULL,
   NULL, '00962777379660',
   NULL, 'شريك',
-  '2012-09-30', 'PARTNER'
+  '2012-09-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   252, NULL, 'علي ضاحي ذياب الصبيحات', NULL,
   NULL, '9601028761',
   'أردني', NULL,
   NULL, '0795428108',
   NULL, 'شريك',
-  '1999-10-23', 'PARTNER'
+  '1999-10-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   251, NULL, 'عبدالله محمد تيسير طافش الشرعه', NULL,
   NULL, '9681043399',
   'أردني', NULL,
   NULL, '0772270145',
   NULL, 'شريك',
-  '2012-08-28', 'PARTNER'
+  '2012-08-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   251, NULL, 'جمال فتحي عبدالرحمن دغلس', NULL,
   NULL, '9581008390',
   'أردني', NULL,
   NULL, '0772270145',
   NULL, 'شريك',
-  '2012-08-28', 'PARTNER'
+  '2012-08-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   258, NULL, 'زياد عبد العزيز صالح الجمحاوي', NULL,
   NULL, '9611025919',
   'أردني', NULL,
   NULL, '0797786813',
   NULL, 'شريك',
-  '2005-04-20', 'PARTNER'
+  '2005-04-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   258, NULL, 'محمد زياد عبد العزيز الجمحاوي/انسحب', NULL,
   NULL, '9971047352',
   'أردني', NULL,
   NULL, '0781703035',
   NULL, 'شريك',
-  '2005-04-20', 'PARTNER'
+  '2005-04-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   258, NULL, 'مؤمن محمد عبد القادر الحوري/انسحب', NULL,
   NULL, '2001080049',
   'أردني', NULL,
   NULL, '0797786813',
   NULL, 'شريك',
-  '2005-04-20', 'PARTNER'
+  '2005-04-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   256, NULL, 'رائد ابراهيم محمد العدوان', NULL,
   NULL, '9791024397',
   'أردني', NULL,
   NULL, '0799635295',
   NULL, 'شريك',
-  '2011-06-19', 'PARTNER'
+  '2011-06-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   256, NULL, 'ابراهيم رائد ابراهيم العدوان', NULL,
   NULL, '2001607938',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2011-06-19', 'PARTNER'
+  '2011-06-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   250, NULL, 'احمد مصطفى الحامد الصمادي', NULL,
   NULL, '9451008917',
   'أردني', NULL,
   NULL, '0775940130',
   NULL, 'شريك',
-  '2012-08-09', 'PARTNER'
+  '2012-08-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   250, NULL, 'سليم يوسف سليم قواي', NULL,
   NULL, '9791041367',
   'أردني', NULL,
   NULL, '00962776735040',
   NULL, 'شريك',
-  '2012-08-09', 'PARTNER'
+  '2012-08-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   246, NULL, 'بلكان محمد احمد الزريقي', NULL,
   NULL, '9622036460',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2012-05-22', 'PARTNER'
+  '2012-05-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   246, NULL, 'يزن وائل صبحي الدحله', NULL,
   NULL, '9851005496',
   'أردني', NULL,
   NULL, '009627909012626',
   NULL, 'شريك',
-  '2012-05-22', 'PARTNER'
+  '2012-05-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   198, NULL, 'مراد عبد الرحمن محمد الجدع', NULL,
   NULL, '9791037397',
   'أردني', NULL,
   NULL, '0795085085',
   NULL, 'شريك',
-  '2012-11-12', 'PARTNER'
+  '2012-11-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   198, NULL, 'محمد عبدالرحمن محمد الجدع / انسحب', NULL,
   NULL, '9891025040',
   'أردني', NULL,
   NULL, '0799481137',
   NULL, 'شريك',
-  '2012-11-12', 'PARTNER'
+  '2012-11-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   198, NULL, 'مروه عبد الرحمن محمد الجدع/انسحب', NULL,
   NULL, '9852021018',
   'أردني', NULL,
   NULL, '0792808825',
   NULL, 'شريك',
-  '2012-11-12', 'PARTNER'
+  '2012-11-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   158, NULL, 'فادي احمد الياس فروقه', NULL,
   NULL, '9751033331',
   'أردني', NULL,
   NULL, '00962797100010',
   NULL, 'شريك',
-  '2012-07-18', 'PARTNER'
+  '2012-07-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   119, NULL, 'مؤسسة الاقتصادية والاجتماعية للمتقاعدين العسكرين والمحاربين القدماء', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2010-11-30', 'PARTNER'
+  '2010-11-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   12, NULL, 'فيصل عبد الفتاح علي الزعبي', NULL,
   NULL, '9851015942',
   'أردني', NULL,
   NULL, '00962797557777',
   NULL, 'شريك',
-  '2012-05-01', 'PARTNER'
+  '2012-05-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   12, NULL, 'عثمان عبد الوهاب خليل العبسي', NULL,
   NULL, '9681027419',
   'أردني', NULL,
   NULL, '00962795547968',
   NULL, 'شريك',
-  '2012-05-01', 'PARTNER'
+  '2012-05-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   137, NULL, 'حسام الدين ابراهيم محمد مغايره', NULL,
   NULL, '9751048188',
   'أردني', NULL,
   NULL, '0799205090',
   NULL, 'شريك',
-  '2009-12-07', 'PARTNER'
+  '2009-12-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   83, NULL, 'شريفة شفيق مصطفى ابو السعود', NULL,
   NULL, '9462006140',
   'أردني', NULL,
   NULL, '0796706065',
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   138, NULL, 'غدير ابراهيم امين محمود', NULL,
   NULL, '9702024176',
   'أردني', NULL,
   NULL, '0779995151',
   NULL, 'شريك',
-  '2010-01-31', 'PARTNER'
+  '2010-01-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   138, NULL, 'عماد محمد فؤاد شريف محمود/انسحب', NULL,
   NULL, '9751032280',
   'أردني', NULL,
   NULL, '4625254',
   NULL, 'شريك',
-  '2010-01-31', 'PARTNER'
+  '2010-01-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   138, NULL, 'ميسون عادل محمد سعيد حلاوة', NULL,
   NULL, '9642025351',
   'أردني', NULL,
   NULL, '0765566117',
   NULL, 'شريك',
-  '2010-01-31', 'PARTNER'
+  '2010-01-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   81, NULL, 'محمد مرزا صالح الكردي/ متوفي', NULL,
   NULL, '2001697005',
   'أردني', NULL,
   NULL, '0796677442',
   NULL, 'شريك',
-  '2009-01-12', 'PARTNER'
+  '2009-01-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   81, NULL, 'نور علي محمود الشطناوي/انسحب', NULL,
   NULL, '9782043606',
   'أردني', NULL,
   NULL, '0777309168',
   NULL, 'شريك',
-  '2009-01-12', 'PARTNER'
+  '2009-01-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   81, NULL, 'مؤيد احمد محمد السلايمه', NULL,
   NULL, '9811025561',
   NULL, NULL,
   NULL, '0796218217',
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   7, NULL, 'فائق شاكر ابراهيم البشارات', NULL,
   NULL, '93010006049',
   'أردني', NULL,
   NULL, '4641350',
   NULL, 'شريك',
-  '1969-12-11', 'PARTNER'
+  '1969-12-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   58, NULL, 'طلال عيسى كايد حجات', NULL,
   NULL, '9591010705',
   'أردني', NULL,
   NULL, '0795011193',
   NULL, 'شريك',
-  '2003-09-15', 'PARTNER'
+  '2003-09-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   81, NULL, 'مؤيد احمد محمد السلايمة', NULL,
   NULL, '9811025561',
   'أردني', NULL,
   NULL, '0796218217',
   NULL, 'شريك',
-  '2009-01-12', 'PARTNER'
+  '2009-01-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   250, NULL, 'رامي نصري كايد نمر', NULL,
   NULL, '9761026357',
   'أردني', NULL,
   NULL, '0777339066',
   NULL, 'شريك',
-  '2013-11-17', 'PARTNER'
+  '2013-11-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   21, NULL, 'لميس احمد محمد يوسف', NULL,
   NULL, '9582014362',
   'أردني', NULL,
   NULL, '0796400320',
   NULL, 'شريك',
-  '1989-08-12', 'PARTNER'
+  '1989-08-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   29, NULL, 'امنه محمد مصطفى نصر', NULL,
   NULL, '9512007346',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2007-01-14', 'PARTNER'
+  '2007-01-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   29, NULL, 'محفوظ محمد عبد الجواد ابو لافي', NULL,
   NULL, '9481006811',
   'أردني', NULL,
   NULL, '0795904446',
   NULL, 'شريك',
-  '2007-01-14', 'PARTNER'
+  '2007-01-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   29, NULL, 'هاني محفوظ محمد ابو لافي / انسحب', NULL,
   NULL, '9781028160',
   'أردني', NULL,
   NULL, '0797322302',
   NULL, 'شريك',
-  '2007-01-14', 'PARTNER'
+  '2007-01-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   29, NULL, 'هشام محفوظ محمد ابو لافي / انسحب', NULL,
   NULL, '9841054694',
   'أردني', NULL,
   NULL, '5695701 06',
   NULL, 'شريك',
-  '2007-01-14', 'PARTNER'
+  '2007-01-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   29, NULL, 'هناء محفوظ محمد ابو لافي', NULL,
   NULL, '9762024621',
   'أردني', NULL,
   NULL, '0796785853',
   NULL, 'شريك',
-  '2007-01-14', 'PARTNER'
+  '2007-01-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   123, NULL, 'كمال الدين عايش محمود الزبيدي', NULL,
   NULL, '9761032614',
   'أردني', NULL,
   NULL, '0796626744',
   NULL, 'شريك',
-  '2009-06-15', 'PARTNER'
+  '2009-06-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   123, NULL, 'نوال حسن ابراهيم زيد/انسحب', NULL,
   NULL, '9772006646',
   'أردني', NULL,
   NULL, '0796626744',
   NULL, 'شريك',
-  '2009-06-15', 'PARTNER'
+  '2009-06-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   40, NULL, 'جمال حمود عابد الضمور/ انسحب', NULL,
   NULL, '9591018357',
   'أردني', NULL,
   NULL, '0795527860',
   NULL, 'شريك',
-  '1998-01-05', 'PARTNER'
+  '1998-01-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   40, NULL, 'علي ماجد علي العواد', NULL,
   NULL, '9791038207',
   'أردني', NULL,
   NULL, '0795083303',
   NULL, 'شريك',
-  '1998-01-05', 'PARTNER'
+  '1998-01-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   40, NULL, 'عماد محمد ماجد احمد شحروري', NULL,
   NULL, '9721027009',
   'أردني', NULL,
   NULL, '0795812600',
   NULL, 'شريك',
-  '1998-01-05', 'PARTNER'
+  '1998-01-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   40, NULL, 'محمد سالم نهار الجبور/ انسحب', NULL,
   NULL, '9641032614',
   'أردني', NULL,
   NULL, '0795712414',
   NULL, 'شريك',
-  '1998-01-05', 'PARTNER'
+  '1998-01-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   28, NULL, 'الياس نخله مخائيل عوض / انسحب', NULL,
   NULL, '9311002771',
   'أردني', NULL,
   NULL, '0795627403',
   NULL, 'شريك',
-  '1991-07-08', 'PARTNER'
+  '1991-07-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   28, NULL, 'نخله الياس نخله عوض', NULL,
   NULL, '9561006722',
   'أردني', NULL,
   NULL, '0776552552',
   NULL, 'شريك',
-  '1991-07-08', 'PARTNER'
+  '1991-07-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   28, NULL, 'هاني الياس نخله عوض', NULL,
   NULL, '9601010027',
   'أردني', NULL,
   NULL, '0796037655',
   NULL, 'شريك',
-  '1991-07-08', 'PARTNER'
+  '1991-07-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   28, NULL, 'سامي الياس نخله عوض', NULL,
   NULL, '9641012395',
   'أردني', NULL,
   NULL, '0795385324',
   NULL, 'شريك',
-  '1991-07-08', 'PARTNER'
+  '1991-07-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   71, NULL, 'دلير كيفي اسماعيل اسماعيل', NULL,
   NULL, NULL,
   'عراقي', NULL,
   NULL, '0796727182',
   NULL, 'شريك',
-  '2008-06-12', 'PARTNER'
+  '2008-06-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   71, NULL, 'رياض مزعل ناصيف ناصيف', NULL,
   NULL, NULL,
   'عراقي', NULL,
   NULL, '0799414615',
   NULL, 'شريك',
-  '2008-06-12', 'PARTNER'
+  '2008-06-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   71, NULL, 'عبد الرحمن ثابت عبد الرحمن العاني', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, '0795303565',
   NULL, 'شريك',
-  '2008-06-12', 'PARTNER'
+  '2008-06-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   71, NULL, 'فيصل شراري نمر الفايز', NULL,
   NULL, '9611025841',
   'أردني', NULL,
   NULL, '0795522066',
   NULL, 'شريك',
-  '2008-06-12', 'PARTNER'
+  '2008-06-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   71, NULL, 'مهند موسى الحاج ناخو ناخوه', NULL,
   NULL, '9681026031',
   'أردني', NULL,
   NULL, '0775500600',
   NULL, 'شريك',
-  '2008-06-12', 'PARTNER'
+  '2008-06-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   16, NULL, 'عصام عصمت احمد الحلبي/ انسحب', NULL,
   NULL, '0000222',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '1973-07-11', 'PARTNER'
+  '1973-07-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   16, NULL, 'محمد نادر علي احمد الحلبي/ انسحب', NULL,
   NULL, '12000000',
   'أردني', NULL,
   NULL, '0797279545',
   NULL, 'شريك',
-  '1973-07-11', 'PARTNER'
+  '1973-07-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   16, NULL, 'ممدوح محمد نادر علي الحلبي/ انسحب', NULL,
   NULL, '5000200',
   'أردني', NULL,
   NULL, '0795718312',
   NULL, 'شريك',
-  '1973-07-11', 'PARTNER'
+  '1973-07-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   20, NULL, 'امين كامل امين قعوار', NULL,
   NULL, '9631009161',
   'أردني', NULL,
   NULL, '0795520995',
   NULL, 'شريك',
-  '1983-08-22', 'PARTNER'
+  '1983-08-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   20, NULL, 'توفيق امين كامل قعوار', NULL,
   NULL, '9271001934',
   'أردني', NULL,
   NULL, '5609500',
   NULL, 'شريك',
-  '1983-08-22', 'PARTNER'
+  '1983-08-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   20, NULL, 'ديمة كامل امين قعوار/انسحب', NULL,
   NULL, '9582006256',
   'أردني', NULL,
   NULL, '5609500',
   NULL, 'شريك',
-  '1983-08-22', 'PARTNER'
+  '1983-08-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   20, NULL, 'ردين توفيق امين قعوار', NULL,
   NULL, '9641009948',
   'أردني', NULL,
   NULL, '0795522511',
   NULL, 'شريك',
-  '1983-08-22', 'PARTNER'
+  '1983-08-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   20, NULL, 'زينة كامل امين قعوار/انسحب', NULL,
   NULL, '9572018415',
   'أردني', NULL,
   NULL, '5609500',
   NULL, 'شريك',
-  '1983-08-22', 'PARTNER'
+  '1983-08-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   20, NULL, 'كريم توفيق امين قعوار', NULL,
   NULL, '9661011398',
   'أردني', NULL,
   NULL, '0795527799',
   NULL, 'شريك',
-  '1983-08-22', 'PARTNER'
+  '1983-08-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   20, NULL, 'ماري كامل امين قعوار/انسحب', NULL,
   NULL, '9652009428',
   'أردني', NULL,
   NULL, '5609500',
   NULL, 'شريك',
-  '1983-08-22', 'PARTNER'
+  '1983-08-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   20, NULL, 'وداد جليل زند ايراني/انسحب', NULL,
   NULL, '9302002660',
   'أردني', NULL,
   NULL, '5609500',
   NULL, 'شريك',
-  '1983-08-22', 'PARTNER'
+  '1983-08-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   11, NULL, 'سامي يوسف نعواس', NULL,
   NULL, NULL,
   'USA', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '1989-11-19', 'PARTNER'
+  '1989-11-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   11, NULL, 'سليمان نعواس', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '1989-11-19', 'PARTNER'
+  '1989-11-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   11, NULL, 'سميرة يوسف نعواس', NULL,
   NULL, NULL,
   'USA', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '1989-11-19', 'PARTNER'
+  '1989-11-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   1, NULL, 'هاني ياسر محي الدين ابو السعود', NULL,
   NULL, '9671010810',
   'أردني', NULL,
   NULL, '0795608420',
   NULL, 'شريك',
-  '2009-03-24', 'PARTNER'
+  '2009-03-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   3, NULL, 'نقولا نخلة نقولا سبانخ', NULL,
   NULL, '9321005978',
   'أردني', NULL,
   NULL, '0795589088',
   NULL, 'شريك',
-  '1964-05-30', 'PARTNER'
+  '1964-05-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   3, NULL, 'انطوانيت سمعان الصويص', NULL,
   NULL, '4220076670',
   'أردني', NULL,
   NULL, '0795589088',
   NULL, 'شريك',
-  '1964-05-30', 'PARTNER'
+  '1964-05-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   5, NULL, 'ناصر عارف توفيق زعترة', NULL,
   NULL, '9641026214',
   'أردني', NULL,
   NULL, '0795526036',
   NULL, 'شريك',
-  '2008-08-04', 'PARTNER'
+  '2008-08-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   5, NULL, 'جمال عارف توفيق زعترة', NULL,
   NULL, '9591041587',
   'أردني', NULL,
   NULL, '0797543201',
   NULL, 'شريك',
-  '2008-08-04', 'PARTNER'
+  '2008-08-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   158, NULL, 'نبيه صلاح الدين راغب ريال', NULL,
   NULL, '9621032374',
   'أردني', NULL,
   NULL, '0795568005',
   NULL, 'شريك',
-  '2014-01-07', 'PARTNER'
+  '2014-01-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   246, NULL, 'عبد الحكيم محمد علي محمد', NULL,
   NULL, '2002391527',
   'أردني', NULL,
   NULL, '0799117111',
   NULL, 'شريك',
-  '2013-10-31', 'PARTNER'
+  '2013-10-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   30, NULL, 'عماد جمال راجي بشارات', NULL,
   NULL, '9541010439',
   'أردني', NULL,
   NULL, '0795547446',
   NULL, 'شريك',
-  '1991-11-13', 'PARTNER'
+  '1991-11-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   32, NULL, 'جميل عبد القادر محمد يوسف', NULL,
   NULL, '9491006837',
   'أردني', NULL,
   NULL, '0795515447',
   NULL, 'شريك',
-  '1992-01-01', 'PARTNER'
+  '1992-01-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   32, NULL, 'محمد جميل عبد القادر يوسف', NULL,
   NULL, '9791030226',
   'أردني', NULL,
   NULL, '0798740077',
   NULL, 'شريك',
-  '1992-01-01', 'PARTNER'
+  '1992-01-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   33, NULL, 'صلاح الدين راغب حسن ريال/انسحب', NULL,
   NULL, '9341005442',
   'أردني', NULL,
   NULL, '0795526315',
   NULL, 'شريك',
-  '2007-12-27', 'PARTNER'
+  '2007-12-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   33, NULL, 'ناصر صلاح الدين راغب ريال / انسحب', NULL,
   NULL, '9581020360',
   'أردني', NULL,
   NULL, '0795522113',
   NULL, 'شريك',
-  '2007-12-27', 'PARTNER'
+  '2007-12-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   33, NULL, 'نبيه صلاح الدين راغب ريال', NULL,
   NULL, '9621033374',
   'أردني', NULL,
   NULL, '0795568005',
   NULL, 'شريك',
-  '2007-12-27', 'PARTNER'
+  '2007-12-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   153, NULL, 'زياد غانم ايليا ججاوي / انسحب', NULL,
   NULL, 'A1043350',
   'عراقي', NULL,
   NULL, '0799555810',
   NULL, 'شريك',
-  '2011-07-19', 'PARTNER'
+  '2011-07-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   153, NULL, 'طارق محمد عبدالفتاح سلامة/ انسحب', NULL,
   NULL, '9741030473',
   'أردني', NULL,
   NULL, '0795525817',
   NULL, 'شريك',
-  '2014-02-06', 'PARTNER'
+  '2014-02-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   155, NULL, 'ابتسام عبدالرزاق سليمان ابوالعز', NULL,
   NULL, '9582023221',
   'أردني', NULL,
   NULL, '0795207052',
   NULL, 'شريك',
-  '1995-01-31', 'PARTNER'
+  '1995-01-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   156, NULL, 'امين ناجي امين عميرة', NULL,
   NULL, '9661029629',
   'أردني', NULL,
   NULL, '0795545001',
   NULL, 'شريك',
-  '2011-01-27', 'PARTNER'
+  '2011-01-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   156, NULL, 'سهير ناجي امين عميرة/ انسحب', NULL,
   NULL, '9752033576',
   'أردني', NULL,
   NULL, '0797707790',
   NULL, 'شريك',
-  '2011-01-27', 'PARTNER'
+  '2011-01-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   157, NULL, 'زياد محمود محمد الزين', NULL,
   NULL, '9721026389',
   'أردني', NULL,
   NULL, '0795822122',
   NULL, 'شريك',
-  '2011-03-09', 'PARTNER'
+  '2011-03-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   120, NULL, 'هناء غسان فهمي الغصين', NULL,
   NULL, '9572020438',
   'أردني', NULL,
   NULL, '0796956995',
   NULL, 'شريك',
-  '2009-06-30', 'PARTNER'
+  '2009-06-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   121, NULL, 'حسان اسعد رشيد حمود/انسحب', NULL,
   NULL, '9621006384',
   'أردني', NULL,
   NULL, '0795742833',
   NULL, 'شريك',
-  '2009-08-09', 'PARTNER'
+  '2009-08-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   121, NULL, 'موسى عبدالرحمن موسى ابو شريف/انسحب', NULL,
   NULL, '9691024530',
   'أردني', NULL,
   NULL, '0795698594',
   NULL, 'شريك',
-  '2009-08-09', 'PARTNER'
+  '2009-08-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   122, NULL, 'محمد مروان محمد ذيب الكرزون', NULL,
   NULL, '9651029165',
   'أردني', NULL,
   NULL, '0799320003',
   NULL, 'شريك',
-  '2009-05-31', 'PARTNER'
+  '2009-05-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   125, NULL, 'خليل محمد منصور العودة الله/ بموجب اغلاق', NULL,
   NULL, '9791054945',
   'أردني', NULL,
   NULL, '0797835757',
   NULL, 'شريك',
-  '2009-10-19', 'PARTNER'
+  '2009-10-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   125, NULL, 'سعود شريف الزعبي/ بموجب اغلاق', NULL,
   NULL, '121-20036672',
   'سوري', NULL,
   NULL, '0797974536',
   NULL, 'شريك',
-  '2017-09-19', 'PARTNER'
+  '2017-09-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   126, NULL, 'سحر جميل هاشم الشرفا', NULL,
   NULL, '9662041801',
   'أردني', NULL,
   NULL, '0795569458',
   NULL, 'شريك',
-  '2009-07-13', 'PARTNER'
+  '2009-07-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   127, NULL, 'محمد فؤاد اسماعيل الزريقي / انسحب', NULL,
   NULL, '9681032157',
   'أردني', NULL,
   NULL, '0797365053',
   NULL, 'شريك',
-  '2009-10-05', 'PARTNER'
+  '2009-10-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   128, NULL, 'يوسف خليل عطية النوافلة/ انسحب', NULL,
   NULL, '9321007957',
   'أردني', NULL,
   NULL, '0777348415',
   NULL, 'شريك',
-  '2009-11-19', 'PARTNER'
+  '2009-11-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   129, NULL, 'ابراهيم عبدالكريم سالم العبد الله', NULL,
   NULL, '9561006913',
   'أردني', NULL,
   NULL, '0795775043',
   NULL, 'شريك',
-  '2009-02-03', 'PARTNER'
+  '2009-02-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   130, NULL, 'محمد فلاح حسين الحايك', NULL,
   NULL, '9641010700',
   'أردني', NULL,
   NULL, '0797782124',
   NULL, 'شريك',
-  '2010-02-07', 'PARTNER'
+  '2010-02-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   130, NULL, 'محمد صالح الهزيم النعمان', NULL,
   NULL, '9531002944',
   'أردني', NULL,
   NULL, '0777750513',
   NULL, 'شريك',
-  '2010-02-07', 'PARTNER'
+  '2010-02-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   130, NULL, 'حجازي عطا عبدالله حجازي', NULL,
   NULL, '9581007605',
   'أردني', NULL,
   NULL, '0796316199',
   NULL, 'شريك',
-  '2010-02-07', 'PARTNER'
+  '2010-02-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   130, NULL, 'خالد محمد عبدالله العمري', NULL,
   NULL, '9741008096',
   'أردني', NULL,
   NULL, '0777671142',
   NULL, 'شريك',
-  '2010-02-07', 'PARTNER'
+  '2010-02-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   131, NULL, 'عمر احمد مطلق الحنيطي', NULL,
   NULL, '9601017497',
   'أردني', NULL,
   NULL, '0795030547',
   NULL, 'شريك',
-  '2010-01-03', 'PARTNER'
+  '2010-01-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   131, NULL, 'عبد الرحمن احمد مطلق الحنيطي', NULL,
   NULL, '9661025284',
   'أردني', NULL,
   NULL, '0795030547',
   NULL, 'شريك',
-  '2010-01-03', 'PARTNER'
+  '2010-01-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   131, NULL, 'اسامة احمد مطلق الحنيطي', NULL,
   NULL, '9721030925',
   'أردني', NULL,
   NULL, '0795030547',
   NULL, 'شريك',
-  '2010-01-03', 'PARTNER'
+  '2010-01-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   132, NULL, 'لؤي اميل عازر عازر', NULL,
   NULL, '9731040602',
   'أردني', NULL,
   NULL, '0799221222',
   NULL, 'شريك',
-  '2009-11-12', 'PARTNER'
+  '2009-11-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   133, NULL, 'نصرية عبدالقادر منصور', NULL,
   NULL, 'لا يوجد',
   'FRA', NULL,
   NULL, '0796173923',
   NULL, 'شريك',
-  '2009-08-18', 'PARTNER'
+  '2009-08-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   133, NULL, 'حسين عوده عيسى الهلالات/انسحب', NULL,
   NULL, '9611024219',
   'أردني', NULL,
   NULL, '0795733555',
   NULL, 'شريك',
-  '2009-08-18', 'PARTNER'
+  '2009-08-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   134, NULL, 'وزيرة عبدالحافظ دخل الله البيايضة', NULL,
   NULL, '9722037060',
   'أردني', NULL,
   NULL, '0798912788',
   NULL, 'شريك',
-  '2000-08-17', 'PARTNER'
+  '2000-08-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   134, NULL, 'قاسم عزام حسين البيايضة', NULL,
   NULL, '9661032527',
   'أردني', NULL,
   NULL, '0795499067',
   NULL, 'شريك',
-  '2000-08-17', 'PARTNER'
+  '2000-08-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   135, NULL, 'محمد هادي مثقال داود عصفور', NULL,
   NULL, '9351007903',
   'أردني', NULL,
   NULL, '4621115',
   NULL, 'شريك',
-  '2009-07-02', 'PARTNER'
+  '2009-07-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   135, NULL, 'جاد محمد هادي مثقال عصفور', NULL,
   NULL, '9811026278',
   'أردني', NULL,
   NULL, '4621115',
   NULL, 'شريك',
-  '2009-07-02', 'PARTNER'
+  '2009-07-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   135, NULL, 'قيس محمد هادي مثقال عصفور', NULL,
   NULL, '9741035030',
   'أردني', NULL,
   NULL, '4621115',
   NULL, 'شريك',
-  '2009-07-02', 'PARTNER'
+  '2009-07-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   136, NULL, 'بلال روبين محمد عوده', NULL,
   NULL, '9691019077',
   'أردني', NULL,
   NULL, '0799955556',
   NULL, 'شريك',
-  '2011-04-04', 'PARTNER'
+  '2011-04-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   136, NULL, 'قصي عبد الباسط روبين عبد الجليل', NULL,
   NULL, '9691019202',
   'أردني', NULL,
   NULL, '0787777711',
   NULL, 'شريك',
-  '2011-04-04', 'PARTNER'
+  '2011-04-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   136, NULL, 'عبدالباسط روبين محمد عبدالجليل/ انسحب', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2011-04-04', 'PARTNER'
+  '2011-04-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   140, NULL, 'مجموعة ترافكو القابضة', NULL,
   NULL, '200106640',
   'مصري', NULL,
   NULL, '5666866',
   NULL, 'شريك',
-  '2009-10-25', 'PARTNER'
+  '2009-10-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   141, NULL, 'امل محمود سعيد غنيم/انسحب', NULL,
   NULL, '9512008775',
   'أردني', NULL,
   NULL, '0796277787',
   NULL, 'شريك',
-  '2010-01-21', 'PARTNER'
+  '2010-01-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   141, NULL, 'عامر عوني عبدالمعطي عبدالله', NULL,
   NULL, '9801036868',
   'أردني', NULL,
   NULL, '0796414145',
   NULL, 'شريك',
-  '2010-01-21', 'PARTNER'
+  '2010-01-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   142, NULL, 'عصام عوني احمد حماد', NULL,
   NULL, '9701023650',
   'أردني', NULL,
   NULL, '0777511105',
   NULL, 'شريك',
-  '2009-08-02', 'PARTNER'
+  '2009-08-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   143, NULL, 'يحيى حسين احمد جبعي', NULL,
   NULL, '9781009589',
   'أردني', NULL,
   NULL, '0797675712',
   NULL, 'شريك',
-  '2010-01-18', 'PARTNER'
+  '2010-01-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   144, NULL, 'محمد خالد مصطفى العمري', NULL,
   NULL, '9771039229',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2009-05-21', 'PARTNER'
+  '2009-05-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   144, NULL, 'حسين خالد مصطفى العمري', NULL,
   NULL, '9781039661',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2009-05-21', 'PARTNER'
+  '2009-05-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   144, NULL, 'سيف خالد مصطفى العمري', NULL,
   NULL, '9841027880',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2009-05-21', 'PARTNER'
+  '2009-05-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   145, NULL, 'محمد محسن حماد الفقير', NULL,
   NULL, '2000541036',
   'أردني', NULL,
   NULL, '0779046740',
   NULL, 'شريك',
-  '2009-12-06', 'PARTNER'
+  '2009-12-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   147, NULL, 'احمد عيسى سالم شديد/انسحب', NULL,
   NULL, '9561007544',
   'أردني', NULL,
   NULL, '0799821671',
   NULL, 'شريك',
-  '2009-07-28', 'PARTNER'
+  '2009-07-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   147, NULL, 'حسن محمد يوسف الدحلة/انسحب', NULL,
   NULL, '9601011325',
   'أردني', NULL,
   NULL, '0799930163',
   NULL, 'شريك',
-  '2009-07-28', 'PARTNER'
+  '2009-07-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   147, NULL, 'يوسف محمد يوسف الدحلة/انسحب', NULL,
   NULL, '9581009953',
   'أردني', NULL,
   NULL, '0796808610',
   NULL, 'شريك',
-  '2009-07-28', 'PARTNER'
+  '2009-07-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   147, NULL, 'موفق عبد المجيد لبيب/انسحب', NULL,
   NULL, '9571009647',
   'أردني', NULL,
   NULL, '0795555545',
   NULL, 'شريك',
-  '2009-10-28', 'PARTNER'
+  '2009-10-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   147, NULL, 'جواد محمد بدر شقير/انسحب', NULL,
   NULL, '9661005328',
   'أردني', NULL,
   NULL, '0799471170',
   NULL, 'شريك',
-  '2009-07-28', 'PARTNER'
+  '2009-07-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   150, NULL, 'عصام رضوان عبوي', NULL,
   NULL, '9741033849',
   'أردني', NULL,
   NULL, '0796721452',
   NULL, 'شريك',
-  '2009-11-01', 'PARTNER'
+  '2009-11-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   150, NULL, 'شريف مهدي حسني الصيفي', NULL,
   NULL, '9721049231',
   'أردني', NULL,
   NULL, '0796122188',
   NULL, 'شريك',
-  '2009-11-01', 'PARTNER'
+  '2009-11-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   150, NULL, 'كريم مهدي حسني الصيفي', NULL,
   NULL, '9791055911',
   'أردني', NULL,
   NULL, '0796110001',
   NULL, 'شريك',
-  '2009-11-01', 'PARTNER'
+  '2009-11-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   6, NULL, 'عوني ناصر نجيب قعوار', NULL,
   NULL, '9581017121',
   'أردني', NULL,
   NULL, '0777441441',
   NULL, 'شريك',
-  '2008-08-25', 'PARTNER'
+  '2008-08-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   6, NULL, 'مازن ناصر نجيب قعوار', NULL,
   NULL, '9621024654',
   'أردني', NULL,
   NULL, '0777444055',
   NULL, 'شريك',
-  '2008-08-25', 'PARTNER'
+  '2008-08-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   151, NULL, 'بشار احمد موسى عنقور', NULL,
   NULL, '9731035872',
   'أردني', NULL,
   NULL, '0796676620',
   NULL, 'شريك',
-  '2010-03-14', 'PARTNER'
+  '2010-03-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   6, NULL, 'وائل ناصر نجيب قعوار', NULL,
   NULL, '9691033398',
   'أردني', NULL,
   NULL, '0777444447',
   NULL, 'شريك',
-  '2008-08-25', 'PARTNER'
+  '2008-08-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   89, NULL, 'محمد علي مطلق البدول', NULL,
   NULL, '9731044033',
   'أردني', NULL,
   NULL, '0776183315',
   NULL, 'شريك',
-  '2006-12-19', 'PARTNER'
+  '2006-12-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   92, NULL, 'محمود محمد احمد ابو سالم', NULL,
   NULL, '9681036714',
   'أردني', NULL,
   NULL, '0795813382',
   NULL, 'شريك',
-  '1998-06-22', 'PARTNER'
+  '1998-06-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   93, NULL, 'احمد صالح محمد بني هاني', NULL,
   NULL, '9621007092',
   'أردني', NULL,
   NULL, '0799100050',
   NULL, 'شريك',
-  '2008-04-07', 'PARTNER'
+  '2008-04-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   93, NULL, 'رزق صالح محمد بني هاني', NULL,
   NULL, '9671008297',
   'أردني', NULL,
   NULL, '0795537455',
   NULL, 'شريك',
-  '2008-04-07', 'PARTNER'
+  '2008-04-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   93, NULL, 'محمد سلمان علي ابو طه', NULL,
   NULL, '9631028405',
   'أردني', NULL,
   NULL, '0795538744',
   NULL, 'شريك',
-  '2008-04-07', 'PARTNER'
+  '2008-04-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   95, NULL, 'ابراهيم احمد محمد الحسنات', NULL,
   NULL, '9761005243',
   'أردني', NULL,
   NULL, '0776250687',
   NULL, 'شريك',
-  '2008-08-14', 'PARTNER'
+  '2008-08-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   96, NULL, 'نور الدين احمد حسن قوقزة', NULL,
   NULL, '9861021750',
   'أردني', NULL,
   NULL, '0779525904',
   NULL, 'شريك',
-  '2008-11-26', 'PARTNER'
+  '2008-11-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   97, NULL, 'محمد احمد جبريل مسلم', NULL,
   NULL, '9621031195',
   'أردني', NULL,
   NULL, '0798986262',
   NULL, 'شريك',
-  '2012-12-19', 'PARTNER'
+  '2012-12-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   97, NULL, 'ماهر رزق محمد محسن/انسحب', NULL,
   NULL, '9721027813',
   'أردني', NULL,
   NULL, '0790905560',
   NULL, 'شريك',
-  '2012-12-19', 'PARTNER'
+  '2012-12-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   99, NULL, 'محمد فنخور منيزل الخوالدة', NULL,
   NULL, '9541001691',
   'أردني', NULL,
   NULL, '0795527621',
   NULL, 'شريك',
-  '2009-02-10', 'PARTNER'
+  '2009-02-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   99, NULL, 'سائد محمد احمد عربيات/انسحب', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2009-02-10', 'PARTNER'
+  '2009-02-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   100, NULL, 'وليد عبد الستار', NULL,
   NULL, '000',
   'CAN', NULL,
   NULL, '0795527321',
   NULL, 'شريك',
-  '2008-06-10', 'PARTNER'
+  '2008-06-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   100, NULL, 'وصفي فرحان سعيد السرحان', NULL,
   NULL, '9741012596',
   'أردني', NULL,
   NULL, '0795527321',
   NULL, 'شريك',
-  '2008-06-10', 'PARTNER'
+  '2008-06-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   100, NULL, 'فاروق عبدالرزاق كاظم علي', NULL,
   NULL, '2000940457',
   'أردني', NULL,
   NULL, '0795527321',
   NULL, 'شريك',
-  '2008-06-10', 'PARTNER'
+  '2008-06-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   102, NULL, 'نجيب سليم نجيب قعوار', NULL,
   NULL, '9401004480',
   'أردني', NULL,
   NULL, '0797109734',
   NULL, 'شريك',
-  '2009-03-03', 'PARTNER'
+  '2009-03-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   104, NULL, 'رويدة محمد ابراهيم اسماعيل', NULL,
   NULL, '9712027754',
   'أردني', NULL,
   NULL, '0795557327',
   NULL, 'شريك',
-  '2008-08-19', 'PARTNER'
+  '2008-08-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   104, NULL, 'شيرين محمد ابراهيم اسماعيل/ انسحب', NULL,
   NULL, '9742028450',
   'أردني', NULL,
   NULL, '0775747292',
   NULL, 'شريك',
-  '2008-08-19', 'PARTNER'
+  '2008-08-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   105, NULL, 'ناصر اندراوس يعقوب مسعد/ انسحب', NULL,
   NULL, '9671029858',
   'أردني', NULL,
   NULL, '0799505051',
   NULL, 'شريك',
-  '2008-11-04', 'PARTNER'
+  '2008-11-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   105, NULL, 'غياث بهجت فرحان الحداد', NULL,
   NULL, '9721048343',
   'أردني', NULL,
   NULL, '0795909993',
   NULL, 'شريك',
-  '2008-11-04', 'PARTNER'
+  '2008-11-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   106, NULL, 'ثريا عزالدين صالح المملح/ انسحب', NULL,
   NULL, '972027498',
   'أردني', NULL,
   NULL, '0777558885',
   NULL, 'شريك',
-  '2009-03-16', 'PARTNER'
+  '2009-03-16'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   107, NULL, 'مروان علي محي الدين بنات/انسحب', NULL,
   NULL, '9541013177',
   'أردني', NULL,
   NULL, '06/5673801',
   NULL, 'شريك',
-  '2009-05-04', 'PARTNER'
+  '2009-05-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   108, NULL, 'محمد علي محمد البدول', NULL,
   NULL, '9761045648',
   'أردني', NULL,
   NULL, '0796904646',
   NULL, 'شريك',
-  '2009-03-10', 'PARTNER'
+  '2009-03-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   109, NULL, 'ايمن احمد علي جلاد', NULL,
   NULL, '9701026389',
   'أردني', NULL,
   NULL, '0797406771',
   NULL, 'شريك',
-  '2009-02-09', 'PARTNER'
+  '2009-02-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   109, NULL, 'مها نجيب صدقي ابو حسن/انسحب', NULL,
   NULL, '9662002682',
   'أردني', NULL,
   NULL, '0795041074',
   NULL, 'شريك',
-  '2009-02-09', 'PARTNER'
+  '2009-02-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   110, NULL, 'شريف عبداللطيف شريف محمود', NULL,
   NULL, '9721013742',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2009-03-10', 'PARTNER'
+  '2009-03-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   110, NULL, 'لبنى سعيد محمد هيجاوي', NULL,
   NULL, '9831032434',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2009-03-10', 'PARTNER'
+  '2009-03-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   110, NULL, 'عبد الرحمن محمد المزرعاوي', NULL,
   NULL, '9691042814',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2009-03-10', 'PARTNER'
+  '2009-03-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   110, NULL, 'ميساء عزت محمد البرماوي', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2009-03-10', 'PARTNER'
+  '2009-03-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   112, NULL, 'وليد قاسم يوسف ابو كركي', NULL,
   NULL, '9471009643',
   'أردني', NULL,
   NULL, '0795616668',
   NULL, 'شريك',
-  '2009-07-06', 'PARTNER'
+  '2009-07-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   112, NULL, 'يزن يعقوب توما الصناع', NULL,
   NULL, '9781032875',
   'أردني', NULL,
   NULL, '0795004020',
   NULL, 'شريك',
-  '2009-07-06', 'PARTNER'
+  '2009-07-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   112, NULL, 'دلال مهاوي خليل ابو كركي', NULL,
   NULL, '9492008415',
   'أردني', NULL,
   NULL, '0777377188',
   NULL, 'شريك',
-  '2009-07-06', 'PARTNER'
+  '2009-07-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   112, NULL, 'نبيلة عبده محمد صبحا/انسحب', NULL,
   NULL, '9522009829',
   'أردني', NULL,
   NULL, '0795066676',
   NULL, 'شريك',
-  '2009-07-06', 'PARTNER'
+  '2009-07-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   112, NULL, 'مي روزي احمد اسماعيل/انسحب', NULL,
   NULL, '9792030234',
   'أردني', NULL,
   NULL, '0799663993',
   NULL, 'شريك',
-  '2009-07-06', 'PARTNER'
+  '2009-07-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   113, NULL, 'مروان عوني خليل عوض', NULL,
   NULL, '9681028358',
   'أردني', NULL,
   NULL, '0795959111',
   NULL, 'شريك',
-  '2009-07-08', 'PARTNER'
+  '2009-07-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   113, NULL, 'محمد موسى محمد اسماعيل', NULL,
   NULL, '9741014861',
   'أردني', NULL,
   NULL, '0798058952',
   NULL, 'شريك',
-  '2009-07-08', 'PARTNER'
+  '2009-07-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   115, NULL, 'اسامة ربيح عبدالمجيد السعيد', NULL,
   NULL, '9661025175',
   'أردني', NULL,
   NULL, '0795588121',
   NULL, 'شريك',
-  '2008-11-10', 'PARTNER'
+  '2008-11-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   115, NULL, 'هلال سميح عبدالمجيد السعيد / انسحب', NULL,
   NULL, '9651023790',
   'أردني', NULL,
   NULL, '0795535235',
   NULL, 'شريك',
-  '2008-11-10', 'PARTNER'
+  '2008-11-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   116, NULL, 'شركه رزان التجاريه', NULL,
   NULL, '9661035755',
   'أردني', NULL,
   NULL, '0797447730',
   NULL, 'شريك',
-  '2009-01-14', 'PARTNER'
+  '2009-01-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   116, NULL, 'شركة رفيق رضا العالمية', NULL,
   NULL, '2444717',
   'لبناني', NULL,
   NULL, '0797434342',
   NULL, 'شريك',
-  '2009-01-14', 'PARTNER'
+  '2009-01-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   117, NULL, 'علي محمد عبد المحسن الحسامي', NULL,
   NULL, '9811002586',
   'أردني', NULL,
   NULL, '0796338485',
   NULL, 'شريك',
-  '2011-04-20', 'PARTNER'
+  '2011-04-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   117, NULL, 'عقاب فرحان عبد المساعفة/انسحب', NULL,
   NULL, '9811002593',
   'أردني', NULL,
   NULL, '0795389818',
   NULL, 'شريك',
-  '2011-04-20', 'PARTNER'
+  '2011-04-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   118, NULL, 'احمد ياسر سعاد حمادنه', NULL,
   NULL, '9891044299',
   'أردني', NULL,
   NULL, '0772001510',
   NULL, 'شريك',
-  '2009-07-07', 'PARTNER'
+  '2009-07-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   118, NULL, 'خولة حامد عليان شموط', NULL,
   NULL, '9712034243',
   'أردني', NULL,
   NULL, '0772001510',
   NULL, 'شريك',
-  '2009-07-07', 'PARTNER'
+  '2009-07-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   87, NULL, 'غازي رزق فضل الداوود', NULL,
   NULL, '9611008779',
   'أردني', NULL,
   NULL, '0795559875',
   NULL, 'شريك',
-  '2009-09-18', 'PARTNER'
+  '2009-09-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   87, NULL, 'سميرة محمد خلف الحجازات', NULL,
   NULL, '9652010944',
   'أردني', NULL,
   NULL, '0799260260',
   NULL, 'شريك',
-  '2008-09-18', 'PARTNER'
+  '2008-09-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   86, NULL, 'ابراهيم حماد عبدالله السعايدة', NULL,
   NULL, '9711018470',
   'أردني', NULL,
   NULL, '0799780888',
   NULL, 'شريك',
-  '2008-02-10', 'PARTNER'
+  '2008-02-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   86, NULL, 'عوض نزال جدوع الصرايرة/انسحب', NULL,
   NULL, '9521011155',
   'أردني', NULL,
   NULL, '0777772412',
   NULL, 'شريك',
-  '2008-02-10', 'PARTNER'
+  '2008-02-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   85, NULL, 'محمد احمد بشير الزعبي/انسحب', NULL,
   NULL, '9561004157',
   'أردني', NULL,
   NULL, '0795608777',
   NULL, 'شريك',
-  '2004-05-13', 'PARTNER'
+  '2004-05-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   85, NULL, 'نائل سعد محمد البكار', NULL,
   NULL, '9641018652',
   'أردني', NULL,
   NULL, '0795607108',
   NULL, 'شريك',
-  '2004-05-13', 'PARTNER'
+  '2004-05-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   85, NULL, 'علي جميل احمد الردايده/انسحب', NULL,
   NULL, '9751009264',
   'أردني', NULL,
   NULL, '0796383936',
   NULL, 'شريك',
-  '2004-05-13', 'PARTNER'
+  '2004-05-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   84, NULL, 'احسان عبدالغفار محمد العمري', NULL,
   NULL, '9741008926',
   'أردني', NULL,
   NULL, '0795056633',
   NULL, 'شريك',
-  '2008-01-03', 'PARTNER'
+  '2008-01-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   84, NULL, 'محمد عبدالكريم محبوب المسرات/ انسحب', NULL,
   NULL, '9791007072',
   'أردني', NULL,
   NULL, '0799684700',
   NULL, 'شريك',
-  '2008-01-03', 'PARTNER'
+  '2008-01-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   83, NULL, 'رجاء مصطفى محمد ياسين', NULL,
   NULL, '9682018318',
   'أردني', NULL,
   NULL, '0777773871',
   NULL, 'شريك',
-  '2009-01-12', 'PARTNER'
+  '2009-01-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   83, NULL, 'احمد مصطفى محمد ياسين/انسحب', NULL,
   NULL, '9851058940',
   'أردني', NULL,
   NULL, '0799888561',
   NULL, 'شريك',
-  '2009-01-12', 'PARTNER'
+  '2009-01-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   82, NULL, 'ليالي حسني حسن ابو سير', NULL,
   NULL, '9652009170',
   'أردني', NULL,
   NULL, '0795577407',
   NULL, 'شريك',
-  '2008-10-15', 'PARTNER'
+  '2008-10-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   80, NULL, 'عائد محمد سعيد عارف استيتيه', NULL,
   NULL, '9701024848',
   'أردني', NULL,
   NULL, '0796294444',
   NULL, 'شريك',
-  '2001-07-23', 'PARTNER'
+  '2001-07-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   80, NULL, 'احمد عبد الكريم ابراهيم الشرفا', NULL,
   NULL, '9601030603',
   'أردني', NULL,
   NULL, '0786294444',
   NULL, 'شريك',
-  '2001-07-23', 'PARTNER'
+  '2001-07-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   79, NULL, 'سمر احمد سعيد هيجر/انسحب', NULL,
   NULL, '9632034667',
   'أردني', NULL,
   NULL, '0772355673',
   NULL, 'شريك',
-  '2008-11-10', 'PARTNER'
+  '2008-11-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   79, NULL, 'شهناز عبدالهادي يوسف الطنطاوي', NULL,
   NULL, '9602003107',
   'أردني', NULL,
   NULL, '0772238565',
   NULL, 'شريك',
-  '2008-11-10', 'PARTNER'
+  '2008-11-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   78, NULL, 'هاني محمود موسى الخالدي', NULL,
   NULL, '9641020364',
   'أردني', NULL,
   NULL, '0796260606',
   NULL, 'شريك',
-  '2008-07-31', 'PARTNER'
+  '2008-07-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   78, NULL, 'لورنس محمد احمد عبيدات', NULL,
   NULL, '9741011893',
   'أردني', NULL,
   NULL, '0795646090',
   NULL, 'شريك',
-  '2008-07-31', 'PARTNER'
+  '2008-07-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   77, NULL, 'اشرف صالح فخر العبد', NULL,
   NULL, '9701028211',
   'أردني', NULL,
   NULL, '0797165671',
   NULL, 'شريك',
-  '2008-08-11', 'PARTNER'
+  '2008-08-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   76, NULL, 'صالح عدنان شعبان ابو مسلم/انسحب', NULL,
   NULL, '9891038986',
   'أردني', NULL,
   NULL, '0795869581',
   NULL, 'شريك',
-  '2008-06-30', 'PARTNER'
+  '2008-06-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   75, NULL, 'ايهاب زهير شفيق الجيوسي', NULL,
   NULL, '9831023268',
   'أردني', NULL,
   NULL, '0799834743',
   NULL, 'شريك',
-  '2008-07-29', 'PARTNER'
+  '2008-07-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   75, NULL, 'زهير شفيق عبدالفتاح الجيوسي', NULL,
   NULL, '9541009911',
   'أردني', NULL,
   NULL, '0799834743',
   NULL, 'شريك',
-  '2008-07-29', 'PARTNER'
+  '2008-07-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   74, NULL, 'زينب افهيد خليل الفرجات/ انسحب', NULL,
   NULL, '9522013654',
   'أردني', NULL,
   NULL, '0777314712',
   NULL, 'شريك',
-  '2007-12-11', 'PARTNER'
+  '2007-12-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   72, NULL, 'محمد جمال احمد محمد علوة', NULL,
   NULL, '9671021072',
   'أردني', NULL,
   NULL, '0795556879',
   NULL, 'شريك',
-  '2009-09-29', 'PARTNER'
+  '2009-09-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   70, NULL, 'عمران جمعه عمران الكركي', NULL,
   NULL, '9681030647',
   'أردني', NULL,
   NULL, '0795554772',
   NULL, 'شريك',
-  '2008-08-21', 'PARTNER'
+  '2008-08-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   69, NULL, 'رانيا باسم صبحي الزريقي', NULL,
   NULL, '9812034593',
   'أردني', NULL,
   NULL, '0796840841',
   NULL, 'شريك',
-  '2008-05-13', 'PARTNER'
+  '2008-05-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   68, NULL, 'احمد عاطف احمد اليوسف', NULL,
   NULL, '9671011117',
   'أردني', NULL,
   NULL, '0795666002',
   NULL, 'شريك',
-  '2006-11-16', 'PARTNER'
+  '2006-11-16'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   67, NULL, 'عمر عبدالعزيز عبدالله حيمور', NULL,
   NULL, '969103431',
   'أردني', NULL,
   NULL, '0795999692',
   NULL, 'شريك',
-  '2006-03-19', 'PARTNER'
+  '2006-03-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   67, NULL, 'غالب عبدالسلام رضا الغزاوي', NULL,
   NULL, '9741033306',
   'أردني', NULL,
   NULL, '0795999692',
   NULL, 'شريك',
-  '2006-03-19', 'PARTNER'
+  '2006-03-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   66, NULL, 'ختام حسن يوسف حسان/انسحبت', NULL,
   NULL, '9682042506',
   'أردني', NULL,
   NULL, '0796409929',
   NULL, 'شريك',
-  '2000-08-29', 'PARTNER'
+  '2000-08-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   66, NULL, 'محمود احمد محمود حسان', NULL,
   NULL, '9621035783',
   'أردني', NULL,
   NULL, '0795510333',
   NULL, 'شريك',
-  '2000-08-29', 'PARTNER'
+  '2000-08-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   65, NULL, 'حسن جوير حمد الدليمي', NULL,
   NULL, 'ِA5216753',
   'عراقي', NULL,
   NULL, '0795540441',
   NULL, 'شريك',
-  '2006-12-04', 'PARTNER'
+  '2006-12-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   65, NULL, 'غدير عثمان حسن جبران', NULL,
   NULL, '9652010726',
   'أردني', NULL,
   NULL, '0795540441',
   NULL, 'شريك',
-  '2006-12-04', 'PARTNER'
+  '2006-12-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   64, NULL, 'كمال كمال سليم ابوذياب', NULL,
   NULL, '9671021647',
   'أردني', NULL,
   NULL, '0795886388',
   NULL, 'شريك',
-  '2005-03-30', 'PARTNER'
+  '2005-03-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   64, NULL, 'عمر كمال كمال ابو ذياب', NULL,
   NULL, '9911018029',
   'أردني', NULL,
   NULL, '0799234543',
   NULL, 'شريك',
-  '2005-03-30', 'PARTNER'
+  '2005-03-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   63, NULL, 'رائد عزت محمد الكسواني/ انسحب', NULL,
   NULL, '9691193854',
   'أردني', NULL,
   NULL, '0796580088',
   NULL, 'شريك',
-  '2006-05-22', 'PARTNER'
+  '2006-05-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   63, NULL, 'شاهر حسن عبدالفتاح عياش', NULL,
   NULL, '9651028302',
   'أردني', NULL,
   NULL, '0796329640',
   NULL, 'شريك',
-  '2006-05-22', 'PARTNER'
+  '2006-05-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   63, NULL, 'عبدالاله شاهر محمد فوارسة/ انسحب', NULL,
   NULL, '9721063854',
   'أردني', NULL,
   NULL, '0799058444',
   NULL, 'شريك',
-  '2006-05-22', 'PARTNER'
+  '2006-05-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   62, NULL, 'محمود علي ابراهيم درادكة/ وفاة', NULL,
   NULL, '9511002234',
   'أردني', NULL,
   NULL, '0797820604',
   NULL, 'شريك',
-  '2004-10-27', 'PARTNER'
+  '2004-10-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   62, NULL, 'صفيه خليل موسى درادكه', NULL,
   NULL, '9612003855',
   'أردني', NULL,
   NULL, '0777955096',
   NULL, 'شريك',
-  '2004-10-27', 'PARTNER'
+  '2004-10-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   61, NULL, 'نوفا سورين دكران خوجايان', NULL,
   NULL, 'G12590061',
   'عراقي', NULL,
   NULL, '0797000997',
   NULL, 'شريك',
-  '2006-08-15', 'PARTNER'
+  '2006-08-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   61, NULL, 'لؤي لبيب رشيد ميزرا', NULL,
   NULL, '2001313481',
   'أردني', NULL,
   NULL, '065605010',
   NULL, 'شريك',
-  '2006-08-15', 'PARTNER'
+  '2006-08-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   60, NULL, 'بلال احمد يوسف الجغبير', NULL,
   NULL, '9631004578',
   'أردني', NULL,
   NULL, '0795382542',
   NULL, 'شريك',
-  '2005-04-17', 'PARTNER'
+  '2005-04-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   60, NULL, 'محمد سامي احمد ابوريا/ ناسحب', NULL,
   NULL, '9641001674',
   'أردني', NULL,
   NULL, '0795827668',
   NULL, 'شريك',
-  '2005-04-17', 'PARTNER'
+  '2005-04-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   60, NULL, 'فراس احمد يوسف فارس/ انسحب', NULL,
   NULL, '9801003128',
   'أردني', NULL,
   NULL, '0795751089',
   NULL, 'شريك',
-  '2005-04-17', 'PARTNER'
+  '2005-04-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   59, NULL, 'خليل محمد خليل قشطة/ انسحب', NULL,
   NULL, '9521014977',
   'أردني', NULL,
   NULL, '0799524846',
   NULL, 'شريك',
-  '2005-02-06', 'PARTNER'
+  '2005-02-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   86, NULL, 'ايمان زعل مطلق العميلات/انسحبت/متوفية', NULL,
   NULL, '9732044106',
   'أردني', NULL,
   NULL, '0799780888',
   NULL, 'شريك',
-  '2016-01-10', 'PARTNER'
+  '2016-01-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   562, NULL, 'يزن محمد عيسى برهوم/ انسحب', NULL,
   NULL, '9881001587',
   'أردني', NULL,
   NULL, '0795555250',
   NULL, 'شريك',
-  '2016-03-01', 'PARTNER'
+  '2016-03-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   55, NULL, 'محمد خليل محمد عشا', NULL,
   NULL, '9671027063',
   'أردني', NULL,
   NULL, '0798627777',
   NULL, 'شريك',
-  '2003-09-16', 'PARTNER'
+  '2003-09-16'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   55, NULL, 'بسمة محمد يونس عويضة', NULL,
   NULL, '9672018991',
   'أردني', NULL,
   NULL, '0795954777',
   NULL, 'شريك',
-  '2003-09-16', 'PARTNER'
+  '2003-09-16'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   57, NULL, 'مروان موسى احمد ابو مويس', NULL,
   NULL, '9421007081',
   'أردني', NULL,
   NULL, '0795569477',
   NULL, 'شريك',
-  '2008-01-08', 'PARTNER'
+  '2008-01-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   57, NULL, 'شوقية حسين مصطفى ابو مويس/ انسحب', NULL,
   NULL, '9492006901',
   'أردني', NULL,
   NULL, '0799837808',
   NULL, 'شريك',
-  '2008-01-08', 'PARTNER'
+  '2008-01-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   10, NULL, 'محمد نور شفيق الوزان', NULL,
   NULL, '9421010411',
   'أردني', NULL,
   NULL, '0797623183',
   NULL, 'شريك',
-  '1971-10-28', 'PARTNER'
+  '1971-10-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   9, NULL, 'رحاب نعمة سليمان ريحاني / انسحب', NULL,
   NULL, '9641006183',
   'أردني', NULL,
   NULL, '0796611511',
   NULL, 'شريك',
-  '1987-01-21', 'PARTNER'
+  '1987-01-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   9, NULL, 'شادي وليم جريس نصراوي / انسحب', NULL,
   NULL, '9761009277',
   'أردني', NULL,
   NULL, '0795728882',
   NULL, 'شريك',
-  '1987-01-21', 'PARTNER'
+  '1987-01-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   9, NULL, 'فيرا ادوارد جريس نصراوي', NULL,
   NULL, '9552009181',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '1987-01-21', 'PARTNER'
+  '1987-01-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   9, NULL, 'لؤي وليم جريس نصراوي', NULL,
   NULL, '9641006183',
   'أردني', NULL,
   NULL, '0797171771',
   NULL, 'شريك',
-  '1987-01-21', 'PARTNER'
+  '1987-01-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   9, NULL, 'لين وليم جريس نصراوي / انسحب', NULL,
   NULL, '9812007720',
   'أردني', NULL,
   NULL, '0796611511',
   NULL, 'شريك',
-  '1987-01-21', 'PARTNER'
+  '1987-01-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   544, NULL, 'محمد هاني صبحي قناديلو', NULL,
   NULL, '9771055981',
   'أردني', NULL,
   NULL, '0795351475',
   NULL, 'شريك',
-  '2016-01-03', 'PARTNER'
+  '2016-01-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   19, NULL, 'جورج حنا ميخائيل مصركي', NULL,
   NULL, '9451011421',
   'أردني', NULL,
   NULL, '0795312054',
   NULL, 'شريك',
-  '1983-03-15', 'PARTNER'
+  '1983-03-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   17, NULL, 'شكري انطون شكري لورنس/ انسحب', NULL,
   NULL, '9361012487',
   'أردني', NULL,
   NULL, '0795042921',
   NULL, 'شريك',
-  '1973-07-20', 'PARTNER'
+  '1973-07-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   17, NULL, 'انطون شكري انطون لورنس', NULL,
   NULL, '0',
   'PSE', NULL,
   NULL, '0795523029',
   NULL, 'شريك',
-  '1973-07-20', 'PARTNER'
+  '1973-07-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   17, NULL, 'الكسندر شكري انطون لورنس', NULL,
   NULL, NULL,
   'PSE', NULL,
   NULL, '0795523029',
   NULL, 'شريك',
-  '1973-07-20', 'PARTNER'
+  '1973-07-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   17, NULL, 'هنري شكري انطون لورنس', NULL,
   NULL, NULL,
   'PSE', NULL,
   NULL, '0795230290',
   NULL, 'شريك',
-  '1973-07-20', 'PARTNER'
+  '1973-07-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   13, NULL, 'نزار خالد نايف استيتيه', NULL,
   NULL, '9651026634',
   'أردني', NULL,
   NULL, '0795525532',
   NULL, 'شريك',
-  '2007-05-22', 'PARTNER'
+  '2007-05-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   13, NULL, 'ماهر خالد نايف استيتيه', NULL,
   NULL, '9661027922',
   'أردني', NULL,
   NULL, '0795525532',
   NULL, 'شريك',
-  '2007-02-25', 'PARTNER'
+  '2007-02-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   13, NULL, 'حنان عبدالرزاق محمود عرفات / انسحب', NULL,
   NULL, '9452010110',
   'أردني', NULL,
   NULL, '0795729104',
   NULL, 'شريك',
-  '2007-02-25', 'PARTNER'
+  '2007-02-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   13, NULL, 'هبه خالد نايف استيتيه', NULL,
   NULL, '9622032376',
   'أردني', NULL,
   NULL, '0795525532',
   NULL, 'شريك',
-  '2007-02-25', 'PARTNER'
+  '2007-02-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   8, NULL, 'سمر جميل هاشم الشرفا', NULL,
   NULL, '9702047831',
   'أردني', NULL,
   NULL, '0795564619',
   NULL, 'شريك',
-  '2007-04-30', 'PARTNER'
+  '2007-04-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   54, NULL, 'سلامة نهار خطار الشموط', NULL,
   NULL, '9631034438',
   'أردني', NULL,
   NULL, '0795557883',
   NULL, 'شريك',
-  '2007-12-12', 'PARTNER'
+  '2007-12-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   51, NULL, 'ناصر ابراهيم عوض الله', NULL,
   NULL, '9611029393',
   'أردني', NULL,
   NULL, '0795538898',
   NULL, 'شريك',
-  '1998-10-07', 'PARTNER'
+  '1998-10-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   51, NULL, 'ابراهيم ناصر ابراهيم عوض الله', NULL,
   NULL, '9961037206',
   'أردني', NULL,
   NULL, '0795538898',
   NULL, 'شريك',
-  '1998-10-07', 'PARTNER'
+  '1998-10-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   49, NULL, 'ايهاب سمير سعيد بدارو', NULL,
   NULL, '9701039521',
   'أردني', NULL,
   NULL, '0795066666',
   NULL, 'شريك',
-  '1998-12-23', 'PARTNER'
+  '1998-12-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   49, NULL, 'كريم مهند اسماعيل ملحس', NULL,
   NULL, '2001353270',
   'أردني', NULL,
   NULL, '0795554235',
   NULL, 'شريك',
-  '1998-12-23', 'PARTNER'
+  '1998-12-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   49, NULL, 'فادي علي اسماعيل غندور', NULL,
   NULL, '9591021308',
   'أردني', NULL,
   NULL, '0799931006',
   NULL, 'شريك',
-  '1998-12-23', 'PARTNER'
+  '1998-12-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   47, NULL, 'فتحي اسماعيل حسن علوان', NULL,
   NULL, '9401006683',
   'أردني', NULL,
   NULL, '0777567403',
   NULL, 'شريك',
-  '1999-04-07', 'PARTNER'
+  '1999-04-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   46, NULL, 'ياسين علي مرشد الرواشدة/انسحب', NULL,
   NULL, '9621009255',
   'أردني', NULL,
   NULL, '0795534455',
   NULL, 'شريك',
-  '1999-02-24', 'PARTNER'
+  '1999-02-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   46, NULL, 'احمد ياسين علي الرواشدة/انسحب', NULL,
   NULL, '2001018618',
   'أردني', NULL,
   NULL, '0779220821',
   NULL, 'شريك',
-  '1999-02-24', 'PARTNER'
+  '1999-02-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   46, NULL, 'مؤيد ياسين علي الرواشدة/انسحب', NULL,
   NULL, '9941030626',
   'أردني', NULL,
   NULL, '0799541566',
   NULL, 'شريك',
-  '2012-05-28', 'PARTNER'
+  '2012-05-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   46, NULL, 'محمد ياسين علي الرواشدة/انسحب', NULL,
   NULL, '9911062273',
   'أردني', NULL,
   NULL, '0795917657',
   NULL, 'شريك',
-  '2012-05-28', 'PARTNER'
+  '2012-05-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   46, NULL, 'هيثم ياسين علي الرواشدة/انسحب', NULL,
   NULL, '9971062394',
   'أردني', NULL,
   NULL, '0796425955',
   NULL, 'شريك',
-  '2012-05-28', 'PARTNER'
+  '2012-05-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   45, NULL, 'خالد محمود ابراهيم الشريف', NULL,
   NULL, '9681031197',
   'أردني', NULL,
   NULL, '0795575560',
   NULL, 'شريك',
-  '2007-08-14', 'PARTNER'
+  '2007-08-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   44, NULL, 'ماجدة سميح صالح خليل', NULL,
   NULL, '9682002766',
   'أردني', NULL,
   NULL, '0795789600',
   NULL, 'شريك',
-  '1998-12-17', 'PARTNER'
+  '1998-12-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   44, NULL, 'ديانا صالح سليمان دحابرة / انسحبت', NULL,
   NULL, '9572001061',
   'أردني', NULL,
   NULL, '0795746747',
   NULL, 'شريك',
-  '1998-12-17', 'PARTNER'
+  '1998-12-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   35, NULL, 'عبد الرحمن عثمان يعقوب جعيدي', NULL,
   NULL, '9441011322',
   'أردني', NULL,
   NULL, '0795723531',
   NULL, 'شريك',
-  '2011-10-26', 'PARTNER'
+  '2011-10-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   36, NULL, 'عدي منذر لطفي جرار/ انسحب', NULL,
   NULL, '9741038957',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '1997-06-30', 'PARTNER'
+  '1997-06-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   36, NULL, 'غسان مصطفى احمد ادريس/ انسحب', NULL,
   NULL, '001618583',
   'سوري', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '1997-06-30', 'PARTNER'
+  '1997-06-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   37, NULL, 'منذر لويس عيسى الطوال', NULL,
   NULL, '9571016488',
   'أردني', NULL,
   NULL, '0795526206',
   NULL, 'شريك',
-  '1997-10-04', 'PARTNER'
+  '1997-10-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   39, NULL, 'محمد حرب سليمان الفرجات', NULL,
   NULL, '9611024158',
   'أردني', NULL,
   NULL, '0795506094',
   NULL, 'شريك',
-  '1998-03-09', 'PARTNER'
+  '1998-03-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   41, NULL, 'الشريف شاكر بن زيد بن شاكر/ انسحب', NULL,
   NULL, '9611023032',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '1998-08-09', 'PARTNER'
+  '1998-08-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   41, NULL, 'تامبي عارف موسى تحغبسو', NULL,
   NULL, '9791009874',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '1998-08-09', 'PARTNER'
+  '1998-08-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   41, NULL, 'خضر توفيق اسعد سالم/ انسحب', NULL,
   NULL, '9761029005',
   'أردني', NULL,
   NULL, '0796501122',
   NULL, 'شريك',
-  '1998-08-09', 'PARTNER'
+  '1998-08-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   41, NULL, 'مصطفى ضياء حبيب الخيون/ انسحب', NULL,
   NULL, '0',
   'عراقي', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '1998-08-09', 'PARTNER'
+  '1998-08-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   41, NULL, 'معاذ محمود حمدان صبيح', NULL,
   NULL, '9781032714',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '1998-08-09', 'PARTNER'
+  '1998-08-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   41, NULL, 'نضال ابراهيم يعقوب قارت', NULL,
   NULL, '9621002197',
   'أردني', NULL,
   NULL, '0795000666',
   NULL, 'شريك',
-  '1998-08-09', 'PARTNER'
+  '1998-08-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   43, NULL, 'شاهر علي محمد حمدان', NULL,
   NULL, '9571014492',
   'أردني', NULL,
   NULL, '0795511284',
   NULL, 'شريك',
-  '2009-12-28', 'PARTNER'
+  '2009-12-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   43, NULL, 'مصلح محمد عبدالعزيز نزال', NULL,
   NULL, '9711010660',
   'أردني', NULL,
   NULL, '0795560701',
   NULL, 'شريك',
-  '2009-12-28', 'PARTNER'
+  '2009-12-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   27, NULL, 'فواز احمد جمعة سوندة', NULL,
   NULL, '9561010858',
   'أردني', NULL,
   NULL, '0795786780',
   NULL, 'شريك',
-  '1991-06-12', 'PARTNER'
+  '1991-06-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   26, NULL, 'كريم وادي محمد شاهين', NULL,
   NULL, '955109951',
   'أردني', NULL,
   NULL, '0796315156',
   NULL, 'شريك',
-  '1990-07-03', 'PARTNER'
+  '1990-07-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   25, NULL, 'بشارة يوسف يعقوب صوالحة', NULL,
   NULL, '9571015648',
   'أردني', NULL,
   NULL, '0795144000',
   NULL, 'شريك',
-  '1990-01-15', 'PARTNER'
+  '1990-01-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   25, NULL, 'اليزابيث فيرجس كيسي', NULL,
   NULL, '9532012996',
   'أردني', NULL,
   NULL, '00',
   NULL, 'شريك',
-  '1990-01-15', 'PARTNER'
+  '1990-01-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   24, NULL, 'محمد محمود عبدالقادر الناطور', NULL,
   NULL, '9551010990',
   'أردني', NULL,
   NULL, '0795957722',
   NULL, 'شريك',
-  '1990-06-23', 'PARTNER'
+  '1990-06-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   23, NULL, 'اروى محمد احمد الطوالبه', NULL,
   NULL, '9622039960',
   'أردني', NULL,
   NULL, '0795528020',
   NULL, 'شريك',
-  '1993-03-18', 'PARTNER'
+  '1993-03-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   23, NULL, 'سمير شعيب احمد الدربي', NULL,
   NULL, '9551017128',
   'أردني', NULL,
   NULL, '0795528020',
   NULL, 'شريك',
-  '1993-03-18', 'PARTNER'
+  '1993-03-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   90, NULL, 'منذر احمد جمعة ابو محفوظ/ انسحب', NULL,
   NULL, '9801021471',
   'أردني', NULL,
   NULL, '0795544769',
   NULL, 'شريك',
-  '2013-01-02', 'PARTNER'
+  '2013-01-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   277, NULL, 'يوسف محمد محمود بكر/انسحب', NULL,
   NULL, '9561015934',
   'أردني', NULL,
   NULL, '0777888199',
   NULL, 'شريك',
-  '2005-05-19', 'PARTNER'
+  '2005-05-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   88, NULL, 'خالد محمد نزال العيسى', NULL,
   NULL, '9841058972',
   'أردني', NULL,
   NULL, '0795554797',
   NULL, 'شريك',
-  '2005-05-17', 'PARTNER'
+  '2005-05-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   103, NULL, 'انور فواز انور سماوي', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   103, NULL, 'عناية ابراهيم خليل منكو', NULL,
   NULL, '9522010980',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2009-04-16', 'PARTNER'
+  '2009-04-16'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   103, NULL, 'ناصر مازن نعيم قلعجي', NULL,
   NULL, '9801038243',
   'أردني', NULL,
   NULL, '0796625808',
   NULL, 'شريك',
-  '2012-04-02', 'PARTNER'
+  '2012-04-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   103, NULL, 'عبد الله مازن نعيم قلعجي', NULL,
   NULL, '9891041105',
   'أردني', NULL,
   NULL, '0797388399',
   NULL, 'شريك',
-  '2009-04-16', 'PARTNER'
+  '2009-04-16'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   269, NULL, 'يحيى محمود محمد هياجنه', NULL,
   NULL, '9701007216',
   'أردني', NULL,
   NULL, '0796954949',
   NULL, 'شريك',
-  '2013-01-30', 'PARTNER'
+  '2013-01-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   101, NULL, 'رانية جمال علي الحنيطي', NULL,
   NULL, '9732021494',
   'أردني', NULL,
   NULL, '0795050607',
   NULL, 'شريك',
-  '2010-01-10', 'PARTNER'
+  '2010-01-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   235, NULL, 'ينال غازي محمود نغوي', NULL,
   NULL, '9751051897',
   'أردني', NULL,
   NULL, '0799000092',
   NULL, 'شريك',
-  '2008-10-26', 'PARTNER'
+  '2008-10-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   152, NULL, 'اسماعيل محمد يوسف الصالح', NULL,
   NULL, '9691032842',
   'أردني', NULL,
   NULL, '0795725506',
   NULL, 'شريك',
-  '2011-01-27', 'PARTNER'
+  '2011-01-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   152, NULL, 'حسين اسماعيل محمد الصالح', NULL,
   NULL, '9991064063',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2011-01-27', 'PARTNER'
+  '2011-01-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   152, NULL, 'حسن اسماعيل محمد الصالح', NULL,
   NULL, '9981038096',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2011-01-27', 'PARTNER'
+  '2011-01-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   111, NULL, 'احمد محمد سليمان الهلالات', NULL,
   NULL, '9861028599',
   'أردني', NULL,
   NULL, '0777809432',
   NULL, 'شريك',
-  '2009-05-12', 'PARTNER'
+  '2009-05-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   111, NULL, 'اسامه محمد سليمان الهلالات', NULL,
   NULL, '9881042093',
   'أردني', NULL,
   NULL, '0777389768',
   NULL, 'شريك',
-  '2009-05-12', 'PARTNER'
+  '2009-05-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   111, NULL, 'طارق محمد سليمان الهلالات', NULL,
   NULL, '9871010554',
   'أردني', NULL,
   NULL, '0777167387',
   NULL, 'شريك',
-  '2009-05-12', 'PARTNER'
+  '2009-05-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   34, NULL, 'محمد سليمان موسى الطويسي', NULL,
   NULL, '94710114248',
   'أردني', NULL,
   NULL, '0777313668',
   NULL, 'شريك',
-  '1997-06-01', 'PARTNER'
+  '1997-06-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   52, NULL, 'حازم علي ابراهيم راسخ/ انسحب', NULL,
   NULL, '0',
   'أردني', NULL,
   NULL, '0777060001',
   NULL, 'شريك',
-  '2005-06-12', 'PARTNER'
+  '2005-06-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   52, NULL, 'حمزة محمد زهير الخشمان', NULL,
   NULL, '9891003961',
   'أردني', NULL,
   NULL, '0777060006',
   NULL, 'شريك',
-  '2005-06-12', 'PARTNER'
+  '2005-06-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   48, NULL, 'بسام محمد نمر عيسى', NULL,
   NULL, '9651022879',
   'أردني', NULL,
   NULL, '0795012069',
   NULL, 'شريك',
-  '2002-09-08', 'PARTNER'
+  '2002-09-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   48, NULL, 'سليمان موسى احمد الحلو/ انسحب', NULL,
   NULL, '9361000492',
   'أردني', NULL,
   NULL, '0799555130',
   NULL, 'شريك',
-  '2002-09-08', 'PARTNER'
+  '2002-09-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   48, NULL, 'نادية محمود نمر عيسى', NULL,
   NULL, '9692024723',
   'أردني', NULL,
   NULL, '0797404304',
   NULL, 'شريك',
-  '2002-09-08', 'PARTNER'
+  '2002-09-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   48, NULL, 'محمد بسام محمد عيسى', NULL,
   NULL, '9921044033',
   'أردني', NULL,
   NULL, '0795675754',
   NULL, 'شريك',
-  '2002-09-08', 'PARTNER'
+  '2002-09-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   48, NULL, 'دانا بسام محمد عيسى', NULL,
   NULL, '9952016147',
   'أردني', NULL,
   NULL, '0795012069',
   NULL, 'شريك',
-  '2002-09-08', 'PARTNER'
+  '2002-09-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   48, NULL, 'زيد بسام محمد عيسى', NULL,
   NULL, '9991019656',
   'أردني', NULL,
   NULL, '0799555130',
   NULL, 'شريك',
-  '2002-09-08', 'PARTNER'
+  '2002-09-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   49, NULL, 'ابركرومبي اند كنت جروب هولدينجز اس ايه', NULL,
   NULL, NULL,
   'LUX', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '1998-12-23', 'PARTNER'
+  '1998-12-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   45, NULL, 'وليد خالد محمود الشريف / انسحب', NULL,
   NULL, '2000161363',
   'أردني', NULL,
   NULL, '0795575560',
   NULL, 'شريك',
-  '2007-08-14', 'PARTNER'
+  '2007-08-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   276, NULL, 'حازم زهدي محمد ملحم', NULL,
   NULL, '9661034342',
   'أردني', NULL,
   NULL, '0796305516',
   NULL, 'شريك',
-  '2014-02-24', 'PARTNER'
+  '2014-02-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   276, NULL, 'عبير حيدر مصطفى حمارشة/ انسحب', NULL,
   NULL, '9752042629',
   'أردني', NULL,
   NULL, '0796678504',
   NULL, 'شريك',
-  '2014-02-24', 'PARTNER'
+  '2014-02-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   15, NULL, 'مازن فضل موسى ديبه/ انسحب', NULL,
   NULL, 'جواز مؤقت',
   'أردني', NULL,
   NULL, '0799727552',
   NULL, 'شريك',
-  '2011-02-06', 'PARTNER'
+  '2011-02-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   15, NULL, 'امل فضل موسى ديبه', NULL,
   NULL, '9682047525',
   'أردني', NULL,
   NULL, '0799727552',
   NULL, 'شريك',
-  '2011-02-06', 'PARTNER'
+  '2011-02-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   15, NULL, 'سهى فضل موسى ديبه', NULL,
   NULL, '9732051029',
   'أردني', NULL,
   NULL, '0799727552',
   NULL, 'شريك',
-  '2011-02-06', 'PARTNER'
+  '2011-02-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'ابو الوفا محمد ابو الوفا الدجاني/انسحب', NULL,
   NULL, '9761033691',
   'أردني', NULL,
   NULL, '0799020609',
   NULL, 'شريك',
-  '1988-11-08', 'PARTNER'
+  '1988-11-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'خالد وائل ابو الوفا الدجاني*(حجز)', NULL,
   NULL, '9711028728',
   'أردني', NULL,
   NULL, '0796227777',
   NULL, 'شريك',
-  '1988-11-08', 'PARTNER'
+  '1988-11-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'خلدون وائل الدجاني/انسحب', NULL,
   NULL, '9731029260',
   'أردني', NULL,
   NULL, '0796227777',
   NULL, 'شريك',
-  '1988-11-08', 'PARTNER'
+  '1988-11-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'زياد وفا ابو الوفا الدجاني/انسحب', NULL,
   NULL, '9761002924',
   'أردني', NULL,
   NULL, '0795575966',
   NULL, 'شريك',
-  '1988-11-08', 'PARTNER'
+  '1988-11-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'زيد رضوان عبدالكريم الكردي', NULL,
   NULL, '9911003030',
   'أردني', NULL,
   NULL, '064641906',
   NULL, 'شريك',
-  '1988-11-08', 'PARTNER'
+  '1988-11-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'صندوق توفير موظفو شركة الشرق الادني للسياحة/انسحب', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '1988-11-08', 'PARTNER'
+  '1988-11-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'طارق وفا ابو الوفا الدجاني/انسحب', NULL,
   NULL, '9691002657',
   'أردني', NULL,
   NULL, '0777646584',
   NULL, 'شريك',
-  '1988-11-08', 'PARTNER'
+  '1988-11-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'عفاف فايز قدورة/انسحب', NULL,
   NULL, '9502008561',
   'أردني', NULL,
   NULL, '0777542190',
   NULL, 'شريك',
-  '1988-11-08', 'PARTNER'
+  '1988-11-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'عمر سمير مصطفى خليفة/انسحب', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '1988-11-08', 'PARTNER'
+  '1988-11-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'فادية فؤاد حسن الانصاري/انسحب', NULL,
   NULL, '9462000905',
   'أردني', NULL,
   NULL, '06566370',
   NULL, 'شريك',
-  '1988-11-08', 'PARTNER'
+  '1988-11-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'لانا وفا ابو الوفا الدجاني/انسحب', NULL,
   NULL, '9712002587',
   'أردني', NULL,
   NULL, '06566370',
   NULL, 'شريك',
-  '1988-11-08', 'PARTNER'
+  '1988-11-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'لمى وفا ابو الوفا الدجاني/انسحب', NULL,
   NULL, '9752051234',
   'أردني', NULL,
   NULL, '06566370',
   NULL, 'شريك',
-  '1988-11-08', 'PARTNER'
+  '1988-11-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'محمد ابو الوفا الدجاني*(حجز)', NULL,
   NULL, '9511009968',
   'أردني', NULL,
   NULL, '0777833933',
   NULL, 'شريك',
-  '1988-11-08', 'PARTNER'
+  '1988-11-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'مها ابو الوفا وفا الدجاني/انسحب', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '1988-11-08', 'PARTNER'
+  '1988-11-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'وفا ابو الوفا الدجاني*(حجز)', NULL,
   NULL, '9411000863',
   'أردني', NULL,
   NULL, '0795573666',
   NULL, 'شريك',
-  '1988-11-08', 'PARTNER'
+  '1988-11-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   5, NULL, 'سوزان صبحي محمد السيدة', NULL,
   NULL, '9562023766',
   'أردني', NULL,
   NULL, '0795655024',
   NULL, 'شريك',
-  '2008-08-04', 'PARTNER'
+  '2008-08-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   5, NULL, 'روان توفيق عارف زعترة', NULL,
   NULL, '9792037677',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2008-08-04', 'PARTNER'
+  '2008-08-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   5, NULL, 'نور توفيق عارف زعترة', NULL,
   NULL, '9852023124',
   'أردني', NULL,
   NULL, '0797221528',
   NULL, 'شريك',
-  '2008-08-04', 'PARTNER'
+  '2008-08-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   5, NULL, 'رزان توفيق عارف زعترة', NULL,
   NULL, '9932031267',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2008-08-04', 'PARTNER'
+  '2008-08-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   5, NULL, 'راية توفيق عارف زعترة', NULL,
   NULL, '9872028547',
   'أردني', NULL,
   NULL, '0795655024',
   NULL, 'شريك',
-  '2008-08-04', 'PARTNER'
+  '2008-08-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   5, NULL, 'فؤاد عارف توفيق زعترة/انسحب', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2008-08-04', 'PARTNER'
+  '2008-08-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   5, NULL, 'ايمن عارف توفيق زعترة/انسحب', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2008-08-04', 'PARTNER'
+  '2008-08-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   5, NULL, 'دينا عارف توفيق زعترة/انسحب', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2008-08-04', 'PARTNER'
+  '2008-08-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   5, NULL, 'امال عارف توفيق زعترة/انسحب', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2008-08-04', 'PARTNER'
+  '2008-08-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   5, NULL, 'نداء عارف توفيق زعترة/انسحب', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2008-08-04', 'PARTNER'
+  '2008-08-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   5, NULL, 'هيفاء عارف توفيق زعترة/انسحب', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2008-08-04', 'PARTNER'
+  '2008-08-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   5, NULL, 'ورثة المرحوم توفيق عارف زعترة باستثناء فؤاد عارف زعترة', NULL,
   NULL, NULL,
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2008-08-04', 'PARTNER'
+  '2008-08-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   56, NULL, 'مراد عبدالرحمن شعيب كشت', NULL,
   NULL, '9701018981',
   'أردني', NULL,
   NULL, '0797347390',
   NULL, 'شريك',
-  '2003-08-25', 'PARTNER'
+  '2003-08-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   56, NULL, 'مأمون شوقي طاهر عميرة', NULL,
   NULL, '9531013252',
   'أردني', NULL,
   NULL, '0795531963',
   NULL, 'شريك',
-  '2003-08-25', 'PARTNER'
+  '2003-08-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   117, NULL, 'قيس علي محمد الحسامي', NULL,
   NULL, '2001865729',
   'أردني', NULL,
   NULL, '0779437630',
   NULL, 'شريك',
-  '2014-02-13', 'PARTNER'
+  '2014-02-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   254, NULL, 'أنس أحمد محمد الطويسي', NULL,
   NULL, '9831043648',
   'أردني', NULL,
   NULL, '0775505671',
   NULL, 'شريك',
-  '2014-09-02', 'PARTNER'
+  '2014-09-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   299, NULL, 'عمر محمد عبدالله فرج', NULL,
   NULL, '9781028362',
   'أردني', NULL,
   NULL, '0798328029',
   NULL, 'شريك',
-  '2013-03-06', 'PARTNER'
+  '2013-03-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   299, NULL, 'مرشد مازن مرشد حماد/ انسحب', NULL,
   NULL, '9711042673',
   'أردني', NULL,
   NULL, '0787400500',
   NULL, 'شريك',
-  '2013-03-06', 'PARTNER'
+  '2013-03-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   300, NULL, 'محمد حسن حسني حسن جادالله', NULL,
   NULL, '9681026256',
   'أردني', NULL,
   NULL, '0790915827',
   NULL, 'شريك',
-  '2014-01-02', 'PARTNER'
+  '2014-01-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   300, NULL, 'مازن حسني حسن جادالله', NULL,
   NULL, '9861057803',
   'أردني', NULL,
   NULL, '0785301768',
   NULL, 'شريك',
-  '2014-01-02', 'PARTNER'
+  '2014-01-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   301, NULL, 'ابراهيم حسن ابراهيم زيد الكيلاني', NULL,
   NULL, '9801005947',
   'أردني', NULL,
   NULL, '0797783362',
   NULL, 'شريك',
-  '2014-01-30', 'PARTNER'
+  '2014-01-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   258, NULL, 'عبير سليمان فياض بطاينة', NULL,
   NULL, '9692039771',
   'أردني', NULL,
   NULL, '0797786813',
   NULL, 'شريك',
-  '2014-10-13', 'PARTNER'
+  '2014-10-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   302, NULL, 'شرحبيل معاذ احمد غانم', NULL,
   NULL, '9791048883',
   'أردني', NULL,
   NULL, '0795633092',
   NULL, 'شريك',
-  '2014-09-01', 'PARTNER'
+  '2014-09-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   303, NULL, 'منى اكرم ابراهيم الشيخ ياسين / انسحب', NULL,
   NULL, '9552014300',
   'أردني', NULL,
   NULL, '0795185507',
   NULL, 'شريك',
-  '2012-01-24', 'PARTNER'
+  '2012-01-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   304, NULL, 'لؤي محمد عوض الله شريم', NULL,
   NULL, '9831022067',
   'أردني', NULL,
   NULL, '0797891155',
   NULL, 'شريك',
-  '2014-07-09', 'PARTNER'
+  '2014-07-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   304, NULL, 'ياسر سفيان اسعد عمرو', NULL,
   NULL, '9771034491',
   'أردني', NULL,
   NULL, '0776554250',
   NULL, 'شريك',
-  '2014-07-09', 'PARTNER'
+  '2014-07-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   305, NULL, 'لؤي عبد حماده عللوه', NULL,
   NULL, '9791041903',
   'أردني', NULL,
   NULL, '0798111119',
   NULL, 'شريك',
-  '2014-09-15', 'PARTNER'
+  '2014-09-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   306, NULL, 'خيري حمزة حسن الطباخي', NULL,
   NULL, '9871059240',
   'أردني', NULL,
   NULL, '0790890436',
   NULL, 'شريك',
-  '2014-09-14', 'PARTNER'
+  '2014-09-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   307, NULL, 'احمد خالد محمد مسعود', NULL,
   NULL, '9821002333',
   'أردني', NULL,
   NULL, '0797580425',
   NULL, 'شريك',
-  '2012-11-04', 'PARTNER'
+  '2012-11-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   307, NULL, 'عبدالله محمود عبدالقادر المصري', NULL,
   NULL, '9851018615',
   'أردني', NULL,
   NULL, '0795465395',
   NULL, 'شريك',
-  '2012-11-04', 'PARTNER'
+  '2012-11-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   308, NULL, 'ديانا حسام جادالله المسنات', NULL,
   NULL, '9672001879',
   'أردني', NULL,
   NULL, '0795502121',
   NULL, 'شريك',
-  '2014-10-14', 'PARTNER'
+  '2014-10-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   308, NULL, 'نبيل هرمز حنا حنا', NULL,
   NULL, 'A5512639',
   'عراقي', NULL,
   NULL, '0799110000',
   NULL, 'شريك',
-  '2014-10-14', 'PARTNER'
+  '2014-10-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   308, NULL, 'رمزي هرمز حنا حنا', NULL,
   NULL, 'G1625759',
   'عراقي', NULL,
   NULL, '0799900114',
   NULL, 'شريك',
-  '2014-10-14', 'PARTNER'
+  '2014-10-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   309, NULL, 'حمزة صالح ذياب تايه', NULL,
   NULL, '9851010585',
   'أردني', NULL,
   NULL, '0786800808',
   NULL, 'شريك',
-  '2014-07-02', 'PARTNER'
+  '2014-07-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   309, NULL, 'يزن هشام هاشم عوض/ انسحب', NULL,
   NULL, '9871030827',
   'أردني', NULL,
   NULL, '0788245873',
   NULL, 'شريك',
-  '2014-07-02', 'PARTNER'
+  '2014-07-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   310, NULL, 'امل صلاح عبدالكريم ابوعاشور', NULL,
   NULL, '9882057902',
   'أردني', NULL,
   NULL, '0799241999',
   NULL, 'شريك',
-  '2014-09-21', 'PARTNER'
+  '2014-09-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   311, NULL, 'هيفاء تيسير ابراهيم عبد العزيز', NULL,
   NULL, '9782031016',
   'أردني', NULL,
   NULL, '0795096625',
   NULL, 'شريك',
-  '2014-03-20', 'PARTNER'
+  '2014-03-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   266, NULL, 'امال امين احمد الزبن/انسحبت', NULL,
   NULL, '9812013196',
   'أردني', NULL,
   NULL, '0799969188',
   NULL, 'شريك',
-  '2015-10-15', 'PARTNER'
+  '2015-10-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   264, NULL, 'وهب طارق عبد الجبار طبره', NULL,
   NULL, 'A8668108',
   'عراقي', NULL,
   NULL, '0795039756',
   NULL, 'شريك',
-  '2014-01-23', 'PARTNER'
+  '2014-01-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   165, NULL, 'رانيا روفائيل مخائيل ابو نفاع/انسحب', NULL,
   NULL, '9742008819',
   'أردني', NULL,
   NULL, '0796666045',
   NULL, 'شريك',
-  '2014-08-18', 'PARTNER'
+  '2014-08-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   158, NULL, 'محمد عدنان محمد حباب', NULL,
   NULL, NULL,
   'CHE', NULL,
   NULL, '0796214722',
   NULL, 'شريك',
-  '2014-07-13', 'PARTNER'
+  '2014-07-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   298, NULL, 'احمد محمد عبدالقادر الحوري /انسحب', NULL,
   NULL, '2002334446',
   'أردني', NULL,
   NULL, '0777778559',
   NULL, 'شريك',
-  '2014-09-10', 'PARTNER'
+  '2014-09-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   298, NULL, 'محمد ناصر منصور الشلول', NULL,
   NULL, '2001590309',
   'أردني', NULL,
   NULL, '0777778559',
   NULL, 'شريك',
-  '2014-09-10', 'PARTNER'
+  '2014-09-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   298, NULL, 'ناصر منصور حمد الشلول/ انسحب', NULL,
   NULL, '9691009288',
   'أردني', NULL,
   NULL, '0777778559',
   NULL, 'شريك',
-  '2014-09-10', 'PARTNER'
+  '2014-09-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   71, NULL, 'وفاء محمد عاكف الدروبي', NULL,
   NULL, '9642031052',
   'أردني', NULL,
   NULL, '0795576668',
   NULL, 'شريك',
-  '2015-01-25', 'PARTNER'
+  '2015-01-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   127, NULL, 'عمار محمود احمد القرعان / انسحب', NULL,
   NULL, '9951007570',
   'أردني', NULL,
   NULL, '0796388588',
   NULL, 'شريك',
-  '2014-10-27', 'PARTNER'
+  '2014-10-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   99, NULL, 'عايد عواد عودة الخوالدة', NULL,
   NULL, '9541001535',
   'أردني', NULL,
   NULL, '0795741200',
   NULL, 'شريك',
-  '2015-01-06', 'PARTNER'
+  '2015-01-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   99, NULL, 'محمد عبد الرحيم السالم الخرابشة', NULL,
   NULL, '9631014689',
   'أردني', NULL,
   NULL, '0795958319',
   NULL, 'شريك',
-  '2015-01-06', 'PARTNER'
+  '2015-01-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   76, NULL, 'لبنى عدنان شعبان ابو مسلم', NULL,
   NULL, '9752038981',
   'أردني', NULL,
   NULL, '0795869581',
   NULL, 'شريك',
-  '2014-08-28', 'PARTNER'
+  '2014-08-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   87, NULL, 'عمر غازي رزق الداود', NULL,
   NULL, '9951055218',
   'أردني', NULL,
   NULL, '0799260260',
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   144, NULL, 'ليلى خالد العمري', NULL,
   NULL, '9862012353',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2014-04-13', 'PARTNER'
+  '2014-04-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   144, NULL, 'خالد مصطفى عبدالله العمري', NULL,
   NULL, '9471010674',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2014-04-13', 'PARTNER'
+  '2014-04-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   144, NULL, 'خلدون خالد مصطفى العمري', NULL,
   NULL, '9751036671',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2014-04-13', 'PARTNER'
+  '2014-04-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   144, NULL, 'طارق خالد مصطفى العمري', NULL,
   NULL, '9801038394',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2014-04-13', 'PARTNER'
+  '2014-04-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   144, NULL, 'حنان خالد مصطفى العمري', NULL,
   NULL, '9742034088',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2014-04-13', 'PARTNER'
+  '2014-04-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   544, NULL, 'هاني محمد هاني قناديلو', NULL,
   NULL, '2002872807',
   'أردني', NULL,
   NULL, '0797815757',
   NULL, 'شريك',
-  '2016-01-03', 'PARTNER'
+  '2016-01-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   546, NULL, 'اكرم محمود احمد الجيزاوي / انسحاب', NULL,
   NULL, '9561017312',
   'أردني', NULL,
   NULL, '0795630443',
   NULL, 'شريك',
-  '2016-01-03', 'PARTNER'
+  '2016-01-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   546, NULL, 'عبد المجيد احمد حامد الصمادي/انسحب', NULL,
   NULL, '9561003773',
   'أردني', NULL,
   NULL, '0795523871',
   NULL, 'شريك',
-  '2016-01-03', 'PARTNER'
+  '2016-01-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   547, NULL, 'محمد احمد بركات فقيه', NULL,
   NULL, '9591003172',
   'أردني', NULL,
   NULL, '0777405437',
   NULL, 'شريك',
-  '2016-01-20', 'PARTNER'
+  '2016-01-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   545, NULL, 'باسم وليد جميل الغلاييني', NULL,
   NULL, '9751009458',
   'أردني', NULL,
   NULL, '0777111771',
   NULL, 'شريك',
-  '2016-01-04', 'PARTNER'
+  '2016-01-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   548, NULL, 'محمد اسماعيل عبد الحميد الخطيب', NULL,
   NULL, '9801041149',
   'أردني', NULL,
   NULL, '0790798910',
   NULL, 'شريك',
-  '2016-02-03', 'PARTNER'
+  '2016-02-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   548, NULL, 'ايمن عمر محمد محمد', NULL,
   NULL, '9781042339',
   'أردني', NULL,
   NULL, '0798141610',
   NULL, 'شريك',
-  '2016-02-03', 'PARTNER'
+  '2016-02-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   549, NULL, 'بسام حمدان عبيد المعاليه / انسحب', NULL,
   NULL, '9611001095',
   'أردني', NULL,
   NULL, '0795561202',
   NULL, 'شريك',
-  '2016-01-23', 'PARTNER'
+  '2016-01-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   549, NULL, 'عبدالفتاح ضيف الله عبدالفتاح دبيسيه', NULL,
   NULL, '9701005578',
   'أردني', NULL,
   NULL, '0798756570',
   NULL, 'شريك',
-  '2016-01-23', 'PARTNER'
+  '2016-01-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   549, NULL, 'محمد محمود محمد البيتاوي / انسحب', NULL,
   NULL, '9541020997',
   'أردني', NULL,
   NULL, '0795291502',
   NULL, 'شريك',
-  '2016-01-23', 'PARTNER'
+  '2016-01-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   551, NULL, 'اياد عبد الوهاب عطالله القطاونه', NULL,
   NULL, '9841037967',
   'أردني', NULL,
   NULL, '0796855324',
   NULL, 'شريك',
-  '2015-05-21', 'PARTNER'
+  '2015-05-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   551, NULL, 'يوسف شعبان حسين المشني/انسحب', NULL,
   NULL, '9501016023',
   'أردني', NULL,
   NULL, '0796855324',
   NULL, 'شريك',
-  '2015-05-21', 'PARTNER'
+  '2015-05-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   550, NULL, 'احمد مهند احمد احمد/ انسحاب', NULL,
   NULL, '01',
   'عراقي', NULL,
   NULL, '0799999362',
   NULL, 'شريك',
-  '2016-03-01', 'PARTNER'
+  '2016-03-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   550, NULL, 'عمر متي يوسف بلوله / انسحاب', NULL,
   NULL, '2001667825',
   'أردني', NULL,
   NULL, '0796696660',
   NULL, 'شريك',
-  '2016-03-01', 'PARTNER'
+  '2016-03-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   552, NULL, 'عطا محمد عطا ابو طاعه', NULL,
   NULL, '9571001654',
   'أردني', NULL,
   NULL, '0795540751',
   NULL, 'شريك',
-  '2016-02-29', 'PARTNER'
+  '2016-02-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   552, NULL, 'فراس عطا محمد ابو طاعه', NULL,
   NULL, '9841037591',
   'أردني', NULL,
   NULL, '0798888775',
   NULL, 'شريك',
-  '2016-02-29', 'PARTNER'
+  '2016-02-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   553, NULL, 'بهاء هاشم عوض المومني', NULL,
   NULL, '9801005872',
   'أردني', NULL,
   NULL, '0795120707',
   NULL, 'شريك',
-  '2016-04-06', 'PARTNER'
+  '2016-04-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   553, NULL, 'امل ذيب عبد عطيه', NULL,
   NULL, '9732027075',
   'أردني', NULL,
   NULL, '0795554615',
   NULL, 'شريك',
-  '2016-04-06', 'PARTNER'
+  '2016-04-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   553, NULL, 'هاله حسن عقل المناصير', NULL,
   NULL, '9792003540',
   'أردني', NULL,
   NULL, '0796167526',
   NULL, 'شريك',
-  '2016-04-06', 'PARTNER'
+  '2016-04-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   18, NULL, 'سمير قدري خلف التل', NULL,
   NULL, '9531002331',
   'أردني', NULL,
   NULL, '0799345733',
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   36, NULL, 'محمد عبدالله محمود اسماعيل/ انسحب', NULL,
   NULL, '9731037834',
   'أردني', NULL,
   NULL, '0799979844',
   NULL, 'شريك',
-  '2016-01-24', 'PARTNER'
+  '2016-01-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   268, NULL, 'محمد عصام عبدالكريم العمراني/ انسحب', NULL,
   NULL, '9931048895',
   'أردني', NULL,
   NULL, '0790788692',
   NULL, 'شريك',
-  '2016-09-30', 'PARTNER'
+  '2016-09-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   79, NULL, 'يحيى محمد محمود ابو عمره', NULL,
   NULL, '785913',
   'PSE', NULL,
   NULL, '0795936161',
   NULL, 'شريك',
-  '2015-10-08', 'PARTNER'
+  '2015-10-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   98, NULL, 'توفيق عيسى توفيق مخامرة', NULL,
   NULL, '9791022195',
   'أردني', NULL,
   NULL, '0798114879',
   NULL, 'شريك',
-  '2009-01-19', 'PARTNER'
+  '2009-01-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   99, NULL, 'عثمان عبد المحسن فندي ارشيدات', NULL,
   NULL, '9661013005',
   'أردني', NULL,
   NULL, '0790488101',
   NULL, 'شريك',
-  '2015-03-08', 'PARTNER'
+  '2015-03-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   127, NULL, 'احمد محمود احمد القرعان / انسحب', NULL,
   NULL, '9971030054',
   'أردني', NULL,
   NULL, '0795726304',
   NULL, 'شريك',
-  '2015-05-22', 'PARTNER'
+  '2015-05-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   264, NULL, 'نسرين احمد جويبر العتيبي', NULL,
   NULL, '9662030788',
   'أردني', NULL,
   NULL, '0795526951',
   NULL, 'شريك',
-  '2015-08-06', 'PARTNER'
+  '2015-08-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   268, NULL, 'عبدالكريم عصام عبدالكريم العمراني / انسحاب', NULL,
   NULL, '9891034626',
   'أردني', NULL,
   NULL, '0797229322',
   NULL, 'شريك',
-  '2015-12-03', 'PARTNER'
+  '2015-12-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   268, NULL, 'مجدي ياسر توفيق عويضه/انسحب', NULL,
   NULL, '9711023894',
   'أردني', NULL,
   NULL, '0797897071',
   NULL, 'شريك',
-  '2015-12-03', 'PARTNER'
+  '2015-12-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   273, NULL, 'طاهر مصطفى رشيد عليان', NULL,
   NULL, '9481009800',
   'أردني', NULL,
   NULL, '0799922042',
   NULL, 'شريك',
-  '2015-10-28', 'PARTNER'
+  '2015-10-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   556, NULL, 'عبدالله ابراهيم سلامه ابو محفوظ', NULL,
   NULL, '9771034858',
   'أردني', NULL,
   NULL, '0795536981',
   NULL, 'شريك',
-  '2016-02-29', 'PARTNER'
+  '2016-02-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   556, NULL, 'عطالله ابراهيم سلامه ابو محفوظ', NULL,
   NULL, '9731032403',
   'أردني', NULL,
   NULL, '0795805504',
   NULL, 'شريك',
-  '2016-02-29', 'PARTNER'
+  '2016-02-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   556, NULL, 'سلطان عبد الجبار محمود ابو محفوظ', NULL,
   NULL, '9641001095',
   'أردني', NULL,
   NULL, '0795560183',
   NULL, 'شريك',
-  '2016-02-29', 'PARTNER'
+  '2016-02-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   558, NULL, 'جود محمد عناد الفايز', NULL,
   NULL, '9952035288',
   'أردني', NULL,
   NULL, '0795811811',
   NULL, 'شريك',
-  '2016-01-27', 'PARTNER'
+  '2016-01-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   557, NULL, 'صلاح موسى هارون هلالات', NULL,
   NULL, '9681043648',
   'أردني', NULL,
   NULL, '0795555215',
   NULL, 'شريك',
-  '2016-04-07', 'PARTNER'
+  '2016-04-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   559, NULL, 'نبيل محمد مصطفى قاسم', NULL,
   NULL, '9811029680',
   'أردني', NULL,
   NULL, '0796868232',
   NULL, 'شريك',
-  '2015-01-22', 'PARTNER'
+  '2015-01-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   560, NULL, 'احمد جميل اسماعيل دبعي/انسحب', NULL,
   NULL, '9691030277',
   'أردني', NULL,
   NULL, '0778434440',
   NULL, 'شريك',
-  '2016-04-04', 'PARTNER'
+  '2016-04-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   560, NULL, 'خالد محمود عبدالله الحجاوي', NULL,
   NULL, '9681034565',
   'أردني', NULL,
   NULL, '0799566135',
   NULL, 'شريك',
-  '2016-04-04', 'PARTNER'
+  '2016-04-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   561, NULL, 'عثمان بدر محمد الخطيب/انسحب', NULL,
   NULL, '9651029761',
   'أردني', NULL,
   NULL, '0796025399',
   NULL, 'شريك',
-  '2016-04-10', 'PARTNER'
+  '2016-04-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   561, NULL, 'عزام محمد احمد صبيح / انسحب', NULL,
   NULL, '9851012560',
   'أردني', NULL,
   NULL, '0798886696',
   NULL, 'شريك',
-  '2016-04-10', 'PARTNER'
+  '2016-04-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   563, NULL, 'باسم اميل فرحان جميعان', NULL,
   NULL, '9661029708',
   'أردني', NULL,
   NULL, '0795531987',
   NULL, 'شريك',
-  '2011-04-19', 'PARTNER'
+  '2011-04-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   563, NULL, 'يوسف سليم يوسف الشويحات', NULL,
   NULL, '9541000460',
   'أردني', NULL,
   NULL, '0799999620',
   NULL, 'شريك',
-  '2011-04-19', 'PARTNER'
+  '2011-04-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   563, NULL, 'طارق عبدالكريم احمد الزقه', NULL,
   NULL, '9821029468',
   'أردني', NULL,
   NULL, '0775588245',
   NULL, 'شريك',
-  '2011-04-19', 'PARTNER'
+  '2011-04-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   564, NULL, 'محمد صادق يوسف ابراهيم عمرو', NULL,
   NULL, '9871009101',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2010-02-09', 'PARTNER'
+  '2010-02-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   564, NULL, 'موسى محمد موسى ابو مراد', NULL,
   NULL, '9621021738',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2010-02-09', 'PARTNER'
+  '2010-02-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   564, NULL, 'منذر عبد العزيز احمد حسن', NULL,
   NULL, '9671030181',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2010-02-09', 'PARTNER'
+  '2010-02-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   565, NULL, 'سعد عوض عطالله البلوي', NULL,
   NULL, '9621036109',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2015-01-25', 'PARTNER'
+  '2015-01-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   565, NULL, 'لورنس سعد عوض البلوي', NULL,
   NULL, '9951075413',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2015-01-25', 'PARTNER'
+  '2015-01-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   566, NULL, 'احمد عارف احمد سرحان', NULL,
   NULL, '9791015800',
   'أردني', NULL,
   NULL, '0795078876',
   NULL, 'شريك',
-  '2016-04-17', 'PARTNER'
+  '2016-04-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   566, NULL, 'عاطف محمود فريح القعقاع / انسحب', NULL,
   NULL, '9571010846',
   'أردني', NULL,
   NULL, '0795538381',
   NULL, 'شريك',
-  '2016-04-17', 'PARTNER'
+  '2016-04-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   566, NULL, 'انور عبد عيسى شوكة/انسحب', NULL,
   NULL, '9671021196',
   'أردني', NULL,
   NULL, '0799934478',
   NULL, 'شريك',
-  '2016-04-17', 'PARTNER'
+  '2016-04-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   567, NULL, 'فراس شوكت عارف سماوي', NULL,
   NULL, '9731006594',
   NULL, NULL,
   NULL, '0796356540',
   NULL, 'شريك',
-  '2016-03-15', 'PARTNER'
+  '2016-03-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   567, NULL, 'فراس شوكت عارف سماوي', NULL,
   NULL, '9731006594',
   'أردني', NULL,
   NULL, '0796356540',
   NULL, 'شريك',
-  '2016-03-15', 'PARTNER'
+  '2016-03-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   567, NULL, 'عمار سالم سليمان العساف', NULL,
   NULL, '9761034800',
   'أردني', NULL,
   NULL, '0795060389',
   NULL, 'شريك',
-  '2016-03-15', 'PARTNER'
+  '2016-03-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   568, NULL, 'عبدالله احمد عبدالله القرعان', NULL,
   NULL, '9941028820',
   'أردني', NULL,
   NULL, '0797537041',
   NULL, 'شريك',
-  '2015-12-09', 'PARTNER'
+  '2015-12-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   568, NULL, 'ثروة احمد موسى ابو ديه', NULL,
   NULL, '9682003161',
   'أردني', NULL,
   NULL, '0795948123',
   NULL, 'شريك',
-  '2015-12-09', 'PARTNER'
+  '2015-12-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   569, NULL, 'موسى عبدالرحمن موسى ابو شريف', NULL,
   NULL, '9691024530',
   'أردني', NULL,
   NULL, '0795698594',
   NULL, 'شريك',
-  '2016-03-28', 'PARTNER'
+  '2016-03-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   83, NULL, 'مصطفى محمد حسين ياسين', NULL,
   NULL, '9751005925',
   'أردني', NULL,
   NULL, '0797076224',
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   134, NULL, 'همام سعيد حسن ابو ضبيع', NULL,
   NULL, '9941072432',
   'أردني', NULL,
   NULL, '079499067',
   NULL, 'شريك',
-  '2015-10-21', 'PARTNER'
+  '2015-10-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   251, NULL, 'احمد فيصل خالد الدليجم', NULL,
   NULL, '9931025869',
   'أردني', NULL,
   NULL, '0772270145',
   NULL, 'شريك',
-  '2013-08-28', 'PARTNER'
+  '2013-08-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   570, NULL, 'رحمه حسن عبد الوهاب البنية', NULL,
   NULL, '2000619765',
   'أردني', NULL,
   NULL, '0790111111',
   NULL, 'شريك',
-  '1996-09-01', 'PARTNER'
+  '1996-09-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   570, NULL, 'عبدالرحمن حسن عبد الوهاب البنية', NULL,
   NULL, '2000619769',
   'أردني', NULL,
   NULL, '0795598180',
   NULL, 'شريك',
-  '1996-09-01', 'PARTNER'
+  '1996-09-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   570, NULL, 'عبدالعزيز حسن عبد الوهاب البنية', NULL,
   NULL, '2001180673',
   'أردني', NULL,
   NULL, '0795598180',
   NULL, 'شريك',
-  '1996-09-01', 'PARTNER'
+  '1996-09-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   107, NULL, 'خـــالـد ريــاض محمـــود الكـــردي', NULL,
   NULL, '9891018518',
   'أردني', NULL,
   NULL, '0795410910',
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   107, NULL, 'احمد عصام عادل محمد/انسحب', NULL,
   NULL, '9831040790',
   'أردني', NULL,
   NULL, '065833353',
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   570, NULL, 'عبدالله حسن عبد الوهاب البنية', NULL,
   NULL, '2000962439',
   'أردني', NULL,
   NULL, '0795598180',
   NULL, 'شريك',
-  '1996-09-01', 'PARTNER'
+  '1996-09-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   570, NULL, 'وليد خالد داود عويضه', NULL,
   NULL, '9641000991',
   'أردني', NULL,
   NULL, '0799255592',
   NULL, 'شريك',
-  '1996-09-01', 'PARTNER'
+  '1996-09-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   147, NULL, 'ايمن عواد فرحان عبدالجواد/انسحب', NULL,
   NULL, '9801011166',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2013-08-26', 'PARTNER'
+  '2013-08-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   147, NULL, 'محمد ايمن عواد عبدالجواد/انسحب', NULL,
   NULL, '0025',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2013-08-26', 'PARTNER'
+  '2013-08-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   571, NULL, 'رامي محمد عيسى عفانه', NULL,
   NULL, '9921050996',
   'أردني', NULL,
   NULL, '0786003228',
   NULL, 'شريك',
-  '2016-02-25', 'PARTNER'
+  '2016-02-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   572, NULL, 'محمد موسى حسن المعالي', NULL,
   NULL, '9571019496',
   'أردني', NULL,
   NULL, '0795051678',
   NULL, 'شريك',
-  '2016-03-03', 'PARTNER'
+  '2016-03-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   149, NULL, 'محمود عمر محمود حردان', NULL,
   NULL, '9901007520',
   'أردني', NULL,
   NULL, '0797836037',
   NULL, 'شريك',
-  '2016-04-12', 'PARTNER'
+  '2016-04-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   573, NULL, 'معن عادل حسين الدميري', NULL,
   NULL, '9861009548',
   'أردني', NULL,
   NULL, '0799620200',
   NULL, 'شريك',
-  '2016-02-18', 'PARTNER'
+  '2016-02-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   573, NULL, 'معتز عادل حسني الدميري', NULL,
   NULL, '9881025189',
   'أردني', NULL,
   NULL, '0795340641',
   NULL, 'شريك',
-  '2016-02-18', 'PARTNER'
+  '2016-02-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   575, NULL, 'علي حسن سليمان ابو دعابس', NULL,
   NULL, '9791022093',
   'أردني', NULL,
   NULL, '0795641369',
   NULL, 'شريك',
-  '2016-03-09', 'PARTNER'
+  '2016-03-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   574, NULL, 'محمد عبداللطيف عباس الشمري/انسحب', NULL,
   NULL, 'A6298243',
   'عراقي', NULL,
   NULL, '0795764731',
   NULL, 'شريك',
-  '2012-09-19', 'PARTNER'
+  '2012-09-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   574, NULL, 'معاوية ضرار محمدمختار المفتي', NULL,
   NULL, '9771002946',
   'أردني', NULL,
   NULL, '0780600200',
   NULL, 'شريك',
-  '2012-09-19', 'PARTNER'
+  '2012-09-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   94, NULL, 'فارس سلمان سليم مرجي', NULL,
   NULL, '9751041101',
   'أردني', NULL,
   NULL, '0777772292',
   NULL, 'شريك',
-  '2016-04-27', 'PARTNER'
+  '2016-04-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   94, NULL, 'هاني حنا فريد الشعبان', NULL,
   NULL, '9681016171',
   'أردني', NULL,
   NULL, '0777564117',
   NULL, 'شريك',
-  '2016-04-27', 'PARTNER'
+  '2016-04-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   576, NULL, 'زياد عطا تيم عثمان', NULL,
   NULL, '9821034837',
   'أردني', NULL,
   NULL, '0791994081',
   NULL, 'شريك',
-  '2016-05-18', 'PARTNER'
+  '2016-05-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   577, NULL, 'عزات كامل ابراهيم الخطيب', NULL,
   NULL, '9771056053',
   'أردني', NULL,
   NULL, '0796663946',
   NULL, 'شريك',
-  '2016-03-16', 'PARTNER'
+  '2016-03-16'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   578, NULL, 'محمد عبدالرحمن طالب البراهمه', NULL,
   NULL, '9691021787',
   'أردني', NULL,
   NULL, '0796100105',
   NULL, 'شريك',
-  '2015-05-07', 'PARTNER'
+  '2015-05-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   2, NULL, 'رمزي ايميل جريس ابو دية', NULL,
   NULL, '506237667',
   'GBR', NULL,
   NULL, '0796358373',
   NULL, 'شريك',
-  '2013-12-11', 'PARTNER'
+  '2013-12-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   2, NULL, 'شركة سانت جورج الاردن', NULL,
   NULL, '200132290',
   'أردني', NULL,
   NULL, '0795291307',
   NULL, 'شريك',
-  '2013-12-11', 'PARTNER'
+  '2013-12-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   579, NULL, 'امين لبيب امين قمحية /انسحب', NULL,
   NULL, '9831058758',
   'أردني', NULL,
   NULL, '0790262729',
   NULL, 'شريك',
-  '2016-04-24', 'PARTNER'
+  '2016-04-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   581, NULL, 'فرح محمدخير حسني بدار', NULL,
   NULL, '9872052454',
   'أردني', NULL,
   NULL, '0796327390',
   NULL, 'شريك',
-  '2011-01-02', 'PARTNER'
+  '2011-01-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   582, NULL, 'امجد فاروق محمود ابو غريبة', NULL,
   NULL, '9851020472',
   'أردني', NULL,
   NULL, '0797941239',
   NULL, 'شريك',
-  '2015-05-26', 'PARTNER'
+  '2015-05-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   580, NULL, 'عبدالاله علي مقبل ابودحية /انسحاب', NULL,
   NULL, '9621009013',
   'أردني', NULL,
   NULL, '0777522777',
   NULL, 'شريك',
-  '2016-06-20', 'PARTNER'
+  '2016-06-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   278, NULL, 'احمد محمد نايف مناع', NULL,
   NULL, '9791016569',
   'أردني', NULL,
   NULL, '0792924024',
   NULL, 'شريك',
-  '2017-03-23', 'PARTNER'
+  '2017-03-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   278, NULL, 'سالم ذياب الغانم الغانم', NULL,
   NULL, '9591007233',
   'أردني', NULL,
   NULL, '0795210132',
   NULL, 'شريك',
-  '2016-11-02', 'PARTNER'
+  '2016-11-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   278, NULL, 'فؤاد عويد بركات البشابشة/ انسحب', NULL,
   NULL, '9711014444',
   'أردني', NULL,
   NULL, '0788891883',
   NULL, 'شريك',
-  '2016-11-02', 'PARTNER'
+  '2016-11-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   3, NULL, 'تاللب ىاماا لالاا بباال', NULL,
   NULL, '54543545',
   'أردني', NULL,
   NULL, '56565',
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   292, NULL, 'شركة الوجدان للسياحة والسفر/ مالكة الشركة', NULL,
   NULL, '200006803',
   'أردني', NULL,
   NULL, '5679977',
   NULL, 'شريك',
-  '2013-07-20', 'PARTNER'
+  '2013-07-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   4, NULL, 'خضر حسن يوسف كلبونة', NULL,
   NULL, '9631025333',
   'أردني', NULL,
   NULL, '0795358661',
   NULL, 'شريك',
-  '2017-01-17', 'PARTNER'
+  '2017-01-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   4, NULL, 'رامي ربحي موسى الشيخ', NULL,
   NULL, '9831011787',
   'أردني', NULL,
   NULL, '0799266694',
   NULL, 'شريك',
-  '2017-01-17', 'PARTNER'
+  '2017-01-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   598, NULL, 'محمد عبدالله محمد السحيمات', NULL,
   NULL, '9721036554',
   'أردني', NULL,
   NULL, '0795576491',
   NULL, 'شريك',
-  '2016-12-18', 'PARTNER'
+  '2016-12-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   599, NULL, 'خضر توفيق اسعد سالم', NULL,
   NULL, '9761029005',
   'أردني', NULL,
   NULL, '0799818787',
   NULL, 'شريك',
-  '2016-10-27', 'PARTNER'
+  '2016-10-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   599, NULL, 'نيفين ابراهيم خليل دبابنة', NULL,
   NULL, '9822014213',
   'أردني', NULL,
   NULL, '0799818383',
   NULL, 'شريك',
-  '2016-10-27', 'PARTNER'
+  '2016-10-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   599, NULL, 'ابراهيم خليل مقبل دبابنة', NULL,
   NULL, '9481003912',
   'أردني', NULL,
   NULL, '0799081600',
   NULL, 'شريك',
-  '2016-10-27', 'PARTNER'
+  '2016-10-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   600, NULL, 'صلاح عدنان عبدالكريم غيث', NULL,
   NULL, '9951052400',
   'أردني', NULL,
   NULL, '0798840023',
   NULL, 'شريك',
-  '2016-11-02', 'PARTNER'
+  '2016-11-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   601, NULL, 'جمال حسن محمد جرار', NULL,
   NULL, '9681010955',
   'أردني', NULL,
   NULL, '0796622226',
   NULL, 'شريك',
-  '2017-01-03', 'PARTNER'
+  '2017-01-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   601, NULL, 'غدير عبد الرحمن عبدالرحيم الصويص/انسحب', NULL,
   NULL, '9782030928',
   'أردني', NULL,
   NULL, '0795688173',
   NULL, 'شريك',
-  '2017-01-03', 'PARTNER'
+  '2017-01-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   602, NULL, 'باسم وليد جميل الغلاينيي', NULL,
   NULL, '9751009458',
   'أردني', NULL,
   NULL, '0799902099',
   NULL, 'شريك',
-  '2016-08-22', 'PARTNER'
+  '2016-08-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   602, NULL, 'محمد نوح علي المعابدة', NULL,
   NULL, '9691036432',
   'أردني', NULL,
   NULL, '0777111771',
   NULL, 'شريك',
-  '2016-08-22', 'PARTNER'
+  '2016-08-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   603, NULL, 'معتصم عدنان صالح زيادة', NULL,
   NULL, '9831024243',
   NULL, NULL,
   NULL, '0798834374',
   NULL, 'شريك',
-  '2016-03-10', 'PARTNER'
+  '2016-03-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   603, NULL, 'معتصم عدنان صالح زيادة', NULL,
   NULL, '9831024243',
   'أردني', NULL,
   NULL, '0798834374',
   NULL, 'شريك',
-  '2016-03-10', 'PARTNER'
+  '2016-03-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   603, NULL, 'منذر توفيق صالح كمال', NULL,
   NULL, '9771024588',
   'أردني', NULL,
   NULL, '0797707704',
   NULL, 'شريك',
-  '2016-03-10', 'PARTNER'
+  '2016-03-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   604, NULL, 'معتصم عدنان صالح زيادة', NULL,
   NULL, '9831024243',
   'أردني', NULL,
   NULL, '0798834374',
   NULL, 'شريك',
-  '2016-03-10', 'PARTNER'
+  '2016-03-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   604, NULL, 'منذر توفيق صالح كمال', NULL,
   NULL, '9771024588',
   'أردني', NULL,
   NULL, '0797707704',
   NULL, 'شريك',
-  '2016-03-10', 'PARTNER'
+  '2016-03-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   605, NULL, 'ساري محمد عبد المعطي جوده', NULL,
   NULL, '9731028038',
   'أردني', NULL,
   NULL, '0795507722',
   NULL, 'شريك',
-  '2016-12-01', 'PARTNER'
+  '2016-12-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   606, NULL, 'محمد عمر احمد الكردي', NULL,
   NULL, '9841052062',
   'أردني', NULL,
   NULL, '077889888',
   NULL, 'شريك',
-  '2016-03-02', 'PARTNER'
+  '2016-03-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   596, NULL, 'محمد محمود عثمان حجازي', NULL,
   NULL, '9531001153',
   'أردني', NULL,
   NULL, '0795537238',
   NULL, 'شريك',
-  '2015-06-01', 'PARTNER'
+  '2015-06-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   607, NULL, 'طه محمد عيسى الهلالات/ انسحب', NULL,
   NULL, '9751005280',
   'أردني', NULL,
   NULL, '0795306317',
   NULL, 'شريك',
-  '2016-09-29', 'PARTNER'
+  '2016-09-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   607, NULL, 'سامر سمير محمود العورتاني/ انسحب', NULL,
   NULL, '9731002938',
   'أردني', NULL,
   NULL, '0795561202',
   NULL, 'شريك',
-  '2016-09-29', 'PARTNER'
+  '2016-09-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   597, NULL, 'تغريد كمال سلمان عليان', NULL,
   NULL, '9832028486',
   'أردني', NULL,
   NULL, '0796471200',
   NULL, 'شريك',
-  '2016-09-25', 'PARTNER'
+  '2016-09-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   588, NULL, 'اسماعيل سليمان حماد خليل', NULL,
   NULL, '9881014430',
   'أردني', NULL,
   NULL, '0797961705',
   NULL, 'شريك',
-  '2016-07-07', 'PARTNER'
+  '2016-07-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   589, NULL, 'خالد محمد محمود شواقفة / انسحب', NULL,
   NULL, '9651032342',
   'أردني', NULL,
   NULL, '0772627187',
   NULL, 'شريك',
-  '2016-10-16', 'PARTNER'
+  '2016-10-16'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   589, NULL, 'محمود علي محمود هياجنة/انسحب', NULL,
   NULL, '9931025421',
   'أردني', NULL,
   NULL, '0788868473',
   NULL, 'شريك',
-  '2016-10-16', 'PARTNER'
+  '2016-10-16'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   590, NULL, 'هالة خالد عبدالله نصار', NULL,
   NULL, '9692035575',
   'أردني', NULL,
   NULL, '0795529368',
   NULL, 'شريك',
-  '2016-10-31', 'PARTNER'
+  '2016-10-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   584, NULL, 'شاكر حسن المعروف حسني احمد الجيوسي', NULL,
   NULL, '9771031412',
   'أردني', NULL,
   NULL, '0796234429',
   NULL, 'شريك',
-  '2016-08-29', 'PARTNER'
+  '2016-08-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   584, NULL, 'علاء توفيق سليم فضا', NULL,
   NULL, '9721021636',
   'أردني', NULL,
   NULL, '0795540566',
   NULL, 'شريك',
-  '2016-08-29', 'PARTNER'
+  '2016-08-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   591, NULL, 'رياض عودة عمارة العضايلة', NULL,
   NULL, '9691036263',
   'أردني', NULL,
   NULL, '0795688325',
   NULL, 'شريك',
-  '2016-03-14', 'PARTNER'
+  '2016-03-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   583, NULL, 'عبدالله خليل ابراهيم البدرساوي', NULL,
   NULL, '9801056941',
   'أردني', NULL,
   NULL, '0799542853',
   NULL, 'شريك',
-  '2016-11-17', 'PARTNER'
+  '2016-11-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   595, NULL, 'امجد محمد علي صباح / انسحب', NULL,
   NULL, '9771018128',
   'أردني', NULL,
   NULL, '0795671616',
   NULL, 'شريك',
-  '2016-09-26', 'PARTNER'
+  '2016-09-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   595, NULL, 'انس محمد علي صباح', NULL,
   NULL, '9871062362',
   'أردني', NULL,
   NULL, '0796366466',
   NULL, 'شريك',
-  '2016-09-26', 'PARTNER'
+  '2016-09-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   594, NULL, 'خالد عبد القادر احمد الصوري', NULL,
   NULL, '9621006262',
   'أردني', NULL,
   NULL, '0777772622',
   NULL, 'شريك',
-  '2017-10-06', 'PARTNER'
+  '2017-10-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   586, NULL, 'سمير محمد ابراهيم القرعان', NULL,
   NULL, '9891057827',
   'أردني', NULL,
   NULL, '0799669162',
   NULL, 'شريك',
-  '2016-06-01', 'PARTNER'
+  '2016-06-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   608, NULL, 'اشرف محمود خليل تايه/انسحب', NULL,
   NULL, '9841043462',
   'أردني', NULL,
   NULL, '0797330541',
   NULL, 'شريك',
-  '2017-01-15', 'PARTNER'
+  '2017-01-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   608, NULL, 'فيصل ضرار كمال استيته/ اغلاق المكتب', NULL,
   NULL, '9801040802',
   'أردني', NULL,
   NULL, '0799989203',
   NULL, 'شريك',
-  '2017-01-15', 'PARTNER'
+  '2017-01-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   609, NULL, 'بلال خليل عبد المعطي ابو هلاله', NULL,
   NULL, '9591015851',
   'أردني', NULL,
   NULL, '0790998843',
   NULL, 'شريك',
-  '2016-10-18', 'PARTNER'
+  '2016-10-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   609, NULL, 'سالم علي موسى الغنيمات', NULL,
   NULL, '9841040671',
   'أردني', NULL,
   NULL, '0772235758',
   NULL, 'شريك',
-  '2016-10-18', 'PARTNER'
+  '2016-10-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   609, NULL, 'موسى عايد موسى النوافلة', NULL,
   NULL, '9761045853',
   'أردني', NULL,
   NULL, '0777327213',
   NULL, 'شريك',
-  '2016-10-18', 'PARTNER'
+  '2016-10-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   611, NULL, 'فتحي عبدالله عبدالحكيم اشتيوي', NULL,
   NULL, '9471000799',
   'أردني', NULL,
   NULL, '0792125555',
   NULL, 'شريك',
-  '2016-10-03', 'PARTNER'
+  '2016-10-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   611, NULL, 'ندى فتحي عبدالله اشتيوي', NULL,
   NULL, '9842031667',
   'أردني', NULL,
   NULL, '0770300002',
   NULL, 'شريك',
-  '2016-10-03', 'PARTNER'
+  '2016-10-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   610, NULL, 'رنا لطفي محمد كنعان', NULL,
   NULL, '9702022363',
   'أردني', NULL,
   NULL, '0796418720',
   NULL, 'شريك',
-  '2017-08-21', 'PARTNER'
+  '2017-08-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   71, NULL, 'عماد صبحي عبد ابو ربيع', NULL,
   NULL, '9641026710',
   'أردني', NULL,
   NULL, '0795603884',
   NULL, 'شريك',
-  '2017-03-26', 'PARTNER'
+  '2017-03-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   16, NULL, 'شيرين محمدنادر علي الحلبي / انسحب', NULL,
   NULL, '2000827209',
   'أردني', NULL,
   NULL, '0795718312',
   NULL, 'شريك',
-  '1973-07-11', 'PARTNER'
+  '1973-07-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   16, NULL, 'هاله عبدالرحمن حسن رمضان', NULL,
   NULL, '9762010707',
   'أردني', NULL,
   NULL, '0795718312',
   NULL, 'شريك',
-  '1973-07-11', 'PARTNER'
+  '1973-07-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   147, NULL, 'نور ابراهيم محمد ابو نجم/ انسحب', NULL,
   NULL, '9971058963',
   'أردني', NULL,
   NULL, '0790463868',
   NULL, 'شريك',
-  '2016-04-05', 'PARTNER'
+  '2016-04-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   121, NULL, 'رنا علي جريد الحراسيس/انسحبت', NULL,
   NULL, '9762031906',
   'أردني', NULL,
   NULL, '0790571372',
   NULL, 'شريك',
-  '2016-03-25', 'PARTNER'
+  '2016-03-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   134, NULL, 'علي عبدالله عيط الحراحشة', NULL,
   NULL, '9561004456',
   'أردني', NULL,
   NULL, '0798841346',
   NULL, 'شريك',
-  '2017-02-14', 'PARTNER'
+  '2017-02-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   89, NULL, 'حيية ضيف الله شتيان البدول', NULL,
   NULL, '9512013295',
   NULL, NULL,
   NULL, '0776992405',
   NULL, 'شريك',
-  '2017-05-10', 'PARTNER'
+  '2017-05-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   89, NULL, 'علي محمد علي البدول', NULL,
   NULL, '20015336630',
   'أردني', NULL,
   NULL, '0776748047',
   NULL, 'شريك',
-  '2017-05-10', 'PARTNER'
+  '2017-05-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   89, NULL, 'حيية ضيف الله شتيان البدول', NULL,
   NULL, '9512013295',
   'أردني', NULL,
   NULL, '0776992405',
   NULL, 'شريك',
-  '2017-05-10', 'PARTNER'
+  '2017-05-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   558, NULL, 'محمد مصطفى شفيق محمد الخليلي', NULL,
   NULL, '9681030346',
   'أردني', NULL,
   NULL, '0795555144',
   NULL, 'شريك',
-  '2016-01-27', 'PARTNER'
+  '2016-01-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   585, NULL, 'عبدالرحمن عبدالوهاب حسن الحلواني/انسحب', NULL,
   NULL, '9541010468',
   'أردني', NULL,
   NULL, '0790601151',
   NULL, 'شريك',
-  '2017-01-02', 'PARTNER'
+  '2017-01-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   585, NULL, 'مصطفى عبدالوهاب حسن الحلواني/ انسحب', NULL,
   NULL, '9581017274',
   'أردني', NULL,
   NULL, '0796786062',
   NULL, 'شريك',
-  '2017-01-02', 'PARTNER'
+  '2017-01-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   585, NULL, 'منير محمد عبدالحميد عقدة/انسحب', NULL,
   NULL, '9511001684',
   'أردني', NULL,
   NULL, '0797378006',
   NULL, 'شريك',
-  '2017-08-02', 'PARTNER'
+  '2017-08-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   587, NULL, 'شيرين صبحي شريف يوسف/انسحب', NULL,
   NULL, '9782055834',
   'أردني', NULL,
   NULL, '0799110881',
   NULL, 'شريك',
-  '2016-09-27', 'PARTNER'
+  '2016-09-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   592, NULL, 'نانسي غالب طاهر الدباس', NULL,
   NULL, '9842043797',
   'أردني', NULL,
   NULL, '0799020095',
   NULL, 'شريك',
-  '2017-01-02', 'PARTNER'
+  '2017-01-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   593, NULL, 'رانية وليد فضول قعوار/انسحب', NULL,
   NULL, '9642009747',
   'أردني', NULL,
   NULL, '0795528500',
   NULL, 'شريك',
-  '2017-01-03', 'PARTNER'
+  '2017-01-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   592, NULL, 'عامر حسني شوماف صوبر/انسحب', NULL,
   NULL, '9621002767',
   'أردني', NULL,
   NULL, '0777403646',
   NULL, 'شريك',
-  '2017-01-02', 'PARTNER'
+  '2017-01-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   65, NULL, 'محمد زياد عثمان حسن جبران', NULL,
   NULL, '9961047706',
   'أردني', NULL,
   NULL, '00',
   NULL, 'شريك',
-  '2017-02-22', 'PARTNER'
+  '2017-02-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   153, NULL, 'نور نبيل يوسف عثمان/ انسحب', NULL,
   NULL, '9852047281',
   'أردني', NULL,
   NULL, '0797455380',
   NULL, 'شريك',
-  '2017-02-23', 'PARTNER'
+  '2017-02-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   574, NULL, 'حمزة ضرار محمدمختار المفتي/انسحب', NULL,
   NULL, '9901004983',
   'أردني', NULL,
   NULL, '0779322991',
   NULL, 'شريك',
-  '2017-02-23', 'PARTNER'
+  '2017-02-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   125, NULL, 'عبدالعزيز شريف الزعبي/ بموجب اغلاق', NULL,
   NULL, '121-20036595',
   'سوري', NULL,
   NULL, '0779006616',
   NULL, 'شريك',
-  '2009-10-19', 'PARTNER'
+  '2009-10-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   561, NULL, 'موفق عبدالله خلف العيطان/ انسحب', NULL,
   NULL, '9741046113',
   'أردني', NULL,
   NULL, '0799825492',
   NULL, 'شريك',
-  '2016-10-25', 'PARTNER'
+  '2016-10-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   269, NULL, 'سيف الدين يحيى محمود هياجنه/ انسحب', NULL,
   NULL, '9981043089',
   'أردني', NULL,
   NULL, '0796954949',
   NULL, 'شريك',
-  '2021-02-07', 'PARTNER'
+  '2021-02-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   286, NULL, 'حسام علاءالدين حسن حسنيه', NULL,
   NULL, '9921036629',
   'أردني', NULL,
   NULL, '078339121',
   NULL, 'شريك',
-  '2012-11-12', 'PARTNER'
+  '2012-11-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   61, NULL, 'محمد جمال عبد الفتاح الطويل', NULL,
   NULL, '9811048802',
   'أردني', NULL,
   NULL, '0795313553',
   NULL, 'شريك',
-  '2016-11-10', 'PARTNER'
+  '2016-11-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   165, NULL, 'شركة النقليات السياحية الاردنية (جت)', NULL,
   NULL, '200011323',
   'أردني', NULL,
   NULL, '5854679',
   NULL, 'شريك',
-  '2016-04-20', 'PARTNER'
+  '2016-04-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   60, NULL, 'محمد بلال احمد الجغبير', NULL,
   NULL, '9971022986',
   'أردني', NULL,
   NULL, '0790159916',
   NULL, 'شريك',
-  '2016-11-15', 'PARTNER'
+  '2016-11-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   29, NULL, 'هيا محفوظ محمد ابو لافي', NULL,
   NULL, '9812024363',
   'أردني', NULL,
   NULL, '0777002995',
   NULL, 'شريك',
-  '2007-01-14', 'PARTNER'
+  '2007-01-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   33, NULL, 'وهب ناصر صلاح الدين ريال', NULL,
   NULL, '9931005657',
   'أردني', NULL,
   NULL, '0797130961',
   NULL, 'شريك',
-  '2016-02-29', 'PARTNER'
+  '2016-02-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   133, NULL, 'خالد عمر عيسى الحسنات', NULL,
   NULL, '9761048647',
   'أردني', NULL,
   NULL, '0795460872',
   NULL, 'شريك',
-  '2017-08-08', 'PARTNER'
+  '2017-08-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   555, NULL, 'رحمة محمد احمد ضراغمة/انسحب', NULL,
   NULL, '9592026490',
   'أردني', NULL,
   NULL, '0786133362',
   NULL, 'شريك',
-  '2017-09-14', 'PARTNER'
+  '2017-09-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   127, NULL, 'رانيا محمد نعيم احمد الطريفي', NULL,
   NULL, '9742031700',
   'أردني', NULL,
   NULL, '0798554466',
   NULL, 'شريك',
-  '2017-09-05', 'PARTNER'
+  '2017-09-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   148, NULL, 'مصطفى محمد سعيد نوفل', NULL,
   NULL, '9681032173',
   'أردني', NULL,
   NULL, '0795700648',
   NULL, 'شريك',
-  '2017-10-29', 'PARTNER'
+  '2017-10-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   63, NULL, 'رحاب عبدالله حسين عياش', NULL,
   NULL, '9662014139',
   'أردني', NULL,
   NULL, '077782825',
   NULL, 'شريك',
-  '2018-01-03', 'PARTNER'
+  '2018-01-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   41, NULL, 'علي الحاج موسى عيد الحلبي/ انسحب', NULL,
   NULL, '9531008494',
   'أردني', NULL,
   NULL, '0791623827',
   NULL, 'شريك',
-  '2018-01-23', 'PARTNER'
+  '2018-01-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   81, NULL, 'جمال علي جميل يوسف', NULL,
   NULL, '9741044582',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2017-09-07', 'PARTNER'
+  '2017-09-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   136, NULL, 'عدي بسام روبين عوده/ انسحب', NULL,
   NULL, '9911018306',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2017-03-13', 'PARTNER'
+  '2017-03-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   255, NULL, 'لبنه حسين محمد العمران', NULL,
   NULL, '9722034478',
   'أردني', NULL,
   NULL, '0780888500',
   NULL, 'شريك',
-  '2018-01-15', 'PARTNER'
+  '2018-01-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   277, NULL, 'بدريه محمود عبدالله ابوخليفه/ انسحب', NULL,
   NULL, '9492011026',
   'أردني', NULL,
   NULL, '0799917569',
   NULL, 'شريك',
-  '2017-10-11', 'PARTNER'
+  '2017-10-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   277, NULL, 'ربا حسين مسعد ابوطالب/ انسحب', NULL,
   NULL, '9742039610',
   'أردني', NULL,
   NULL, '0799917569',
   NULL, 'شريك',
-  '2017-10-11', 'PARTNER'
+  '2017-10-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   277, NULL, 'ناجح فيصل عبد القادر ربابعه', NULL,
   NULL, '9721007175',
   'أردني', NULL,
   NULL, '0799917569',
   NULL, 'شريك',
-  '2017-10-11', 'PARTNER'
+  '2017-10-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   610, NULL, 'محمود عبدالرحمن محمود شاهين', NULL,
   NULL, '9461006740',
   'أردني', NULL,
   NULL, '0787766266',
   NULL, 'شريك',
-  '2017-12-31', 'PARTNER'
+  '2017-12-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   592, NULL, 'زيد عامر حسني صوبر', NULL,
   NULL, '9941033296',
   'أردني', NULL,
   NULL, '0796333112',
   NULL, 'شريك',
-  '2018-01-03', 'PARTNER'
+  '2018-01-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   298, NULL, 'احمد ناصر منصور الشلول', NULL,
   NULL, '9971045907',
   'أردني', NULL,
   NULL, '0777778559',
   NULL, 'شريك',
-  '2017-11-19', 'PARTNER'
+  '2017-11-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   562, NULL, 'محمد قاسم محمد الجميلي', NULL,
   NULL, '9399223',
   'عراقي', NULL,
   NULL, '0795555250',
   NULL, 'شريك',
-  '2018-01-09', 'PARTNER'
+  '2018-01-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   562, NULL, 'محمد وليد عبدالمجيد الدوري/انسحب', NULL,
   NULL, '9869007',
   'عراقي', NULL,
   NULL, '0798282820',
   NULL, 'شريك',
-  '2018-01-09', 'PARTNER'
+  '2018-01-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   544, NULL, 'وسام جمال عبدالحافظ عرعر', NULL,
   NULL, '9891006574',
   'أردني', NULL,
   NULL, '0788011684',
   NULL, 'شريك',
-  '2017-12-05', 'PARTNER'
+  '2017-12-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   549, NULL, 'خميس ابراهيم النجار/انسحب', NULL,
   NULL, '9741030349',
   'أردني', NULL,
   NULL, '0795110221',
   NULL, 'شريك',
-  '2018-01-02', 'PARTNER'
+  '2018-01-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   555, NULL, 'بتول زياد الحاج عبدالرازق', NULL,
   NULL, '9832052369',
   'أردني', NULL,
   NULL, '0790912744',
   NULL, 'شريك',
-  '2017-12-31', 'PARTNER'
+  '2017-12-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   555, NULL, 'ريم احمد عبدالكريم الطراونه', NULL,
   NULL, '9782018817',
   'أردني', NULL,
   NULL, '0797690019',
   NULL, 'شريك',
-  '2017-12-31', 'PARTNER'
+  '2017-12-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   555, NULL, 'نوره زياد الحاج سعد عبدالرازق', NULL,
   NULL, '9982048424',
   'أردني', NULL,
   NULL, '0798182468',
   NULL, 'شريك',
-  '2017-12-31', 'PARTNER'
+  '2017-12-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   574, NULL, 'بلال ابراهيم عيد/انسحب', NULL,
   NULL, '9811036655',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2017-12-05', 'PARTNER'
+  '2017-12-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   574, NULL, 'محمد انس غازي عمار', NULL,
   NULL, '2000890711',
   'أردني', NULL,
   NULL, '0788889999',
   NULL, 'شريك',
-  '2017-12-05', 'PARTNER'
+  '2017-12-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   4, NULL, 'تامر جميل حسن زهران', NULL,
   NULL, '9821050845',
   'أردني', NULL,
   NULL, '0796622247',
   NULL, 'شريك',
-  '2018-01-11', 'PARTNER'
+  '2018-01-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   4, NULL, 'رشا سميح عطية القططي', NULL,
   NULL, '9872024889',
   'أردني', NULL,
   NULL, '0799618161',
   NULL, 'شريك',
-  '2018-01-01', 'PARTNER'
+  '2018-01-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   591, NULL, 'اماني يوسف عصمت العزيزي', NULL,
   NULL, '9872012944',
   'أردني', NULL,
   NULL, '0799841201',
   NULL, 'شريك',
-  '2016-11-14', 'PARTNER'
+  '2016-11-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   591, NULL, 'رنده محمود خليل السيد', NULL,
   NULL, '9882028519',
   'أردني', NULL,
   NULL, '0795669393',
   NULL, 'شريك',
-  '2016-11-14', 'PARTNER'
+  '2016-11-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   591, NULL, 'زيدون زكريا محمد شقديح', NULL,
   NULL, '9671035519',
   'أردني', NULL,
   NULL, '0796603790',
   NULL, 'شريك',
-  '2016-11-14', 'PARTNER'
+  '2016-11-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   591, NULL, 'صفاء زهدي محمود الفقيه', NULL,
   NULL, '9822054621',
   'أردني', NULL,
   NULL, '0790901799',
   NULL, 'شريك',
-  '2017-11-14', 'PARTNER'
+  '2017-11-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   576, NULL, 'عرفات سميح محمد سعيد الكلباني', NULL,
   NULL, '9791035812',
   'أردني', NULL,
   NULL, '0796441144',
   NULL, 'شريك',
-  '2017-04-20', 'PARTNER'
+  '2017-04-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   587, NULL, 'اسماء ابراهيم محمد ابوصعيليك', NULL,
   NULL, '9812048660',
   'أردني', NULL,
   NULL, '0772410551',
   NULL, 'شريك',
-  '2017-08-23', 'PARTNER'
+  '2017-08-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   278, NULL, 'فؤاد عويد بركات البشابشة/انسحب', NULL,
   NULL, '9711014444',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2013-01-29', 'PARTNER'
+  '2013-01-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   109, NULL, 'احمد محمد غازي ابو صوفه', NULL,
   NULL, '9771001403',
   'أردني', NULL,
   NULL, '0795659434',
   NULL, 'شريك',
-  '2017-05-29', 'PARTNER'
+  '2017-05-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   273, NULL, 'ميساء طاهر مصطفى عليان', NULL,
   NULL, '9812034599',
   'أردني', NULL,
   NULL, '0795614851',
   NULL, 'شريك',
-  '2017-09-12', 'PARTNER'
+  '2017-09-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   580, NULL, 'ياسر عبدالله عبدالرؤوف حمد/ انسحب', NULL,
   NULL, '9761043366',
   'أردني', NULL,
   NULL, '0798881110',
   NULL, 'شريك',
-  '2018-04-23', 'PARTNER'
+  '2018-04-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   121, NULL, 'حسين علي جريد الحراسيس', NULL,
   NULL, '9691030855',
   'أردني', NULL,
   NULL, '0799435434',
   NULL, 'شريك',
-  '2018-03-29', 'PARTNER'
+  '2018-03-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   303, NULL, 'ماجد حسين خليل عطية', NULL,
   NULL, '9621022287',
   'أردني', NULL,
   NULL, '0795222228',
   NULL, 'شريك',
-  '2018-09-20', 'PARTNER'
+  '2018-09-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   29, NULL, 'تاج هشام محفوظ ابولافي', NULL,
   NULL, '2002858610',
   'أردني', NULL,
   NULL, '0795549753',
   NULL, 'شريك',
-  '2018-06-05', 'PARTNER'
+  '2018-06-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   29, NULL, 'طلال هشام محفوظ ابولافي', NULL,
   NULL, '2003706238',
   'أردني', NULL,
   NULL, '0795549753',
   NULL, 'شريك',
-  '2018-06-05', 'PARTNER'
+  '2018-06-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   36, NULL, 'وليد جميل علان هندي/انسحب', NULL,
   NULL, '9771036879',
   'أردني', NULL,
   NULL, '0796990990',
   NULL, 'شريك',
-  '2018-05-22', 'PARTNER'
+  '2018-05-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   99, NULL, 'نادر ابراهيم خليل يوسف/انسحب', NULL,
   NULL, '9851024876',
   'أردني', NULL,
   NULL, '0790904473',
   NULL, 'شريك',
-  '2018-04-25', 'PARTNER'
+  '2018-04-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   102, NULL, 'مهند ياسين صالح مسمار', NULL,
   NULL, '9701038248',
   'أردني', NULL,
   NULL, '0795012193',
   NULL, 'شريك',
-  '2018-03-07', 'PARTNER'
+  '2018-03-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   128, NULL, 'بسمة يوسف خليل النوافلة', NULL,
   NULL, '9662038253',
   'أردني', NULL,
   NULL, '0777348475',
   NULL, 'شريك',
-  '2019-01-07', 'PARTNER'
+  '2019-01-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   97, NULL, 'يوسف احمد جبريل مسلم/ انسحب', NULL,
   NULL, '9691040487',
   'أردني', NULL,
   NULL, '0777853942',
   NULL, 'شريك',
-  '2018-11-14', 'PARTNER'
+  '2018-11-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   85, NULL, 'عيسى فرحان ضيف الله الشبول', NULL,
   NULL, '9661012776',
   'أردني', NULL,
   NULL, '0796023584',
   NULL, 'شريك',
-  '2019-01-21', 'PARTNER'
+  '2019-01-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   153, NULL, 'اياد غانم ايليا ججاوي', NULL,
   NULL, 'A9388759',
   'عراقي', NULL,
   NULL, '0799518315',
   NULL, 'شريك',
-  '2019-01-15', 'PARTNER'
+  '2019-01-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   153, NULL, 'زياد غانم ايليا ججاوي', NULL,
   NULL, 'A12169954',
   'عراقي', NULL,
   NULL, '0799555810',
   NULL, 'شريك',
-  '2018-04-08', 'PARTNER'
+  '2018-04-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   585, NULL, 'ماهر رزق محمد محسن/ انسحب', NULL,
   NULL, '9721027813',
   'أردني', NULL,
   NULL, '0790905560',
   NULL, 'شريك',
-  '2018-11-19', 'PARTNER'
+  '2018-11-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   585, NULL, 'ايمن خالد عبدالرحمن الخوالده/ انسحب', NULL,
   NULL, '9781045870',
   'أردني', NULL,
   NULL, '0799051524',
   NULL, 'شريك',
-  '2018-11-19', 'PARTNER'
+  '2018-11-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   591, NULL, 'عبدالرحمن ثابت عبدالرحمن السفر', NULL,
   NULL, 'T337221',
   'عراقي', NULL,
   NULL, '0795303565',
   NULL, 'شريك',
-  '2018-10-10', 'PARTNER'
+  '2018-10-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   608, NULL, 'ناصر حسين محمد أحمد/ اغلاق المكتب', NULL,
   NULL, '9811011591',
   'أردني', NULL,
   NULL, '0795121144',
   NULL, 'شريك',
-  '2018-01-18', 'PARTNER'
+  '2018-01-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   259, NULL, 'خميس هاني خميس ابوحسونة', NULL,
   NULL, 'لا يوجد',
   'PSE', NULL,
   NULL, '0797739328',
   NULL, 'شريك',
-  '2019-01-27', 'PARTNER'
+  '2019-01-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   259, NULL, 'صفاء محمد عبدالنبي الشاقلدي', NULL,
   NULL, '9742034444',
   'أردني', NULL,
   NULL, '0795265798',
   NULL, 'شريك',
-  '2019-01-27', 'PARTNER'
+  '2019-01-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   277, NULL, 'روان شاكر خليل المحارمة/ انسحب', NULL,
   NULL, '9892025958',
   'أردني', NULL,
   NULL, '0795575557',
   NULL, 'شريك',
-  '2018-07-09', 'PARTNER'
+  '2018-07-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   277, NULL, 'محمود عيسى محمود جبر/ انسحب', NULL,
   NULL, '9901062285',
   'أردني', NULL,
   NULL, '0799818085',
   NULL, 'شريك',
-  '2018-07-09', 'PARTNER'
+  '2018-07-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   550, NULL, 'سعد مظهر سعد العرس / انسحاب', NULL,
   NULL, '00321',
   'عراقي', NULL,
   NULL, '0799449999',
   NULL, 'شريك',
-  '2019-01-06', 'PARTNER'
+  '2019-01-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   297, NULL, 'هيثم رياض حسن الهنيدي', NULL,
   NULL, '9751030174',
   'أردني', NULL,
   NULL, '0795506244',
   NULL, 'شريك',
-  '2018-10-07', 'PARTNER'
+  '2018-10-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   549, NULL, 'سمر حسن الحاج محمود عكه', NULL,
   NULL, '9752030164',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2020-01-07', 'PARTNER'
+  '2020-01-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   580, NULL, 'رائد بلال خليل ابوهلاله', NULL,
   NULL, '9861031051',
   'أردني', NULL,
   NULL, '0799579909',
   NULL, 'شريك',
-  '2019-03-18', 'PARTNER'
+  '2019-03-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   613, NULL, 'نزار محمد وسوف', NULL,
   NULL, 'N012385247',
   'سوري', NULL,
   NULL, '0796660441',
   NULL, 'شريك',
-  '2018-03-12', 'PARTNER'
+  '2018-03-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   613, NULL, 'عمر احمد حسين العرايشي/انسحب', NULL,
   NULL, '9871013364',
   'أردني', NULL,
   NULL, '079945631',
   NULL, 'شريك',
-  '2018-03-12', 'PARTNER'
+  '2018-03-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   266, NULL, 'طارق اديب صبحي الحنطي/انسحب', NULL,
   NULL, '9871004885',
   'أردني', NULL,
   NULL, '0799969188',
   NULL, 'شريك',
-  '2018-12-19', 'PARTNER'
+  '2018-12-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   614, NULL, 'عماد خالد محمود ظاظا', NULL,
   NULL, '9561013771',
   'أردني', NULL,
   NULL, '0796724837',
   NULL, 'شريك',
-  '2019-09-17', 'PARTNER'
+  '2019-09-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   615, NULL, 'معتصم محمد سليمان الدلابيح', NULL,
   NULL, '9841023419',
   'أردني', NULL,
   NULL, '0770585858',
   NULL, 'شريك',
-  '2019-09-17', 'PARTNER'
+  '2019-09-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   616, NULL, 'المعشر للاستثمارات المالية', NULL,
   NULL, '.0321',
   'أردني', NULL,
   NULL, '0795607099',
   NULL, 'شريك',
-  '2019-09-26', 'PARTNER'
+  '2019-09-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   616, NULL, 'امجد رمزي صالح المعشر (شريك في المعشر للاستثمار', NULL,
   NULL, '9741036429',
   'أردني', NULL,
   NULL, '0795607099',
   NULL, 'شريك',
-  '2019-09-26', 'PARTNER'
+  '2019-09-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   616, NULL, 'سعيد رمزي صالح المعشر (شريك في المعشر للاستثمار', NULL,
   NULL, '9771039205',
   'أردني', NULL,
   NULL, '07952077099',
   NULL, 'شريك',
-  '2019-09-26', 'PARTNER'
+  '2019-09-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   274, NULL, 'عبد الله محمد حسن المشاعله', NULL,
   NULL, '9651034727',
   'أردني', NULL,
   NULL, '0777550254',
   NULL, 'شريك',
-  '2016-05-11', 'PARTNER'
+  '2016-05-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   452, NULL, 'اسامة مصطفى نعيم العسل', NULL,
   NULL, '9951057746',
   'أردني', NULL,
   NULL, '0798690414',
   NULL, 'شريك',
-  '2019-10-22', 'PARTNER'
+  '2019-10-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   452, NULL, 'يزيد فادي نعيم العسل', NULL,
   NULL, '9871006799',
   'أردني', NULL,
   NULL, '0795330034',
   NULL, 'شريك',
-  '2019-10-22', 'PARTNER'
+  '2019-10-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   452, NULL, 'احمد محمد انيس قاسم القاعاتي', NULL,
   NULL, '9791032817',
   NULL, NULL,
   NULL, '0795051326',
   NULL, 'شريك',
-  '2019-10-22', 'PARTNER'
+  '2019-10-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   452, NULL, 'احمد محمد انيس قاسم القاعاتي', NULL,
   NULL, '9791032817',
   'أردني', NULL,
   NULL, '0795051326',
   NULL, 'شريك',
-  '2019-10-22', 'PARTNER'
+  '2019-10-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   651, NULL, 'يوسف جمال علي الحنيطي', NULL,
   NULL, '9881002331',
   'أردني', NULL,
   NULL, '0770777080',
   NULL, 'شريك',
-  '2019-11-05', 'PARTNER'
+  '2019-11-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   651, NULL, 'علا جمال علي الحنيطي', NULL,
   NULL, '9772023130',
   'أردني', NULL,
   NULL, '0791484784',
   NULL, 'شريك',
-  '2019-11-05', 'PARTNER'
+  '2019-11-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   589, NULL, 'علي محمود خليل هياجنه', NULL,
   NULL, '9671016892',
   'أردني', NULL,
   NULL, '0799494878',
   NULL, 'شريك',
-  '2019-10-20', 'PARTNER'
+  '2019-10-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   279, NULL, 'مروان عبدالقادر فالح الحوري', NULL,
   NULL, '9711009784',
   'أردني', NULL,
   NULL, '0795661894',
   NULL, 'شريك',
-  '2019-12-10', 'PARTNER'
+  '2019-12-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   665, NULL, 'محمود سامي عبده الزعبي/ انسحب', NULL,
   NULL, '9821010005',
   'أردني', NULL,
   NULL, '0799757654',
   NULL, 'شريك',
-  '2020-01-08', 'PARTNER'
+  '2020-01-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   665, NULL, 'انا ماريا فوينتس غيريرو/ انسحب', NULL,
   NULL, 'G29659724',
   'MEX', NULL,
   NULL, '0792534124',
   NULL, 'شريك',
-  '2020-01-08', 'PARTNER'
+  '2020-01-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   665, NULL, 'ابراهيم خالد محمد سعيد الفاهوم/ انسحب', NULL,
   NULL, '9841056194',
   'أردني', NULL,
   NULL, '0799272870',
   NULL, 'شريك',
-  '2020-01-08', 'PARTNER'
+  '2020-01-08'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   656, NULL, 'احمد محمود عبد الحافظ صالح', NULL,
   NULL, '9911058375',
   'أردني', NULL,
   NULL, '0799372781',
   NULL, 'شريك',
-  '2020-02-05', 'PARTNER'
+  '2020-02-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   657, NULL, 'عماد وديع يعقوب حداد', NULL,
   NULL, '9661039525',
   'أردني', NULL,
   NULL, '0799636903',
   NULL, 'شريك',
-  '2020-01-26', 'PARTNER'
+  '2020-01-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   657, NULL, 'هيثم فخري ذياب المزاهرة/ انسحب', NULL,
   NULL, '9781004477',
   'أردني', NULL,
   NULL, '0777740034',
   NULL, 'شريك',
-  '2020-01-26', 'PARTNER'
+  '2020-01-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   661, NULL, 'محمد نعيم عبدالسلام عبدالله/ انسحب', NULL,
   NULL, '97710220044',
   'أردني', NULL,
   NULL, '0795623838',
   NULL, 'شريك',
-  '2021-09-14', 'PARTNER'
+  '2021-09-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   658, NULL, 'بسام حمدان عبيد المعالية/ انسحب', NULL,
   NULL, '9611001095',
   'أردني', NULL,
   NULL, '0795903600',
   NULL, 'شريك',
-  '2020-01-06', 'PARTNER'
+  '2020-01-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   658, NULL, 'خلدون ضيف الله مفلح المومني', NULL,
   NULL, '9701009276',
   'أردني', NULL,
   NULL, '00772112657',
   NULL, 'شريك',
-  '2020-01-06', 'PARTNER'
+  '2020-01-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   658, NULL, 'فاضل عبد الحميد محمد المومني', NULL,
   NULL, '9651009447',
   'أردني', NULL,
   NULL, '0772247663',
   NULL, 'شريك',
-  '2020-01-06', 'PARTNER'
+  '2020-01-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   667, NULL, 'مراد سعيد حسن عبد الهادي', NULL,
   NULL, '9811020054',
   'أردني', NULL,
   NULL, '0799600834',
   NULL, 'شريك',
-  '2020-02-18', 'PARTNER'
+  '2020-02-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   660, NULL, 'عمار اسحق فؤاد سعد', NULL,
   NULL, '9841026035',
   'أردني', NULL,
   NULL, '0798200037',
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   660, NULL, 'بسام نقولا سالم القسوس', NULL,
   NULL, '9501003981',
   'أردني', NULL,
   NULL, '0792750094',
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   663, NULL, 'عدي بسام روبين عوده', NULL,
   NULL, '9911018306',
   'أردني', NULL,
   NULL, '0778858888',
   NULL, 'شريك',
-  '2020-02-24', 'PARTNER'
+  '2020-02-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   659, NULL, 'فؤاد أنور فؤاد كلبونة', NULL,
   NULL, '9871006720',
   'أردني', NULL,
   NULL, '0797970578',
   NULL, 'شريك',
-  '2020-02-16', 'PARTNER'
+  '2020-02-16'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   654, NULL, 'عثمان بدر محمد الخطيب', NULL,
   NULL, '9751029761',
   'أردني', NULL,
   NULL, '0796025399',
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   668, NULL, 'أيمن خليل عبد القادر ابراهيم', NULL,
   NULL, '9711030289',
   'أردني', NULL,
   NULL, '0798197074',
   NULL, 'شريك',
-  '2020-03-01', 'PARTNER'
+  '2020-03-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   668, NULL, 'هادية علي هاشم الصرصور', NULL,
   NULL, '9932044004',
   'أردني', NULL,
   NULL, '0790355352',
   NULL, 'شريك',
-  '2020-03-01', 'PARTNER'
+  '2020-03-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'انس محمد حسن داود', NULL,
   NULL, '9771002286',
   'أردني', NULL,
   NULL, '0797880707',
   NULL, 'شريك',
-  '2019-08-07', 'PARTNER'
+  '2019-08-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   14, NULL, 'قسطندي صليبا قسطندي ابو صليح', NULL,
   NULL, 'T519677',
   'PSE', NULL,
   NULL, '0795956771',
   NULL, 'شريك',
-  '2019-08-07', 'PARTNER'
+  '2019-08-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   669, NULL, 'محمد توفيق سالم المطارنة', NULL,
   NULL, '9821032553',
   'أردني', NULL,
   NULL, '0791751124',
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   669, NULL, 'سارة محمد خير محمد الحاج عيسى', NULL,
   NULL, '9992037656',
   'أردني', NULL,
   NULL, '0799744633',
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   36, NULL, 'محمد مروان غسان ادريس', NULL,
   NULL, '001618583',
   'سوري', NULL,
   NULL, '0797510265',
   NULL, 'شريك',
-  '2018-05-22', 'PARTNER'
+  '2018-05-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   46, NULL, 'ابراهيم حسن حسن المبروم', NULL,
   NULL, '9571000565',
   'أردني', NULL,
   NULL, '0799050779',
   NULL, 'شريك',
-  '2019-09-18', 'PARTNER'
+  '2019-09-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   46, NULL, 'عمر ابراهيم حسن المبروم', NULL,
   NULL, '9951027349',
   'أردني', NULL,
   NULL, '0790565561',
   NULL, 'شريك',
-  '2019-09-18', 'PARTNER'
+  '2019-09-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   46, NULL, 'منى عيسى محمد ادحيل', NULL,
   NULL, '9612000904',
   'أردني', NULL,
   NULL, '0795640964',
   NULL, 'شريك',
-  '2019-09-18', 'PARTNER'
+  '2019-09-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   268, NULL, 'اسامة كمال ابراهيم ابو داري/ انسحب', NULL,
   NULL, '9851000996',
   'أردني', NULL,
   NULL, '0790788692- 0797',
   NULL, 'شريك',
-  '2019-10-10', 'PARTNER'
+  '2019-10-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   655, NULL, 'زيد احمد علي ابو زيد/ انسحب', NULL,
   NULL, '9751011482',
   'أردني', NULL,
   NULL, '0795465679',
   NULL, 'شريك',
-  '2020-06-07', 'PARTNER'
+  '2020-06-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   655, NULL, 'سما زيد احمد ابو زيد / طفل', NULL,
   NULL, '2003773969',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2020-06-07', 'PARTNER'
+  '2020-06-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   655, NULL, 'فرح زيد احمد ابو زيد / طفل', NULL,
   NULL, '2002469407',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2020-06-07', 'PARTNER'
+  '2020-06-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   655, NULL, 'نور زيد احمد ابو زيد / طفل', NULL,
   NULL, '2003565187',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2020-06-07', 'PARTNER'
+  '2020-06-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   266, NULL, 'عبدالله عبدالرحمن محمد عبدالواحد / انسحب', NULL,
   NULL, '9801030009',
   'أردني', NULL,
   NULL, '0790582521',
   NULL, 'شريك',
-  '2019-12-01', 'PARTNER'
+  '2019-12-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   266, NULL, 'اسامة محمد حسين العتلة', NULL,
   NULL, '9761014688',
   'أردني', NULL,
   NULL, '0799494702',
   NULL, 'شريك',
-  '2019-12-01', 'PARTNER'
+  '2019-12-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   136, NULL, 'عبد الاله عبد الباسط روبين عبد الجليل', NULL,
   NULL, '2001022986',
   'أردني', NULL,
   NULL, '0787777711',
   NULL, 'شريك',
-  '2019-10-19', 'PARTNER'
+  '2019-10-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   136, NULL, 'فرح عبد الباسط روبين عبد الجليل', NULL,
   NULL, '2000618761',
   'أردني', NULL,
   NULL, '0787777711',
   NULL, 'شريك',
-  '2019-10-29', 'PARTNER'
+  '2019-10-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   124, NULL, 'شهم الدين زكريا رضا الشريده', NULL,
   NULL, '9971028545',
   'أردني', NULL,
   NULL, '0795596708',
   NULL, 'شريك',
-  '2019-12-31', 'PARTNER'
+  '2019-12-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   54, NULL, 'ماريا الينا اسيرا/انسحبت', NULL,
   NULL, 'YA8690309',
   'ITA', NULL,
   NULL, '+393289725193',
   NULL, 'شريك',
-  '2019-08-15', 'PARTNER'
+  '2019-08-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   106, NULL, 'عبد الرزاق محمد قاسم الدغلس', NULL,
   NULL, '9661023620',
   'أردني', NULL,
   NULL, '0777558885',
   NULL, 'شريك',
-  '2018-07-01', 'PARTNER'
+  '2018-07-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   593, NULL, 'الحمل للاستثمار', NULL,
   NULL, '200115358',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2019-08-01', 'PARTNER'
+  '2019-08-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   607, NULL, 'عمر سامر سمير العورتاني', NULL,
   NULL, '2000372741',
   'أردني', NULL,
   NULL, '0795561202',
   NULL, 'شريك',
-  '2019-12-03', 'PARTNER'
+  '2019-12-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   607, NULL, 'جهاد محمد عيسى الهلالات', NULL,
   NULL, '9691004771',
   'أردني', NULL,
   NULL, '0795306317',
   NULL, 'شريك',
-  '2019-12-03', 'PARTNER'
+  '2019-12-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   587, NULL, 'داني نادر Dani Nader', NULL,
   NULL, '21AD51734',
   'FRA', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2019-10-30', 'PARTNER'
+  '2019-10-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   670, NULL, 'وسام احمد سعيد عرفات', NULL,
   NULL, '9751042103',
   'أردني', NULL,
   NULL, '0799951939',
   NULL, 'شريك',
-  '2021-05-20', 'PARTNER'
+  '2021-05-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   670, NULL, 'احمد كامل ابراهيم ابو داري', NULL,
   NULL, '9831005535',
   'أردني', NULL,
   NULL, '0799466610',
   NULL, 'شريك',
-  '2021-05-20', 'PARTNER'
+  '2021-05-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   672, NULL, 'سوزان احمد سليمان الدلال', NULL,
   NULL, '9702035091',
   'أردني', NULL,
   NULL, '0799039993',
   NULL, 'شريك',
-  '2021-05-23', 'PARTNER'
+  '2021-05-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   673, NULL, 'محمود فراس محمود بشير/انسحب', NULL,
   NULL, '9931040417',
   'أردني', NULL,
   NULL, '0777000111',
   NULL, 'شريك',
-  '2021-05-31', 'PARTNER'
+  '2021-05-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   673, NULL, 'طلال غسان عاكف الفايز', NULL,
   NULL, '9941063963',
   'أردني', NULL,
   NULL, '0777277771',
   NULL, 'شريك',
-  '2021-05-31', 'PARTNER'
+  '2021-05-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   674, NULL, 'مأمون محمود احمد العائدي', NULL,
   NULL, '9821037668',
   'أردني', NULL,
   NULL, '0795153164',
   NULL, 'شريك',
-  '2021-05-31', 'PARTNER'
+  '2021-05-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   676, NULL, 'محمود احمد سليمان عبد الرزاق', NULL,
   NULL, '9471015240',
   'أردني', NULL,
   NULL, '0796231747',
   NULL, 'شريك',
-  '2021-06-20', 'PARTNER'
+  '2021-06-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   676, NULL, 'حسام الدين محمود احمد عبد الرزاق', NULL,
   NULL, '9811056451',
   'أردني', NULL,
   NULL, '0796231747',
   NULL, 'شريك',
-  '2021-06-20', 'PARTNER'
+  '2021-06-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   677, NULL, 'أحمد عبدالعزيز مصطفى سكر/انسحب', NULL,
   NULL, '9961061935',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2021-06-23', 'PARTNER'
+  '2021-06-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   677, NULL, 'أحمد عبدالعزيز مصطفى سكر/انسحب', NULL,
   NULL, '9961061935',
   'أردني', NULL,
   NULL, '0795083303',
   NULL, 'شريك',
-  '2021-06-23', 'PARTNER'
+  '2021-06-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   678, NULL, 'جمال جميل جمال الشريف', NULL,
   NULL, '9821029200',
   'أردني', NULL,
   NULL, '0797133370',
   NULL, 'شريك',
-  '2024-02-11', 'PARTNER'
+  '2024-02-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   665, NULL, 'حسام راجي عبد الرضاونه', NULL,
   NULL, '9751004319',
   'أردني', NULL,
   NULL, '0778040938',
   NULL, 'شريك',
-  '2021-01-26', 'PARTNER'
+  '2021-01-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   665, NULL, 'رأفت عبد القادر مصطفى زيدان', NULL,
   NULL, '9801027342',
   'أردني', NULL,
   NULL, '0782784593',
   NULL, 'شريك',
-  '2021-01-26', 'PARTNER'
+  '2021-01-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   680, NULL, 'محمد جميل كامل حداد / انسحب قبل فتح المكتب', NULL,
   NULL, '9791038007',
   'أردني', NULL,
   NULL, '0795755575',
   NULL, 'شريك',
-  '2020-01-21', 'PARTNER'
+  '2020-01-21'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   658, NULL, 'احمد بسام حمدان المعالية', NULL,
   NULL, '2000225715',
   'أردني', NULL,
   NULL, '0795903600',
   NULL, 'شريك',
-  '2020-01-07', 'PARTNER'
+  '2020-01-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   680, NULL, 'مهند محمد خير جميل البنادرة', NULL,
   NULL, '9861033475',
   'أردني', NULL,
   NULL, '0798738828',
   NULL, 'شريك',
-  '2021-07-27', 'PARTNER'
+  '2021-07-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   680, NULL, 'خالد وليد سالم ابو رمان', NULL,
   NULL, '9861022002',
   'أردني', NULL,
   NULL, '0798707150',
   NULL, 'شريك',
-  '2021-07-27', 'PARTNER'
+  '2021-07-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   658, NULL, 'جاسر محمود علي قطاطشي', NULL,
   NULL, '9611023531',
   'أردني', NULL,
   NULL, '077247663',
   NULL, 'شريك',
-  '2020-01-07', 'PARTNER'
+  '2020-01-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   658, NULL, 'يوسف جمال يوسف القواسمي', NULL,
   NULL, '9961024068',
   'أردني', NULL,
   NULL, '0797167649',
   NULL, 'شريك',
-  '2020-01-07', 'PARTNER'
+  '2020-01-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   658, NULL, 'عبير احمد عبد الكريم المومني', NULL,
   NULL, '9752017289',
   'أردني', NULL,
   NULL, '0772112657',
   NULL, 'شريك',
-  '2020-01-07', 'PARTNER'
+  '2020-01-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   561, NULL, 'عبد الرحمن طارق ابراهيم ابو شحاده', NULL,
   NULL, '9981051536',
   'أردني', NULL,
   NULL, '0798782608',
   NULL, 'شريك',
-  '2021-03-14', 'PARTNER'
+  '2021-03-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   580, NULL, 'سليمان عبدالله حسن السعودي', NULL,
   NULL, '9691039891',
   'أردني', NULL,
   NULL, '0776494900',
   NULL, 'شريك',
-  '2019-05-12', 'PARTNER'
+  '2019-05-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   286, NULL, 'بسام حمدان عبيد المعالية/انسحب', NULL,
   NULL, '9611001095',
   'أردني', NULL,
   NULL, '0795903600',
   NULL, 'شريك',
-  '2021-01-24', 'PARTNER'
+  '2021-01-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   277, NULL, 'رامي حسن مرعي عثمان/ انسحب', NULL,
   NULL, '9781021543',
   'أردني', NULL,
   NULL, '0788331591',
   NULL, 'شريك',
-  '2020-11-24', 'PARTNER'
+  '2020-11-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   268, NULL, 'فارس احمد طلال ابو ذريوي', NULL,
   NULL, '9871046509',
   'أردني', NULL,
   NULL, '0796068881',
   NULL, 'شريك',
-  '2020-09-03', 'PARTNER'
+  '2020-09-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   268, NULL, 'رامي احمد طلال ابو ذريوي', NULL,
   NULL, '9831052761',
   'أردني', NULL,
   NULL, '0796840044',
   NULL, 'شريك',
-  '2021-05-30', 'PARTNER'
+  '2021-05-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   682, NULL, 'علاء عمر رشاد شبارو', NULL,
   NULL, '9911035820',
   'أردني', NULL,
   NULL, '0799919234',
   NULL, 'شريك',
-  '2021-08-24', 'PARTNER'
+  '2021-08-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   683, NULL, 'بدر حسن محمد عبدالجواد', NULL,
   NULL, '9951051364',
   'أردني', NULL,
   NULL, '0790932280',
   NULL, 'شريك',
-  '2021-08-24', 'PARTNER'
+  '2021-08-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   147, NULL, 'عز الدين ابراهيم عبدالله شقبوعه', NULL,
   NULL, '9611028702',
   'أردني', NULL,
   NULL, '0797421222',
   NULL, 'شريك',
-  '2020-02-24', 'PARTNER'
+  '2020-02-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   147, NULL, 'نور ابراهيم محمد ابو نجم/ انسحب', NULL,
   NULL, '9971058963',
   'أردني', NULL,
   NULL, '0797421222',
   NULL, 'شريك',
-  '2020-02-24', 'PARTNER'
+  '2020-02-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   59, NULL, 'احمد عبد القادر فالح الحوري', NULL,
   NULL, '9801009877',
   'أردني', NULL,
   NULL, '0795652559',
   NULL, 'شريك',
-  '2020-09-17', 'PARTNER'
+  '2020-09-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   684, NULL, 'محمود عبد الفتاح محمود يعقوب', NULL,
   NULL, '9751037332',
   'أردني', NULL,
   NULL, '0796689505',
   NULL, 'شريك',
-  '2021-09-15', 'PARTNER'
+  '2021-09-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   84, NULL, 'موفق محمد نمر عساف', NULL,
   NULL, '9621019027',
   'أردني', NULL,
   NULL, '079624132',
   NULL, 'شريك',
-  '2020-02-24', 'PARTNER'
+  '2020-02-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   589, NULL, 'محمد صبحي محمد حماد/انسحب', NULL,
   NULL, '9781047926',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2021-09-06', 'PARTNER'
+  '2021-09-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   64, NULL, 'خالد كمال كمال ابو ذياب / انسحاب', NULL,
   NULL, '2001023390',
   'أردني', NULL,
   NULL, '0792550551',
   NULL, 'شريك',
-  '2021-01-30', 'PARTNER'
+  '2021-01-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   262, NULL, 'زيد عطا عيسى المناصير/انسحب', NULL,
   NULL, '9851001461',
   'أردني', NULL,
   NULL, '0798914820',
   NULL, 'شريك',
-  '2019-11-03', 'PARTNER'
+  '2019-11-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   16, NULL, 'ممدوح محمدنادر علي الحلبي', NULL,
   NULL, '5000200',
   'أردني', NULL,
   NULL, '0795718312',
   NULL, 'شريك',
-  '2020-03-09', 'PARTNER'
+  '2020-03-09'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   62, NULL, 'رشا محمود علي درادكه', NULL,
   NULL, '9872051903',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2021-09-06', 'PARTNER'
+  '2021-09-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   62, NULL, 'محمد محمود علي درادكه', NULL,
   NULL, '9941056425',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2021-09-06', 'PARTNER'
+  '2021-09-06'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   661, NULL, 'ابراهيم محمد الحاج محمود صالح', NULL,
   NULL, '9801048842',
   'أردني', NULL,
   NULL, '0790906868',
   NULL, 'شريك',
-  '2021-09-14', 'PARTNER'
+  '2021-09-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   661, NULL, 'علاء عدنان حلمي حسين', NULL,
   NULL, '9951055952',
   'أردني', NULL,
   NULL, '0790704809',
   NULL, 'شريك',
-  '2021-09-14', 'PARTNER'
+  '2021-09-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   661, NULL, 'باريس للتسويق الالكتروني', NULL,
   NULL, '200177666',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2021-09-14', 'PARTNER'
+  '2021-09-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   269, NULL, 'منى فلاح محمد طنش', NULL,
   NULL, '97202013229',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2021-08-11', 'PARTNER'
+  '2021-08-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   90, NULL, 'اشرف صالح محمد ابو عوده', NULL,
   NULL, '012012021012012',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2021-09-01', 'PARTNER'
+  '2021-09-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   147, NULL, 'محمد مجدي حسن بواعنه/لاغي', NULL,
   NULL, '9951044657',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2021-09-27', 'PARTNER'
+  '2021-09-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   277, NULL, 'سفيان محمد يوسف مساد', NULL,
   NULL, '9531002462',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2021-09-12', 'PARTNER'
+  '2021-09-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   153, NULL, 'قناة السويس للإستشارات الادارية', NULL,
   NULL, '200178903',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2021-03-24', 'PARTNER'
+  '2021-03-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   292, NULL, 'نهلة احمد محمد الصفدي/ شريك في شركة الوجدان', NULL,
   NULL, '2000012',
   'أردني', NULL,
   NULL, '0',
   NULL, 'شريك',
-  '2013-07-20', 'PARTNER'
+  '2013-07-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   266, NULL, 'حسين محمد حسين العتلة/انسحب', NULL,
   NULL, '9731014088',
   'أردني', NULL,
   NULL, '0799989930',
   NULL, 'شريك',
-  '2021-05-31', 'PARTNER'
+  '2021-05-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   729, NULL, 'خضر ايمن رجا الخضر', NULL,
   NULL, '9981064777',
   'أردني', NULL,
   NULL, '0790335864',
   NULL, 'شريك',
-  '2025-11-03', 'PARTNER'
+  '2025-11-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   671, NULL, 'نانسي يعقوب يواكيم زهران', NULL,
   NULL, '9742026173',
   'أردني', NULL,
   NULL, '0798597161',
   NULL, 'شريك',
-  '2022-07-18', 'PARTNER'
+  '2022-07-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   681, NULL, 'محمد بدر محمد الخطيب', NULL,
   NULL, '9851016534',
   'أردني', NULL,
   NULL, '0795353810',
   NULL, 'شريك',
-  '2022-09-01', 'PARTNER'
+  '2022-09-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   147, NULL, 'هدى سيد اسماعيل ابو نجم', NULL,
   NULL, '9652025650',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   126, NULL, 'مهند جميل هاشم الشرفا', NULL,
   NULL, '9811107436',
   'أردني', NULL,
   NULL, '0796333033',
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   677, NULL, 'محمد سالم نهار الجبور', NULL,
   NULL, '9641032614',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   286, NULL, 'محمد محمود محمد البيتاوي', NULL,
   NULL, '941020997',
   'أردني', NULL,
   NULL, '0795903600',
   NULL, 'شريك',
-  '2020-12-10', 'PARTNER'
+  '2020-12-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   255, NULL, 'فدوى حسين محمد العمران', NULL,
   NULL, '9532011432',
   'أردني', NULL,
   NULL, '0780677788',
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   255, NULL, 'تغريد حسين محمد العمران', NULL,
   NULL, '9622024803',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   579, NULL, 'مراد ابراهيم يوسف سليمان', NULL,
   NULL, '9781027969',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   285, NULL, 'بلال عوني ابراهيم البخيت', NULL,
   NULL, '9721030899',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   679, NULL, 'سمير سليمان جمعه ابو محفوظ', NULL,
   NULL, '9851025336',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   552, NULL, 'فادي عطا محمد ابو طاعه', NULL,
   NULL, '9861025540',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2022-02-07', 'PARTNER'
+  '2022-02-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   546, NULL, 'حسام الدين محمد عبد الهادي السباخي', NULL,
   NULL, '5000076093',
   'PSE', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   546, NULL, 'عائشه رزق محسن البريقي/ انسحب', NULL,
   NULL, '9702025147',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   652, NULL, 'باسل عزيز ميخائيل الداود/ انسحب', NULL,
   NULL, '9921003694',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2023-03-15', 'PARTNER'
+  '2023-03-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   652, NULL, 'خليل حامد اعقيلان جرار', NULL,
   NULL, '9941035076',
   'أردني', NULL,
   NULL, '0796006642',
   NULL, 'شريك',
-  '2023-03-15', 'PARTNER'
+  '2023-03-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   652, NULL, 'طارق ابراهيم عبد المجيد عبد الله/ انسحب', NULL,
   NULL, '9871028441',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2023-03-15', 'PARTNER'
+  '2023-03-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   589, NULL, 'احمد محمد روبين عوده', NULL,
   NULL, '9921070868',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   601, NULL, 'ماهر محمد حسن الدبس', NULL,
   NULL, '9721049844',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   685, NULL, 'حسن مظهر عبد المهدي الطنطاوي', NULL,
   NULL, '9881027846',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   686, NULL, 'فخريه حسن عبد الفتاح عايش', NULL,
   NULL, '9572019948',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   687, NULL, 'ديما سامر قاسم زياده', NULL,
   NULL, '9982020453',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   687, NULL, 'محمد حسام شحاده بياري/ انسحب', NULL,
   NULL, '9931047271',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   688, NULL, 'راكان طارق بهجت الناظر', NULL,
   NULL, '9911028980',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   689, NULL, 'هديل عبد الرحمن عبد الرزاق كوكش', NULL,
   NULL, '9852027331',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   690, NULL, 'رامي احمد محمود عبيد', NULL,
   NULL, '9831048141',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   691, NULL, 'تقى جهاد محمد الرواشده', NULL,
   NULL, '9952036988',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   691, NULL, 'احمد سعيد كامل عيران', NULL,
   NULL, '9881024217',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   675, NULL, 'زينب سلامه سلمان الموسه', NULL,
   NULL, '9832040728',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   675, NULL, 'زين علي دخيل الله الفقير', NULL,
   NULL, '2000821709',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   91, NULL, 'رياض احمد سليمان حلاحلة/انسحب', NULL,
   NULL, '9751042924',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   104, NULL, 'منى رائد تيسير صباح', NULL,
   NULL, '2000365308',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2023-08-03', 'PARTNER'
+  '2023-08-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   673, NULL, 'فرح غسان عاكف الفايز', NULL,
   NULL, '9982058222',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   585, NULL, 'يزن جمال سليمان مجاهد التميمي', NULL,
   NULL, '9941021529',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2023-09-17', 'PARTNER'
+  '2023-09-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   70, NULL, 'صلاح الدين محمد بدوي محمد جويلس', NULL,
   NULL, '9681027898',
   'أردني', NULL,
   NULL, '0799748000',
   NULL, 'شريك',
-  '2022-01-02', 'PARTNER'
+  '2022-01-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   17, NULL, 'ورثة شكري لورنس انطون لورنس', NULL,
   NULL, '2000000',
   'أردني', NULL,
   NULL, 'Null',
   NULL, 'شريك',
-  '2024-01-01', 'PARTNER'
+  '2024-01-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   17, NULL, 'جوزفين عالي داود سكياس', NULL,
   NULL, '9412011318',
   'أردني', NULL,
   NULL, 'Null',
   NULL, 'شريك',
-  '2024-01-01', 'PARTNER'
+  '2024-01-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   54, NULL, 'زين سلامة نهار الشموط', NULL,
   NULL, '9942020487',
   'أردني', NULL,
   NULL, '0797173802',
   NULL, 'شريك',
-  '2022-02-01', 'PARTNER'
+  '2022-02-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   54, NULL, 'ايمان سلامه نهار الشموط', NULL,
   NULL, '9962040022',
   'أردني', NULL,
   NULL, '0797970309',
   NULL, 'شريك',
-  '2022-02-01', 'PARTNER'
+  '2022-02-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   40, NULL, 'محمد سالم نهار الجبور', NULL,
   NULL, '9641032614',
   'أردني', NULL,
   NULL, '0795712414',
   NULL, 'شريك',
-  '2023-05-23', 'PARTNER'
+  '2023-05-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   66, NULL, 'ملاك محمود احمد حسان', NULL,
   NULL, '2000488764',
   'أردني', NULL,
   NULL, '0799806099',
   NULL, 'شريك',
-  '2022-08-11', 'PARTNER'
+  '2022-08-11'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   97, NULL, 'عطاف علي جبريل ابو عواد', NULL,
   NULL, '9622032564',
   'أردني', NULL,
   NULL, '0798986262',
   NULL, 'شريك',
-  '2023-08-16', 'PARTNER'
+  '2023-08-16'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   74, NULL, 'رضوان علي ضيف الله الفرجات', NULL,
   NULL, '9701041773',
   'أردني', NULL,
   NULL, '0777314712',
   NULL, 'شريك',
-  '2023-10-01', 'PARTNER'
+  '2023-10-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   666, NULL, 'منير احمد محمد ابو عيشه/ انسحاب', NULL,
   NULL, '9701032424',
   'أردني', NULL,
   NULL, '0791860639',
   NULL, 'شريك',
-  '2024-07-28', 'PARTNER'
+  '2024-07-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   546, NULL, 'عبد المجيد احمد حامد الصمادي', NULL,
   NULL, '9561003773',
   'أردني', NULL,
   NULL, 'Null',
   NULL, 'شريك',
-  '2023-03-16', 'PARTNER'
+  '2023-03-16'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   546, NULL, 'اكرم محمود احمد ابو سعدون الجيزاوي', NULL,
   NULL, '9561017312',
   'أردني', NULL,
   NULL, 'Null',
   NULL, 'شريك',
-  '2023-03-16', 'PARTNER'
+  '2023-03-16'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   611, NULL, 'ظافر ماهر ظافر ابو جعفر', NULL,
   NULL, '9761033164',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2023-11-05', 'PARTNER'
+  '2023-11-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   1, NULL, 'اسماعيل محي الدين ابراهيم ابو السعود', NULL,
   NULL, '9441012827',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2024-08-01', 'PARTNER'
+  '2024-08-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   276, NULL, 'منال شاكر محمد صوص', NULL,
   NULL, '9722026698',
   'أردني', NULL,
   NULL, '0797846158',
   NULL, 'شريك',
-  '2023-05-30', 'PARTNER'
+  '2023-05-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   652, NULL, 'مالك نهار فهد السليحات / انسحاب', NULL,
   NULL, '9941038122',
   'أردني', NULL,
   NULL, '0795221556',
   NULL, 'شريك',
-  '2023-12-30', 'PARTNER'
+  '2023-12-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   672, NULL, 'زيد محمد شعبان الزين/انسحب', NULL,
   NULL, '2000785339',
   'أردني', NULL,
   NULL, '0799039992',
   NULL, 'شريك',
-  '2023-09-18', 'PARTNER'
+  '2023-09-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   663, NULL, 'احمد عماد صالح المدادحة /انسحاب', NULL,
   NULL, '9891007214',
   'أردني', NULL,
   NULL, '0795542444',
   NULL, 'شريك',
-  '2023-12-31', 'PARTNER'
+  '2023-12-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   655, NULL, 'نسرين احمد علي ابو زيد', NULL,
   NULL, '9772011438',
   'أردني', NULL,
   NULL, '079546567',
   NULL, 'شريك',
-  '2024-01-30', 'PARTNER'
+  '2024-01-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   166, NULL, 'ناهض محمد علي النوافلة', NULL,
   NULL, '9891056447',
   'أردني', NULL,
   NULL, '0790133458',
   NULL, 'شريك',
-  '2024-11-18', 'PARTNER'
+  '2024-11-18'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   692, NULL, 'راكان طارق بهجت الناظر', NULL,
   NULL, '9911028980',
   'أردني', NULL,
   NULL, '0795554068',
   NULL, 'شريك',
-  '2024-11-27', 'PARTNER'
+  '2024-11-27'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   278, NULL, 'محمد فؤاد عويد البشابشه', NULL,
   NULL, '9921045493',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2024-11-29', 'PARTNER'
+  '2024-11-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   693, NULL, 'احمد عبدالله متعب محمود', NULL,
   NULL, '2000056433',
   'أردني', NULL,
   NULL, '0787442220',
   NULL, 'شريك',
-  '2024-12-05', 'PARTNER'
+  '2024-12-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   696, NULL, 'عطية تيسير عطية قرعاوي', NULL,
   NULL, '200319445',
   'أردني', NULL,
   NULL, '0796388514',
   NULL, 'شريك',
-  '2025-01-05', 'PARTNER'
+  '2025-01-05'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   697, NULL, 'قصي فؤاد يوسف الزعبي', NULL,
   NULL, '9781027238',
   'أردني', NULL,
   NULL, '0788227326',
   NULL, 'شريك',
-  '2025-01-07', 'PARTNER'
+  '2025-01-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   697, NULL, 'فؤاد يوسف الصالح الزعبي', NULL,
   NULL, '9461006686',
   'أردني', NULL,
   NULL, '079311293',
   NULL, 'شريك',
-  '2025-01-07', 'PARTNER'
+  '2025-01-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   697, NULL, 'يامن قصي فؤاد الزعبي', NULL,
   NULL, '2001192296',
   'أردني', NULL,
   NULL, '0779138822',
   NULL, 'شريك',
-  '2025-01-07', 'PARTNER'
+  '2025-01-07'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   698, NULL, 'احمد طالب عبدالكريم الجبوري', NULL,
   NULL, '2004992257',
   'عراقي', NULL,
   NULL, '0775055526',
   NULL, 'شريك',
-  '2025-01-16', 'PARTNER'
+  '2025-01-16'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   699, NULL, 'فراس عثمان يوسف ابو ناموس', NULL,
   NULL, '9761026536',
   'أردني', NULL,
   NULL, '0795842377',
   NULL, 'شريك',
-  '2025-01-19', 'PARTNER'
+  '2025-01-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   699, NULL, 'وسيم فايز بدوي الديسي', NULL,
   NULL, '9821001857',
   'أردني', NULL,
   NULL, '0796608499',
   NULL, 'شريك',
-  '2025-01-19', 'PARTNER'
+  '2025-01-19'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   700, NULL, 'احمد محمد فواز عبدالغني سنان', NULL,
   NULL, '9851007350',
   'أردني', NULL,
   NULL, '0799777152',
   NULL, 'شريك',
-  '2025-01-23', 'PARTNER'
+  '2025-01-23'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   701, NULL, 'ابراهيم عبدالله احمد عبدالله', NULL,
   NULL, '9701026100',
   'أردني', NULL,
   NULL, '0798762419',
   NULL, 'شريك',
-  '2025-01-26', 'PARTNER'
+  '2025-01-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   702, NULL, 'احمد عيد حسن جبر', NULL,
   NULL, '9791022396',
   'أردني', NULL,
   NULL, '0798909157',
   NULL, 'شريك',
-  '2025-01-26', 'PARTNER'
+  '2025-01-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   703, NULL, 'فيصل عدنان خوام الفرهود', NULL,
   NULL, 'A11635249',
   'عراقي', NULL,
   NULL, '0798444480',
   NULL, 'شريك',
-  '2025-01-30', 'PARTNER'
+  '2025-01-30'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   664, NULL, 'زيد علي قاسم الربابعه', NULL,
   NULL, '9921034808',
   'أردني', NULL,
   NULL, '0792487488',
   NULL, 'شريك',
-  '2025-02-24', 'PARTNER'
+  '2025-02-24'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   706, NULL, 'علي احميد سالم المساعده', NULL,
   NULL, '9861028641',
   'أردني', NULL,
   NULL, '0796846018',
   NULL, 'شريك',
-  '2025-03-25', 'PARTNER'
+  '2025-03-25'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   707, NULL, 'انس عبدالجليل نعمان البكري', NULL,
   NULL, '9831038967',
   'أردني', NULL,
   NULL, '0797774447',
   NULL, 'شريك',
-  '2025-04-10', 'PARTNER'
+  '2025-04-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   709, NULL, 'ابراهيم منذر ابراهيم كتانه', NULL,
   NULL, '9931073677',
   'أردني', NULL,
   NULL, '0791905471',
   NULL, 'شريك',
-  '2025-04-20', 'PARTNER'
+  '2025-04-20'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   591, NULL, 'ليلى جمال علي المومني', NULL,
   NULL, '9942020804',
   'أردني', NULL,
   NULL, 'Null',
   NULL, 'شريك',
-  '2022-02-01', 'PARTNER'
+  '2022-02-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   710, NULL, 'محمد طارق نصوح الكيالي', NULL,
   NULL, '9951058187',
   'أردني', NULL,
   NULL, '0792303040',
   NULL, 'شريك',
-  '2025-05-12', 'PARTNER'
+  '2025-05-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   710, NULL, 'نور طارق نصوح الكيالي', NULL,
   NULL, '9942046776',
   'أردني', NULL,
   NULL, '0792303010',
   NULL, 'شريك',
-  '2025-05-12', 'PARTNER'
+  '2025-05-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   710, NULL, 'لينا يعقوب يوسف سلام', NULL,
   NULL, '9662000939',
   'أردني', NULL,
   NULL, '0793203020',
   NULL, 'شريك',
-  '2025-05-12', 'PARTNER'
+  '2025-05-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   710, NULL, 'زين طارق نصوح الكيالي', NULL,
   NULL, '9892003320',
   'أردني', NULL,
   NULL, '0796445813',
   NULL, 'شريك',
-  '2025-05-12', 'PARTNER'
+  '2025-05-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   710, NULL, 'ايه طارق نصوح الكيالي', NULL,
   NULL, '9912026436',
   'أردني', NULL,
   NULL, '0799495655',
   NULL, 'شريك',
-  '2025-05-12', 'PARTNER'
+  '2025-05-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   710, NULL, 'محمد سعيد نصوح سعيد الكيالي', NULL,
   NULL, '9641000354',
   'أردني', NULL,
   NULL, '0792100000',
   NULL, 'شريك',
-  '2025-05-12', 'PARTNER'
+  '2025-05-12'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   694, NULL, 'ادوارد يوسف جبران القصار', NULL,
   NULL, '9931030501',
   'أردني', NULL,
   NULL, '0791368358',
   NULL, 'شريك',
-  '2025-05-13', 'PARTNER'
+  '2025-05-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   711, NULL, 'محمود رائد محمود المعايطة', NULL,
   NULL, '9921059509',
   'أردني', NULL,
   NULL, '0790785555',
   NULL, 'شريك',
-  '2025-05-13', 'PARTNER'
+  '2025-05-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   711, NULL, 'محمد عبدالله محمد المطيري', NULL,
   NULL, '200000',
   'YEM', NULL,
   NULL, '0798268490',
   NULL, 'شريك',
-  '2025-05-13', 'PARTNER'
+  '2025-05-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   711, NULL, 'محمد علي محمد يحيى احمد الجائفي', NULL,
   NULL, '2971155',
   'BHR', NULL,
   NULL, '0795225325',
   NULL, 'شريك',
-  '2025-05-13', 'PARTNER'
+  '2025-05-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   705, NULL, 'احمد محمد علي محمد', NULL,
   NULL, '1005776263',
   'أردني', NULL,
   NULL, 'Null',
   NULL, 'شريك',
-  '2025-06-02', 'PARTNER'
+  '2025-06-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   705, NULL, 'فارس يوسف حسين ابو عيشه', NULL,
   NULL, '9881035211',
   'أردني', NULL,
   NULL, '0795100171',
   NULL, 'شريك',
-  '2025-06-02', 'PARTNER'
+  '2025-06-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   705, NULL, 'ماهر زكريا محفوظ ابو عوض', NULL,
   NULL, '9651036385',
   'أردني', NULL,
   NULL, '0795591538',
   NULL, 'شريك',
-  '2025-06-02', 'PARTNER'
+  '2025-06-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   712, NULL, 'عيد محمد عبدالله ابو رمان', NULL,
   NULL, '9621018348',
   'أردني', NULL,
   NULL, '0790100041',
   NULL, 'شريك',
-  '2025-06-02', 'PARTNER'
+  '2025-06-02'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   713, NULL, 'امين زهير محمد يحيى شاهين', NULL,
   NULL, '9921062699',
   'أردني', NULL,
   NULL, '0799710102',
   NULL, 'شريك',
-  '2025-06-01', 'PARTNER'
+  '2025-06-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   713, NULL, 'رنا سعيد محمود ابو الهيجاء', NULL,
   NULL, '9842053923',
   'أردني', NULL,
   NULL, '0791141400',
   NULL, 'شريك',
-  '2025-06-01', 'PARTNER'
+  '2025-06-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   713, NULL, 'نور الدين مازن سميح الحصري', NULL,
   NULL, '9861012426',
   'أردني', NULL,
   NULL, '0785190001',
   NULL, 'شريك',
-  '2025-06-01', 'PARTNER'
+  '2025-06-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   714, NULL, 'احمد محمد احمد شريتح', NULL,
   NULL, '9851025850',
   'أردني', NULL,
   NULL, '0796332355',
   NULL, 'شريك',
-  '2025-06-17', 'PARTNER'
+  '2025-06-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   714, NULL, 'لما احمد محمد شريتح/ شريك موصي', NULL,
   NULL, '2002997307',
   'أردني', NULL,
   NULL, 'Null',
   NULL, 'شريك',
-  '2025-06-17', 'PARTNER'
+  '2025-06-17'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   715, NULL, 'محمد يوسف عزت بيدس', NULL,
   NULL, '9901006543',
   'أردني', NULL,
   NULL, '0799827957',
   NULL, 'شريك',
-  '2025-01-15', 'PARTNER'
+  '2025-01-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   716, NULL, 'محمد سمير محمد الفران', NULL,
   NULL, '9971013689',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   716, NULL, 'خالد صالح محمود السيد', NULL,
   NULL, '9681030911',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   708, NULL, 'احمد عمر يوسف نوفل', NULL,
   NULL, '9861060461',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   717, NULL, 'داليا محمد محمود ابو هنطش', NULL,
   NULL, '9962000767',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   717, NULL, 'محمد ربحي اشرف ربحي البرقوني', NULL,
   NULL, '9941010321',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   562, NULL, 'اسر اشرف احمد احمد', NULL,
   NULL, 'A21262412',
   'عراقي', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   91, NULL, 'هبه منذر محمد عبابنه', NULL,
   NULL, '9842039975',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   718, NULL, 'عدي حسين سعد بني سلامه', NULL,
   NULL, '9921024951',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   718, NULL, 'نجيب محمود نجيب القباني', NULL,
   NULL, '9961018329',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   719, NULL, 'حنين علي ابراهيم صالح', NULL,
   NULL, '9951054384',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2024-10-14', 'PARTNER'
+  '2024-10-14'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   720, NULL, 'عبد الفتاح ضيف الله عبد الفتاح دبيسيه', NULL,
   NULL, '9701005578',
   'أردني', NULL,
   NULL, '07919191770',
   NULL, 'شريك',
-  '2018-02-28', 'PARTNER'
+  '2018-02-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   720, NULL, 'رحمة الله خميس ابراهيم النجار', NULL,
   NULL, '2000371470',
   'أردني', NULL,
   NULL, '07919291770',
   NULL, 'شريك',
-  '2024-10-13', 'PARTNER'
+  '2024-10-13'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   721, NULL, 'صهيب فضل محمد الشاقلدي', NULL,
   NULL, '200369592',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   721, NULL, 'مصعب فضل محمد الشاقلدي', NULL,
   NULL, '9981044271',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   266, NULL, 'ياسمين اسامه محمد العتله', NULL,
   NULL, '2000397893',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2025-08-04', 'PARTNER'
+  '2025-08-04'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   704, NULL, 'فارس احمد طلال ابو ذريوي', NULL,
   NULL, '9871046509',
   'أردني', NULL,
   NULL, '0796068881',
   NULL, 'شريك',
-  '2025-06-29', 'PARTNER'
+  '2025-06-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   704, NULL, 'رامي احمد طلال ابو ذريوي', NULL,
   NULL, '9831052761',
   'أردني', NULL,
   NULL, '0796840044',
   NULL, 'شريك',
-  '2025-06-29', 'PARTNER'
+  '2025-06-29'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   722, NULL, 'لمى يوسف محمد القواسمه', NULL,
   NULL, '9842014721',
   'أردني', NULL,
   NULL, '0795354121',
   NULL, 'شريك',
-  '2025-07-22', 'PARTNER'
+  '2025-07-22'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   723, NULL, 'خليل موسى خليل دبوبش', NULL,
   NULL, '9811020070',
   'أردني', NULL,
   NULL, '0795898562',
   NULL, 'شريك',
-  '2025-08-28', 'PARTNER'
+  '2025-08-28'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   724, NULL, 'عدي حكم رمضان فحل', NULL,
   NULL, '9991057188',
   'أردني', NULL,
   NULL, '0792604048',
   NULL, 'شريك',
-  '2025-08-03', 'PARTNER'
+  '2025-08-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   724, NULL, 'صهيب احمد حسن شحاده', NULL,
   NULL, '9931051391',
   'أردني', NULL,
   NULL, '0798971349',
   NULL, 'شريك',
-  '2025-08-03', 'PARTNER'
+  '2025-08-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   724, NULL, 'صلاح محمود صلاح الصدر', NULL,
   NULL, '9981061292',
   'أردني', NULL,
   NULL, '0792691411',
   NULL, 'شريك',
-  '2025-08-03', 'PARTNER'
+  '2025-08-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   725, NULL, 'شركة بافاريا للسياحة والسفر ذ م م', NULL,
   NULL, '200127804',
   'أردني', NULL,
   NULL, '0799944406',
   NULL, 'شريك',
-  '2024-12-03', 'PARTNER'
+  '2024-12-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   725, NULL, 'هيثم رياض حسن الهنيدي', NULL,
   NULL, '9751030174',
   'أردني', NULL,
   NULL, '0798859999',
   NULL, 'شريك',
-  '2024-12-03', 'PARTNER'
+  '2024-12-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   726, NULL, 'محمد طالب عبدالمهدي المحيسن', NULL,
   NULL, '9901005837',
   'أردني', NULL,
   NULL, '0770000977',
   NULL, 'شريك',
-  '2025-06-15', 'PARTNER'
+  '2025-06-15'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   550, NULL, 'تاره عبدالله علي', NULL,
   NULL, '2003494869',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2022-03-31', 'PARTNER'
+  '2022-03-31'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   550, NULL, 'تمارا عبدالله علي', NULL,
   NULL, '1001219153',
   'عراقي', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   550, NULL, 'حميد اكرم حميد النجار', NULL,
   NULL, '2003494864',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   727, NULL, 'عروه فؤاد عبد الوهاب الطراونه', NULL,
   NULL, '9981062344',
   'أردني', NULL,
   NULL, '0795356641',
   NULL, 'شريك',
-  '2025-10-10', 'PARTNER'
+  '2025-10-10'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   33, NULL, 'ليث نبيه صلاح الدين ريال', NULL,
   NULL, '9901024940',
   'أردني', NULL,
   NULL, '0795210632',
   NULL, 'شريك',
-  '2023-02-26', 'PARTNER'
+  '2023-02-26'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   728, NULL, 'ماهر بسام شريف الشاويش', NULL,
   NULL, '9761021742',
   'أردني', NULL,
   NULL, '0795455590',
   NULL, 'شريك',
-  '2025-10-01', 'PARTNER'
+  '2025-10-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   112, NULL, 'شادي وليد قاسم ابو كركي', NULL,
   NULL, '9781036133',
   'أردني', NULL,
   NULL, '0795087187',
   NULL, 'شريك',
-  '2024-08-01', 'PARTNER'
+  '2024-08-01'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   666, NULL, 'محمد عبدالله سلامه ابو نبهان', NULL,
   NULL, '9671028004',
   'أردني', NULL,
   NULL, '0782322559',
   NULL, 'شريك',
-  '0000-00-00', 'PARTNER'
+  '0000-00-00'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   695, NULL, 'انس زياد حسن شحاده', NULL,
   NULL, '9911011468',
   'أردني', NULL,
   NULL, '0777761399',
   NULL, 'شريك',
-  '2025-08-03', 'PARTNER'
+  '2025-08-03'
 );
 
 INSERT INTO people (
   office_id, renewal_id, full_name_ar, full_name_en,
   national_id, social_security_no, nationality, gender,
-  mother_name, mobile, birth_date, current_position, start_date, role_type
+  mother_name, mobile, birth_date, current_position, start_date
 ) VALUES (
   730, NULL, 'اكرم حاتم محمد احمد', NULL,
   NULL, '9961074233',
   'أردني', NULL,
   NULL, NULL,
   NULL, 'شريك',
-  '2025-11-06', 'PARTNER'
+  '2025-11-06'
 );
 
 -- Renewals Migration (Historical)
