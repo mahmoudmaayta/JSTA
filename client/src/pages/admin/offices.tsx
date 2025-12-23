@@ -248,7 +248,7 @@ export default function AdminOffices() {
                             </TableRow>
                           </TableHeader>
                           <TableBody>
-                            {filteredOffices.slice(0, 100).map((office) => (
+                            {filteredOffices.slice(0, 25).map((office) => (
                               <TableRow key={office.id}>
                                 <TableCell className="font-mono text-sm">
                                   {office.registrationNumber || office.id}
@@ -320,11 +320,11 @@ export default function AdminOffices() {
                         }
                       />
                     )}
-                    {filteredOffices.length > 100 && (
+                    {filteredOffices.length > 25 && (
                       <div className="mt-4 text-center text-sm text-muted-foreground">
                         {language === 'ar' 
-                          ? `عرض أول 100 نتيجة. استخدم الفلاتر لتضييق البحث.`
-                          : `Showing first 100 results. Use filters to narrow down.`}
+                          ? `عرض أول 25 نتيجة. استخدم الفلاتر لتضييق البحث.`
+                          : `Showing first 25 results. Use filters to narrow down.`}
                       </div>
                     )}
                   </CardContent>

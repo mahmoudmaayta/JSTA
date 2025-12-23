@@ -80,7 +80,7 @@ export default function AdminStaffDashboard() {
   const [selectedPerson, setSelectedPerson] = useState<StaffDataItem | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 50;
+  const pageSize = 25;
 
   const { data: officesData, isLoading: isLoadingOffices } = useQuery<Office[]>({
     queryKey: ["/api/admin/offices"],
