@@ -171,60 +171,95 @@ export default function AdminStaffDashboard() {
     setSelectedNationality("all");
   };
 
-  const exportToCSV = () => {
-    if (!filteredStaff.length) {
+  const [isExporting, setIsExporting] = useState(false);
+
+  const exportToCSV = async () => {
+    setIsExporting(true);
+    try {
+      // Fetch all matching records from export endpoint
+      const params = new URLSearchParams();
+      if (debouncedSearch) params.append("search", debouncedSearch);
+      if (selectedOffice !== "all") params.append("officeId", selectedOffice);
+      
+      const response = await fetch(`/api/admin/staff/export?${params.toString()}`, {
+        credentials: "include",
+      });
+      
+      if (!response.ok) {
+        throw new Error("Export failed");
+      }
+      
+      const result = await response.json();
+      const exportData = result.data as StaffMember[];
+      
+      if (!exportData.length) {
+        toast({
+          title: language === "ar" ? "لا توجد بيانات" : "No Data",
+          description: language === "ar" ? "لا توجد بيانات للتصدير" : "No data to export",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const headers = [
+        "Office Name",
+        "Full Name (Arabic)",
+        "Full Name (English)",
+        "National ID",
+        "Social Security",
+        "Nationality",
+        "Gender",
+        "Mother's Name",
+        "Mobile",
+        "Birth Date",
+        "Job/Position",
+        "Work History Description",
+        "Role Type",
+      ];
+
+      const csvContent = [
+        headers.join(","),
+        ...exportData.map((item) =>
+          [
+            `"${item.office?.tradeNameAr || ""}"`,
+            `"${item.person.fullNameAr || ""}"`,
+            `"${item.person.fullNameEn || ""}"`,
+            `"${item.person.nationalId || ""}"`,
+            `"${item.person.socialSecurityNo || ""}"`,
+            `"${item.person.nationality || ""}"`,
+            `"${item.person.gender || ""}"`,
+            `"${item.person.motherName || ""}"`,
+            `"${item.person.mobile || ""}"`,
+            `"${item.person.birthDate || ""}"`,
+            `"${item.person.job || item.workHistory?.description || ""}"`,
+            `"${item.workHistory?.description || ""}"`,
+            `"${getRoleLabel(item.role?.roleType || 'EMPLOYEE')}"`,
+          ].join(",")
+        ),
+      ].join("\n");
+
+      const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `staff_report_${new Date().toISOString().split("T")[0]}.csv`;
+      link.click();
+      
       toast({
-        title: language === "ar" ? "لا توجد بيانات" : "No Data",
-        description: language === "ar" ? "لا توجد بيانات للتصدير" : "No data to export",
+        title: language === "ar" ? "تم التصدير" : "Export Complete",
+        description: language === "ar" 
+          ? `تم تصدير ${exportData.length} سجل` 
+          : `Exported ${exportData.length} records`,
+      });
+    } catch (error) {
+      console.error("Export error:", error);
+      toast({
+        title: language === "ar" ? "خطأ في التصدير" : "Export Error",
+        description: language === "ar" ? "فشل تصدير البيانات" : "Failed to export data",
         variant: "destructive",
       });
-      return;
+    } finally {
+      setIsExporting(false);
     }
-
-    const headers = [
-      "Office Name",
-      "Full Name (Arabic)",
-      "Full Name (English)",
-      "National ID",
-      "Social Security",
-      "Nationality",
-      "Gender",
-      "Mother's Name",
-      "Mobile",
-      "Birth Date",
-      "Position",
-      "Start Date",
-      "Branch",
-      "Role Type",
-    ];
-
-    const csvContent = [
-      headers.join(","),
-      ...filteredStaff.map((item) =>
-        [
-          `"${item.office.tradeNameAr || ""}"`,
-          `"${item.person.fullNameAr || ""}"`,
-          `"${item.person.fullNameEn || ""}"`,
-          `"${item.person.nationalId || ""}"`,
-          `"${item.person.socialSecurityNo || ""}"`,
-          `"${item.person.nationality || ""}"`,
-          `"${item.person.gender || ""}"`,
-          `"${item.person.motherName || ""}"`,
-          `"${item.person.mobile || ""}"`,
-          `"${item.person.birthDate || ""}"`,
-          `"${item.person.currentPosition || ""}"`,
-          `"${item.person.startDate || ""}"`,
-          `"${item.person.branch || ""}"`,
-          `"${getRoleLabel(item.role?.roleType || 'EMPLOYEE')}"`,
-        ].join(",")
-      ),
-    ].join("\n");
-
-    const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = `staff_report_${new Date().toISOString().split("T")[0]}.csv`;
-    link.click();
   };
 
   const isLoading = isLoadingOffices || isLoadingStaff;
@@ -261,11 +296,14 @@ export default function AdminStaffDashboard() {
                   <Button
                     variant="outline"
                     onClick={exportToCSV}
+                    disabled={isExporting}
                     className="flex items-center gap-2"
                     data-testid="button-export-csv"
                   >
                     <Download className="w-4 h-4" />
-                    {language === "ar" ? "تصدير CSV" : "Export CSV"}
+                    {isExporting 
+                      ? (language === "ar" ? "جاري التصدير..." : "Exporting...") 
+                      : (language === "ar" ? "تصدير CSV" : "Export CSV")}
                   </Button>
                 </div>
               </CardHeader>

@@ -895,6 +895,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Export all staff matching filters (no pagination) for CSV download
+  app.get("/api/admin/staff/export", ensureAdmin, async (req, res) => {
+    try {
+      const search = (req.query.search as string) || "";
+      const officeId = req.query.officeId ? parseInt(req.query.officeId as string) : null;
+      
+      // Get all employees matching filters without pagination
+      const result = await pool.query(`
+        SELECT DISTINCT ON (p.id)
+          p.*,
+          ewh.date_in, ewh.date_out, ewh.job_title as wh_job_title, ewh.description as wh_description,
+          o.trade_name_ar as office_name_ar, o.trade_name_en as office_name_en, o.registration_number, o.id as office_id
+        FROM people p
+        LEFT JOIN employee_work_history ewh ON p.id = ewh.person_id
+        LEFT JOIN offices o ON ewh.office_id = o.id
+        WHERE p.legacy_id IS NOT NULL
+          ${officeId ? `AND ewh.office_id = $1` : ''}
+          ${search ? `AND (p.full_name_ar ILIKE $${officeId ? 2 : 1} OR p.full_name_en ILIKE $${officeId ? 2 : 1} OR p.national_id ILIKE $${officeId ? 2 : 1} OR p.mobile ILIKE $${officeId ? 2 : 1})` : ''}
+        ORDER BY p.id, ewh.date_in DESC NULLS LAST
+      `, officeId 
+        ? (search ? [officeId, `%${search}%`] : [officeId])
+        : (search ? [`%${search}%`] : [])
+      );
+      
+      const staffData = result.rows.map(row => ({
+        person: {
+          id: row.id,
+          legacyId: row.legacy_id,
+          fullNameAr: row.full_name_ar,
+          fullNameEn: row.full_name_en,
+          firstName: row.first_name,
+          lastName: row.last_name,
+          nationalId: row.national_id,
+          nationality: row.nationality,
+          gender: row.gender,
+          mobile: row.mobile,
+          motherName: row.mother_name,
+          email: row.email,
+          job: row.job,
+          qualification: row.qualification,
+          jstaIdNum: row.jsta_id_num,
+          birthDate: row.birth_date,
+          socialSecurityNo: row.social_security_no,
+        },
+        role: {
+          roleType: row.job || 'EMPLOYEE',
+          description: row.wh_description,
+        },
+        office: {
+          id: row.office_id,
+          tradeNameAr: row.office_name_ar,
+          tradeNameEn: row.office_name_en,
+          registrationNumber: row.registration_number,
+        },
+        workHistory: {
+          dateIn: row.date_in,
+          dateOut: row.date_out,
+          jobTitle: row.wh_job_title,
+          description: row.wh_description,
+        },
+      }));
+
+      res.json({ data: staffData });
+    } catch (error) {
+      console.error("Export admin staff error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   // KPI Dashboard endpoint for admin - must be before :id route
   app.get("/api/admin/renewals/kpis", ensureAdmin, async (req, res) => {
     try {
