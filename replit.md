@@ -218,3 +218,24 @@ Preferred communication style: Simple, everyday language.
 - Filter by role and nationality
 - Export to CSV
 - View detailed employee information in modal
+
+### Job Titles Reference Data (December 2025)
+
+**Data Source**: jobtitle_1766512759191.sql containing 53 standardized job titles
+
+**Migration Script**: scripts/migration/import-job-titles.cjs
+- Loads standardized Arabic job titles into the database
+- Preserves legacy IDs for reference
+
+**Job Titles Table**:
+- id: Auto-generated primary key
+- legacy_id: Original ID from legacy system
+- name: Job title in Arabic (same as nameAr for this dataset)
+- name_ar: Job title in Arabic
+
+**Sample Job Titles**:
+- شريك (Partner), مالك (Owner), رئيس مجلس الادارة (Chairman)
+- مدير عام (General Manager), محاسب (Accountant), حجوزات (Reservations)
+- مدير سياحة واردة (Inbound Tourism Manager), مدير فرع (Branch Manager)
+
+**Total Job Titles Imported**: 53
