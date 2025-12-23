@@ -74,7 +74,7 @@ export default function AdminStaffDashboard() {
   const { toast } = useToast();
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedOffice, setSelectedOffice] = useState<string>("all");
+  const [officeSearchQuery, setOfficeSearchQuery] = useState("");
   const [selectedRole, setSelectedRole] = useState<string>("all");
   const [selectedNationality, setSelectedNationality] = useState<string>("all");
   const [selectedPerson, setSelectedPerson] = useState<StaffDataItem | null>(null);
@@ -82,21 +82,15 @@ export default function AdminStaffDashboard() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 25;
 
-  const { data: officesData, isLoading: isLoadingOffices } = useQuery<Office[]>({
-    queryKey: ["/api/admin/offices"],
-  });
-
-  const [officeSearchQuery, setOfficeSearchQuery] = useState("");
-
   const { data: staffResponse, isLoading: isLoadingStaff } = useQuery<StaffResponse>({
-    queryKey: ["/api/admin/staff", currentPage, searchQuery, selectedOffice],
+    queryKey: ["/api/admin/staff", currentPage, searchQuery, officeSearchQuery],
     queryFn: async () => {
       const params = new URLSearchParams({
         page: currentPage.toString(),
         limit: pageSize.toString(),
       });
       if (searchQuery) params.set("search", searchQuery);
-      if (selectedOffice !== "all") params.set("officeId", selectedOffice);
+      if (officeSearchQuery) params.set("officeSearch", officeSearchQuery);
       
       const response = await fetch(`/api/admin/staff?${params}`);
       if (!response.ok) throw new Error("Failed to fetch staff");
@@ -128,17 +122,6 @@ export default function AdminStaffDashboard() {
     return Array.from(nationalities).sort();
   }, [staffData]);
 
-  const filteredOffices = useMemo(() => {
-    if (!officesData) return [];
-    if (!officeSearchQuery.trim()) return officesData;
-    
-    const query = officeSearchQuery.toLowerCase();
-    return officesData.filter(office => 
-      office.tradeNameAr?.toLowerCase().includes(query) ||
-      office.tradeNameEn?.toLowerCase().includes(query)
-    );
-  }, [officesData, officeSearchQuery]);
-
   const roleTypeLabels: Record<string, { ar: string; en: string }> = {
     OWNER_PARTNER: { ar: "مالك/شريك", en: "Owner/Partner" },
     AUTHORIZED_SIGNATORY: { ar: "مفوّض", en: "Authorized" },
@@ -166,7 +149,7 @@ export default function AdminStaffDashboard() {
 
   const resetFilters = () => {
     setSearchQuery("");
-    setSelectedOffice("all");
+    setOfficeSearchQuery("");
     setSelectedRole("all");
     setSelectedNationality("all");
   };
@@ -178,8 +161,8 @@ export default function AdminStaffDashboard() {
     try {
       // Fetch all matching records from export endpoint
       const params = new URLSearchParams();
-      if (debouncedSearch) params.append("search", debouncedSearch);
-      if (selectedOffice !== "all") params.append("officeId", selectedOffice);
+      if (searchQuery) params.append("search", searchQuery);
+      if (officeSearchQuery) params.append("officeSearch", officeSearchQuery);
       
       const response = await fetch(`/api/admin/staff/export?${params.toString()}`, {
         credentials: "include",
@@ -190,7 +173,7 @@ export default function AdminStaffDashboard() {
       }
       
       const result = await response.json();
-      const exportData = result.data as StaffMember[];
+      const exportData = result.data as StaffDataItem[];
       
       if (!exportData.length) {
         toast({
@@ -262,7 +245,7 @@ export default function AdminStaffDashboard() {
     }
   };
 
-  const isLoading = isLoadingOffices || isLoadingStaff;
+  const isLoading = isLoadingStaff;
 
   return (
     <SidebarProvider>
@@ -328,51 +311,16 @@ export default function AdminStaffDashboard() {
 
                   <div>
                     <Label>{language === "ar" ? "المكتب" : "Office"}</Label>
-                    <Select value={selectedOffice} onValueChange={(value) => {
-                      setSelectedOffice(value);
-                      setOfficeSearchQuery("");
-                    }}>
-                      <SelectTrigger data-testid="select-office">
-                        <SelectValue placeholder={language === "ar" ? "جميع المكاتب" : "All Offices"} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <div className="p-2 border-b">
-                          <div className="relative">
-                            <Search className="absolute start-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                            <Input
-                              value={officeSearchQuery}
-                              onChange={(e) => setOfficeSearchQuery(e.target.value)}
-                              placeholder={language === "ar" ? "ابحث عن مكتب..." : "Search office..."}
-                              className="ps-8 h-8"
-                              onClick={(e) => e.stopPropagation()}
-                              onKeyDown={(e) => e.stopPropagation()}
-                              data-testid="input-office-search"
-                            />
-                          </div>
-                        </div>
-                        <SelectItem value="all">{language === "ar" ? "جميع المكاتب" : "All Offices"}</SelectItem>
-                        {isLoadingOffices ? (
-                          <div className="p-2 text-center text-muted-foreground">
-                            <Loader2 className="w-4 h-4 animate-spin mx-auto" />
-                          </div>
-                        ) : filteredOffices.length === 0 ? (
-                          <div className="p-2 text-center text-muted-foreground text-sm">
-                            {language === "ar" ? "لا توجد مكاتب مطابقة" : "No matching offices"}
-                          </div>
-                        ) : (
-                          filteredOffices.map((office) => (
-                            <SelectItem key={office.id} value={office.id.toString()}>
-                              <div className="flex flex-col">
-                                <span>{office.tradeNameAr}</span>
-                                {office.tradeNameEn && (
-                                  <span className="text-xs text-muted-foreground">{office.tradeNameEn}</span>
-                                )}
-                              </div>
-                            </SelectItem>
-                          ))
-                        )}
-                      </SelectContent>
-                    </Select>
+                    <div className="relative">
+                      <Building2 className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <Input
+                        value={officeSearchQuery}
+                        onChange={(e) => setOfficeSearchQuery(e.target.value)}
+                        placeholder={language === "ar" ? "ابحث باسم المكتب..." : "Search by office name..."}
+                        className="ps-9"
+                        data-testid="input-office-search"
+                      />
+                    </div>
                   </div>
 
                   <div>
@@ -410,7 +358,7 @@ export default function AdminStaffDashboard() {
                   </div>
                 </div>
 
-                {(searchQuery || selectedOffice !== "all" || selectedRole !== "all" || selectedNationality !== "all") && (
+                {(searchQuery || officeSearchQuery || selectedRole !== "all" || selectedNationality !== "all") && (
                   <div className="mt-4 flex items-center gap-2">
                     <Badge variant="secondary" className="gap-1">
                       <Filter className="w-3 h-3" />

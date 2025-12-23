@@ -823,7 +823,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const limit = parseInt(req.query.limit as string) || 50;
       const offset = (page - 1) * limit;
       const search = (req.query.search as string) || "";
-      const officeId = req.query.officeId ? parseInt(req.query.officeId as string) : null;
+      const officeSearch = (req.query.officeSearch as string) || "";
+      
+      // Build dynamic query with office name search
+      let paramIndex = 3;
+      const params: any[] = [limit, offset];
+      let officeCondition = '';
+      let searchCondition = '';
+      
+      if (officeSearch) {
+        officeCondition = `AND (o.trade_name_ar ILIKE $${paramIndex} OR o.trade_name_en ILIKE $${paramIndex})`;
+        params.push(`%${officeSearch}%`);
+        paramIndex++;
+      }
+      
+      if (search) {
+        searchCondition = `AND (p.full_name_ar ILIKE $${paramIndex} OR p.full_name_en ILIKE $${paramIndex} OR p.national_id ILIKE $${paramIndex} OR p.mobile ILIKE $${paramIndex})`;
+        params.push(`%${search}%`);
+      }
       
       // Get all employees with work history (legacy imported data) - direct DB query for performance
       const result = await pool.query(`
@@ -835,27 +852,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
         LEFT JOIN employee_work_history ewh ON p.id = ewh.person_id
         LEFT JOIN offices o ON ewh.office_id = o.id
         WHERE p.legacy_id IS NOT NULL
-          ${officeId ? `AND ewh.office_id = $3` : ''}
-          ${search ? `AND (p.full_name_ar ILIKE $${officeId ? 4 : 3} OR p.full_name_en ILIKE $${officeId ? 4 : 3} OR p.national_id ILIKE $${officeId ? 4 : 3} OR p.mobile ILIKE $${officeId ? 4 : 3})` : ''}
+          ${officeCondition}
+          ${searchCondition}
         ORDER BY p.id, ewh.date_in DESC NULLS LAST
         LIMIT $1 OFFSET $2
-      `, officeId 
-        ? (search ? [limit, offset, officeId, `%${search}%`] : [limit, offset, officeId])
-        : (search ? [limit, offset, `%${search}%`] : [limit, offset])
-      );
+      `, params);
       
-      // Get total count
+      // Get total count with same filters
+      const countParams: any[] = [];
+      let countParamIndex = 1;
+      let countOfficeCondition = '';
+      let countSearchCondition = '';
+      
+      if (officeSearch) {
+        countOfficeCondition = `AND (o.trade_name_ar ILIKE $${countParamIndex} OR o.trade_name_en ILIKE $${countParamIndex})`;
+        countParams.push(`%${officeSearch}%`);
+        countParamIndex++;
+      }
+      
+      if (search) {
+        countSearchCondition = `AND (p.full_name_ar ILIKE $${countParamIndex} OR p.full_name_en ILIKE $${countParamIndex} OR p.national_id ILIKE $${countParamIndex} OR p.mobile ILIKE $${countParamIndex})`;
+        countParams.push(`%${search}%`);
+      }
+      
       const countResult = await pool.query(`
         SELECT COUNT(DISTINCT p.id) as total
         FROM people p
         LEFT JOIN employee_work_history ewh ON p.id = ewh.person_id
+        LEFT JOIN offices o ON ewh.office_id = o.id
         WHERE p.legacy_id IS NOT NULL
-          ${officeId ? `AND ewh.office_id = $1` : ''}
-          ${search ? `AND (p.full_name_ar ILIKE $${officeId ? 2 : 1} OR p.full_name_en ILIKE $${officeId ? 2 : 1} OR p.national_id ILIKE $${officeId ? 2 : 1} OR p.mobile ILIKE $${officeId ? 2 : 1})` : ''}
-      `, officeId 
-        ? (search ? [officeId, `%${search}%`] : [officeId])
-        : (search ? [`%${search}%`] : [])
-      );
+          ${countOfficeCondition}
+          ${countSearchCondition}
+      `, countParams);
       
       const staffData = result.rows.map(row => ({
         person: {
@@ -910,7 +938,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/admin/staff/export", ensureAdmin, async (req, res) => {
     try {
       const search = (req.query.search as string) || "";
-      const officeId = req.query.officeId ? parseInt(req.query.officeId as string) : null;
+      const officeSearch = (req.query.officeSearch as string) || "";
+      
+      // Build dynamic query with office name search
+      let paramIndex = 1;
+      const params: any[] = [];
+      let officeCondition = '';
+      let searchCondition = '';
+      
+      if (officeSearch) {
+        officeCondition = `AND (o.trade_name_ar ILIKE $${paramIndex} OR o.trade_name_en ILIKE $${paramIndex})`;
+        params.push(`%${officeSearch}%`);
+        paramIndex++;
+      }
+      
+      if (search) {
+        searchCondition = `AND (p.full_name_ar ILIKE $${paramIndex} OR p.full_name_en ILIKE $${paramIndex} OR p.national_id ILIKE $${paramIndex} OR p.mobile ILIKE $${paramIndex})`;
+        params.push(`%${search}%`);
+      }
       
       // Get all employees matching filters without pagination
       const result = await pool.query(`
@@ -922,13 +967,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         LEFT JOIN employee_work_history ewh ON p.id = ewh.person_id
         LEFT JOIN offices o ON ewh.office_id = o.id
         WHERE p.legacy_id IS NOT NULL
-          ${officeId ? `AND ewh.office_id = $1` : ''}
-          ${search ? `AND (p.full_name_ar ILIKE $${officeId ? 2 : 1} OR p.full_name_en ILIKE $${officeId ? 2 : 1} OR p.national_id ILIKE $${officeId ? 2 : 1} OR p.mobile ILIKE $${officeId ? 2 : 1})` : ''}
+          ${officeCondition}
+          ${searchCondition}
         ORDER BY p.id, ewh.date_in DESC NULLS LAST
-      `, officeId 
-        ? (search ? [officeId, `%${search}%`] : [officeId])
-        : (search ? [`%${search}%`] : [])
-      );
+      `, params);
       
       const staffData = result.rows.map(row => ({
         person: {
