@@ -522,7 +522,8 @@ export class DatabaseStorage implements IStorage {
     const allPeople = await db.select().from(people);
     const allWorkHistory = await db.select({
       personId: employeeWorkHistory.personId,
-      officeId: employeeWorkHistory.officeId
+      officeId: employeeWorkHistory.officeId,
+      jobTitle: employeeWorkHistory.jobTitle
     }).from(employeeWorkHistory);
     
     const allOffices = await this.getAllOffices();
@@ -544,11 +545,11 @@ export class DatabaseStorage implements IStorage {
       genderBreakdown[gender] = (genderBreakdown[gender] || 0) + 1;
     }
     
-    // Job title distribution - look up actual name from job titles table
+    // Job title distribution - from work history records (where actual job data is stored)
     const jobTitleBreakdown: Record<string, number> = {};
-    for (const person of allPeople) {
-      if (person.jobTitle) {
-        const jobTitleId = String(person.jobTitle);
+    for (const wh of allWorkHistory) {
+      if (wh.jobTitle) {
+        const jobTitleId = String(wh.jobTitle);
         const titleName = jobTitleMap.get(jobTitleId) || `Job #${jobTitleId}`;
         jobTitleBreakdown[titleName] = (jobTitleBreakdown[titleName] || 0) + 1;
       }
