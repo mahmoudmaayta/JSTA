@@ -1783,9 +1783,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const dedicatedManagers: any[] = [];
       const employees: any[] = [];
 
+      // Track person IDs already added (from roles_in_office)
+      const addedPersonIds = new Set<number>();
+
       for (const person of people) {
         const personRoles = roles.filter(r => r.personId === person.id);
         for (const role of personRoles) {
+          addedPersonIds.add(person.id);
           const personData = {
             id: person.id,
             fullNameAr: person.fullNameAr,
@@ -1817,6 +1821,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
               break;
           }
         }
+      }
+
+      // Also fetch employees from work history (legacy imported data)
+      const workHistoryEmployees = await storage.getEmployeesByOffice(officeId);
+      for (const { person, workHistory } of workHistoryEmployees) {
+        // Skip if already added via roles
+        if (addedPersonIds.has(person.id)) continue;
+        
+        // Get the most recent work history record
+        const latestWH = workHistory.sort((a, b) => {
+          const dateA = a.dateIn ? new Date(a.dateIn).getTime() : 0;
+          const dateB = b.dateIn ? new Date(b.dateIn).getTime() : 0;
+          return dateB - dateA;
+        })[0];
+
+        const personData = {
+          id: person.id,
+          fullNameAr: person.fullNameAr,
+          fullNameEn: person.fullNameEn,
+          nationalId: person.nationalId,
+          socialSecurityNo: person.socialSecurityNo,
+          nationality: person.nationality,
+          gender: person.gender,
+          motherName: person.motherName,
+          mobile: person.mobile,
+          birthDate: person.birthDate,
+          currentPosition: person.job || latestWH?.description || person.currentPosition,
+          startDate: latestWH?.dateIn || person.startDate,
+          branch: person.branch,
+          isLegacy: true, // Flag to indicate this is imported legacy data
+        };
+
+        // Add to employees array (legacy staff don't have specific roles)
+        employees.push(personData);
       }
 
       res.json({

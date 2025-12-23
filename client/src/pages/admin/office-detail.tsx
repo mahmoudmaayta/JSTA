@@ -59,6 +59,7 @@ interface StaffPerson {
   currentPosition: string | null;
   startDate: string | null;
   branch: string | null;
+  isLegacy?: boolean;
 }
 
 interface StaffFormResponse {
@@ -792,9 +793,14 @@ export default function AdminOfficeDetail() {
                                 {staffFormData && staffFormData.employees.length > 0 ? (
                                   staffFormData.employees.map((person, index) => (
                                     <div key={person.id || index} className="p-4 border rounded-lg bg-muted/20">
-                                      <div className="flex items-center gap-2 mb-3 pb-2 border-b">
+                                      <div className="flex items-center gap-2 mb-3 pb-2 border-b flex-wrap">
                                         <User className="h-4 w-4 text-muted-foreground" />
                                         <span className="font-medium">{person.fullNameAr || notFilled}</span>
+                                        {person.isLegacy && (
+                                          <Badge variant="outline" className="text-xs">
+                                            {language === "ar" ? "بيانات مستوردة" : "Imported"}
+                                          </Badge>
+                                        )}
                                       </div>
                                       <dl className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
                                         <div><dt className="text-muted-foreground">{t("adminOffice.staffFullNameAr")}</dt><dd className="font-medium">{person.fullNameAr || notFilled}</dd></div>
