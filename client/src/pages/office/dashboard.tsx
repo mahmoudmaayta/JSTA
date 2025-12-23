@@ -62,14 +62,16 @@ export default function OfficeDashboard() {
 
   const canRequestRenewal = formStatus?.staffFormCompleted && formStatus?.commitmentFormCompleted;
 
-  const getOfficeStatusLabel = (status?: string): string => {
-    if (!status) return t("common.unknown");
-    const statusMap: Record<string, string> = {
-      "PENDING_APPROVAL": t("office.statusPendingApproval"),
-      "ACTIVE": t("office.statusActive"),
-      "REJECTED": t("office.statusRejected"),
-    };
-    return statusMap[status] || status.toLowerCase().replace("_", " ");
+  // Determine if office is "Active" based on 2025 renewal
+  const isOfficeActive = office?.lastRenewalYear === 2025;
+  
+  const getOfficeStatusLabel = (): string => {
+    if (!office) return t("common.unknown");
+    if (office.status === "PENDING_APPROVAL") return t("office.statusPendingApproval");
+    if (office.status === "REJECTED") return t("office.statusRejected");
+    // Active status only if last renewal was 2025
+    if (isOfficeActive) return t("office.statusActive");
+    return t("office.statusInactive") || t("common.inactive") || "Inactive";
   };
 
   const createRenewalMutation = useMutation({
@@ -144,7 +146,7 @@ export default function OfficeDashboard() {
                     </p>
                   </div>
                   {office && (
-                    <StatusBadge status={office.status as any} />
+                    <StatusBadge status={isOfficeActive ? "ACTIVE" : (office.status === "PENDING_APPROVAL" ? "PENDING_APPROVAL" : office.status === "REJECTED" ? "REJECTED" : "INACTIVE")} />
                   )}
                 </div>
 
@@ -158,7 +160,7 @@ export default function OfficeDashboard() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold capitalize" data-testid="text-status">
-                        {getOfficeStatusLabel(office?.status)}
+                        {getOfficeStatusLabel()}
                       </div>
                     </CardContent>
                   </Card>

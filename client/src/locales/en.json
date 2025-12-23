@@ -163,6 +163,7 @@
     "uploadedDocuments": "Your uploaded documents",
     "statusPendingApproval": "Pending Approval",
     "statusActive": "Active",
+    "statusInactive": "Inactive",
     "statusRejected": "Rejected"
   },
   "renewal": {

@@ -11,7 +11,7 @@ import {
   Loader2
 } from "lucide-react";
 
-type OfficeStatus = "PENDING_APPROVAL" | "ACTIVE" | "REJECTED";
+type OfficeStatus = "PENDING_APPROVAL" | "ACTIVE" | "INACTIVE" | "REJECTED";
 type RenewalStatus = 
   | "SUBMITTED" 
   | "UNDER_REVIEW" 
@@ -43,6 +43,12 @@ const statusConfig: Record<string, {
     variant: "default",
     className: "bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800",
     icon: CheckCircle2,
+  },
+  INACTIVE: {
+    label: { en: "Inactive", ar: "غير فعال" },
+    variant: "secondary",
+    className: "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900/30 dark:text-gray-400 dark:border-gray-800",
+    icon: XCircle,
   },
   REJECTED: {
     label: { en: "Rejected", ar: "مرفوض" },

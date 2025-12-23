@@ -163,6 +163,7 @@
     "uploadedDocuments": "المستندات المرفوعة",
     "statusPendingApproval": "قيد الموافقة",
     "statusActive": "نشط",
+    "statusInactive": "غير فعال",
     "statusRejected": "مرفوض"
   },
   "renewal": {
