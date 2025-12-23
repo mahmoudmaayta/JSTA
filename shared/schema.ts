@@ -174,15 +174,32 @@ export const offices = pgTable("offices", {
 
 export const branches = pgTable("branches", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  legacyId: integer("legacy_id"),
   officeId: integer("office_id").notNull(),
+  fileNum: text("file_num"),
+  openDate: text("open_date"),
+  closeDate: text("close_date"),
+  iataNumber: text("iata_number"),
+  ministryFileNum: text("ministry_file_num"),
+  managerFirstName: text("manager_first_name"),
+  managerSecondName: text("manager_second_name"),
+  managerMiddleName: text("manager_middle_name"),
+  managerLastName: text("manager_last_name"),
+  managerFile: text("manager_file"),
   city: text("city"),
-  area: text("area"),
+  cityId: integer("city_id"),
+  region: text("region"),
+  regionId: integer("region_id"),
   street: text("street"),
   buildingNumber: text("building_number"),
-  managerName: text("manager_name"),
-  managerMobile: text("manager_mobile"),
+  poBox: text("po_box"),
+  zipCode: text("zip_code"),
   phone: text("phone"),
-  fax: text("fax")
+  fax: text("fax"),
+  mobile: text("mobile"),
+  email: text("email"),
+  notes: text("notes"),
+  isLegacy: boolean("is_legacy").default(false)
 });
 
 export const documents = pgTable("documents", {
