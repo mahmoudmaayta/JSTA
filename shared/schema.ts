@@ -67,6 +67,34 @@ export const DiscountType = {
   FREE: 'FREE'
 } as const;
 
+export const RenewalState = {
+  NOT_STARTED: 'NOT_STARTED',
+  INVITED: 'INVITED',
+  ACCESS_GRANTED: 'ACCESS_GRANTED',
+  CREDENTIALS_UPDATED: 'CREDENTIALS_UPDATED',
+  INFO_APPROVED: 'INFO_APPROVED',
+  PAYMENT_PENDING: 'PAYMENT_PENDING',
+  COMPLETED: 'COMPLETED'
+} as const;
+
+export const RenewalInviteStatus = {
+  PENDING: 'PENDING',
+  SENT: 'SENT',
+  CONSUMED: 'CONSUMED',
+  EXPIRED: 'EXPIRED'
+} as const;
+
+export const RenewalStepType = {
+  INVITE_SENT: 'INVITE_SENT',
+  TOKEN_REDEEMED: 'TOKEN_REDEEMED',
+  CREDENTIALS_RESET: 'CREDENTIALS_RESET',
+  INFO_REVIEWED: 'INFO_REVIEWED',
+  DECLARATIONS_ACCEPTED: 'DECLARATIONS_ACCEPTED',
+  PAYMENT_INITIATED: 'PAYMENT_INITIATED',
+  PAYMENT_CONFIRMED: 'PAYMENT_CONFIRMED',
+  RENEWAL_COMPLETED: 'RENEWAL_COMPLETED'
+} as const;
+
 export type OfficeStatusType = typeof OfficeStatus[keyof typeof OfficeStatus];
 export type RenewalStatusType = typeof RenewalStatus[keyof typeof RenewalStatus];
 export type DocumentCategoryType = typeof DocumentCategory[keyof typeof DocumentCategory];
@@ -75,6 +103,9 @@ export type ConsentTypeType = typeof ConsentType[keyof typeof ConsentType];
 export type UserRoleType = typeof UserRole[keyof typeof UserRole];
 export type PaymentStatusType = typeof PaymentStatus[keyof typeof PaymentStatus];
 export type DiscountTypeType = typeof DiscountType[keyof typeof DiscountType];
+export type RenewalStateType = typeof RenewalState[keyof typeof RenewalState];
+export type RenewalInviteStatusType = typeof RenewalInviteStatus[keyof typeof RenewalInviteStatus];
+export type RenewalStepTypeType = typeof RenewalStepType[keyof typeof RenewalStepType];
 
 export const users = pgTable("users", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
@@ -218,6 +249,8 @@ export const licenseRenewals = pgTable("license_renewals", {
   officeId: integer("office_id").notNull(),
   year: integer("year").notNull(),
   status: text("status").notNull().$type<RenewalStatusType>().default('SUBMITTED'),
+  renewalState: text("renewal_state").$type<RenewalStateType>().default('NOT_STARTED'),
+  canTransact2026: boolean("can_transact_2026").default(false),
   ministryDocumentPath: text("ministry_document_path"),
   officialLicenseUrl: text("official_license_url"),
   expiryDate: text("expiry_date"),
@@ -226,6 +259,10 @@ export const licenseRenewals = pgTable("license_renewals", {
   officeFormCompleted: boolean("office_form_completed").default(false),
   staffFormCompleted: boolean("staff_form_completed").default(false),
   commitmentFormCompleted: boolean("commitment_form_completed").default(false),
+  credentialsUpdated: boolean("credentials_updated").default(false),
+  infoApproved: boolean("info_approved").default(false),
+  declarationsAccepted: boolean("declarations_accepted").default(false),
+  paymentCompleted: boolean("payment_completed").default(false),
   submittedAt: timestamp("submitted_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull()
@@ -465,6 +502,54 @@ export const payments = pgTable("payments", {
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
 
+export const renewalInvites = pgTable("renewal_invites", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  officeId: integer("office_id").notNull(),
+  renewalId: integer("renewal_id"),
+  tokenHash: text("token_hash").notNull(),
+  status: text("status").notNull().$type<RenewalInviteStatusType>().default('PENDING'),
+  expiresAt: timestamp("expires_at").notNull(),
+  sentAt: timestamp("sent_at"),
+  consumedAt: timestamp("consumed_at"),
+  sentToEmail: text("sent_to_email"),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+export const renewalSteps = pgTable("renewal_steps", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  renewalId: integer("renewal_id").notNull(),
+  officeId: integer("office_id").notNull(),
+  stepType: text("step_type").notNull().$type<RenewalStepTypeType>(),
+  payload: jsonb("payload"),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  completedAt: timestamp("completed_at").defaultNow().notNull()
+});
+
+export const insertRenewalInviteSchema = z.object({
+  officeId: z.number(),
+  renewalId: z.number().nullable().optional(),
+  tokenHash: z.string(),
+  status: z.enum(['PENDING', 'SENT', 'CONSUMED', 'EXPIRED']).optional(),
+  expiresAt: z.date(),
+  sentAt: z.date().nullable().optional(),
+  consumedAt: z.date().nullable().optional(),
+  sentToEmail: z.string().nullable().optional(),
+  ipAddress: z.string().nullable().optional(),
+  userAgent: z.string().nullable().optional()
+});
+
+export const insertRenewalStepSchema = z.object({
+  renewalId: z.number(),
+  officeId: z.number(),
+  stepType: z.enum(['INVITE_SENT', 'TOKEN_REDEEMED', 'CREDENTIALS_RESET', 'INFO_REVIEWED', 'DECLARATIONS_ACCEPTED', 'PAYMENT_INITIATED', 'PAYMENT_CONFIRMED', 'RENEWAL_COMPLETED'] as const),
+  payload: z.any().nullable().optional(),
+  ipAddress: z.string().nullable().optional(),
+  userAgent: z.string().nullable().optional()
+});
+
 export const insertUserSchema = z.object({
   email: z.string().email(),
   passwordHash: z.string(),
@@ -558,12 +643,18 @@ export const insertDocumentSchema = z.object({
 export const insertLicenseRenewalSchema = z.object({
   officeId: z.number(),
   year: z.number(),
+  renewalState: z.enum(['NOT_STARTED', 'INVITED', 'ACCESS_GRANTED', 'CREDENTIALS_UPDATED', 'INFO_APPROVED', 'PAYMENT_PENDING', 'COMPLETED']).optional(),
+  canTransact2026: z.boolean().optional(),
   officialLicenseUrl: z.string().nullable().optional(),
   expiryDate: z.string().nullable().optional(),
   reviewerNotes: z.string().nullable().optional(),
   officeFormCompleted: z.boolean().nullable().optional(),
   staffFormCompleted: z.boolean().nullable().optional(),
   commitmentFormCompleted: z.boolean().nullable().optional(),
+  credentialsUpdated: z.boolean().nullable().optional(),
+  infoApproved: z.boolean().nullable().optional(),
+  declarationsAccepted: z.boolean().nullable().optional(),
+  paymentCompleted: z.boolean().nullable().optional(),
   submittedAt: z.date().nullable().optional()
 });
 
@@ -796,6 +887,10 @@ export type InsertPromoCode = z.infer<typeof insertPromoCodeSchema>;
 export type PromoCode = typeof promoCodes.$inferSelect;
 export type InsertPayment = z.infer<typeof insertPaymentSchema>;
 export type Payment = typeof payments.$inferSelect;
+export type InsertRenewalInvite = z.infer<typeof insertRenewalInviteSchema>;
+export type RenewalInvite = typeof renewalInvites.$inferSelect;
+export type InsertRenewalStep = z.infer<typeof insertRenewalStepSchema>;
+export type RenewalStep = typeof renewalSteps.$inferSelect;
 
 export const officeForm2026Schema = z.object({
   legalNameAr: z.string().min(1, "الاسم القانوني مطلوب"),
