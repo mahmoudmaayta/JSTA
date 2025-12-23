@@ -709,6 +709,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ office, branches, documents });
   });
 
+  app.get("/api/admin/offices/:id/employees", ensureAdmin, async (req, res) => {
+    const officeId = parseInt(req.params.id);
+    if (isNaN(officeId)) {
+      return res.status(400).json({ message: "Invalid office ID" });
+    }
+    
+    const office = await storage.getOffice(officeId);
+    if (!office) {
+      return res.status(404).json({ message: "Office not found" });
+    }
+
+    const employees = await storage.getEmployeesByOffice(officeId);
+    res.json({ office, employees });
+  });
+
   app.post("/api/admin/offices/:id/approve", ensureAdmin, async (req, res) => {
     const user = (req as any).user;
     const officeId = parseInt(req.params.id);

@@ -1,7 +1,8 @@
 import { 
   users, offices, branches, documents, licenseRenewals, auditLogs,
-  people, rolesInOffice, consents, renewalAttachments,
+  people, rolesInOffice, consents, renewalAttachments, employeeWorkHistory,
   complaints, commitmentForms, officeInfoForms, payments, promoCodes,
+  type EmployeeWorkHistory,
   type User, type InsertUser,
   type Office, type InsertOffice,
   type Branch, type InsertBranch,
@@ -70,6 +71,9 @@ export interface IStorage {
   upsertPersonByNationalId(officeId: number, nationalId: string, data: InsertPerson): Promise<Person>;
   deletePerson(id: number): Promise<void>;
   deletePeopleByRenewal(renewalId: number): Promise<void>;
+  
+  getEmployeesByOffice(officeId: number): Promise<{ person: Person; workHistory: EmployeeWorkHistory[] }[]>;
+  getWorkHistoryByOffice(officeId: number): Promise<EmployeeWorkHistory[]>;
   
   getRolesInOffice(officeId: number): Promise<RoleInOffice[]>;
   getRolesByRenewal(renewalId: number): Promise<RoleInOffice[]>;
@@ -349,6 +353,26 @@ export class DatabaseStorage implements IStorage {
 
   async deletePeopleByRenewal(renewalId: number): Promise<void> {
     await db.delete(people).where(eq(people.renewalId, renewalId));
+  }
+
+  async getWorkHistoryByOffice(officeId: number): Promise<EmployeeWorkHistory[]> {
+    return await db.select().from(employeeWorkHistory).where(eq(employeeWorkHistory.officeId, officeId));
+  }
+
+  async getEmployeesByOffice(officeId: number): Promise<{ person: Person; workHistory: EmployeeWorkHistory[] }[]> {
+    const workHistory = await this.getWorkHistoryByOffice(officeId);
+    const personIds = [...new Set(workHistory.map(wh => wh.personId))];
+    
+    if (personIds.length === 0) {
+      return [];
+    }
+    
+    const employees = await db.select().from(people).where(inArray(people.id, personIds));
+    
+    return employees.map(person => ({
+      person,
+      workHistory: workHistory.filter(wh => wh.personId === person.id)
+    }));
   }
 
   async getRolesInOffice(officeId: number): Promise<RoleInOffice[]> {
