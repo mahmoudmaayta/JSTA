@@ -239,3 +239,35 @@ Preferred communication style: Simple, everyday language.
 - مدير سياحة واردة (Inbound Tourism Manager), مدير فرع (Branch Manager)
 
 **Total Job Titles Imported**: 53
+
+### Office Branches Migration (December 2025)
+
+**Data Source**: officesbranch_1766524752990.sql containing 302 branch records
+
+**Migration Script**: scripts/migration/import-branches.cjs
+- Parses SQL INSERT statements from legacy MySQL dump
+- Links branches to offices via legacy_id mapping
+- Handles manager names, contact details, and location data
+- City code mapping for Arabic city names
+
+**Branches Table Fields**:
+- legacy_id: Original branch ID from legacy system
+- office_id: Link to parent office (mapped from offID via legacy_id)
+- file_num: Office file number reference
+- open_date, close_date: Branch operation dates
+- iata_number: IATA code for the branch
+- ministry_file_num: Ministry file reference
+- Manager details: first_name, second_name, middle_name, last_name
+- Location: city, city_id, region, region_id, street, building_number
+- Contact: phone, fax, mobile, email
+- po_box, zip_code, notes, is_legacy
+
+**Branch Statistics**:
+- Total Branches Imported: 296
+- Offices with Branches: 166
+- Top offices by branch count: احمد ابو محفوظ وشركاه (15), منذر كمال وشريكه (8), فيصل الطراد وشريكه (7)
+
+**Office Flags Updated** (automated in migration script):
+- has_branch: Boolean flag set to true for offices with branches
+- branch_count: Count of branches per office
+- Script automatically updates these flags after importing branch records
