@@ -547,7 +547,8 @@ export class DatabaseStorage implements IStorage {
     const jobTitleBreakdown: Record<string, number> = {};
     for (const person of allPeople) {
       if (person.jobTitle) {
-        const titleName = jobTitleMap.get(person.jobTitle) || person.jobTitle;
+        const jobTitleId = String(person.jobTitle);
+        const titleName = jobTitleMap.get(jobTitleId) || `Job #${jobTitleId}`;
         jobTitleBreakdown[titleName] = (jobTitleBreakdown[titleName] || 0) + 1;
       }
     }
