@@ -55,8 +55,14 @@ export default function AdminOffices() {
     { value: "المفرق", label: language === 'ar' ? "المفرق" : "Mafraq" },
   ];
 
+  // Helper function to determine if office is active (renewed in 2025)
+  const isOfficeActive = (office: Office) => office.lastRenewalYear === 2025;
+  
   const filteredOffices = offices?.filter((office) => {
-    const matchesStatus = statusFilter === "all" || office.status === statusFilter;
+    // Status filter based on 2025 renewal
+    const matchesStatus = statusFilter === "all" || 
+      (statusFilter === "ACTIVE" && isOfficeActive(office)) ||
+      (statusFilter === "INACTIVE" && !isOfficeActive(office));
     const matchesCategory = categoryFilter === "all" || office.licenseCategory === categoryFilter;
     const matchesCity = cityFilter === "all" || office.mainCity === cityFilter;
     const matchesIata = iataFilter === "all" || 
@@ -80,7 +86,9 @@ export default function AdminOffices() {
   const renewalYears = offices ? Array.from(new Set(offices.map(o => o.lastRenewalYear).filter(Boolean))).sort((a, b) => (b || 0) - (a || 0)) : [];
 
   const totalCount = offices?.length || 0;
-  const activeCount = offices?.filter(o => o.status === 'ACTIVE').length || 0;
+  // Active offices = those with 2025 renewal
+  const activeCount = offices?.filter(o => isOfficeActive(o)).length || 0;
+  const inactiveCount = totalCount - activeCount;
   const iataCount = offices?.filter(o => o.isIata).length || 0;
 
   return (
@@ -154,9 +162,8 @@ export default function AdminOffices() {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="all">{t("admin.allStatuses")}</SelectItem>
-                            <SelectItem value="PENDING_APPROVAL">{t("status.pendingApproval")}</SelectItem>
-                            <SelectItem value="ACTIVE">{t("status.active")}</SelectItem>
-                            <SelectItem value="REJECTED">{t("status.rejected")}</SelectItem>
+                            <SelectItem value="ACTIVE">{language === 'ar' ? `فعال (${activeCount})` : `Active (${activeCount})`}</SelectItem>
+                            <SelectItem value="INACTIVE">{language === 'ar' ? `غير فعال (${inactiveCount})` : `Inactive (${inactiveCount})`}</SelectItem>
                           </SelectContent>
                         </Select>
                         <Select value={categoryFilter} onValueChange={setCategoryFilter}>
@@ -270,7 +277,7 @@ export default function AdminOffices() {
                                   {office.lastRenewalYear || "-"}
                                 </TableCell>
                                 <TableCell>
-                                  <StatusBadge status={office.status as any} size="sm" />
+                                  <StatusBadge status={isOfficeActive(office) ? "ACTIVE" : "INACTIVE"} size="sm" />
                                 </TableCell>
                                 <TableCell className="text-right">
                                   <Link href={`/admin/offices/${office.id}`}>
