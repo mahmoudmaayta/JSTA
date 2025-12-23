@@ -14,13 +14,13 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useLanguage } from "@/lib/i18n";
 import type { Office } from "@shared/schema";
-import { Search, Eye, FolderOpen, Plane, Building2 } from "lucide-react";
+import { Search, Eye, FolderOpen, Building2, Plane } from "lucide-react";
 
 export default function AdminOffices() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [cityFilter, setCityFilter] = useState<string>("all");
-  const [iataFilter, setIataFilter] = useState<string>("all");
+  const [membershipFilter, setMembershipFilter] = useState<string>("all");
   const [renewalYearFilter, setRenewalYearFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [fileNoQuery, setFileNoQuery] = useState("");
@@ -65,9 +65,13 @@ export default function AdminOffices() {
       (statusFilter === "INACTIVE" && !isOfficeActive(office));
     const matchesCategory = categoryFilter === "all" || office.licenseCategory === categoryFilter;
     const matchesCity = cityFilter === "all" || office.mainCity === cityFilter;
-    const matchesIata = iataFilter === "all" || 
-      (iataFilter === "yes" && office.isIata) || 
-      (iataFilter === "no" && !office.isIata);
+    const matchesMembership = membershipFilter === "all" || 
+      (membershipFilter === "iata" && office.isIata) || 
+      (membershipFilter === "uftaa" && office.isUftaa) ||
+      (membershipFilter === "asta" && office.isAsta) ||
+      (membershipFilter === "wto" && office.isWto) ||
+      (membershipFilter === "any" && (office.isIata || office.isUftaa || office.isAsta || office.isWto)) ||
+      (membershipFilter === "none" && !office.isIata && !office.isUftaa && !office.isAsta && !office.isWto);
     const matchesRenewalYear = renewalYearFilter === "all" || 
       (office.lastRenewalYear?.toString() === renewalYearFilter);
     const matchesFileNo = !fileNoQuery || 
@@ -80,7 +84,7 @@ export default function AdminOffices() {
       office.registrationNumber?.toLowerCase().includes(searchLower) ||
       office.mainEmail?.toLowerCase().includes(searchLower) ||
       office.iataNumber?.toLowerCase().includes(searchLower);
-    return matchesStatus && matchesCategory && matchesCity && matchesIata && matchesRenewalYear && matchesFileNo && matchesSearch;
+    return matchesStatus && matchesCategory && matchesCity && matchesMembership && matchesRenewalYear && matchesFileNo && matchesSearch;
   }) || [];
 
   const renewalYears = offices ? Array.from(new Set(offices.map(o => o.lastRenewalYear).filter(Boolean))).sort((a, b) => (b || 0) - (a || 0)) : [];
@@ -205,14 +209,18 @@ export default function AdminOffices() {
                             ))}
                           </SelectContent>
                         </Select>
-                        <Select value={iataFilter} onValueChange={setIataFilter}>
-                          <SelectTrigger data-testid="select-iata">
-                            <SelectValue placeholder="IATA" />
+                        <Select value={membershipFilter} onValueChange={setMembershipFilter}>
+                          <SelectTrigger data-testid="select-membership">
+                            <SelectValue placeholder={language === 'ar' ? 'العضويات' : 'Memberships'} />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="all">{language === 'ar' ? 'الكل' : 'All'}</SelectItem>
-                            <SelectItem value="yes">{language === 'ar' ? 'عضو IATA' : 'IATA Member'}</SelectItem>
-                            <SelectItem value="no">{language === 'ar' ? 'غير عضو' : 'Non-IATA'}</SelectItem>
+                            <SelectItem value="any">{language === 'ar' ? 'أي عضوية' : 'Any Membership'}</SelectItem>
+                            <SelectItem value="iata">IATA</SelectItem>
+                            <SelectItem value="uftaa">UFTAA</SelectItem>
+                            <SelectItem value="asta">ASTA</SelectItem>
+                            <SelectItem value="wto">WTO</SelectItem>
+                            <SelectItem value="none">{language === 'ar' ? 'بدون عضوية' : 'No Membership'}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -233,7 +241,7 @@ export default function AdminOffices() {
                               <TableHead>{language === 'ar' ? 'الاسم التجاري' : 'Trade Name'}</TableHead>
                               <TableHead className="w-[60px] text-center">{language === 'ar' ? 'الفئة' : 'Cat.'}</TableHead>
                               <TableHead className="hidden md:table-cell">{language === 'ar' ? 'المدينة' : 'City'}</TableHead>
-                              <TableHead className="hidden lg:table-cell text-center">IATA</TableHead>
+                              <TableHead className="hidden lg:table-cell">{language === 'ar' ? 'العضويات الدولية' : 'Memberships'}</TableHead>
                               <TableHead className="hidden xl:table-cell">{language === 'ar' ? 'آخر تجديد' : 'Last Renewal'}</TableHead>
                               <TableHead>{t("adminOffices.status")}</TableHead>
                               <TableHead className="text-right">{t("adminOffices.actions")}</TableHead>
@@ -263,15 +271,24 @@ export default function AdminOffices() {
                                 <TableCell className="hidden md:table-cell">
                                   {office.mainCity || "-"}
                                 </TableCell>
-                                <TableCell className="hidden lg:table-cell text-center">
-                                  {office.isIata ? (
-                                    <Badge variant="secondary" className="text-xs gap-1">
-                                      <Plane className="h-3 w-3" />
-                                      {office.iataNumber || 'Yes'}
-                                    </Badge>
-                                  ) : (
-                                    <span className="text-muted-foreground">-</span>
-                                  )}
+                                <TableCell className="hidden lg:table-cell">
+                                  <div className="flex flex-wrap gap-1">
+                                    {office.isIata && (
+                                      <Badge variant="outline" className="text-xs">IATA</Badge>
+                                    )}
+                                    {office.isUftaa && (
+                                      <Badge variant="outline" className="text-xs">UFTAA</Badge>
+                                    )}
+                                    {office.isAsta && (
+                                      <Badge variant="outline" className="text-xs">ASTA</Badge>
+                                    )}
+                                    {office.isWto && (
+                                      <Badge variant="outline" className="text-xs">WTO</Badge>
+                                    )}
+                                    {!office.isIata && !office.isUftaa && !office.isAsta && !office.isWto && (
+                                      <span className="text-muted-foreground">-</span>
+                                    )}
+                                  </div>
                                 </TableCell>
                                 <TableCell className="hidden xl:table-cell">
                                   {office.lastRenewalYear || "-"}
