@@ -278,6 +278,13 @@ export const employeeWorkHistory = pgTable("employee_work_history", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+export const jobTitles = pgTable("job_titles", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  legacyId: integer("legacy_id"),
+  name: text("name").notNull(),
+  nameAr: text("name_ar").notNull()
+});
+
 export const rolesInOffice = pgTable("roles_in_office", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   officeId: integer("office_id").notNull(),
@@ -602,6 +609,12 @@ export const insertEmployeeWorkHistorySchema = z.object({
   disclaimersFile: z.string().nullable().optional()
 });
 
+export const insertJobTitleSchema = z.object({
+  legacyId: z.number().nullable().optional(),
+  name: z.string(),
+  nameAr: z.string()
+});
+
 export const insertRoleInOfficeSchema = z.object({
   officeId: z.number(),
   personId: z.number(),
@@ -747,6 +760,8 @@ export type InsertPerson = z.infer<typeof insertPersonSchema>;
 export type Person = typeof people.$inferSelect;
 export type InsertEmployeeWorkHistory = z.infer<typeof insertEmployeeWorkHistorySchema>;
 export type EmployeeWorkHistory = typeof employeeWorkHistory.$inferSelect;
+export type InsertJobTitle = z.infer<typeof insertJobTitleSchema>;
+export type JobTitle = typeof jobTitles.$inferSelect;
 export type InsertRoleInOffice = z.infer<typeof insertRoleInOfficeSchema>;
 export type RoleInOffice = typeof rolesInOffice.$inferSelect;
 export type InsertConsent = z.infer<typeof insertConsentSchema>;
