@@ -216,22 +216,66 @@ export const licenseRenewals = pgTable("license_renewals", {
 
 export const people = pgTable("people", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  officeId: integer("office_id").notNull(),
+  legacyId: integer("legacy_id"),
+  officeId: integer("office_id"),
   renewalId: integer("renewal_id"),
-  fullNameAr: text("full_name_ar").notNull(),
+  firstName: text("first_name"),
+  secondName: text("second_name"),
+  middleName: text("middle_name"),
+  lastName: text("last_name"),
+  firstNameEn: text("first_name_en"),
+  secondNameEn: text("second_name_en"),
+  middleNameEn: text("middle_name_en"),
+  lastNameEn: text("last_name_en"),
+  fullNameAr: text("full_name_ar"),
   fullNameEn: text("full_name_en"),
+  jstaIdNum: text("jsta_id_num"),
   nationalId: text("national_id"),
   socialSecurityNo: text("social_security_no"),
   nationality: text("nationality"),
   gender: text("gender"),
   motherName: text("mother_name"),
   mobile: text("mobile"),
+  email: text("email"),
   birthDate: text("birth_date"),
+  qualification: integer("qualification"),
+  qualificationFile: text("qualification_file"),
+  jobTitle: integer("job_title"),
+  job: text("job"),
+  courses: text("courses"),
   currentPosition: text("current_position"),
   startDate: text("start_date"),
   branch: text("branch"),
+  passportNumber: text("passport_number"),
+  passportFile: text("passport_file"),
+  locationFile: text("location_file"),
+  picture: text("picture"),
+  cv: text("cv"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+export const employeeWorkHistory = pgTable("employee_work_history", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  legacyId: integer("legacy_id"),
+  personId: integer("person_id").notNull(),
+  officeId: integer("office_id").notNull(),
+  branchId: integer("branch_id"),
+  dateIn: text("date_in"),
+  dateOut: text("date_out"),
+  jobTitle: integer("job_title"),
+  description: text("description"),
+  letterAppointment: text("letter_appointment"),
+  contractAppointment: text("contract_appointment"),
+  intelligenceModel: text("intelligence_model"),
+  noCriminalRecord: text("no_criminal_record"),
+  permit: text("permit"),
+  photoId: text("photo_id"),
+  bookEnd: text("book_end"),
+  healthInsurance: text("health_insurance"),
+  socialSecurity: text("social_security"),
+  disclaimersFile: text("disclaimers_file"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
 export const rolesInOffice = pgTable("roles_in_office", {
@@ -500,20 +544,62 @@ export const insertLicenseRenewalSchema = z.object({
 });
 
 export const insertPersonSchema = z.object({
-  officeId: z.number(),
+  legacyId: z.number().nullable().optional(),
+  officeId: z.number().nullable().optional(),
   renewalId: z.number().nullable().optional(),
-  fullNameAr: z.string(),
+  firstName: z.string().nullable().optional(),
+  secondName: z.string().nullable().optional(),
+  middleName: z.string().nullable().optional(),
+  lastName: z.string().nullable().optional(),
+  firstNameEn: z.string().nullable().optional(),
+  secondNameEn: z.string().nullable().optional(),
+  middleNameEn: z.string().nullable().optional(),
+  lastNameEn: z.string().nullable().optional(),
+  fullNameAr: z.string().nullable().optional(),
   fullNameEn: z.string().nullable().optional(),
+  jstaIdNum: z.string().nullable().optional(),
   nationalId: z.string().nullable().optional(),
   socialSecurityNo: z.string().nullable().optional(),
   nationality: z.string().nullable().optional(),
   gender: z.string().nullable().optional(),
   motherName: z.string().nullable().optional(),
   mobile: z.string().nullable().optional(),
+  email: z.string().nullable().optional(),
   birthDate: z.string().nullable().optional(),
+  qualification: z.number().nullable().optional(),
+  qualificationFile: z.string().nullable().optional(),
+  jobTitle: z.number().nullable().optional(),
+  job: z.string().nullable().optional(),
+  courses: z.string().nullable().optional(),
   currentPosition: z.string().nullable().optional(),
   startDate: z.string().nullable().optional(),
-  branch: z.string().nullable().optional()
+  branch: z.string().nullable().optional(),
+  passportNumber: z.string().nullable().optional(),
+  passportFile: z.string().nullable().optional(),
+  locationFile: z.string().nullable().optional(),
+  picture: z.string().nullable().optional(),
+  cv: z.string().nullable().optional()
+});
+
+export const insertEmployeeWorkHistorySchema = z.object({
+  legacyId: z.number().nullable().optional(),
+  personId: z.number(),
+  officeId: z.number(),
+  branchId: z.number().nullable().optional(),
+  dateIn: z.string().nullable().optional(),
+  dateOut: z.string().nullable().optional(),
+  jobTitle: z.number().nullable().optional(),
+  description: z.string().nullable().optional(),
+  letterAppointment: z.string().nullable().optional(),
+  contractAppointment: z.string().nullable().optional(),
+  intelligenceModel: z.string().nullable().optional(),
+  noCriminalRecord: z.string().nullable().optional(),
+  permit: z.string().nullable().optional(),
+  photoId: z.string().nullable().optional(),
+  bookEnd: z.string().nullable().optional(),
+  healthInsurance: z.string().nullable().optional(),
+  socialSecurity: z.string().nullable().optional(),
+  disclaimersFile: z.string().nullable().optional()
 });
 
 export const insertRoleInOfficeSchema = z.object({
@@ -659,6 +745,8 @@ export type InsertLicenseRenewal = z.infer<typeof insertLicenseRenewalSchema>;
 export type LicenseRenewal = typeof licenseRenewals.$inferSelect;
 export type InsertPerson = z.infer<typeof insertPersonSchema>;
 export type Person = typeof people.$inferSelect;
+export type InsertEmployeeWorkHistory = z.infer<typeof insertEmployeeWorkHistorySchema>;
+export type EmployeeWorkHistory = typeof employeeWorkHistory.$inferSelect;
 export type InsertRoleInOffice = z.infer<typeof insertRoleInOfficeSchema>;
 export type RoleInOffice = typeof rolesInOffice.$inferSelect;
 export type InsertConsent = z.infer<typeof insertConsentSchema>;
