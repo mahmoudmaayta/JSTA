@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import { db } from '../storage';
 import { renewalInvites, renewalSteps, licenseRenewals, offices, users, RenewalInviteStatusType } from '@shared/schema';
 import { eq, and, sql } from 'drizzle-orm';
-import { sendEmail } from '../email';
+import { sendRenewalInvitationEmail, sendRenewalReminderEmail } from '../email';
 
 const TOKEN_BYTES = 32;
 const TOKEN_EXPIRY_DAYS = 30;
@@ -79,35 +79,30 @@ export async function createRenewalInvitation(officeId: number, renewalId: numbe
     let emailSent = false;
     if (sentToEmail) {
       try {
-        const officeName = office[0].tradeNameEn || office[0].tradeNameAr || 'Office';
+        const officeName = office[0].name || office[0].tradeNameAr || 'Office';
+        const officeNameEn = office[0].nameEn || office[0].tradeNameEn;
         const portalUrl = process.env.REPLIT_DOMAINS 
           ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}` 
           : 'http://localhost:5000';
         
-        sendEmail({
+        // Send bilingual invitation emails (Arabic first, then English)
+        sendRenewalInvitationEmail({
           to: sentToEmail,
-          subject: '2026 License Renewal Invitation - JSTA Portal',
-          body: `
-Dear ${officeName},
-
-You are invited to complete your 2026 license renewal through the JSTA Portal.
-
-Please click the link below to access your renewal:
-${portalUrl}/renew/${token}
-
-This link will expire in ${TOKEN_EXPIRY_DAYS} days.
-
-Steps to complete your renewal:
-1. Reset your password using the secure link
-2. Review and confirm your office information
-3. Accept the declarations
-4. Complete the payment
-
-If you have any questions, please contact JSTA support.
-
-Best regards,
-Jordan Society of Tourism and Travel Agents
-          `.trim()
+          officeName,
+          officeNameEn,
+          renewalUrl: `${portalUrl}/renew/${token}`,
+          expiresAt,
+          language: 'ar'
+        });
+        
+        // Also send English version
+        sendRenewalInvitationEmail({
+          to: sentToEmail,
+          officeName,
+          officeNameEn,
+          renewalUrl: `${portalUrl}/renew/${token}`,
+          expiresAt,
+          language: 'en'
         });
 
         await db.update(renewalInvites)

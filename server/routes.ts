@@ -3188,6 +3188,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userAgent: req.headers['user-agent']
       });
 
+      // Audit log: Credentials set
+      await storage.createAuditLog({
+        userId: user.id,
+        action: 'RENEWAL_CREDENTIALS_SET',
+        targetType: 'renewal',
+        targetId: renewalId,
+        details: { officeId: renewal.officeId, emailChanged: email !== user.email }
+      });
+
       res.json({ success: true, message: "Credentials updated successfully" });
     } catch (error) {
       console.error("Credential update error:", error);
@@ -3285,6 +3294,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userAgent: req.headers['user-agent']
       });
 
+      // Audit log: Info approved
+      const user = req.user as any;
+      if (user) {
+        await storage.createAuditLog({
+          userId: user.id,
+          action: 'RENEWAL_INFO_APPROVED',
+          targetType: 'renewal',
+          targetId: renewalId,
+          details: { officeId }
+        });
+      }
+
       res.json({ success: true, message: "Information approved" });
     } catch (error) {
       console.error("Info approval error:", error);
@@ -3325,6 +3346,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ipAddress: getClientIp(req),
         userAgent: req.headers['user-agent']
       });
+
+      // Audit log: Declarations accepted
+      const user = req.user as any;
+      if (user) {
+        await storage.createAuditLog({
+          userId: user.id,
+          action: 'RENEWAL_DECLARATIONS_ACCEPTED',
+          targetType: 'renewal',
+          targetId: renewalId,
+          details: { officeId }
+        });
+      }
 
       res.json({ success: true, message: "Declarations accepted" });
     } catch (error) {
@@ -3507,6 +3540,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const officeId = parseInt(req.params.officeId);
       const year = parseInt(req.body.year) || 2026;
+      const user = req.user as any;
 
       // Find or create renewal for this office
       let renewal = await storage.getRenewalByOfficeAndYear(officeId, year);
@@ -3520,6 +3554,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const result = await createRenewalInvitation(officeId, renewal.id);
+      
+      // Audit log: Invitation sent
+      if (result.success) {
+        await storage.createAuditLog({
+          userId: user.id,
+          action: 'RENEWAL_INVITE_SENT',
+          targetType: 'renewal',
+          targetId: renewal.id,
+          details: { officeId, year, inviteId: result.inviteId, emailSent: result.emailSent }
+        });
+      }
+      
       res.json(result);
     } catch (error) {
       console.error("Send invitation error:", error);
