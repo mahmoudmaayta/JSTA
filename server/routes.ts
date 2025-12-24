@@ -122,6 +122,32 @@ async function ensureOffice(req: Request, res: Response, next: NextFunction) {
   });
 }
 
+async function ensureCanTransact2026(req: Request, res: Response, next: NextFunction) {
+  await ensureOffice(req, res, async () => {
+    const user = (req as any).user;
+    if (!user?.officeId) {
+      return res.status(403).json({ message: "Office not associated with user" });
+    }
+
+    const currentYear = new Date().getFullYear();
+    if (currentYear < 2026) {
+      return next();
+    }
+
+    const renewal = await storage.getRenewalByOfficeAndYear(user.officeId, 2026);
+    
+    if (!renewal || !renewal.canTransact2026) {
+      return res.status(403).json({ 
+        message: "2026 license renewal required",
+        renewalRequired: true,
+        redirectUrl: "/office/renewal-2026"
+      });
+    }
+    
+    next();
+  });
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
   await storage.seedAdminUser();
 
@@ -3169,6 +3195,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Public: Get office info for renewal review (requires valid token in query)
+  app.get("/api/renew/:renewalId/office-info", async (req, res) => {
+    try {
+      const renewalId = parseInt(req.params.renewalId);
+      const token = req.query.token as string;
+      
+      // Require token for security
+      if (!token) {
+        return res.status(401).json({ error: "Token required" });
+      }
+
+      // Validate the token
+      const tokenValidation = await validateInvitationToken(token);
+      if (!tokenValidation.valid) {
+        return res.status(403).json({ error: "Invalid or expired token" });
+      }
+
+      // Verify token matches the renewal
+      if (tokenValidation.renewalId !== renewalId) {
+        return res.status(403).json({ error: "Token does not match renewal" });
+      }
+      
+      const renewal = await storage.getLicenseRenewal(renewalId);
+      if (!renewal) {
+        return res.status(404).json({ error: "Renewal not found" });
+      }
+
+      // Only allow access if renewal is in a state where info review is appropriate
+      const allowedStates = ['ACCESS_GRANTED', 'CREDENTIALS_UPDATED', 'INFO_APPROVED', 'PAYMENT_PENDING'];
+      if (!allowedStates.includes(renewal.renewalState || '')) {
+        return res.status(403).json({ error: "Access denied" });
+      }
+
+      const office = await storage.getOffice(renewal.officeId);
+      if (!office) {
+        return res.status(404).json({ error: "Office not found" });
+      }
+
+      res.json({
+        id: office.id,
+        name: office.name,
+        nameEn: office.nameEn,
+        registrationNumber: office.registrationNumber,
+        licenseCategory: office.licenseCategory,
+        email: office.email,
+        phone: office.phone,
+        city: office.city,
+        address: office.address,
+        managerName: [office.managerFirst, office.managerSecond, office.managerLast].filter(Boolean).join(' ')
+      });
+    } catch (error) {
+      console.error("Office info error:", error);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
   // Office: Approve office information
   app.post("/api/renew/:renewalId/approve-info", ensureOffice, async (req, res) => {
     try {
@@ -3372,6 +3454,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(stats);
     } catch (error) {
       console.error("Get invitation stats error:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  // Admin: Get all invitation statuses
+  app.get("/api/admin/renewal-invitations", ensureAdmin, async (req, res) => {
+    try {
+      const year = parseInt(req.query.year as string) || 2026;
+      
+      // Get all active offices (those with lastRenewalYear = 2025)
+      const offices = await storage.getActiveOfficesForRenewal(2025);
+      
+      const invitationStatuses = await Promise.all(offices.map(async (office) => {
+        const renewal = await storage.getRenewalByOfficeAndYear(office.id, year);
+        const invite = renewal ? await storage.getLatestInviteForRenewal(renewal.id) : null;
+        
+        return {
+          officeId: office.id,
+          officeName: office.name,
+          officeNameEn: office.nameEn,
+          email: office.email,
+          lastRenewalYear: office.lastRenewalYear,
+          inviteStatus: invite?.status || 'NOT_INVITED',
+          renewalState: renewal?.renewalState || null,
+          inviteSentAt: invite?.sentAt || null,
+          tokenRedeemedAt: invite?.consumedAt || null
+        };
+      }));
+      
+      res.json(invitationStatuses);
+    } catch (error) {
+      console.error("Get invitation statuses error:", error);
       res.status(500).json({ message: "Server error" });
     }
   });

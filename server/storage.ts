@@ -2,8 +2,9 @@ import {
   users, offices, branches, documents, licenseRenewals, auditLogs,
   people, rolesInOffice, consents, renewalAttachments, employeeWorkHistory,
   complaints, commitmentForms, officeInfoForms, payments, promoCodes, jobTitles,
-  renewalSteps,
+  renewalSteps, renewalInvites,
   type EmployeeWorkHistory,
+  type RenewalInvite,
   type User, type InsertUser,
   type Office, type InsertOffice,
   type Branch, type InsertBranch,
@@ -164,6 +165,9 @@ export interface IStorage {
   getRenewalByOfficeAndYear(officeId: number, year: number): Promise<LicenseRenewal | undefined>;
   
   createRenewalStep(step: InsertRenewalStep): Promise<RenewalStep>;
+  
+  getActiveOfficesForRenewal(lastRenewalYear: number): Promise<Office[]>;
+  getLatestInviteForRenewal(renewalId: number): Promise<RenewalInvite | undefined>;
   
   seedAdminUser(): Promise<void>;
 }
@@ -833,6 +837,22 @@ export class DatabaseStorage implements IStorage {
       completedAt: new Date()
     } as any).returning();
     return created;
+  }
+
+  async getActiveOfficesForRenewal(lastRenewalYear: number): Promise<Office[]> {
+    return await db.select()
+      .from(offices)
+      .where(eq(offices.lastRenewalYear, lastRenewalYear))
+      .orderBy(offices.name);
+  }
+
+  async getLatestInviteForRenewal(renewalId: number): Promise<RenewalInvite | undefined> {
+    const [invite] = await db.select()
+      .from(renewalInvites)
+      .where(eq(renewalInvites.renewalId, renewalId))
+      .orderBy(desc(renewalInvites.createdAt))
+      .limit(1);
+    return invite;
   }
 }
 

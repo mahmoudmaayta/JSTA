@@ -12,6 +12,7 @@ import LandingPage from "@/pages/landing";
 import LoginPage from "@/pages/login";
 import RegisterPage from "@/pages/register";
 import RegistrationSuccessPage from "@/pages/registration-success";
+import RenewalWizard from "@/pages/public/renewal-wizard";
 import NotFound from "@/pages/not-found";
 
 import OfficeDashboard from "@/pages/office/dashboard";
@@ -35,6 +36,7 @@ import AdminAuditLogs from "@/pages/admin/audit-logs";
 import AdminStaffDashboard from "@/pages/admin/staff-dashboard";
 import AdminCommitmentDashboard from "@/pages/admin/commitment-dashboard";
 import AdminPromoCodes from "@/pages/admin/promo-codes";
+import AdminRenewalInvitations from "@/pages/admin/renewal-invitations";
 
 function ProtectedRoute({ 
   children, 
@@ -107,6 +109,10 @@ function Router() {
       
       <Route path="/registration-success">
         <RegistrationSuccessPage />
+      </Route>
+
+      <Route path="/renew/:token">
+        <RenewalWizard />
       </Route>
 
       <Route path="/office/dashboard">
@@ -226,6 +232,12 @@ function Router() {
       <Route path="/admin/promo-codes">
         <ProtectedRoute allowedRoles={['ADMIN']}>
           <AdminPromoCodes />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/renewal-invitations">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminRenewalInvitations />
         </ProtectedRoute>
       </Route>
 
