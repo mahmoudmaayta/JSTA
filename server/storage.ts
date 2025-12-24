@@ -2,6 +2,7 @@ import {
   users, offices, branches, documents, licenseRenewals, auditLogs,
   people, rolesInOffice, consents, renewalAttachments, employeeWorkHistory,
   complaints, commitmentForms, officeInfoForms, payments, promoCodes, jobTitles,
+  renewalSteps,
   type EmployeeWorkHistory,
   type User, type InsertUser,
   type Office, type InsertOffice,
@@ -18,6 +19,7 @@ import {
   type OfficeInfoFormRecord, type InsertOfficeInfoForm,
   type Payment, type InsertPayment, type PaymentStatusType,
   type PromoCode, type InsertPromoCode,
+  type RenewalStep, type InsertRenewalStep,
   type OfficeStatusType, type RenewalStatusType, type PersonRoleTypeType,
   type OfficeUpdateForm, type DocumentCategoryType
 } from "@shared/schema";
@@ -152,6 +154,16 @@ export interface IStorage {
   createPromoCode(promoCode: InsertPromoCode): Promise<PromoCode>;
   updatePromoCode(id: number, data: Partial<PromoCode>): Promise<PromoCode | undefined>;
   incrementPromoCodeUses(id: number): Promise<void>;
+  
+  getUserByOfficeId(officeId: number): Promise<User | undefined>;
+  updateUser(id: number, data: Partial<User>): Promise<User | undefined>;
+  
+  getLicenseRenewal(id: number): Promise<LicenseRenewal | undefined>;
+  updateLicenseRenewal(id: number, data: Partial<LicenseRenewal>): Promise<LicenseRenewal | undefined>;
+  createLicenseRenewal(renewal: InsertLicenseRenewal): Promise<LicenseRenewal>;
+  getRenewalByOfficeAndYear(officeId: number, year: number): Promise<LicenseRenewal | undefined>;
+  
+  createRenewalStep(step: InsertRenewalStep): Promise<RenewalStep>;
   
   seedAdminUser(): Promise<void>;
 }
@@ -776,6 +788,51 @@ export class DatabaseStorage implements IStorage {
     await db.update(promoCodes)
       .set({ currentUses: sql`${promoCodes.currentUses} + 1` })
       .where(eq(promoCodes.id, id));
+  }
+
+  async getUserByOfficeId(officeId: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.officeId, officeId));
+    return user;
+  }
+
+  async updateUser(id: number, data: Partial<User>): Promise<User | undefined> {
+    const [updated] = await db.update(users)
+      .set(data)
+      .where(eq(users.id, id))
+      .returning();
+    return updated;
+  }
+
+  async getLicenseRenewal(id: number): Promise<LicenseRenewal | undefined> {
+    return this.getRenewal(id);
+  }
+
+  async updateLicenseRenewal(id: number, data: Partial<LicenseRenewal>): Promise<LicenseRenewal | undefined> {
+    return this.updateRenewal(id, data);
+  }
+
+  async createLicenseRenewal(renewal: InsertLicenseRenewal): Promise<LicenseRenewal> {
+    return this.createRenewal(renewal);
+  }
+
+  async getRenewalByOfficeAndYear(officeId: number, year: number): Promise<LicenseRenewal | undefined> {
+    const [renewal] = await db.select()
+      .from(licenseRenewals)
+      .where(
+        and(
+          eq(licenseRenewals.officeId, officeId),
+          eq(licenseRenewals.year, year)
+        )
+      );
+    return renewal;
+  }
+
+  async createRenewalStep(step: InsertRenewalStep): Promise<RenewalStep> {
+    const [created] = await db.insert(renewalSteps).values({
+      ...step,
+      completedAt: new Date()
+    } as any).returning();
+    return created;
   }
 }
 

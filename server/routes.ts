@@ -27,6 +27,15 @@ import {
   sendRenewalRejectedEmail,
 } from "./email";
 import {
+  validateInvitationToken,
+  redeemInvitationToken,
+  createRenewalInvitation,
+  sendBulkInvitations,
+  resendInvitation,
+  getInvitationStats,
+  getOfficeRenewalStatus,
+} from "./services/renewalInvitation";
+import {
   registerSchema,
   loginSchema,
   officeInfoSchema,
@@ -3024,6 +3033,402 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Update promo code error:", error);
       res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // ========================================
+  // 2026 Renewal Workflow API Endpoints
+  // ========================================
+
+  // Public: Validate renewal invitation token
+  app.get("/api/renew/validate/:token", async (req, res) => {
+    try {
+      const { token } = req.params;
+      const result = await validateInvitationToken(token);
+      
+      if (!result.valid) {
+        return res.status(400).json({ valid: false, message: result.error });
+      }
+
+      // Get office info for display
+      const office = await storage.getOffice(result.officeId!);
+      
+      res.json({
+        valid: true,
+        officeId: result.officeId,
+        renewalId: result.renewalId,
+        officeName: office?.tradeNameEn || office?.tradeNameAr
+      });
+    } catch (error) {
+      console.error("Token validation error:", error);
+      res.status(500).json({ valid: false, message: "Server error" });
+    }
+  });
+
+  // Public: Redeem token and start renewal workflow
+  app.post("/api/renew/redeem/:token", async (req, res) => {
+    try {
+      const { token } = req.params;
+      const ipAddress = getClientIp(req);
+      const userAgent = req.headers['user-agent'];
+
+      const result = await redeemInvitationToken(token, ipAddress, userAgent);
+      
+      if (!result.valid) {
+        return res.status(400).json({ success: false, message: result.error });
+      }
+
+      res.json({
+        success: true,
+        officeId: result.officeId,
+        renewalId: result.renewalId,
+        message: "Token redeemed successfully. Please set your password."
+      });
+    } catch (error) {
+      console.error("Token redemption error:", error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  });
+
+  // Protected: Update credentials during renewal (requires redeemed token)
+  app.post("/api/renew/:renewalId/credentials", async (req, res) => {
+    try {
+      const renewalId = parseInt(req.params.renewalId);
+      const { email, password, token } = req.body;
+
+      if (!email || !password || !token) {
+        return res.status(400).json({ success: false, message: "Email, password, and token required" });
+      }
+
+      if (password.length < 8) {
+        return res.status(400).json({ success: false, message: "Password must be at least 8 characters" });
+      }
+
+      // Validate the token matches this renewal (even if consumed)
+      const tokenValidation = await validateInvitationToken(token);
+      
+      // Get renewal to find office
+      const renewal = await storage.getLicenseRenewal(renewalId);
+      if (!renewal) {
+        return res.status(404).json({ success: false, message: "Renewal not found" });
+      }
+
+      // Verify renewal is in the correct state for credential update
+      if (renewal.renewalState !== 'ACCESS_GRANTED' && renewal.renewalState !== 'CREDENTIALS_UPDATED') {
+        return res.status(403).json({ 
+          success: false, 
+          message: "Invalid renewal state. Please redeem your invitation link first." 
+        });
+      }
+
+      // Extra check: if token was provided and valid, verify it matches the renewal
+      if (tokenValidation.valid && tokenValidation.renewalId !== renewalId) {
+        return res.status(403).json({ success: false, message: "Token does not match renewal" });
+      }
+
+      // Find user for this office
+      const user = await storage.getUserByOfficeId(renewal.officeId);
+      if (!user) {
+        return res.status(404).json({ success: false, message: "User not found" });
+      }
+
+      // Check for duplicate email (if changing email)
+      if (email !== user.email) {
+        const existingUser = await storage.getUserByEmail(email);
+        if (existingUser && existingUser.id !== user.id) {
+          return res.status(400).json({ success: false, message: "Email already in use" });
+        }
+      }
+
+      // Update user credentials
+      const passwordHash = await bcrypt.hash(password, 10);
+      await storage.updateUser(user.id, { 
+        email, 
+        passwordHash 
+      });
+
+      // Update renewal state
+      await storage.updateLicenseRenewal(renewalId, {
+        renewalState: 'CREDENTIALS_UPDATED',
+        credentialsUpdated: true
+      });
+
+      // Log the step
+      await storage.createRenewalStep({
+        renewalId,
+        officeId: renewal.officeId,
+        stepType: 'CREDENTIALS_RESET',
+        ipAddress: getClientIp(req),
+        userAgent: req.headers['user-agent']
+      });
+
+      res.json({ success: true, message: "Credentials updated successfully" });
+    } catch (error) {
+      console.error("Credential update error:", error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  });
+
+  // Office: Approve office information
+  app.post("/api/renew/:renewalId/approve-info", ensureOffice, async (req, res) => {
+    try {
+      const renewalId = parseInt(req.params.renewalId);
+      const officeId = req.session.officeId;
+
+      const renewal = await storage.getLicenseRenewal(renewalId);
+      if (!renewal || renewal.officeId !== officeId) {
+        return res.status(403).json({ success: false, message: "Not authorized" });
+      }
+
+      // State guard: must have updated credentials first
+      if (renewal.renewalState !== 'CREDENTIALS_UPDATED' && renewal.renewalState !== 'INFO_APPROVED') {
+        return res.status(403).json({ 
+          success: false, 
+          message: "Please update your credentials first" 
+        });
+      }
+
+      // Update renewal state
+      await storage.updateLicenseRenewal(renewalId, {
+        renewalState: 'INFO_APPROVED',
+        infoApproved: true
+      });
+
+      // Log the step
+      await storage.createRenewalStep({
+        renewalId,
+        officeId,
+        stepType: 'INFO_REVIEWED',
+        ipAddress: getClientIp(req),
+        userAgent: req.headers['user-agent']
+      });
+
+      res.json({ success: true, message: "Information approved" });
+    } catch (error) {
+      console.error("Info approval error:", error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  });
+
+  // Office: Accept declarations
+  app.post("/api/renew/:renewalId/accept-declarations", ensureOffice, async (req, res) => {
+    try {
+      const renewalId = parseInt(req.params.renewalId);
+      const officeId = req.session.officeId;
+
+      const renewal = await storage.getLicenseRenewal(renewalId);
+      if (!renewal || renewal.officeId !== officeId) {
+        return res.status(403).json({ success: false, message: "Not authorized" });
+      }
+
+      // State guard: must have approved info first
+      if (renewal.renewalState !== 'INFO_APPROVED' && renewal.renewalState !== 'PAYMENT_PENDING') {
+        return res.status(403).json({ 
+          success: false, 
+          message: "Please review and approve your information first" 
+        });
+      }
+
+      // Update renewal state
+      await storage.updateLicenseRenewal(renewalId, {
+        renewalState: 'PAYMENT_PENDING',
+        declarationsAccepted: true
+      });
+
+      // Log the step
+      await storage.createRenewalStep({
+        renewalId,
+        officeId,
+        stepType: 'DECLARATIONS_ACCEPTED',
+        ipAddress: getClientIp(req),
+        userAgent: req.headers['user-agent']
+      });
+
+      res.json({ success: true, message: "Declarations accepted" });
+    } catch (error) {
+      console.error("Declaration acceptance error:", error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  });
+
+  // Office: Initiate payment
+  app.post("/api/renew/:renewalId/initiate-payment", ensureOffice, async (req, res) => {
+    try {
+      const renewalId = parseInt(req.params.renewalId);
+      const officeId = req.session.officeId;
+
+      const renewal = await storage.getLicenseRenewal(renewalId);
+      if (!renewal || renewal.officeId !== officeId) {
+        return res.status(403).json({ success: false, message: "Not authorized" });
+      }
+
+      // State guard: must have accepted declarations first
+      if (renewal.renewalState !== 'PAYMENT_PENDING') {
+        return res.status(403).json({ 
+          success: false, 
+          message: "Please accept the declarations first" 
+        });
+      }
+
+      // TODO: Integrate with payment gateway
+      // For now, simulate payment initiation
+
+      // Log the step
+      await storage.createRenewalStep({
+        renewalId,
+        officeId,
+        stepType: 'PAYMENT_INITIATED',
+        ipAddress: getClientIp(req),
+        userAgent: req.headers['user-agent']
+      });
+
+      res.json({ 
+        success: true, 
+        message: "Payment initiated",
+        paymentUrl: `/office/renewal/${renewalId}/payment` 
+      });
+    } catch (error) {
+      console.error("Payment initiation error:", error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  });
+
+  // Office: Confirm payment (webhook or manual confirmation)
+  app.post("/api/renew/:renewalId/confirm-payment", ensureOffice, async (req, res) => {
+    try {
+      const renewalId = parseInt(req.params.renewalId);
+      const officeId = req.session.officeId;
+
+      const renewal = await storage.getLicenseRenewal(renewalId);
+      if (!renewal || renewal.officeId !== officeId) {
+        return res.status(403).json({ success: false, message: "Not authorized" });
+      }
+
+      // State guard: must be in PAYMENT_PENDING state
+      if (renewal.renewalState !== 'PAYMENT_PENDING') {
+        return res.status(403).json({ 
+          success: false, 
+          message: "Payment cannot be confirmed at this stage" 
+        });
+      }
+
+      // Update renewal state to completed
+      await storage.updateLicenseRenewal(renewalId, {
+        renewalState: 'COMPLETED',
+        paymentCompleted: true,
+        canTransact2026: true
+      });
+
+      // Update office lastRenewalYear
+      await storage.updateOffice(officeId, {
+        lastRenewalYear: 2026
+      });
+
+      // Log the steps
+      await storage.createRenewalStep({
+        renewalId,
+        officeId,
+        stepType: 'PAYMENT_CONFIRMED',
+        ipAddress: getClientIp(req),
+        userAgent: req.headers['user-agent']
+      });
+
+      await storage.createRenewalStep({
+        renewalId,
+        officeId,
+        stepType: 'RENEWAL_COMPLETED',
+        ipAddress: getClientIp(req),
+        userAgent: req.headers['user-agent']
+      });
+
+      res.json({ 
+        success: true, 
+        message: "Payment confirmed. Your 2026 license renewal is complete.",
+        canTransact2026: true
+      });
+    } catch (error) {
+      console.error("Payment confirmation error:", error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  });
+
+  // Office: Get renewal status
+  app.get("/api/renew/status", ensureOffice, async (req, res) => {
+    try {
+      const officeId = req.session.officeId;
+      const status = await getOfficeRenewalStatus(officeId!, 2026);
+      res.json(status);
+    } catch (error) {
+      console.error("Get renewal status error:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  // Admin: Get invitation statistics
+  app.get("/api/admin/renewal-invitations/stats", ensureAdmin, async (req, res) => {
+    try {
+      const year = parseInt(req.query.year as string) || 2026;
+      const stats = await getInvitationStats(year);
+      res.json(stats);
+    } catch (error) {
+      console.error("Get invitation stats error:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  // Admin: Send bulk invitations
+  app.post("/api/admin/renewal-invitations/send-bulk", ensureAdmin, async (req, res) => {
+    try {
+      const year = parseInt(req.body.year) || 2026;
+      const result = await sendBulkInvitations(year);
+      res.json(result);
+    } catch (error) {
+      console.error("Send bulk invitations error:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  // Admin: Send single invitation
+  app.post("/api/admin/renewal-invitations/send/:officeId", ensureAdmin, async (req, res) => {
+    try {
+      const officeId = parseInt(req.params.officeId);
+      const year = parseInt(req.body.year) || 2026;
+
+      // Find or create renewal for this office
+      let renewal = await storage.getRenewalByOfficeAndYear(officeId, year);
+      if (!renewal) {
+        renewal = await storage.createLicenseRenewal({
+          officeId,
+          year,
+          status: 'DRAFT',
+          renewalState: 'NOT_STARTED'
+        });
+      }
+
+      const result = await createRenewalInvitation(officeId, renewal.id);
+      res.json(result);
+    } catch (error) {
+      console.error("Send invitation error:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  // Admin: Resend invitation
+  app.post("/api/admin/renewal-invitations/resend/:officeId", ensureAdmin, async (req, res) => {
+    try {
+      const officeId = parseInt(req.params.officeId);
+      const year = parseInt(req.body.year) || 2026;
+
+      const renewal = await storage.getRenewalByOfficeAndYear(officeId, year);
+      if (!renewal) {
+        return res.status(404).json({ success: false, message: "No renewal found for this office" });
+      }
+
+      const result = await resendInvitation(officeId, renewal.id);
+      res.json(result);
+    } catch (error) {
+      console.error("Resend invitation error:", error);
+      res.status(500).json({ message: "Server error" });
     }
   });
 
