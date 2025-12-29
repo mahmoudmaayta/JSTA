@@ -27,6 +27,7 @@ import {
   FileWarning,
   Tag,
   CreditCard,
+  Mail,
 } from "lucide-react";
 
 export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
@@ -49,6 +50,11 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
       title: t("navigation.renewals"),
       url: "/admin/renewals",
       icon: FileCheck,
+    },
+    {
+      title: t("navigation.renewalInvitations") || "Renewal Invitations",
+      url: "/admin/renewal-invitations",
+      icon: Mail,
     },
     {
       title: t("navigation.payments"),
