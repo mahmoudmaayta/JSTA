@@ -1,0 +1,81 @@
+Objective:
+Conduct a full end-to-end system test to identify any features, logic, workflows, or data that are implemented in the backend but not visible, accessible, or correctly reflected in the dashboard/UI.
+
+Scope of Testing:
+
+Feature Visibility Audit
+
+Verify that every backend function, API endpoint, automation, and logic block has a corresponding UI element or dashboard representation (button, card, table, status, notification, or log).
+
+Identify any features that are:
+
+Built but hidden
+
+Triggered but not displayed
+
+Stored in the database but not surfaced in the UI
+
+Dashboard Accuracy Check
+
+Ensure the dashboard reflects:
+
+Real system states (success, failure, pending, hidden)
+
+All user actions and system-generated actions
+
+Historical logs and background processes
+
+Flag any mismatch between actual system behavior and what the dashboard shows.
+
+Permission & Role Validation
+
+Test all user roles (Admin, User, Staff, etc.)
+
+Confirm that features are not unintentionally hidden due to permission misconfiguration.
+
+Background / Silent Processes Review
+
+Identify any background jobs, automations, or triggers that:
+
+Execute without UI feedback
+
+Do not expose status, progress, or results
+
+Propose how each should be visualized (status badge, activity log, notification, or system alert).
+
+Negative & Edge Case Testing
+
+Test scenarios where:
+
+A feature is partially executed
+
+An action succeeds but the UI fails to update
+
+Data exists but is not rendered
+
+Document all inconsistencies.
+
+Required Outputs:
+
+A visibility gap report listing:
+
+Feature name
+
+Backend status (exists / works / partial)
+
+UI status (visible / hidden / missing)
+
+Risk level (low / medium / critical)
+
+A recommendation list for:
+
+UI fixes
+
+Dashboard enhancements
+
+Logging and transparency improvements
+
+Confirmation that no functionality exists without a clear UI trace.
+
+Success Criteria:
+The system should reach a state where nothing can run, exist, or affect users without being observable, traceable, and understandable from the dashboard.
