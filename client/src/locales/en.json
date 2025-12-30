@@ -669,7 +669,9 @@
     "commitmentsDashboard": "Pledges",
     "payment": "Payment",
     "payments": "Payments",
-    "promoCodes": "Promo Codes"
+    "promoCodes": "Promo Codes",
+    "resources": "Resources",
+    "userManual": "User Manual"
   },
   "forms": {
     "continue": "Continue",

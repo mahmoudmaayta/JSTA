@@ -669,7 +669,9 @@
     "commitmentsDashboard": "التعهدات",
     "payment": "الدفع",
     "payments": "المدفوعات",
-    "promoCodes": "رموز الخصم"
+    "promoCodes": "رموز الخصم",
+    "resources": "الموارد",
+    "userManual": "دليل المستخدم"
   },
   "forms": {
     "continue": "متابعة",

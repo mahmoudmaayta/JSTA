@@ -29,6 +29,8 @@ import {
   CreditCard,
   Mail,
   FileText,
+  BookOpen,
+  Download,
 } from "lucide-react";
 
 export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
@@ -133,6 +135,27 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>{t("navigation.resources") || "Resources"}</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <a 
+                    href="/api/admin/user-manual" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    data-testid="link-user-manual"
+                  >
+                    <BookOpen className="h-4 w-4" />
+                    <span>{t("navigation.userManual") || "User Manual"}</span>
+                    <Download className="h-3 w-3 ml-auto opacity-60" />
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

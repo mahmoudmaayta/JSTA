@@ -708,6 +708,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // User manual PDF download
+  app.get("/api/admin/user-manual", ensureAdmin, async (req, res) => {
+    const filePath = path.join(process.cwd(), "public", "JSTA_Portal_User_Manual.pdf");
+    
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ message: "User manual not found" });
+    }
+    
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "attachment; filename=JSTA_Portal_User_Manual.pdf");
+    
+    const fileStream = fs.createReadStream(filePath);
+    fileStream.pipe(res);
+  });
+
   app.get("/api/admin/audit-logs", ensureAdmin, async (req, res) => {
     const limit = parseInt(req.query.limit as string) || 50;
     const offset = parseInt(req.query.offset as string) || 0;
