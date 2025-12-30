@@ -40,6 +40,7 @@ import {
   Briefcase,
   Building2,
 } from "lucide-react";
+import { RenewalStepsTimeline } from "@/components/ui/renewal-steps-timeline";
 
 interface CommitmentFormResponse extends CommitmentFormRecord {
   complaints: Complaint[];
@@ -284,6 +285,9 @@ export default function AdminOfficeDetail() {
                     <TabsTrigger value="pledge" data-testid="tab-pledge">
                       {t("adminOffice.tabPledge")} {commitmentForm ? "✓" : ""}
                     </TabsTrigger>
+                    <TabsTrigger value="timeline" data-testid="tab-timeline">
+                      {language === 'ar' ? 'سجل التجديد' : 'Renewal Timeline'}
+                    </TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="info" className="mt-4">
@@ -434,7 +438,7 @@ export default function AdminOfficeDetail() {
                                 </div>
                                 <div className="flex justify-between gap-2">
                                   <dt className="text-muted-foreground">{t("adminOffice.area")}</dt>
-                                  <dd>{branch.area || "-"}</dd>
+                                  <dd>{branch.region || "-"}</dd>
                                 </div>
                                 <div className="flex justify-between gap-2">
                                   <dt className="text-muted-foreground">{t("adminOffice.street")}</dt>
@@ -446,11 +450,11 @@ export default function AdminOfficeDetail() {
                                 </div>
                                 <div className="flex justify-between gap-2">
                                   <dt className="text-muted-foreground">{t("adminOffice.manager")}</dt>
-                                  <dd>{branch.managerName || "-"}</dd>
+                                  <dd>{[branch.managerFirstName, branch.managerMiddleName, branch.managerLastName].filter(Boolean).join(' ') || "-"}</dd>
                                 </div>
                                 <div className="flex justify-between gap-2">
                                   <dt className="text-muted-foreground">{t("adminOffice.managerMobile")}</dt>
-                                  <dd>{branch.managerMobile || "-"}</dd>
+                                  <dd>{branch.mobile || "-"}</dd>
                                 </div>
                                 <div className="flex justify-between gap-2">
                                   <dt className="text-muted-foreground">{t("adminOffice.phone")}</dt>
@@ -993,6 +997,10 @@ export default function AdminOfficeDetail() {
                         </CardContent>
                       </Card>
                     )}
+                  </TabsContent>
+
+                  <TabsContent value="timeline" className="mt-4">
+                    <RenewalStepsTimeline officeId={parseInt(officeId!)} />
                   </TabsContent>
                 </Tabs>
               </div>

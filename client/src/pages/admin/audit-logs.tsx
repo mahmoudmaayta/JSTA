@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/table";
 import { useTranslation, useLanguage } from "@/lib/i18n";
 import { format } from "date-fns";
-import { ChevronLeft, ChevronRight, History, Building2, RefreshCw, CheckCircle, XCircle, Download, FileCheck } from "lucide-react";
+import { ChevronLeft, ChevronRight, History, Building2, RefreshCw, CheckCircle, XCircle, Download, FileCheck, Mail, MailCheck, MailX } from "lucide-react";
 import type { AuditLog } from "@shared/schema";
 
 type AuditLogWithUser = AuditLog & { user: { email: string } };
@@ -92,6 +92,41 @@ export default function AdminAuditLogs() {
     }
     
     return items.join(" | ");
+  };
+
+  const renderEmailStatus = (log: AuditLogWithUser) => {
+    const details = log.details as Record<string, any> | null;
+    if (!details) return null;
+    
+    const emailSent = details.emailSent;
+    const emailRecipient = details.emailRecipient;
+    
+    if (emailSent === undefined) return null;
+    
+    if (emailSent) {
+      return (
+        <Badge 
+          variant="outline" 
+          className="ml-2 text-xs bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800"
+          data-testid={`badge-email-sent-${log.id}`}
+        >
+          <MailCheck className="h-3 w-3 mr-1" />
+          {language === 'ar' ? 'تم إرسال البريد' : 'Email Sent'}
+          {emailRecipient && <span className="opacity-70 ml-1">({emailRecipient})</span>}
+        </Badge>
+      );
+    } else {
+      return (
+        <Badge 
+          variant="outline" 
+          className="ml-2 text-xs bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800"
+          data-testid={`badge-email-not-sent-${log.id}`}
+        >
+          <MailX className="h-3 w-3 mr-1" />
+          {language === 'ar' ? 'لم يتم إرسال البريد' : 'Email Not Sent'}
+        </Badge>
+      );
+    }
   };
 
   const sidebarStyle = {
@@ -188,8 +223,11 @@ export default function AdminAuditLogs() {
                                         </span>
                                       </div>
                                     </TableCell>
-                                    <TableCell className="max-w-xs truncate text-sm text-muted-foreground hidden md:table-cell">
-                                      {renderDetails(log)}
+                                    <TableCell className="max-w-xs text-sm text-muted-foreground hidden md:table-cell">
+                                      <div className="flex items-center gap-2 flex-wrap">
+                                        <span className="truncate">{renderDetails(log)}</span>
+                                        {renderEmailStatus(log)}
+                                      </div>
                                     </TableCell>
                                     <TableCell className="text-sm text-muted-foreground">
                                       {format(new Date(log.createdAt!), "MMM d, yyyy HH:mm")}

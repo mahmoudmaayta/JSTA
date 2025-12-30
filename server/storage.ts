@@ -165,6 +165,8 @@ export interface IStorage {
   getRenewalByOfficeAndYear(officeId: number, year: number): Promise<LicenseRenewal | undefined>;
   
   createRenewalStep(step: InsertRenewalStep): Promise<RenewalStep>;
+  getRenewalStepsByRenewalId(renewalId: number): Promise<RenewalStep[]>;
+  getRenewalStepsByOfficeId(officeId: number): Promise<RenewalStep[]>;
   
   getActiveOfficesForRenewal(lastRenewalYear: number): Promise<Office[]>;
   getLatestInviteForRenewal(renewalId: number): Promise<RenewalInvite | undefined>;
@@ -837,6 +839,20 @@ export class DatabaseStorage implements IStorage {
       completedAt: new Date()
     } as any).returning();
     return created;
+  }
+
+  async getRenewalStepsByRenewalId(renewalId: number): Promise<RenewalStep[]> {
+    return await db.select()
+      .from(renewalSteps)
+      .where(eq(renewalSteps.renewalId, renewalId))
+      .orderBy(renewalSteps.completedAt);
+  }
+
+  async getRenewalStepsByOfficeId(officeId: number): Promise<RenewalStep[]> {
+    return await db.select()
+      .from(renewalSteps)
+      .where(eq(renewalSteps.officeId, officeId))
+      .orderBy(renewalSteps.completedAt);
   }
 
   async getActiveOfficesForRenewal(lastRenewalYear: number): Promise<Office[]> {

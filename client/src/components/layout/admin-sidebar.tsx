@@ -28,6 +28,7 @@ import {
   Tag,
   CreditCard,
   Mail,
+  FileText,
 } from "lucide-react";
 
 export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
@@ -55,6 +56,11 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
       title: t("navigation.renewalInvitations") || "Renewal Invitations",
       url: "/admin/renewal-invitations",
       icon: Mail,
+    },
+    {
+      title: t("navigation.officeInfoForms") || "Office Info Forms",
+      url: "/admin/office-info-forms",
+      icon: FileText,
     },
     {
       title: t("navigation.payments"),

@@ -755,6 +755,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ office, branches, documents });
   });
 
+  // Get renewal steps/timeline for an office
+  app.get("/api/admin/offices/:id/renewal-steps", ensureAdmin, async (req, res) => {
+    const officeId = parseInt(req.params.id);
+    if (isNaN(officeId)) {
+      return res.status(400).json({ message: "Invalid office ID" });
+    }
+    
+    const steps = await storage.getRenewalStepsByOfficeId(officeId);
+    res.json(steps);
+  });
+
   app.get("/api/admin/offices/:id/employees", ensureAdmin, async (req, res) => {
     const officeId = parseInt(req.params.id);
     if (isNaN(officeId)) {
@@ -784,15 +795,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     await storage.updateOfficeStatus(office.id, "ACTIVE");
 
+    const emailRecipient = office.mainEmail || "";
+    const emailSent = !!emailRecipient;
+    
     await storage.createAuditLog({
       userId: user.id,
       action: "OFFICE_APPROVED",
       targetType: "office",
       targetId: office.id,
-      details: { officeName: office.tradeNameAr }
+      details: { officeName: office.tradeNameAr, emailSent, emailRecipient: emailSent ? emailRecipient : undefined }
     });
 
-    sendAccountApprovedEmail(office.mainEmail || "", office.tradeNameAr);
+    if (emailSent) {
+      sendAccountApprovedEmail(emailRecipient, office.tradeNameAr);
+    }
 
     res.json({ message: "Office approved successfully" });
   });
@@ -818,15 +834,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     await storage.updateOfficeStatus(office.id, "REJECTED", comment);
 
+    const emailRecipient = office.mainEmail || "";
+    const emailSent = !!emailRecipient;
+    
     await storage.createAuditLog({
       userId: user.id,
       action: "OFFICE_REJECTED",
       targetType: "office",
       targetId: office.id,
-      details: { officeName: office.tradeNameAr, comment }
+      details: { officeName: office.tradeNameAr, comment, emailSent, emailRecipient: emailSent ? emailRecipient : undefined }
     });
 
-    sendAccountRejectedEmail(office.mainEmail || "", office.tradeNameAr, comment);
+    if (emailSent) {
+      sendAccountRejectedEmail(emailRecipient, office.tradeNameAr, comment);
+    }
 
     res.json({ message: "Office rejected" });
   });
@@ -1094,16 +1115,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     await storage.updateRenewalStatus(renewal.id, "APPROVED_FOR_DOWNLOAD");
 
     const office = await storage.getOffice(renewal.officeId);
+    const emailRecipient = office?.mainEmail || "";
+    const emailSent = !!emailRecipient;
     
     await storage.createAuditLog({
       userId: user.id,
       action: "RENEWAL_APPROVED_FOR_DOWNLOAD",
       targetType: "renewal",
       targetId: renewal.id,
-      details: { officeName: office?.tradeNameAr, year: renewal.year }
+      details: { officeName: office?.tradeNameAr, year: renewal.year, emailSent, emailRecipient: emailSent ? emailRecipient : undefined }
     });
 
-    sendRenewalApprovedForDownloadEmail(office?.mainEmail || "", office?.tradeNameAr || "", renewal.year);
+    if (emailSent) {
+      sendRenewalApprovedForDownloadEmail(emailRecipient, office?.tradeNameAr || "", renewal.year);
+    }
 
     res.json({ message: "Renewal approved for download" });
   });
@@ -1123,16 +1148,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     await storage.updateRenewalStatus(renewal.id, "FINAL_APPROVED");
 
     const office = await storage.getOffice(renewal.officeId);
+    const emailRecipient = office?.mainEmail || "";
+    const emailSent = !!emailRecipient;
     
     await storage.createAuditLog({
       userId: user.id,
       action: "RENEWAL_FINAL_APPROVED",
       targetType: "renewal",
       targetId: renewal.id,
-      details: { officeName: office?.tradeNameAr, year: renewal.year }
+      details: { officeName: office?.tradeNameAr, year: renewal.year, emailSent, emailRecipient: emailSent ? emailRecipient : undefined }
     });
 
-    sendRenewalFinalApprovedEmail(office?.mainEmail || "", office?.tradeNameAr || "", renewal.year);
+    if (emailSent) {
+      sendRenewalFinalApprovedEmail(emailRecipient, office?.tradeNameAr || "", renewal.year);
+    }
 
     res.json({ message: "Renewal fully approved" });
   });
@@ -1159,16 +1188,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     await storage.updateRenewalStatus(renewal.id, "REJECTED", comment);
 
     const office = await storage.getOffice(renewal.officeId);
+    const emailRecipient = office?.mainEmail || "";
+    const emailSent = !!emailRecipient;
     
     await storage.createAuditLog({
       userId: user.id,
       action: "RENEWAL_REJECTED",
       targetType: "renewal",
       targetId: renewal.id,
-      details: { officeName: office?.tradeNameAr, year: renewal.year, comment }
+      details: { officeName: office?.tradeNameAr, year: renewal.year, comment, emailSent, emailRecipient: emailSent ? emailRecipient : undefined }
     });
 
-    sendRenewalRejectedEmail(office?.mainEmail || "", office?.tradeNameAr || "", renewal.year, comment);
+    if (emailSent) {
+      sendRenewalRejectedEmail(emailRecipient, office?.tradeNameAr || "", renewal.year, comment);
+    }
 
     res.json({ message: "Renewal rejected" });
   });
