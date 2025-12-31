@@ -1235,11 +1235,12 @@
       "title": "Office Basic Information"
     },
     "fields": {
+      "tourismActivityType": "Tourism Activity Type (Ministry of Tourism)",
       "establishmentNameCommercialReg": "Establishment Name (as per Commercial Register)",
-      "tradeNameAr": "Trade Name (Arabic)",
-      "tradeNameEn": "Trade Name (English)",
       "nationalEstablishmentNumber": "National Establishment Number",
+      "tradeNameAr": "Trade Name (Arabic)",
       "trademark": "Trademark (if applicable)",
+      "tradeNameEn": "Trade Name (English)",
       "awqafAccreditationNumber": "Ministry of Awqaf Accreditation Number (Current Year)",
       "socialSecurityNumber": "Social Security Number",
       "guaranteeExpiryDate": "Guarantee Expiry Date",
@@ -1261,7 +1262,7 @@
       "title": "Tourism Office Information"
     },
     "tourismActivity": {
-      "title": "Tourism Activity Type",
+      "title": "Tourism Activity Type (Ministry of Tourism)",
       "hajjUmrah": "Hajj & Umrah",
       "tourismImported": "Inbound Tourism",
       "outboundTourism": "Outbound Tourism",

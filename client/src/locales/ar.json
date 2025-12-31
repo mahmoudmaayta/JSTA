@@ -1235,11 +1235,12 @@
       "title": "المعلومات الأساسية للمنشأة"
     },
     "fields": {
+      "tourismActivityType": "نوع النشاط السياحي في وزارة السياحة والآثار",
       "establishmentNameCommercialReg": "اسم المنشأة حسب السجل التجاري",
-      "tradeNameAr": "الاسم التجاري باللغة العربية",
-      "tradeNameEn": "الاسم باللغة الإنجليزية",
       "nationalEstablishmentNumber": "رقم المنشأة الوطني",
+      "tradeNameAr": "الاسم التجاري باللغة العربية",
       "trademark": "العلامة التجارية (إن وجدت)",
+      "tradeNameEn": "الاسم باللغة الإنجليزية",
       "awqafAccreditationNumber": "رقم اعتماد وزارة الأوقاف للعام الحالي",
       "socialSecurityNumber": "رقم الضمان الاجتماعي",
       "guaranteeExpiryDate": "تاريخ انتهاء الضمان",
@@ -1261,7 +1262,7 @@
       "title": "المعلومات المطلوبة حول المكتب السياحي"
     },
     "tourismActivity": {
-      "title": "نوع النشاط السياحي",
+      "title": "نوع النشاط السياحي في وزارة السياحة والآثار",
       "hajjUmrah": "حج وعمرة",
       "tourismImported": "وارد",
       "outboundTourism": "صادر",

@@ -241,6 +241,22 @@ export default function OfficeInfoForm2026() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* 1. Tourism Activity Type - FIRST */}
+                    <div className="space-y-2 md:col-span-2">
+                      <Label htmlFor="tourismActivityType">
+                        <Plane className="w-4 h-4 inline me-1" />
+                        {t("officeInfoForm2026.fields.tourismActivityType")}
+                      </Label>
+                      <Input
+                        id="tourismActivityType"
+                        value={office?.licenseCategory || "-"}
+                        readOnly
+                        className="bg-muted cursor-default"
+                        data-testid="input-tourism-activity-type"
+                      />
+                    </div>
+
+                    {/* 2. Establishment Name */}
                     <div className="space-y-2 md:col-span-2">
                       <Label htmlFor="establishmentNameCommercialReg">
                         {t("officeInfoForm2026.fields.establishmentNameCommercialReg")}
@@ -254,6 +270,7 @@ export default function OfficeInfoForm2026() {
                       />
                     </div>
 
+                    {/* 3. National Establishment Number */}
                     <div className="space-y-2">
                       <Label htmlFor="nationalEstablishmentNumber">
                         {t("officeInfoForm2026.fields.nationalEstablishmentNumber")}
@@ -267,6 +284,7 @@ export default function OfficeInfoForm2026() {
                       />
                     </div>
 
+                    {/* 4. Trade Name Arabic */}
                     <div className="space-y-2">
                       <Label htmlFor="tradeNameAr">
                         {t("officeInfoForm2026.fields.tradeNameAr")}
@@ -280,6 +298,7 @@ export default function OfficeInfoForm2026() {
                       />
                     </div>
 
+                    {/* 5. Trademark */}
                     <div className="space-y-2">
                       <Label htmlFor="trademark">
                         {t("officeInfoForm2026.fields.trademark")}
@@ -293,6 +312,7 @@ export default function OfficeInfoForm2026() {
                       />
                     </div>
 
+                    {/* 6. Trade Name English */}
                     <div className="space-y-2">
                       <Label htmlFor="tradeNameEn">
                         {t("officeInfoForm2026.fields.tradeNameEn")}
@@ -306,6 +326,7 @@ export default function OfficeInfoForm2026() {
                       />
                     </div>
 
+                    {/* 7. Awqaf Accreditation */}
                     <div className="space-y-2">
                       <Label htmlFor="awqafAccreditationNumber">
                         {t("officeInfoForm2026.fields.awqafAccreditationNumber")}
@@ -319,6 +340,7 @@ export default function OfficeInfoForm2026() {
                       />
                     </div>
 
+                    {/* 8. Social Security Number */}
                     <div className="space-y-2">
                       <Label htmlFor="socialSecurityNumber">
                         {t("officeInfoForm2026.fields.socialSecurityNumber")}
@@ -332,6 +354,7 @@ export default function OfficeInfoForm2026() {
                       />
                     </div>
 
+                    {/* 9. Guarantee Expiry Date */}
                     <div className="space-y-2">
                       <Label htmlFor="guaranteeExpiryDate">
                         <CalendarDays className="w-4 h-4 inline me-1" />
