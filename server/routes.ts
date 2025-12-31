@@ -708,6 +708,286 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Reports & Statistics endpoints
+  app.get("/api/admin/reports/activity-types", ensureAdmin, async (req, res) => {
+    try {
+      const offices = await storage.getAllOffices();
+      
+      const activityCounts = {
+        hajjUmrah: 0,
+        inboundTourism: 0,
+        outboundTourism: 0,
+        domesticTourism: 0,
+        airlineTickets: 0,
+        imported: 0
+      };
+      
+      for (const office of offices) {
+        if (office.hajjUmrah) activityCounts.hajjUmrah++;
+        if (office.tourismImported || office.imported) activityCounts.inboundTourism++;
+        if (office.outboundTourism) activityCounts.outboundTourism++;
+        if (office.domesticTourism) activityCounts.domesticTourism++;
+        if (office.tickets) activityCounts.airlineTickets++;
+        if (office.imported) activityCounts.imported++;
+      }
+      
+      res.json({
+        total: offices.length,
+        activities: [
+          { name: "الحج والعمرة", nameEn: "Hajj & Umrah", count: activityCounts.hajjUmrah },
+          { name: "السياحة الواردة", nameEn: "Inbound Tourism", count: activityCounts.inboundTourism },
+          { name: "السياحة الصادرة", nameEn: "Outbound Tourism", count: activityCounts.outboundTourism },
+          { name: "السياحة الداخلية", nameEn: "Domestic Tourism", count: activityCounts.domesticTourism },
+          { name: "تذاكر الطيران", nameEn: "Airline Tickets", count: activityCounts.airlineTickets }
+        ]
+      });
+    } catch (error) {
+      console.error("Activity types report error:", error);
+      res.status(500).json({ message: "Failed to fetch activity types report" });
+    }
+  });
+
+  app.get("/api/admin/reports/payments-summary", ensureAdmin, async (req, res) => {
+    try {
+      const payments = await storage.getAllPayments();
+      
+      const monthlyData: Record<string, { pending: number; approved: number; rejected: number; total: number }> = {};
+      let totalPending = 0;
+      let totalApproved = 0;
+      let totalRejected = 0;
+      let totalAmount = 0;
+      
+      for (const payment of payments) {
+        const date = new Date(payment.createdAt);
+        const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+        
+        if (!monthlyData[monthKey]) {
+          monthlyData[monthKey] = { pending: 0, approved: 0, rejected: 0, total: 0 };
+        }
+        
+        const amount = payment.finalAmount || payment.amount;
+        monthlyData[monthKey].total += amount;
+        
+        if (payment.status === 'PENDING') {
+          monthlyData[monthKey].pending += amount;
+          totalPending += amount;
+        } else if (payment.status === 'APPROVED') {
+          monthlyData[monthKey].approved += amount;
+          totalApproved += amount;
+        } else if (payment.status === 'REJECTED') {
+          monthlyData[monthKey].rejected += amount;
+          totalRejected += amount;
+        }
+        
+        totalAmount += amount;
+      }
+      
+      const monthlyArray = Object.entries(monthlyData)
+        .map(([month, data]) => ({ month, ...data }))
+        .sort((a, b) => b.month.localeCompare(a.month))
+        .slice(0, 12);
+      
+      res.json({
+        summary: {
+          totalPayments: payments.length,
+          totalAmount,
+          totalPending,
+          totalApproved,
+          totalRejected
+        },
+        monthly: monthlyArray
+      });
+    } catch (error) {
+      console.error("Payments summary report error:", error);
+      res.status(500).json({ message: "Failed to fetch payments summary" });
+    }
+  });
+
+  app.get("/api/admin/reports/expiring-licenses", ensureAdmin, async (req, res) => {
+    try {
+      const offices = await storage.getAllOffices();
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      
+      const expired: typeof offices = [];
+      const expiring30: typeof offices = [];
+      const expiring60: typeof offices = [];
+      const expiring90: typeof offices = [];
+      
+      for (const office of offices) {
+        if (!office.lastRenewalYear) {
+          expired.push(office);
+          continue;
+        }
+        
+        const renewalYear = office.lastRenewalYear;
+        const expiryDate = new Date(renewalYear, 11, 31);
+        const daysUntilExpiry = Math.ceil((expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+        
+        if (daysUntilExpiry < 0) {
+          expired.push(office);
+        } else if (daysUntilExpiry <= 30) {
+          expiring30.push(office);
+        } else if (daysUntilExpiry <= 60) {
+          expiring60.push(office);
+        } else if (daysUntilExpiry <= 90) {
+          expiring90.push(office);
+        }
+      }
+      
+      res.json({
+        expired: expired.map(o => ({ id: o.id, name: o.tradeNameAr, lastRenewal: o.lastRenewalYear, city: o.mainCity })),
+        expiring30Days: expiring30.map(o => ({ id: o.id, name: o.tradeNameAr, lastRenewal: o.lastRenewalYear, city: o.mainCity })),
+        expiring60Days: expiring60.map(o => ({ id: o.id, name: o.tradeNameAr, lastRenewal: o.lastRenewalYear, city: o.mainCity })),
+        expiring90Days: expiring90.map(o => ({ id: o.id, name: o.tradeNameAr, lastRenewal: o.lastRenewalYear, city: o.mainCity })),
+        summary: {
+          expired: expired.length,
+          expiring30: expiring30.length,
+          expiring60: expiring60.length,
+          expiring90: expiring90.length,
+          total: offices.length
+        }
+      });
+    } catch (error) {
+      console.error("Expiring licenses report error:", error);
+      res.status(500).json({ message: "Failed to fetch expiring licenses report" });
+    }
+  });
+
+  // Notifications/Alerts endpoint
+  app.get("/api/admin/notifications/alerts", ensureAdmin, async (req, res) => {
+    try {
+      const offices = await storage.getAllOffices();
+      const payments = await storage.getAllPayments();
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      
+      const licenseExpiry: any[] = [];
+      const paymentDue: any[] = [];
+      const socialSecurityExpiry: any[] = [];
+      const guaranteeExpiry: any[] = [];
+      
+      let critical = 0;
+      let warning = 0;
+      let info = 0;
+      
+      for (const office of offices) {
+        const renewalYear = office.lastRenewalYear || 0;
+        const expiryDate = new Date(renewalYear, 11, 31);
+        const daysUntilExpiry = Math.ceil((expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+        
+        if (daysUntilExpiry < 0 || !office.lastRenewalYear) {
+          licenseExpiry.push({
+            id: office.id,
+            type: "license_expiry",
+            severity: "critical",
+            title: "رخصة منتهية",
+            description: `الترخيص منتهي منذ ${office.lastRenewalYear || 'غير محدد'}`,
+            officeId: office.id,
+            officeName: office.tradeNameAr || office.legalNameAr || `Office #${office.id}`,
+            dueDate: office.lastRenewalYear ? `${office.lastRenewalYear}` : null
+          });
+          critical++;
+        } else if (daysUntilExpiry <= 30) {
+          licenseExpiry.push({
+            id: office.id,
+            type: "license_expiry",
+            severity: "critical",
+            title: "رخصة على وشك الانتهاء",
+            description: `تنتهي خلال ${daysUntilExpiry} يوم`,
+            officeId: office.id,
+            officeName: office.tradeNameAr || office.legalNameAr || `Office #${office.id}`,
+            dueDate: expiryDate.toISOString().split('T')[0]
+          });
+          critical++;
+        } else if (daysUntilExpiry <= 60) {
+          licenseExpiry.push({
+            id: office.id,
+            type: "license_expiry",
+            severity: "warning",
+            title: "رخصة تنتهي قريباً",
+            description: `تنتهي خلال ${daysUntilExpiry} يوم`,
+            officeId: office.id,
+            officeName: office.tradeNameAr || office.legalNameAr || `Office #${office.id}`,
+            dueDate: expiryDate.toISOString().split('T')[0]
+          });
+          warning++;
+        }
+        
+        if (office.guaranteeExpiryDate) {
+          const guaranteeDate = new Date(office.guaranteeExpiryDate);
+          const guaranteeDays = Math.ceil((guaranteeDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+          
+          if (guaranteeDays < 0) {
+            guaranteeExpiry.push({
+              id: office.id,
+              type: "guarantee_expiry",
+              severity: "critical",
+              title: "كفالة بنكية منتهية",
+              description: "الكفالة البنكية منتهية الصلاحية",
+              officeId: office.id,
+              officeName: office.tradeNameAr || office.legalNameAr || `Office #${office.id}`,
+              dueDate: office.guaranteeExpiryDate
+            });
+            critical++;
+          } else if (guaranteeDays <= 30) {
+            guaranteeExpiry.push({
+              id: office.id,
+              type: "guarantee_expiry",
+              severity: "warning",
+              title: "كفالة بنكية تنتهي قريباً",
+              description: `تنتهي خلال ${guaranteeDays} يوم`,
+              officeId: office.id,
+              officeName: office.tradeNameAr || office.legalNameAr || `Office #${office.id}`,
+              dueDate: office.guaranteeExpiryDate
+            });
+            warning++;
+          }
+        }
+      }
+      
+      for (const payment of payments) {
+        if (payment.status === 'PENDING') {
+          const createdAt = new Date(payment.createdAt);
+          const daysPending = Math.ceil((now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24));
+          const office = offices.find(o => o.id === payment.officeId);
+          
+          if (daysPending > 7) {
+            paymentDue.push({
+              id: payment.id,
+              type: "payment_due",
+              severity: daysPending > 14 ? "critical" : "warning",
+              title: "دفعة معلقة",
+              description: `معلقة منذ ${daysPending} يوم`,
+              officeId: payment.officeId,
+              officeName: office?.tradeNameAr || office?.legalNameAr || `Office #${payment.officeId}`,
+              amount: payment.finalAmount || payment.amount,
+              dueDate: createdAt.toISOString().split('T')[0]
+            });
+            if (daysPending > 14) critical++;
+            else warning++;
+          }
+        }
+      }
+      
+      res.json({
+        licenseExpiry: licenseExpiry.slice(0, 50),
+        paymentDue: paymentDue.slice(0, 50),
+        socialSecurityExpiry: socialSecurityExpiry.slice(0, 50),
+        guaranteeExpiry: guaranteeExpiry.slice(0, 50),
+        summary: {
+          critical,
+          warning,
+          info,
+          total: critical + warning + info
+        }
+      });
+    } catch (error) {
+      console.error("Notifications alerts error:", error);
+      res.status(500).json({ message: "Failed to fetch notifications" });
+    }
+  });
+
   // User manual PDF download
   app.get("/api/admin/user-manual", ensureAdmin, async (req, res) => {
     const filePath = path.join(process.cwd(), "public", "JSTA_Portal_User_Manual.pdf");

@@ -16,7 +16,8 @@ import {
 } from "@/components/ui/table";
 import { useTranslation, useLanguage } from "@/lib/i18n";
 import { format } from "date-fns";
-import { ChevronLeft, ChevronRight, History, Building2, RefreshCw, CheckCircle, XCircle, Download, FileCheck, Mail, MailCheck, MailX } from "lucide-react";
+import { ChevronLeft, ChevronRight, History, Building2, RefreshCw, CheckCircle, XCircle, Download, FileCheck, Mail, MailCheck, MailX, Filter } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { AuditLog } from "@shared/schema";
 
 type AuditLogWithUser = AuditLog & { user: { email: string } };
@@ -50,7 +51,39 @@ export default function AdminAuditLogs() {
     RENEWAL_REJECTED: t("auditLogs.renewalRejected"),
   };
   const [offset, setOffset] = useState(0);
+  const [actionFilter, setActionFilter] = useState<string>("all");
   const limit = 20;
+
+  const actionTypes = [
+    { value: "OFFICE_APPROVED", label: t("auditLogs.officeApproved") },
+    { value: "OFFICE_REJECTED", label: t("auditLogs.officeRejected") },
+    { value: "RENEWAL_APPROVED_FOR_DOWNLOAD", label: t("auditLogs.renewalApprovedForDownload") },
+    { value: "RENEWAL_FINAL_APPROVED", label: t("auditLogs.renewalFinalApproved") },
+    { value: "RENEWAL_REJECTED", label: t("auditLogs.renewalRejected") },
+  ];
+
+  const exportLogsToCSV = () => {
+    if (!data?.logs.length) return;
+    
+    const headers = ['Date', 'Action', 'User', 'Target Type', 'Target ID', 'Details'];
+    const csvContent = [
+      headers.join(','),
+      ...data.logs.map(log => [
+        new Date(log.createdAt!).toISOString(),
+        log.action,
+        log.user?.email || '',
+        log.targetType,
+        log.targetId,
+        `"${JSON.stringify(log.details || {}).replace(/"/g, '""')}"`
+      ].join(','))
+    ].join('\n');
+    
+    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `audit_logs_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+  };
 
   const { data, isLoading, refetch } = useQuery<{
     logs: AuditLogWithUser[];
@@ -61,6 +94,10 @@ export default function AdminAuditLogs() {
     queryKey: ["/api/admin/audit-logs", { limit, offset }],
   });
 
+  const filteredLogs = actionFilter === "all" 
+    ? data?.logs 
+    : data?.logs.filter(log => log.action === actionFilter);
+  
   const totalPages = data ? Math.ceil(data.total / limit) : 0;
   const currentPage = Math.floor(offset / limit) + 1;
 
@@ -144,15 +181,41 @@ export default function AdminAuditLogs() {
             <div className="flex-1">
               <h1 className="text-lg font-semibold">{t("auditLogs.title")}</h1>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => refetch()}
-              data-testid="button-refresh"
-            >
-              <RefreshCw className="h-4 w-4 mr-2" />
-              {t("auditLogs.refresh")}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Select value={actionFilter} onValueChange={setActionFilter}>
+                <SelectTrigger className="w-40" data-testid="select-action-filter">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder={language === 'ar' ? 'نوع الإجراء' : 'Action Type'} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{language === 'ar' ? 'جميع الإجراءات' : 'All Actions'}</SelectItem>
+                  {actionTypes.map(action => (
+                    <SelectItem key={action.value} value={action.value}>
+                      {action.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={exportLogsToCSV}
+                disabled={!data?.logs.length}
+                data-testid="button-export-logs"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                {language === 'ar' ? 'تصدير' : 'Export'}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => refetch()}
+                data-testid="button-refresh"
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                {t("auditLogs.refresh")}
+              </Button>
+            </div>
           </header>
 
           <main className="flex-1 p-4 sm:p-6">
@@ -186,14 +249,14 @@ export default function AdminAuditLogs() {
                             </TableRow>
                           </TableHeader>
                           <TableBody>
-                            {data?.logs.length === 0 ? (
+                            {!filteredLogs?.length ? (
                               <TableRow>
                                 <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
                                   {t("auditLogs.noLogs")}
                                 </TableCell>
                               </TableRow>
                             ) : (
-                              data?.logs.map((log) => {
+                              filteredLogs?.map((log) => {
                                 const Icon = actionIcons[log.action] || History;
                                 return (
                                   <TableRow key={log.id} data-testid={`row-audit-log-${log.id}`}>

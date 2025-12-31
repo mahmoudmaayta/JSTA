@@ -39,6 +39,8 @@ import AdminPromoCodes from "@/pages/admin/promo-codes";
 import AdminRenewalInvitations from "@/pages/admin/renewal-invitations";
 import AdminOfficeInfoForms from "@/pages/admin/office-info-forms";
 import AdminFieldInspection from "@/pages/admin/field-inspection";
+import AdminReports from "@/pages/admin/reports";
+import AdminNotifications from "@/pages/admin/notifications";
 
 function ProtectedRoute({ 
   children, 
@@ -210,6 +212,16 @@ function Router() {
       <Route path="/admin/field-inspection">
         <ProtectedRoute allowedRoles={['ADMIN']}>
           <AdminFieldInspection />
+        </ProtectedRoute>
+      </Route>
+      <Route path="/admin/reports">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminReports />
+        </ProtectedRoute>
+      </Route>
+      <Route path="/admin/notifications">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminNotifications />
         </ProtectedRoute>
       </Route>
       

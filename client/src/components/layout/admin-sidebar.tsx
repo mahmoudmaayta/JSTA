@@ -91,6 +91,16 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
       icon: FileWarning,
     },
     {
+      title: t("navigation.reports") || "Reports & Statistics",
+      url: "/admin/reports",
+      icon: BarChart3,
+    },
+    {
+      title: t("navigation.notifications") || "Notifications",
+      url: "/admin/notifications",
+      icon: Bell,
+    },
+    {
       title: t("navigation.auditLogs"),
       url: "/admin/audit-logs",
       icon: History,

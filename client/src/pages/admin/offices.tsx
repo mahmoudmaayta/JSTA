@@ -14,7 +14,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useLanguage } from "@/lib/i18n";
 import type { Office } from "@shared/schema";
-import { Search, Eye, FolderOpen, Building2, Plane } from "lucide-react";
+import { Search, Eye, FolderOpen, Building2, Plane, Download } from "lucide-react";
 
 export default function AdminOffices() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -89,6 +89,45 @@ export default function AdminOffices() {
 
   const renewalYears = offices ? Array.from(new Set(offices.map(o => o.lastRenewalYear).filter(Boolean))).sort((a, b) => (b || 0) - (a || 0)) : [];
 
+  const exportToCSV = () => {
+    if (!filteredOffices.length) return;
+    
+    const headers = [
+      'Registration Number',
+      'Trade Name (Arabic)',
+      'Trade Name (English)',
+      'License Category',
+      'City',
+      'Email',
+      'Phone',
+      'IATA Number',
+      'Last Renewal Year',
+      'Status'
+    ];
+    
+    const csvContent = [
+      headers.join(','),
+      ...filteredOffices.map(office => [
+        office.registrationNumber || '',
+        `"${(office.tradeNameAr || '').replace(/"/g, '""')}"`,
+        `"${(office.tradeNameEn || '').replace(/"/g, '""')}"`,
+        office.licenseCategory || '',
+        office.mainCity || '',
+        office.mainEmail || '',
+        office.mainPhone || '',
+        office.iataNumber || '',
+        office.lastRenewalYear || '',
+        isOfficeActive(office) ? 'Active' : 'Inactive'
+      ].join(','))
+    ].join('\n');
+    
+    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `offices_export_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+  };
+
   const totalCount = offices?.length || 0;
   // Active offices = those with 2025 renewal
   const activeCount = offices?.filter(o => isOfficeActive(o)).length || 0;
@@ -119,7 +158,7 @@ export default function AdminOffices() {
                       {t("admin.manageOffices")}
                     </p>
                   </div>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="secondary" className="gap-1">
                       <Building2 className="h-3 w-3" />
                       {totalCount} {language === 'ar' ? 'مكتب' : 'Offices'}
@@ -131,6 +170,16 @@ export default function AdminOffices() {
                       <Plane className="h-3 w-3" />
                       {iataCount} IATA
                     </Badge>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={exportToCSV}
+                      disabled={filteredOffices.length === 0}
+                      data-testid="button-export-csv"
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      {language === 'ar' ? 'تصدير CSV' : 'Export CSV'}
+                    </Button>
                   </div>
                 </div>
 
