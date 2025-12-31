@@ -1242,8 +1242,23 @@
       "trademark": "العلامة التجارية (إن وجدت)",
       "awqafAccreditationNumber": "رقم اعتماد وزارة الأوقاف للعام الحالي",
       "socialSecurityNumber": "رقم الضمان الاجتماعي",
-      "guaranteeExpiryDate": "تاريخ انتهاء الكفالة",
-      "geographicLocationLink": "رابط الموقع الجغرافي"
+      "guaranteeExpiryDate": "تاريخ انتهاء الضمان",
+      "city": "المدينة",
+      "phone": "الهاتف",
+      "street": "الشارع",
+      "mobile": "الموبايل",
+      "jstaEmail": "البريد الإلكتروني المراد اعتماده لدى الجمعية",
+      "poBox": "صندوق البريد",
+      "region": "المنطقة",
+      "buildingNumber": "رقم العمارة",
+      "fax": "الفاكس",
+      "website": "الموقع الإلكتروني",
+      "geographicLocationLink": "الموقع الجغرافي (رابط)",
+      "additionalEmail": "بريد إلكتروني إضافي",
+      "zipCode": "الرمز البريدي"
+    },
+    "contactInfo": {
+      "title": "المعلومات المطلوبة حول المكتب السياحي"
     },
     "tourismActivity": {
       "title": "نوع النشاط السياحي",

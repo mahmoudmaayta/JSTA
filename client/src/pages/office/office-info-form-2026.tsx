@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import { 
   ArrowRight,
   Building2,
@@ -18,9 +18,11 @@ import {
   Loader2,
   FileText,
   CalendarDays,
-  Info,
   MapPin,
-  Plane
+  Plane,
+  Phone,
+  Mail,
+  Globe
 } from "lucide-react";
 import type { Office, OfficeInfoFormRecord } from "@shared/schema";
 
@@ -33,7 +35,19 @@ interface OfficeInfoFormData {
   awqafAccreditationNumber: string;
   socialSecurityNumber: string;
   guaranteeExpiryDate: string;
+  city: string;
+  phone: string;
+  street: string;
+  mobile: string;
+  jstaEmail: string;
+  poBox: string;
+  region: string;
+  buildingNumber: string;
+  fax: string;
+  website: string;
   geographicLocationLink: string;
+  additionalEmail: string;
+  zipCode: string;
   tourismImported: boolean;
   airlineTickets: boolean;
   hajjUmrah: boolean;
@@ -57,7 +71,19 @@ export default function OfficeInfoForm2026() {
     awqafAccreditationNumber: "",
     socialSecurityNumber: "",
     guaranteeExpiryDate: "",
+    city: "",
+    phone: "",
+    street: "",
+    mobile: "",
+    jstaEmail: "",
+    poBox: "",
+    region: "",
+    buildingNumber: "",
+    fax: "",
+    website: "",
     geographicLocationLink: "",
+    additionalEmail: "",
+    zipCode: "",
     tourismImported: false,
     airlineTickets: false,
     hajjUmrah: false,
@@ -88,12 +114,24 @@ export default function OfficeInfoForm2026() {
         awqafAccreditationNumber: existingForm.awqafAccreditationNumber || "",
         socialSecurityNumber: existingForm.socialSecurityNumber || "",
         guaranteeExpiryDate: existingForm.guaranteeExpiryDate || "",
-        geographicLocationLink: (existingForm as any).geographicLocationLink || "",
-        tourismImported: (existingForm as any).tourismImported || false,
-        airlineTickets: (existingForm as any).airlineTickets || false,
-        hajjUmrah: (existingForm as any).hajjUmrah || false,
-        domesticTourism: (existingForm as any).domesticTourism || false,
-        outboundTourism: (existingForm as any).outboundTourism || false,
+        city: existingForm.city || "",
+        phone: existingForm.phone || "",
+        street: existingForm.street || "",
+        mobile: existingForm.mobile || "",
+        jstaEmail: existingForm.jstaEmail || "",
+        poBox: existingForm.poBox || "",
+        region: existingForm.region || "",
+        buildingNumber: existingForm.buildingNumber || "",
+        fax: existingForm.fax || "",
+        website: existingForm.website || "",
+        geographicLocationLink: existingForm.geographicLocationLink || "",
+        additionalEmail: existingForm.additionalEmail || "",
+        zipCode: existingForm.zipCode || "",
+        tourismImported: existingForm.tourismImported || false,
+        airlineTickets: existingForm.airlineTickets || false,
+        hajjUmrah: existingForm.hajjUmrah || false,
+        domesticTourism: existingForm.domesticTourism || false,
+        outboundTourism: existingForm.outboundTourism || false,
       });
     } else if (office && !autoSaved) {
       const autoFormData: OfficeInfoFormData = {
@@ -105,7 +143,19 @@ export default function OfficeInfoForm2026() {
         awqafAccreditationNumber: office.awqafApprovalNo || "",
         socialSecurityNumber: office.socialSecurityNumber || "",
         guaranteeExpiryDate: office.guaranteeExpiryDate || "",
+        city: office.mainCity || "",
+        phone: office.phone || "",
+        street: office.mainStreet || "",
+        mobile: office.mobile || "",
+        jstaEmail: office.mainEmail || "",
+        poBox: office.poBox || "",
+        region: office.mainArea || "",
+        buildingNumber: office.mainBuildingNumber || "",
+        fax: office.fax || "",
+        website: office.website || "",
         geographicLocationLink: "",
+        additionalEmail: office.extraEmail || "",
+        zipCode: office.postalCode || "",
         tourismImported: office.tourismImported || false,
         airlineTickets: office.airlineTickets || false,
         hajjUmrah: office.hajjUmrah || false,
@@ -205,32 +255,6 @@ export default function OfficeInfoForm2026() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="tradeNameAr">
-                        {t("officeInfoForm2026.fields.tradeNameAr")}
-                      </Label>
-                      <Input
-                        id="tradeNameAr"
-                        value={formData.tradeNameAr}
-                        readOnly
-                        className="bg-muted cursor-default"
-                        data-testid="input-trade-name-ar"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="tradeNameEn">
-                        {t("officeInfoForm2026.fields.tradeNameEn")}
-                      </Label>
-                      <Input
-                        id="tradeNameEn"
-                        value={formData.tradeNameEn}
-                        readOnly
-                        className="bg-muted cursor-default"
-                        data-testid="input-trade-name-en"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
                       <Label htmlFor="nationalEstablishmentNumber">
                         {t("officeInfoForm2026.fields.nationalEstablishmentNumber")}
                       </Label>
@@ -244,6 +268,19 @@ export default function OfficeInfoForm2026() {
                     </div>
 
                     <div className="space-y-2">
+                      <Label htmlFor="tradeNameAr">
+                        {t("officeInfoForm2026.fields.tradeNameAr")}
+                      </Label>
+                      <Input
+                        id="tradeNameAr"
+                        value={formData.tradeNameAr}
+                        readOnly
+                        className="bg-muted cursor-default"
+                        data-testid="input-trade-name-ar"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
                       <Label htmlFor="trademark">
                         {t("officeInfoForm2026.fields.trademark")}
                       </Label>
@@ -253,6 +290,19 @@ export default function OfficeInfoForm2026() {
                         readOnly
                         className="bg-muted cursor-default"
                         data-testid="input-trademark"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="tradeNameEn">
+                        {t("officeInfoForm2026.fields.tradeNameEn")}
+                      </Label>
+                      <Input
+                        id="tradeNameEn"
+                        value={formData.tradeNameEn}
+                        readOnly
+                        className="bg-muted cursor-default"
+                        data-testid="input-trade-name-en"
                       />
                     </div>
 
@@ -296,8 +346,179 @@ export default function OfficeInfoForm2026() {
                         data-testid="input-guarantee-expiry"
                       />
                     </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="mb-6">
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-5 h-5 text-primary" />
+                    <CardTitle className="text-lg">{t("officeInfoForm2026.contactInfo.title")}</CardTitle>
+                    <CheckCircle2 className="w-4 h-4 text-green-500 ms-auto" />
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="city">
+                        {t("officeInfoForm2026.fields.city")}
+                      </Label>
+                      <Input
+                        id="city"
+                        value={formData.city}
+                        readOnly
+                        className="bg-muted cursor-default"
+                        data-testid="input-city"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">
+                        {t("officeInfoForm2026.fields.phone")}
+                      </Label>
+                      <Input
+                        id="phone"
+                        value={formData.phone}
+                        readOnly
+                        className="bg-muted cursor-default"
+                        data-testid="input-phone"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="street">
+                        {t("officeInfoForm2026.fields.street")}
+                      </Label>
+                      <Input
+                        id="street"
+                        value={formData.street}
+                        readOnly
+                        className="bg-muted cursor-default"
+                        data-testid="input-street"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="mobile">
+                        {t("officeInfoForm2026.fields.mobile")}
+                      </Label>
+                      <Input
+                        id="mobile"
+                        value={formData.mobile}
+                        readOnly
+                        className="bg-muted cursor-default"
+                        data-testid="input-mobile"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="jstaEmail">
+                        <Mail className="w-4 h-4 inline me-1" />
+                        {t("officeInfoForm2026.fields.jstaEmail")}
+                      </Label>
+                      <Input
+                        id="jstaEmail"
+                        value={formData.jstaEmail}
+                        readOnly
+                        className="bg-muted cursor-default"
+                        data-testid="input-jsta-email"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="poBox">
+                        {t("officeInfoForm2026.fields.poBox")}
+                      </Label>
+                      <Input
+                        id="poBox"
+                        value={formData.poBox}
+                        readOnly
+                        className="bg-muted cursor-default"
+                        data-testid="input-po-box"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="region">
+                        {t("officeInfoForm2026.fields.region")}
+                      </Label>
+                      <Input
+                        id="region"
+                        value={formData.region}
+                        readOnly
+                        className="bg-muted cursor-default"
+                        data-testid="input-region"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="buildingNumber">
+                        {t("officeInfoForm2026.fields.buildingNumber")}
+                      </Label>
+                      <Input
+                        id="buildingNumber"
+                        value={formData.buildingNumber}
+                        readOnly
+                        className="bg-muted cursor-default"
+                        data-testid="input-building-number"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="fax">
+                        {t("officeInfoForm2026.fields.fax")}
+                      </Label>
+                      <Input
+                        id="fax"
+                        value={formData.fax}
+                        readOnly
+                        className="bg-muted cursor-default"
+                        data-testid="input-fax"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="website">
+                        <Globe className="w-4 h-4 inline me-1" />
+                        {t("officeInfoForm2026.fields.website")}
+                      </Label>
+                      <Input
+                        id="website"
+                        value={formData.website}
+                        readOnly
+                        className="bg-muted cursor-default"
+                        data-testid="input-website"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="additionalEmail">
+                        {t("officeInfoForm2026.fields.additionalEmail")}
+                      </Label>
+                      <Input
+                        id="additionalEmail"
+                        value={formData.additionalEmail}
+                        readOnly
+                        className="bg-muted cursor-default"
+                        data-testid="input-additional-email"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="zipCode">
+                        {t("officeInfoForm2026.fields.zipCode")}
+                      </Label>
+                      <Input
+                        id="zipCode"
+                        value={formData.zipCode}
+                        readOnly
+                        className="bg-muted cursor-default"
+                        data-testid="input-zip-code"
+                      />
+                    </div>
                     
-                    <div className="space-y-2 md:col-span-2">
+                    <div className="space-y-2 md:col-span-2 lg:col-span-3">
                       <Label htmlFor="geographicLocationLink">
                         <MapPin className="w-4 h-4 inline me-1" />
                         {t("officeInfoForm2026.fields.geographicLocationLink")}

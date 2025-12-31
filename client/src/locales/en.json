@@ -1243,7 +1243,22 @@
       "awqafAccreditationNumber": "Ministry of Awqaf Accreditation Number (Current Year)",
       "socialSecurityNumber": "Social Security Number",
       "guaranteeExpiryDate": "Guarantee Expiry Date",
-      "geographicLocationLink": "Geographic Location Link"
+      "city": "City",
+      "phone": "Phone",
+      "street": "Street",
+      "mobile": "Mobile",
+      "jstaEmail": "Email to be Registered with JSTA",
+      "poBox": "PO Box",
+      "region": "Region",
+      "buildingNumber": "Building Number",
+      "fax": "Fax",
+      "website": "Website",
+      "geographicLocationLink": "Geographic Location (Link)",
+      "additionalEmail": "Additional Email",
+      "zipCode": "Zip Code"
+    },
+    "contactInfo": {
+      "title": "Tourism Office Information"
     },
     "tourismActivity": {
       "title": "Tourism Activity Type",
