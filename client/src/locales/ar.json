@@ -671,7 +671,11 @@
     "payments": "المدفوعات",
     "promoCodes": "رموز الخصم",
     "resources": "الموارد",
-    "userManual": "دليل المستخدم"
+    "userManual": "دليل المستخدم",
+    "fieldInspection": "الكشف الحسي",
+    "reports": "التقارير والإحصائيات",
+    "notifications": "الإشعارات",
+    "activityLog": "سجل النشاطات"
   },
   "forms": {
     "continue": "متابعة",
@@ -1170,7 +1174,16 @@
       "trademark": "العلامة التجارية (إن وجدت)",
       "awqafAccreditationNumber": "رقم اعتماد وزارة الأوقاف للعام الحالي",
       "socialSecurityNumber": "رقم الضمان الاجتماعي",
-      "guaranteeExpiryDate": "تاريخ انتهاء الكفالة"
+      "guaranteeExpiryDate": "تاريخ انتهاء الكفالة",
+      "geographicLocationLink": "رابط الموقع الجغرافي"
+    },
+    "tourismActivity": {
+      "title": "نوع النشاط السياحي",
+      "hajjUmrah": "حج وعمرة",
+      "tourismImported": "وارد",
+      "outboundTourism": "صادر",
+      "domesticTourism": "داخلي",
+      "airlineTickets": "تذاكر طيران"
     },
     "consent": {
       "title": "تأكيد صحة البيانات",

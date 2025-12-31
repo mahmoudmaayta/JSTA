@@ -38,6 +38,7 @@ import AdminCommitmentDashboard from "@/pages/admin/commitment-dashboard";
 import AdminPromoCodes from "@/pages/admin/promo-codes";
 import AdminRenewalInvitations from "@/pages/admin/renewal-invitations";
 import AdminOfficeInfoForms from "@/pages/admin/office-info-forms";
+import AdminFieldInspection from "@/pages/admin/field-inspection";
 
 function ProtectedRoute({ 
   children, 
@@ -203,6 +204,12 @@ function Router() {
       <Route path="/admin/renewals/:id">
         <ProtectedRoute allowedRoles={['ADMIN']}>
           <AdminRenewalDetail />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/field-inspection">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminFieldInspection />
         </ProtectedRoute>
       </Route>
       

@@ -671,7 +671,11 @@
     "payments": "Payments",
     "promoCodes": "Promo Codes",
     "resources": "Resources",
-    "userManual": "User Manual"
+    "userManual": "User Manual",
+    "fieldInspection": "Field Inspection",
+    "reports": "Reports & Statistics",
+    "notifications": "Notifications",
+    "activityLog": "Activity Log"
   },
   "forms": {
     "continue": "Continue",
@@ -1170,7 +1174,16 @@
       "trademark": "Trademark (if applicable)",
       "awqafAccreditationNumber": "Ministry of Awqaf Accreditation Number (Current Year)",
       "socialSecurityNumber": "Social Security Number",
-      "guaranteeExpiryDate": "Guarantee Expiry Date"
+      "guaranteeExpiryDate": "Guarantee Expiry Date",
+      "geographicLocationLink": "Geographic Location Link"
+    },
+    "tourismActivity": {
+      "title": "Tourism Activity Type",
+      "hajjUmrah": "Hajj & Umrah",
+      "tourismImported": "Inbound Tourism",
+      "outboundTourism": "Outbound Tourism",
+      "domesticTourism": "Domestic Tourism",
+      "airlineTickets": "Airline Tickets"
     },
     "consent": {
       "title": "Data Accuracy Confirmation",

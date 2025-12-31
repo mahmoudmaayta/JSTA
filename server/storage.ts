@@ -2,7 +2,7 @@ import {
   users, offices, branches, documents, licenseRenewals, auditLogs,
   people, rolesInOffice, consents, renewalAttachments, employeeWorkHistory,
   complaints, commitmentForms, officeInfoForms, payments, promoCodes, jobTitles,
-  renewalSteps, renewalInvites,
+  renewalSteps, renewalInvites, inspections,
   type EmployeeWorkHistory,
   type RenewalInvite,
   type User, type InsertUser,
@@ -21,6 +21,7 @@ import {
   type Payment, type InsertPayment, type PaymentStatusType,
   type PromoCode, type InsertPromoCode,
   type RenewalStep, type InsertRenewalStep,
+  type Inspection, type InsertInspection, type InspectionStatusType,
   type OfficeStatusType, type RenewalStatusType, type PersonRoleTypeType,
   type OfficeUpdateForm, type DocumentCategoryType
 } from "@shared/schema";
@@ -170,6 +171,13 @@ export interface IStorage {
   
   getActiveOfficesForRenewal(lastRenewalYear: number): Promise<Office[]>;
   getLatestInviteForRenewal(renewalId: number): Promise<RenewalInvite | undefined>;
+  
+  getInspection(id: number): Promise<Inspection | undefined>;
+  getInspectionsByOffice(officeId: number): Promise<Inspection[]>;
+  getAllInspections(): Promise<Inspection[]>;
+  createInspection(inspection: InsertInspection): Promise<Inspection>;
+  updateInspection(id: number, data: Partial<Inspection>): Promise<Inspection | undefined>;
+  updateInspectionStatus(id: number, status: InspectionStatusType): Promise<void>;
   
   seedAdminUser(): Promise<void>;
 }
@@ -869,6 +877,40 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(renewalInvites.createdAt))
       .limit(1);
     return invite;
+  }
+
+  async getInspection(id: number): Promise<Inspection | undefined> {
+    const [inspection] = await db.select().from(inspections).where(eq(inspections.id, id));
+    return inspection;
+  }
+
+  async getInspectionsByOffice(officeId: number): Promise<Inspection[]> {
+    return await db.select().from(inspections)
+      .where(eq(inspections.officeId, officeId))
+      .orderBy(desc(inspections.createdAt));
+  }
+
+  async getAllInspections(): Promise<Inspection[]> {
+    return await db.select().from(inspections).orderBy(desc(inspections.createdAt));
+  }
+
+  async createInspection(inspection: InsertInspection): Promise<Inspection> {
+    const [created] = await db.insert(inspections).values(inspection as any).returning();
+    return created;
+  }
+
+  async updateInspection(id: number, data: Partial<Inspection>): Promise<Inspection | undefined> {
+    const [updated] = await db.update(inspections)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(inspections.id, id))
+      .returning();
+    return updated;
+  }
+
+  async updateInspectionStatus(id: number, status: InspectionStatusType): Promise<void> {
+    await db.update(inspections)
+      .set({ status, updatedAt: new Date() })
+      .where(eq(inspections.id, id));
   }
 }
 

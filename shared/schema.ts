@@ -95,6 +95,14 @@ export const RenewalStepType = {
   RENEWAL_COMPLETED: 'RENEWAL_COMPLETED'
 } as const;
 
+export const InspectionStatus = {
+  PENDING: 'PENDING',
+  SCHEDULED: 'SCHEDULED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const;
+
 export type OfficeStatusType = typeof OfficeStatus[keyof typeof OfficeStatus];
 export type RenewalStatusType = typeof RenewalStatus[keyof typeof RenewalStatus];
 export type DocumentCategoryType = typeof DocumentCategory[keyof typeof DocumentCategory];
@@ -106,6 +114,7 @@ export type DiscountTypeType = typeof DiscountType[keyof typeof DiscountType];
 export type RenewalStateType = typeof RenewalState[keyof typeof RenewalState];
 export type RenewalInviteStatusType = typeof RenewalInviteStatus[keyof typeof RenewalInviteStatus];
 export type RenewalStepTypeType = typeof RenewalStepType[keyof typeof RenewalStepType];
+export type InspectionStatusType = typeof InspectionStatus[keyof typeof InspectionStatus];
 
 export const users = pgTable("users", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
@@ -534,6 +543,41 @@ export const renewalSteps = pgTable("renewal_steps", {
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
   completedAt: timestamp("completed_at").defaultNow().notNull()
+});
+
+export const inspections = pgTable("inspections", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  officeId: integer("office_id").notNull(),
+  renewalId: integer("renewal_id"),
+  inspectorUserId: integer("inspector_user_id"),
+  inspectorName: text("inspector_name"),
+  status: text("status").notNull().$type<InspectionStatusType>().default('PENDING'),
+  scheduledDate: date("scheduled_date"),
+  visitDate: date("visit_date"),
+  locationAddress: text("location_address"),
+  city: text("city"),
+  region: text("region"),
+  street: text("street"),
+  buildingNumber: text("building_number"),
+  geographicLocationLink: text("geographic_location_link"),
+  latitude: text("latitude"),
+  longitude: text("longitude"),
+  officeCondition: text("office_condition"),
+  notes: text("notes"),
+  report: text("report"),
+  conclusion: text("conclusion"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+export const inspectionPhotos = pgTable("inspection_photos", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  inspectionId: integer("inspection_id").notNull(),
+  fileName: text("file_name").notNull(),
+  fileUrl: text("file_url").notNull(),
+  description: text("description"),
+  photoType: text("photo_type"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
 export const insertRenewalInviteSchema = z.object({
@@ -1033,3 +1077,38 @@ export type CommitmentFormRecord = typeof commitmentForms.$inferSelect;
 export type OfficeInfoFormData = z.infer<typeof officeInfoFormSchema>;
 export type InsertOfficeInfoForm = z.infer<typeof insertOfficeInfoFormSchema>;
 export type OfficeInfoFormRecord = typeof officeInfoForms.$inferSelect;
+
+export const insertInspectionSchema = z.object({
+  officeId: z.number(),
+  renewalId: z.number().nullable().optional(),
+  inspectorUserId: z.number().nullable().optional(),
+  inspectorName: z.string().nullable().optional(),
+  status: z.enum(['PENDING', 'SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED']).optional(),
+  scheduledDate: z.string().nullable().optional(),
+  visitDate: z.string().nullable().optional(),
+  locationAddress: z.string().nullable().optional(),
+  city: z.string().nullable().optional(),
+  region: z.string().nullable().optional(),
+  street: z.string().nullable().optional(),
+  buildingNumber: z.string().nullable().optional(),
+  geographicLocationLink: z.string().nullable().optional(),
+  latitude: z.string().nullable().optional(),
+  longitude: z.string().nullable().optional(),
+  officeCondition: z.string().nullable().optional(),
+  notes: z.string().nullable().optional(),
+  report: z.string().nullable().optional(),
+  conclusion: z.string().nullable().optional()
+});
+
+export const insertInspectionPhotoSchema = z.object({
+  inspectionId: z.number(),
+  fileName: z.string(),
+  fileUrl: z.string(),
+  description: z.string().nullable().optional(),
+  photoType: z.string().nullable().optional()
+});
+
+export type InsertInspection = z.infer<typeof insertInspectionSchema>;
+export type Inspection = typeof inspections.$inferSelect;
+export type InsertInspectionPhoto = z.infer<typeof insertInspectionPhotoSchema>;
+export type InspectionPhoto = typeof inspectionPhotos.$inferSelect;

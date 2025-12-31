@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { 
   ArrowRight,
@@ -17,7 +18,9 @@ import {
   Loader2,
   FileText,
   CalendarDays,
-  Info
+  Info,
+  MapPin,
+  Plane
 } from "lucide-react";
 import type { Office, OfficeInfoFormRecord } from "@shared/schema";
 
@@ -30,6 +33,12 @@ interface OfficeInfoFormData {
   awqafAccreditationNumber: string;
   socialSecurityNumber: string;
   guaranteeExpiryDate: string;
+  geographicLocationLink: string;
+  tourismImported: boolean;
+  airlineTickets: boolean;
+  hajjUmrah: boolean;
+  domesticTourism: boolean;
+  outboundTourism: boolean;
 }
 
 export default function OfficeInfoForm2026() {
@@ -48,6 +57,12 @@ export default function OfficeInfoForm2026() {
     awqafAccreditationNumber: "",
     socialSecurityNumber: "",
     guaranteeExpiryDate: "",
+    geographicLocationLink: "",
+    tourismImported: false,
+    airlineTickets: false,
+    hajjUmrah: false,
+    domesticTourism: false,
+    outboundTourism: false,
   });
 
   const [autoSaved, setAutoSaved] = useState(false);
@@ -73,6 +88,12 @@ export default function OfficeInfoForm2026() {
         awqafAccreditationNumber: existingForm.awqafAccreditationNumber || "",
         socialSecurityNumber: existingForm.socialSecurityNumber || "",
         guaranteeExpiryDate: existingForm.guaranteeExpiryDate || "",
+        geographicLocationLink: (existingForm as any).geographicLocationLink || "",
+        tourismImported: (existingForm as any).tourismImported || false,
+        airlineTickets: (existingForm as any).airlineTickets || false,
+        hajjUmrah: (existingForm as any).hajjUmrah || false,
+        domesticTourism: (existingForm as any).domesticTourism || false,
+        outboundTourism: (existingForm as any).outboundTourism || false,
       });
     } else if (office && !autoSaved) {
       const autoFormData: OfficeInfoFormData = {
@@ -84,6 +105,12 @@ export default function OfficeInfoForm2026() {
         awqafAccreditationNumber: office.awqafApprovalNo || "",
         socialSecurityNumber: office.socialSecurityNumber || "",
         guaranteeExpiryDate: office.guaranteeExpiryDate || "",
+        geographicLocationLink: "",
+        tourismImported: office.tourismImported || false,
+        airlineTickets: office.airlineTickets || false,
+        hajjUmrah: office.hajjUmrah || false,
+        domesticTourism: office.domesticTourism || false,
+        outboundTourism: office.outboundTourism || false,
       };
       setFormData(autoFormData);
       setAutoSaved(true);
@@ -268,6 +295,94 @@ export default function OfficeInfoForm2026() {
                         className="bg-muted cursor-default"
                         data-testid="input-guarantee-expiry"
                       />
+                    </div>
+                    
+                    <div className="space-y-2 md:col-span-2">
+                      <Label htmlFor="geographicLocationLink">
+                        <MapPin className="w-4 h-4 inline me-1" />
+                        {t("officeInfoForm2026.fields.geographicLocationLink")}
+                      </Label>
+                      <Input
+                        id="geographicLocationLink"
+                        value={formData.geographicLocationLink}
+                        readOnly
+                        className="bg-muted cursor-default"
+                        placeholder={language === "ar" ? "رابط خرائط جوجل" : "Google Maps link"}
+                        data-testid="input-geographic-location"
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="mb-6">
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <Plane className="w-5 h-5 text-primary" />
+                    <CardTitle className="text-lg">{t("officeInfoForm2026.tourismActivity.title")}</CardTitle>
+                    <CheckCircle2 className="w-4 h-4 text-green-500 ms-auto" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    <div className="flex items-center gap-2">
+                      <Checkbox
+                        id="hajjUmrah"
+                        checked={formData.hajjUmrah}
+                        disabled
+                        data-testid="checkbox-hajj-umrah"
+                      />
+                      <Label htmlFor="hajjUmrah" className="cursor-default">
+                        {t("officeInfoForm2026.tourismActivity.hajjUmrah")}
+                      </Label>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      <Checkbox
+                        id="tourismImported"
+                        checked={formData.tourismImported}
+                        disabled
+                        data-testid="checkbox-tourism-imported"
+                      />
+                      <Label htmlFor="tourismImported" className="cursor-default">
+                        {t("officeInfoForm2026.tourismActivity.tourismImported")}
+                      </Label>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      <Checkbox
+                        id="outboundTourism"
+                        checked={formData.outboundTourism}
+                        disabled
+                        data-testid="checkbox-outbound-tourism"
+                      />
+                      <Label htmlFor="outboundTourism" className="cursor-default">
+                        {t("officeInfoForm2026.tourismActivity.outboundTourism")}
+                      </Label>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      <Checkbox
+                        id="domesticTourism"
+                        checked={formData.domesticTourism}
+                        disabled
+                        data-testid="checkbox-domestic-tourism"
+                      />
+                      <Label htmlFor="domesticTourism" className="cursor-default">
+                        {t("officeInfoForm2026.tourismActivity.domesticTourism")}
+                      </Label>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      <Checkbox
+                        id="airlineTickets"
+                        checked={formData.airlineTickets}
+                        disabled
+                        data-testid="checkbox-airline-tickets"
+                      />
+                      <Label htmlFor="airlineTickets" className="cursor-default">
+                        {t("officeInfoForm2026.tourismActivity.airlineTickets")}
+                      </Label>
                     </div>
                   </div>
                 </CardContent>

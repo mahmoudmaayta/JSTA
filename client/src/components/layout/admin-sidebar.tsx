@@ -31,6 +31,9 @@ import {
   FileText,
   BookOpen,
   Download,
+  ClipboardCheck,
+  BarChart3,
+  Bell,
 } from "lucide-react";
 
 export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
@@ -38,7 +41,7 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
   const [location, setLocation] = useLocation();
   const { t } = useTranslation();
 
-  const adminMenuItems = [
+  const mainMenuItems = [
     {
       title: t("navigation.dashboard"),
       url: "/admin",
@@ -55,14 +58,9 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
       icon: FileCheck,
     },
     {
-      title: t("navigation.renewalInvitations") || "Renewal Invitations",
-      url: "/admin/renewal-invitations",
-      icon: Mail,
-    },
-    {
-      title: t("navigation.officeInfoForms") || "Office Info Forms",
-      url: "/admin/office-info-forms",
-      icon: FileText,
+      title: t("navigation.fieldInspection"),
+      url: "/admin/field-inspection",
+      icon: ClipboardCheck,
     },
     {
       title: t("navigation.payments"),
@@ -73,6 +71,19 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
       title: t("navigation.staffDashboard"),
       url: "/admin/staff",
       icon: Users,
+    },
+  ];
+
+  const secondaryMenuItems = [
+    {
+      title: t("navigation.renewalInvitations") || "Renewal Invitations",
+      url: "/admin/renewal-invitations",
+      icon: Mail,
+    },
+    {
+      title: t("navigation.officeInfoForms") || "Office Info Forms",
+      url: "/admin/office-info-forms",
+      icon: FileText,
     },
     {
       title: t("navigation.commitmentsDashboard"),
@@ -119,10 +130,30 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
+          <SidebarGroupLabel>{t("navigation.home")}</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {mainMenuItems.map((item) => (
+                <SidebarMenuItem key={item.url}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={location === item.url || (item.url !== "/admin" && location.startsWith(item.url))}
+                  >
+                    <Link href={item.url} data-testid={`nav-${item.url.split("/").pop()}`}>
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
           <SidebarGroupLabel>{t("navigation.management")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {adminMenuItems.map((item) => (
+              {secondaryMenuItems.map((item) => (
                 <SidebarMenuItem key={item.url}>
                   <SidebarMenuButton
                     asChild

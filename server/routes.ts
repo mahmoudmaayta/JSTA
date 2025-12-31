@@ -2838,6 +2838,176 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin: Get all inspections
+  app.get("/api/admin/inspections", ensureAdmin, async (req, res) => {
+    try {
+      const allInspections = await storage.getAllInspections();
+      
+      const inspectionsWithDetails = await Promise.all(
+        allInspections.map(async (inspection) => {
+          const office = await storage.getOffice(inspection.officeId);
+          return { 
+            ...inspection, 
+            officeName: office?.tradeNameAr,
+            officeNameEn: office?.tradeNameEn
+          };
+        })
+      );
+      
+      res.json(inspectionsWithDetails);
+    } catch (error) {
+      console.error("Get all inspections error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Create new inspection
+  app.post("/api/admin/inspections", ensureAdmin, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const { officeId, inspectorName, scheduledDate, notes } = req.body;
+      
+      if (!officeId) {
+        return res.status(400).json({ message: "Office ID is required" });
+      }
+      
+      const office = await storage.getOffice(officeId);
+      if (!office) {
+        return res.status(404).json({ message: "Office not found" });
+      }
+      
+      const inspection = await storage.createInspection({
+        officeId,
+        inspectorName: inspectorName || null,
+        inspectorUserId: user.id,
+        scheduledDate: scheduledDate || null,
+        notes: notes || null,
+        status: 'PENDING',
+        city: office.mainCity || null,
+        region: office.area || null,
+        street: office.street || null,
+        buildingNumber: office.buildingNumber || null
+      });
+      
+      // Create audit log
+      await storage.createAuditLog({
+        userId: user.id,
+        action: 'INSPECTION_CREATED',
+        targetType: 'inspection',
+        targetId: inspection.id,
+        details: { officeId, inspectorName, scheduledDate },
+      });
+      
+      res.json(inspection);
+    } catch (error) {
+      console.error("Create inspection error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Get inspection by ID
+  app.get("/api/admin/inspections/:id", ensureAdmin, async (req, res) => {
+    try {
+      const inspectionId = parseInt(req.params.id);
+      if (isNaN(inspectionId)) {
+        return res.status(400).json({ message: "Invalid inspection ID" });
+      }
+      
+      const inspection = await storage.getInspection(inspectionId);
+      if (!inspection) {
+        return res.status(404).json({ message: "Inspection not found" });
+      }
+      
+      const office = await storage.getOffice(inspection.officeId);
+      res.json({ 
+        ...inspection, 
+        officeName: office?.tradeNameAr,
+        officeNameEn: office?.tradeNameEn
+      });
+    } catch (error) {
+      console.error("Get inspection error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Update inspection status
+  app.patch("/api/admin/inspections/:id/status", ensureAdmin, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const inspectionId = parseInt(req.params.id);
+      const { status } = req.body;
+      
+      if (isNaN(inspectionId)) {
+        return res.status(400).json({ message: "Invalid inspection ID" });
+      }
+      
+      const inspection = await storage.getInspection(inspectionId);
+      if (!inspection) {
+        return res.status(404).json({ message: "Inspection not found" });
+      }
+      
+      const validStatuses = ['PENDING', 'SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'];
+      if (!validStatuses.includes(status)) {
+        return res.status(400).json({ message: "Invalid status" });
+      }
+      
+      const updateData: any = { status };
+      if (status === 'IN_PROGRESS' || status === 'COMPLETED') {
+        updateData.visitDate = new Date().toISOString().split('T')[0];
+      }
+      
+      await storage.updateInspection(inspectionId, updateData);
+      
+      // Create audit log
+      await storage.createAuditLog({
+        userId: user.id,
+        action: 'INSPECTION_STATUS_UPDATED',
+        targetType: 'inspection',
+        targetId: inspectionId,
+        details: { oldStatus: inspection.status, newStatus: status },
+      });
+      
+      const updatedInspection = await storage.getInspection(inspectionId);
+      res.json(updatedInspection);
+    } catch (error) {
+      console.error("Update inspection status error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin: Update inspection details
+  app.patch("/api/admin/inspections/:id", ensureAdmin, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const inspectionId = parseInt(req.params.id);
+      
+      if (isNaN(inspectionId)) {
+        return res.status(400).json({ message: "Invalid inspection ID" });
+      }
+      
+      const inspection = await storage.getInspection(inspectionId);
+      if (!inspection) {
+        return res.status(404).json({ message: "Inspection not found" });
+      }
+      
+      const updatedInspection = await storage.updateInspection(inspectionId, req.body);
+      
+      // Create audit log
+      await storage.createAuditLog({
+        userId: user.id,
+        action: 'INSPECTION_UPDATED',
+        targetType: 'inspection',
+        targetId: inspectionId,
+        details: req.body,
+      });
+      
+      res.json(updatedInspection);
+    } catch (error) {
+      console.error("Update inspection error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   // Promo code validation endpoint
   app.post("/api/promo-codes/validate", ensureOffice, async (req, res) => {
     try {
