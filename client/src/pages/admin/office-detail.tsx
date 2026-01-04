@@ -298,66 +298,52 @@ export default function AdminOfficeDetail() {
                         </CardHeader>
                         <CardContent>
                           <dl className="space-y-3 text-sm">
+                            {/* 1. Tourism Activity Type */}
+                            <div className="flex justify-between gap-2">
+                              <dt className="text-muted-foreground">{t("adminOffice.tourismActivityType")}</dt>
+                              <dd className="font-medium">{data.office.licenseCategory || "-"}</dd>
+                            </div>
+                            {/* 2. Establishment Name (Commercial Register) */}
+                            <div className="flex justify-between gap-2">
+                              <dt className="text-muted-foreground">{t("adminOffice.establishmentNameCommercialReg")}</dt>
+                              <dd className="font-medium">{data.office.legalNameAr || data.office.tradeNameAr || "-"}</dd>
+                            </div>
+                            {/* 3. National Establishment Number */}
+                            <div className="flex justify-between gap-2">
+                              <dt className="text-muted-foreground">{t("adminOffice.nationalEstablishmentNumber")}</dt>
+                              <dd className="font-mono">{data.office.nationalEstablishmentNumber || "-"}</dd>
+                            </div>
+                            {/* 4. Trade Name (Arabic) */}
                             <div className="flex justify-between gap-2">
                               <dt className="text-muted-foreground">{t("adminOffice.tradeNameAr")}</dt>
                               <dd className="font-medium">{data.office.tradeNameAr || "-"}</dd>
                             </div>
-                            <div className="flex justify-between gap-2">
-                              <dt className="text-muted-foreground">{t("adminOffice.tradeNameEn")}</dt>
-                              <dd className="font-medium">{data.office.tradeNameEn || "-"}</dd>
-                            </div>
-                            <div className="flex justify-between gap-2">
-                              <dt className="text-muted-foreground">{t("adminOffice.legalNameAr")}</dt>
-                              <dd className="font-medium">{data.office.legalNameAr || "-"}</dd>
-                            </div>
-                            <div className="flex justify-between gap-2">
-                              <dt className="text-muted-foreground">{t("adminOffice.legalName")}</dt>
-                              <dd className="font-medium">{data.office.legalNameRegistrar || "-"}</dd>
-                            </div>
-                            <div className="flex justify-between gap-2">
-                              <dt className="text-muted-foreground">{t("adminOffice.nationalEntityNo")}</dt>
-                              <dd className="font-mono">{data.office.nationalEntityNo || "-"}</dd>
-                            </div>
-                            <div className="flex justify-between gap-2">
-                              <dt className="text-muted-foreground">{t("adminOffice.establishmentNo")}</dt>
-                              <dd className="font-mono">{data.office.nationalEstablishmentNumber || "-"}</dd>
-                            </div>
+                            {/* 5. Trademark (if applicable) */}
                             <div className="flex justify-between gap-2">
                               <dt className="text-muted-foreground">{t("adminOffice.trademark")}</dt>
                               <dd className="font-medium">{data.office.trademark || "-"}</dd>
                             </div>
+                            {/* 6. Trade Name (English) */}
                             <div className="flex justify-between gap-2">
-                              <dt className="text-muted-foreground">{t("adminOffice.awqafApprovalNo")}</dt>
+                              <dt className="text-muted-foreground">{t("adminOffice.tradeNameEn")}</dt>
+                              <dd className="font-medium">{data.office.tradeNameEn || "-"}</dd>
+                            </div>
+                            {/* 7. Awqaf Accreditation Number */}
+                            <div className="flex justify-between gap-2">
+                              <dt className="text-muted-foreground">{t("adminOffice.awqafAccreditationNumber")}</dt>
                               <dd className="font-mono">{data.office.awqafApprovalNo || "-"}</dd>
                             </div>
+                            {/* 8. Social Security Number */}
                             <div className="flex justify-between gap-2">
-                              <dt className="text-muted-foreground">{t("adminOffice.ssn")}</dt>
+                              <dt className="text-muted-foreground">{t("adminOffice.socialSecurityNumber")}</dt>
                               <dd className="font-mono">{data.office.socialSecurityNumber || "-"}</dd>
                             </div>
+                            {/* 9. Guarantee Expiry Date */}
                             <div className="flex justify-between gap-2">
-                              <dt className="text-muted-foreground">{t("adminOffice.guaranteeExpiry")}</dt>
+                              <dt className="text-muted-foreground">{t("adminOffice.guaranteeExpiryDate")}</dt>
                               <dd>{data.office.guaranteeExpiryDate || "-"}</dd>
                             </div>
-                            <div className="flex justify-between gap-2">
-                              <dt className="text-muted-foreground">{t("adminOffice.registered")}</dt>
-                              <dd>{new Date(data.office.createdAt).toLocaleDateString()}</dd>
-                            </div>
                           </dl>
-
-                          <div className="mt-4 pt-4 border-t">
-                            <p className="text-sm font-medium mb-2">{t("adminOffice.tourismActivities")}</p>
-                            <div className="flex flex-wrap gap-1">
-                              {data.office.tourismActivities && (data.office.tourismActivities as string[]).length > 0 ? (
-                                (data.office.tourismActivities as string[]).map((activity) => (
-                                  <Badge key={activity} variant="secondary" className="text-xs">
-                                    {ACTIVITY_LABELS[activity] || activity}
-                                  </Badge>
-                                ))
-                              ) : (
-                                <span className="text-muted-foreground text-sm">-</span>
-                              )}
-                            </div>
-                          </div>
                         </CardContent>
                       </Card>
 
