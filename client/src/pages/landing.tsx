@@ -78,19 +78,19 @@ export default function LandingPage() {
 
               {/* Feature highlights */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 border-t border-border" data-testid="section-features">
-                <div className="flex items-center gap-3" style={{ flexDirection: isRTL ? 'row-reverse' : 'row' }} data-testid="feature-registration">
+                <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : 'flex-row'}`} data-testid="feature-registration">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                     <FileText className="h-5 w-5 text-primary" />
                   </div>
                   <span className="text-sm font-medium text-muted-foreground" data-testid="text-feature-registration">{t("landing.featureRegistration")}</span>
                 </div>
-                <div className="flex items-center gap-3" style={{ flexDirection: isRTL ? 'row-reverse' : 'row' }} data-testid="feature-renewal">
+                <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : 'flex-row'}`} data-testid="feature-renewal">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                     <RefreshCw className="h-5 w-5 text-primary" />
                   </div>
                   <span className="text-sm font-medium text-muted-foreground" data-testid="text-feature-renewal">{t("landing.featureRenewal")}</span>
                 </div>
-                <div className="flex items-center gap-3" style={{ flexDirection: isRTL ? 'row-reverse' : 'row' }} data-testid="feature-secure">
+                <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : 'flex-row'}`} data-testid="feature-secure">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                     <Shield className="h-5 w-5 text-primary" />
                   </div>
