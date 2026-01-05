@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -49,12 +50,11 @@ export default function RegisterPage() {
   const [, setLocation] = useLocation();
   const [currentStep, setCurrentStep] = useState(1);
   
-  const TOURISM_ACTIVITIES = [
-    { id: "tickets", label: t("forms.officeStep.activities.tickets") },
-    { id: "inbound", label: t("forms.officeStep.activities.inbound") },
-    { id: "outbound", label: t("forms.officeStep.activities.outbound") },
-    { id: "hajj_umrah", label: t("forms.officeStep.activities.hajjUmrah") },
-    { id: "domestic", label: t("forms.officeStep.activities.domestic") },
+  const LICENSE_CATEGORIES = [
+    { value: "A" as const, label: t("forms.officeStep.licenseCategories.A") },
+    { value: "B" as const, label: t("forms.officeStep.licenseCategories.B") },
+    { value: "C" as const, label: t("forms.officeStep.licenseCategories.C") },
+    { value: "D" as const, label: t("forms.officeStep.licenseCategories.D") },
   ];
 
   const STEPS = [
@@ -86,15 +86,15 @@ export default function RegisterPage() {
   const officeForm = useForm<OfficeInfoForm>({
     resolver: zodResolver(officeInfoSchema),
     defaultValues: {
-      tradeNameAr: "",
-      tradeNameEn: "",
+      licenseCategory: undefined,
       legalNameRegistrar: "",
       nationalEstablishmentNumber: "",
+      tradeNameAr: "",
       trademark: "",
+      tradeNameEn: "",
       awqafApprovalNo: "",
       socialSecurityNumber: "",
       guaranteeExpiryDate: "",
-      tourismActivities: [],
       mainCity: "",
       mainArea: "",
       mainStreet: "",
@@ -402,110 +402,138 @@ export default function RegisterPage() {
                     <div className="space-y-4">
                       <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">{t("forms.officeStep.basicInfo")}</h3>
                       
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <FormField
-                          control={officeForm.control}
-                          name="tradeNameAr"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>{t("forms.officeStep.tradeNameAr")} <span className="text-red-500">*</span></FormLabel>
+                      {/* 1. Tourism Activity Type (License Category) - FIRST */}
+                      <FormField
+                        control={officeForm.control}
+                        name="licenseCategory"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t("forms.officeStep.tourismActivityType")}</FormLabel>
+                            <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
-                                <Input placeholder={t("forms.officeStep.tradeNamePlaceholder")} data-testid="input-trade-name" {...field} />
+                                <SelectTrigger data-testid="select-license-category">
+                                  <SelectValue placeholder={t("forms.officeStep.tourismActivityTypePlaceholder")} />
+                                </SelectTrigger>
                               </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                              <SelectContent>
+                                {LICENSE_CATEGORIES.map((cat) => (
+                                  <SelectItem key={cat.value} value={cat.value} data-testid={`option-category-${cat.value}`}>
+                                    {cat.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                        <FormField
-                          control={officeForm.control}
-                          name="tradeNameEn"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>{t("forms.officeStep.tradeNameEn")}</FormLabel>
-                              <FormControl>
-                                <Input placeholder={t("forms.officeStep.tradeNameEnPlaceholder")} data-testid="input-trade-name-en" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-
+                      {/* 2. Establishment Name (Commercial Register) */}
                       <FormField
                         control={officeForm.control}
                         name="legalNameRegistrar"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("forms.officeStep.legalName")}</FormLabel>
+                            <FormLabel>{t("forms.officeStep.establishmentName")}</FormLabel>
                             <FormControl>
-                              <Input placeholder={t("forms.officeStep.legalNamePlaceholder")} data-testid="input-legal-name" {...field} />
+                              <Input placeholder={t("forms.officeStep.establishmentNamePlaceholder")} data-testid="input-establishment-name" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
 
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <FormField
-                          control={officeForm.control}
-                          name="nationalEstablishmentNumber"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>{t("forms.officeStep.nationalNumber")}</FormLabel>
-                              <FormControl>
-                                <Input placeholder={t("forms.officeStep.nationalNumberPlaceholder")} data-testid="input-national-number" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                      {/* 3. National Establishment Number */}
+                      <FormField
+                        control={officeForm.control}
+                        name="nationalEstablishmentNumber"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t("forms.officeStep.nationalNumber")}</FormLabel>
+                            <FormControl>
+                              <Input placeholder={t("forms.officeStep.nationalNumberPlaceholder")} data-testid="input-national-number" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                        <FormField
-                          control={officeForm.control}
-                          name="trademark"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>{t("forms.officeStep.trademark")}</FormLabel>
-                              <FormControl>
-                                <Input placeholder={t("forms.officeStep.trademarkPlaceholder")} data-testid="input-trademark" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+                      {/* 4. Trade Name Arabic - REQUIRED */}
+                      <FormField
+                        control={officeForm.control}
+                        name="tradeNameAr"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t("forms.officeStep.tradeNameAr")} <span className="text-red-500">*</span></FormLabel>
+                            <FormControl>
+                              <Input placeholder={t("forms.officeStep.tradeNamePlaceholder")} data-testid="input-trade-name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <FormField
-                          control={officeForm.control}
-                          name="awqafApprovalNo"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>{t("forms.officeStep.awqafAccreditation")}</FormLabel>
-                              <FormControl>
-                                <Input placeholder={t("forms.officeStep.awqafAccreditationPlaceholder")} data-testid="input-awqaf" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                      {/* 5. Trademark */}
+                      <FormField
+                        control={officeForm.control}
+                        name="trademark"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t("forms.officeStep.trademark")}</FormLabel>
+                            <FormControl>
+                              <Input placeholder={t("forms.officeStep.trademarkPlaceholder")} data-testid="input-trademark" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                        <FormField
-                          control={officeForm.control}
-                          name="socialSecurityNumber"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>{t("forms.officeStep.socialSecurity")}</FormLabel>
-                              <FormControl>
-                                <Input placeholder={t("forms.officeStep.socialSecurityPlaceholder")} data-testid="input-ssn" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+                      {/* 6. Trade Name English */}
+                      <FormField
+                        control={officeForm.control}
+                        name="tradeNameEn"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t("forms.officeStep.tradeNameEn")}</FormLabel>
+                            <FormControl>
+                              <Input placeholder={t("forms.officeStep.tradeNameEnPlaceholder")} data-testid="input-trade-name-en" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
+                      {/* 7. Awqaf Accreditation Number */}
+                      <FormField
+                        control={officeForm.control}
+                        name="awqafApprovalNo"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t("forms.officeStep.awqafAccreditation")}</FormLabel>
+                            <FormControl>
+                              <Input placeholder={t("forms.officeStep.awqafAccreditationPlaceholder")} data-testid="input-awqaf" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      {/* 8. Social Security Number */}
+                      <FormField
+                        control={officeForm.control}
+                        name="socialSecurityNumber"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t("forms.officeStep.socialSecurity")}</FormLabel>
+                            <FormControl>
+                              <Input placeholder={t("forms.officeStep.socialSecurityPlaceholder")} data-testid="input-ssn" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      {/* 9. Guarantee Expiry Date */}
                       <FormField
                         control={officeForm.control}
                         name="guaranteeExpiryDate"
@@ -515,65 +543,6 @@ export default function RegisterPage() {
                             <FormControl>
                               <Input type="date" data-testid="input-guarantee-date" {...field} />
                             </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={officeForm.control}
-                        name="tourismActivities"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>{t("forms.officeStep.tourismActivities")}</FormLabel>
-                            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                              <FormItem className="flex items-center space-x-2 rtl:space-x-reverse space-y-0">
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value?.length === TOURISM_ACTIVITIES.length}
-                                    onCheckedChange={(checked) => {
-                                      if (checked) {
-                                        field.onChange(TOURISM_ACTIVITIES.map(a => a.id));
-                                      } else {
-                                        field.onChange([]);
-                                      }
-                                    }}
-                                    data-testid="checkbox-activity-all"
-                                  />
-                                </FormControl>
-                                <FormLabel className="font-medium text-sm cursor-pointer">
-                                  {t("forms.officeStep.activities.all")}
-                                </FormLabel>
-                              </FormItem>
-                              {TOURISM_ACTIVITIES.map((activity) => (
-                                <FormField
-                                  key={activity.id}
-                                  control={officeForm.control}
-                                  name="tourismActivities"
-                                  render={({ field: innerField }) => (
-                                    <FormItem className="flex items-center space-x-2 rtl:space-x-reverse space-y-0">
-                                      <FormControl>
-                                        <Checkbox
-                                          checked={innerField.value?.includes(activity.id)}
-                                          onCheckedChange={(checked) => {
-                                            const current = innerField.value || [];
-                                            if (checked) {
-                                              innerField.onChange([...current, activity.id]);
-                                            } else {
-                                              innerField.onChange(current.filter((v) => v !== activity.id));
-                                            }
-                                          }}
-                                          data-testid={`checkbox-activity-${activity.id}`}
-                                        />
-                                      </FormControl>
-                                      <FormLabel className="font-normal text-sm cursor-pointer">
-                                        {activity.label}
-                                      </FormLabel>
-                                    </FormItem>
-                                  )}
-                                />
-                              ))}
-                            </div>
                             <FormMessage />
                           </FormItem>
                         )}

@@ -877,15 +877,15 @@ export const loginSchema = z.object({
 });
 
 export const officeInfoSchema = z.object({
-  tradeNameAr: z.string().min(1, "Trade name is required"),
-  tradeNameEn: z.string().optional(),
+  licenseCategory: z.enum(["A", "B", "C", "D"]).optional(),
   legalNameRegistrar: z.string().optional(),
   nationalEstablishmentNumber: z.string().optional(),
+  tradeNameAr: z.string().min(1, "Trade name is required"),
   trademark: z.string().optional(),
+  tradeNameEn: z.string().optional(),
   awqafApprovalNo: z.string().optional(),
   socialSecurityNumber: z.string().optional(),
   guaranteeExpiryDate: z.string().optional(),
-  tourismActivities: z.array(z.string()).optional(),
   mainCity: z.string().optional(),
   mainArea: z.string().optional(),
   mainStreet: z.string().optional(),
