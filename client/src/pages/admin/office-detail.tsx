@@ -39,6 +39,7 @@ import {
   UserCheck,
   Briefcase,
   Building2,
+  ExternalLink,
 } from "lucide-react";
 import { RenewalStepsTimeline } from "@/components/ui/renewal-steps-timeline";
 
@@ -450,6 +451,23 @@ export default function AdminOfficeDetail() {
                                   <dt className="text-muted-foreground">{t("adminOffice.fax")}</dt>
                                   <dd>{branch.fax || "-"}</dd>
                                 </div>
+                                <div className="flex justify-between gap-2">
+                                  <dt className="text-muted-foreground">{t("adminOffice.geographyLink")}</dt>
+                                  <dd>
+                                    {branch.geographyLink ? (
+                                      <a 
+                                        href={branch.geographyLink} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        className="inline-flex items-center gap-1 text-primary hover:underline"
+                                        data-testid={`link-branch-map-${branch.id}`}
+                                      >
+                                        <ExternalLink className="h-3 w-3" />
+                                        {t("adminOffice.openMap")}
+                                      </a>
+                                    ) : "-"}
+                                  </dd>
+                                </div>
                               </dl>
                             </CardContent>
                           </Card>
@@ -495,6 +513,10 @@ export default function AdminOfficeDetail() {
                               </div>
                               <div className="flex justify-between gap-2">
                                 <dt className="text-muted-foreground">{t("adminOffice.fax")}</dt>
+                                <dd>-</dd>
+                              </div>
+                              <div className="flex justify-between gap-2">
+                                <dt className="text-muted-foreground">{t("adminOffice.geographyLink")}</dt>
                                 <dd>-</dd>
                               </div>
                             </dl>

@@ -453,6 +453,8 @@
     "address": "العنوان",
     "manager": "المدير",
     "managerMobile": "جوال المدير",
+    "geographyLink": "الرابط الجغرافي",
+    "openMap": "فتح على الخريطة",
     "phone": "الهاتف",
     "noBranches": "لا توجد فروع",
     "noBranchesDesc": "هذا المكتب لم يسجل أي فروع.",
@@ -850,7 +852,10 @@
       "managerName": "اسم المدير",
       "managerNamePlaceholder": "أدخل اسم المدير",
       "managerMobile": "جوال المدير",
-      "managerMobilePlaceholder": "أدخل رقم الجوال"
+      "managerMobilePlaceholder": "أدخل رقم الجوال",
+      "geographyLink": "الرابط الجغرافي",
+      "geographyLinkPlaceholder": "https://maps.google.com/...",
+      "openMap": "فتح على الخريطة"
     },
     "documentStep": {
       "title": "المستندات المطلوبة",

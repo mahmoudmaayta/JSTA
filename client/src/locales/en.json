@@ -453,6 +453,8 @@
     "address": "Address",
     "manager": "Manager",
     "managerMobile": "Manager Mobile",
+    "geographyLink": "Geography Link",
+    "openMap": "Open in Map",
     "phone": "Phone",
     "noBranches": "No Branches",
     "noBranchesDesc": "This office has not registered any branch locations.",
@@ -850,7 +852,10 @@
       "managerName": "Manager Name",
       "managerNamePlaceholder": "Enter manager name",
       "managerMobile": "Manager Mobile",
-      "managerMobilePlaceholder": "Enter mobile"
+      "managerMobilePlaceholder": "Enter mobile",
+      "geographyLink": "Geography Link",
+      "geographyLinkPlaceholder": "https://maps.google.com/...",
+      "openMap": "Open in Map"
     },
     "documentStep": {
       "title": "Required Documents",

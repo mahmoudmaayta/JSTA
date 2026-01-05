@@ -1778,6 +1778,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             managerMobile: branch.managerMobile,
             phone: branch.phone,
             fax: branch.fax,
+            geographyLink: branch.geographyLink,
           });
         }
       }

@@ -239,6 +239,7 @@ export const branches = pgTable("branches", {
   mobile: text("mobile"),
   email: text("email"),
   notes: text("notes"),
+  geographyLink: text("geography_link"),
   isLegacy: boolean("is_legacy").default(false)
 });
 
@@ -700,7 +701,8 @@ export const insertBranchSchema = z.object({
   managerName: z.string().nullable().optional(),
   managerMobile: z.string().nullable().optional(),
   phone: z.string().nullable().optional(),
-  fax: z.string().nullable().optional()
+  fax: z.string().nullable().optional(),
+  geographyLink: z.string().nullable().optional()
 });
 
 export const insertDocumentSchema = z.object({
@@ -908,7 +910,8 @@ export const branchSchema = z.object({
   managerName: z.string().optional(),
   managerMobile: z.string().optional(),
   phone: z.string().optional(),
-  fax: z.string().optional()
+  fax: z.string().optional(),
+  geographyLink: z.string().url().optional().or(z.literal(""))
 });
 
 export const officeUpdateSchema = z.object({

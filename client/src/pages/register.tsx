@@ -121,6 +121,7 @@ export default function RegisterPage() {
       managerMobile: "",
       phone: "",
       fax: "",
+      geographyLink: "",
     },
   });
 
@@ -912,6 +913,19 @@ export default function RegisterPage() {
                                       )}
                                     />
                                   </div>
+                                  <FormField
+                                    control={branchForm.control}
+                                    name="geographyLink"
+                                    render={({ field }) => (
+                                      <FormItem>
+                                        <FormLabel>{t("forms.branchStep.geographyLink")}</FormLabel>
+                                        <FormControl>
+                                          <Input placeholder={t("forms.branchStep.geographyLinkPlaceholder")} data-testid="input-branch-geo-link" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                      </FormItem>
+                                    )}
+                                  />
                                   <div className="flex gap-2 justify-end pt-2">
                                     <Button type="button" variant="outline" onClick={cancelEditingBranch}>
                                       {t("forms.cancelEdit")}
@@ -956,6 +970,14 @@ export default function RegisterPage() {
                                   <div>
                                     <span className="text-muted-foreground">{t("forms.officeStep.fax")}:</span>{" "}
                                     <span>{branch.fax || "-"}</span>
+                                  </div>
+                                  <div className="sm:col-span-2">
+                                    <span className="text-muted-foreground">{t("forms.branchStep.geographyLink")}:</span>{" "}
+                                    {branch.geographyLink ? (
+                                      <a href={branch.geographyLink} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                        {t("forms.branchStep.openMap")}
+                                      </a>
+                                    ) : "-"}
                                   </div>
                                 </div>
                                 <div className="flex gap-2 justify-end pt-2 border-t">
@@ -1113,6 +1135,20 @@ export default function RegisterPage() {
                             )}
                           />
                         </div>
+
+                        <FormField
+                          control={branchForm.control}
+                          name="geographyLink"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>{t("forms.branchStep.geographyLink")}</FormLabel>
+                              <FormControl>
+                                <Input placeholder={t("forms.branchStep.geographyLinkPlaceholder")} data-testid="input-branch-geography-link" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
 
                         <Button type="submit" variant="outline" className="gap-2" data-testid="button-add-branch">
                           <Plus className="h-4 w-4" />
