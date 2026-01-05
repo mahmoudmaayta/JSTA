@@ -57,6 +57,7 @@ Preferred communication style: Simple, everyday language.
 - **branches**: Branch office locations linked to parent office
 - **documents**: File metadata, category, linked to office or renewal
 - **license_renewals**: Renewal requests, status workflow, ministry document tracking
+- **cities**: Reference table with 16 Jordanian cities (id, nameEn, nameAr) for standardized city dropdowns
 
 **Current Implementation**: The codebase uses `DatabaseStorage` class (in `server/storage.ts`) providing PostgreSQL persistence through Drizzle ORM with the node-postgres driver.
 
