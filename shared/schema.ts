@@ -243,6 +243,12 @@ export const branches = pgTable("branches", {
   isLegacy: boolean("is_legacy").default(false)
 });
 
+export const cities = pgTable("cities", {
+  id: integer("id").primaryKey(),
+  nameEn: text("name_en").notNull(),
+  nameAr: text("name_ar").notNull()
+});
+
 export const documents = pgTable("documents", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   officeId: integer("office_id").notNull(),
@@ -705,6 +711,12 @@ export const insertBranchSchema = z.object({
   geographyLink: z.string().nullable().optional()
 });
 
+export const insertCitySchema = z.object({
+  id: z.number(),
+  nameEn: z.string(),
+  nameAr: z.string()
+});
+
 export const insertDocumentSchema = z.object({
   officeId: z.number(),
   renewalId: z.number().nullable().optional(),
@@ -935,6 +947,8 @@ export type InsertOffice = z.infer<typeof insertOfficeSchema>;
 export type Office = typeof offices.$inferSelect;
 export type InsertBranch = z.infer<typeof insertBranchSchema>;
 export type Branch = typeof branches.$inferSelect;
+export type InsertCity = z.infer<typeof insertCitySchema>;
+export type City = typeof cities.$inferSelect;
 export type InsertDocument = z.infer<typeof insertDocumentSchema>;
 export type Document = typeof documents.$inferSelect;
 export type InsertLicenseRenewal = z.infer<typeof insertLicenseRenewalSchema>;
