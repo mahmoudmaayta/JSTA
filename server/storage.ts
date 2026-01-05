@@ -566,7 +566,20 @@ export class DatabaseStorage implements IStorage {
     }).from(employeeWorkHistory);
     
     const allOffices = await this.getAllOffices();
-    const officeMap = new Map(allOffices.map(o => [o.id, o.tradeNameAr || o.tradeNameEn || `Office #${o.id}`]));
+    
+    // Filter to active offices only (lastRenewalYear = 2025)
+    const activeOffices = allOffices.filter(o => o.lastRenewalYear === 2025);
+    const activeOfficeIds = new Set(activeOffices.map(o => o.id));
+    const officeMap = new Map(activeOffices.map(o => [o.id, o.tradeNameAr || o.tradeNameEn || `Office #${o.id}`]));
+    
+    // Filter work history to only active offices
+    const activeWorkHistory = allWorkHistory.filter(wh => activeOfficeIds.has(wh.officeId));
+    
+    // Get person IDs linked to active offices
+    const activePersonIds = new Set(activeWorkHistory.map(wh => wh.personId));
+    
+    // Filter people to only those linked to active offices
+    const activePeople = allPeople.filter(p => activePersonIds.has(p.id));
     
     // Load job titles lookup table (legacy_id -> name)
     const allJobTitles = await db.select().from(jobTitles);
@@ -577,16 +590,16 @@ export class DatabaseStorage implements IStorage {
       }
     }
     
-    // Gender distribution
+    // Gender distribution (from active people only)
     const genderBreakdown: Record<string, number> = {};
-    for (const person of allPeople) {
+    for (const person of activePeople) {
       const gender = person.gender || 'غير محدد';
       genderBreakdown[gender] = (genderBreakdown[gender] || 0) + 1;
     }
     
-    // Job title distribution - from work history records (where actual job data is stored)
+    // Job title distribution - from active work history records
     const jobTitleBreakdown: Record<string, number> = {};
-    for (const wh of allWorkHistory) {
+    for (const wh of activeWorkHistory) {
       if (wh.jobTitle) {
         const jobTitleId = String(wh.jobTitle);
         const titleName = jobTitleMap.get(jobTitleId) || `Job #${jobTitleId}`;
@@ -594,29 +607,26 @@ export class DatabaseStorage implements IStorage {
       }
     }
     
-    // Nationality distribution
+    // Nationality distribution (from active people only)
     const nationalityBreakdown: Record<string, number> = {};
-    for (const person of allPeople) {
+    for (const person of activePeople) {
       const nationality = person.nationality || 'غير محدد';
       nationalityBreakdown[nationality] = (nationalityBreakdown[nationality] || 0) + 1;
     }
     
-    // Distinct employees per office (not raw work history counts)
+    // Distinct employees per active office
     const officeEmployees: Record<number, Set<number>> = {};
-    for (const wh of allWorkHistory) {
+    for (const wh of activeWorkHistory) {
       if (!officeEmployees[wh.officeId]) {
         officeEmployees[wh.officeId] = new Set();
       }
       officeEmployees[wh.officeId].add(wh.personId);
     }
     
-    // People linked to offices
-    const linkedPersonIds = new Set(allWorkHistory.map(wh => wh.personId));
-    
     return {
-      totalStaff: allPeople.length,
-      linkedToOffices: linkedPersonIds.size,
-      workHistoryRecords: allWorkHistory.length,
+      totalStaff: activePeople.length,
+      linkedToOffices: activePersonIds.size,
+      workHistoryRecords: activeWorkHistory.length,
       byGender: Object.entries(genderBreakdown)
         .map(([name, value]) => ({ name, value }))
         .sort((a, b) => b.value - a.value),
