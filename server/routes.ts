@@ -658,7 +658,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/admin/analytics", ensureAdmin, async (req, res) => {
     const allOffices = await storage.getAllOffices();
-    const activeOffices = allOffices.filter(office => office.status === 'ACTIVE');
+    const activeOffices = allOffices.filter(office => office.lastRenewalYear === 2025);
     
     const categoryBreakdown: Record<string, number> = {};
     const cityBreakdown: Record<string, number> = {};
