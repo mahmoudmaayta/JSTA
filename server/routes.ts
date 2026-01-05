@@ -657,7 +657,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/admin/analytics", ensureAdmin, async (req, res) => {
-    const offices = await storage.getAllOffices();
+    const allOffices = await storage.getAllOffices();
+    const activeOffices = allOffices.filter(office => office.status === 'ACTIVE');
     
     const categoryBreakdown: Record<string, number> = {};
     const cityBreakdown: Record<string, number> = {};
@@ -666,7 +667,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     let astaCount = 0;
     let wtoCount = 0;
     
-    for (const office of offices) {
+    for (const office of activeOffices) {
       const cat = office.licenseCategory || 'Unknown';
       categoryBreakdown[cat] = (categoryBreakdown[cat] || 0) + 1;
       
@@ -680,14 +681,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     
     const renewalYears: Record<number, number> = {};
-    for (const office of offices) {
+    for (const office of activeOffices) {
       if (office.lastRenewalYear) {
         renewalYears[office.lastRenewalYear] = (renewalYears[office.lastRenewalYear] || 0) + 1;
       }
     }
     
     res.json({
-      totalOffices: offices.length,
+      totalOffices: activeOffices.length,
       byCategory: Object.entries(categoryBreakdown)
         .map(([name, value]) => ({ name, value }))
         .sort((a, b) => b.value - a.value),
