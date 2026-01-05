@@ -2,7 +2,7 @@ import {
   users, offices, branches, documents, licenseRenewals, auditLogs,
   people, rolesInOffice, consents, renewalAttachments, employeeWorkHistory,
   complaints, commitmentForms, officeInfoForms, payments, promoCodes, jobTitles,
-  renewalSteps, renewalInvites, inspections,
+  renewalSteps, renewalInvites, inspections, cities,
   type EmployeeWorkHistory,
   type RenewalInvite,
   type User, type InsertUser,
@@ -23,7 +23,8 @@ import {
   type RenewalStep, type InsertRenewalStep,
   type Inspection, type InsertInspection, type InspectionStatusType,
   type OfficeStatusType, type RenewalStatusType, type PersonRoleTypeType,
-  type OfficeUpdateForm, type DocumentCategoryType
+  type OfficeUpdateForm, type DocumentCategoryType,
+  type City
 } from "@shared/schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import pkg from "pg";
@@ -51,6 +52,9 @@ export interface IStorage {
   getBranches(officeId: number): Promise<Branch[]>;
   createBranch(branch: InsertBranch): Promise<Branch>;
   deleteBranchesByOffice(officeId: number): Promise<void>;
+  
+  getCities(): Promise<City[]>;
+  getCity(id: number): Promise<City | undefined>;
   
   getDocument(id: number): Promise<Document | undefined>;
   getDocuments(officeId: number): Promise<Document[]>;
@@ -270,6 +274,15 @@ export class DatabaseStorage implements IStorage {
 
   async deleteBranchesByOffice(officeId: number): Promise<void> {
     await db.delete(branches).where(eq(branches.officeId, officeId));
+  }
+
+  async getCities(): Promise<City[]> {
+    return await db.select().from(cities).orderBy(cities.id);
+  }
+
+  async getCity(id: number): Promise<City | undefined> {
+    const [city] = await db.select().from(cities).where(eq(cities.id, id));
+    return city;
   }
 
   async getDocument(id: number): Promise<Document | undefined> {

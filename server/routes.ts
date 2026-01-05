@@ -199,6 +199,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // Public API - Cities list for dropdowns
+  app.get("/api/cities", async (req, res) => {
+    try {
+      const citiesList = await storage.getCities();
+      res.json(citiesList);
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+      res.status(500).json({ message: "Failed to fetch cities" });
+    }
+  });
+
   app.post("/api/auth/login", rateLimitMiddleware(loginRateLimiter), async (req, res) => {
     try {
       const parsed = loginSchema.safeParse(req.body);
