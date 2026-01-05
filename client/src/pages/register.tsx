@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +16,7 @@ import { Progress } from "@/components/ui/progress";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Header } from "@/components/layout/header";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { registerSchema, officeInfoSchema, branchSchema, type RegisterForm, type OfficeInfoForm, type BranchForm } from "@shared/schema";
+import { registerSchema, officeInfoSchema, branchSchema, type RegisterForm, type OfficeInfoForm, type BranchForm, type City } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import { useLanguage } from "@/lib/i18n";
 import { 
@@ -72,6 +72,10 @@ export default function RegisterPage() {
     account?: RegisterForm;
     office?: OfficeInfoForm;
   }>({});
+
+  const { data: cities = [] } = useQuery<City[]>({
+    queryKey: ['/api/cities'],
+  });
 
   const accountForm = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
@@ -560,9 +564,20 @@ export default function RegisterPage() {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>{t("forms.officeStep.city")}</FormLabel>
-                              <FormControl>
-                                <Input placeholder={t("forms.officeStep.cityPlaceholder")} data-testid="input-city" {...field} />
-                              </FormControl>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger data-testid="select-city">
+                                    <SelectValue placeholder={t("forms.officeStep.cityPlaceholder")} />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {cities.map((city) => (
+                                    <SelectItem key={city.id} value={city.nameAr} data-testid={`option-city-${city.id}`}>
+                                      {city.nameAr}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
                               <FormMessage />
                             </FormItem>
                           )}
@@ -808,9 +823,20 @@ export default function RegisterPage() {
                                       render={({ field }) => (
                                         <FormItem>
                                           <FormLabel>{t("forms.officeStep.city")}</FormLabel>
-                                          <FormControl>
-                                            <Input placeholder={t("forms.officeStep.cityPlaceholder")} {...field} />
-                                          </FormControl>
+                                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                              <SelectTrigger data-testid="select-edit-branch-city">
+                                                <SelectValue placeholder={t("forms.officeStep.cityPlaceholder")} />
+                                              </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                              {cities.map((city) => (
+                                                <SelectItem key={city.id} value={city.nameAr} data-testid={`option-edit-branch-city-${city.id}`}>
+                                                  {city.nameAr}
+                                                </SelectItem>
+                                              ))}
+                                            </SelectContent>
+                                          </Select>
                                           <FormMessage />
                                         </FormItem>
                                       )}
@@ -1023,9 +1049,20 @@ export default function RegisterPage() {
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>{t("forms.officeStep.city")}</FormLabel>
-                                <FormControl>
-                                  <Input placeholder={t("forms.officeStep.cityPlaceholder")} data-testid="input-branch-city" {...field} />
-                                </FormControl>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                  <FormControl>
+                                    <SelectTrigger data-testid="select-branch-city">
+                                      <SelectValue placeholder={t("forms.officeStep.cityPlaceholder")} />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    {cities.map((city) => (
+                                      <SelectItem key={city.id} value={city.nameAr} data-testid={`option-branch-city-${city.id}`}>
+                                        {city.nameAr}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
                                 <FormMessage />
                               </FormItem>
                             )}
