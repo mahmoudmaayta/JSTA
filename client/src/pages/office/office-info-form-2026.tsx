@@ -10,7 +10,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Alert, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { 
   ArrowRight,
   Building2,
@@ -22,9 +31,12 @@ import {
   Plane,
   Phone,
   Mail,
-  Globe
+  Globe,
+  Pencil,
+  Clock,
+  AlertCircle
 } from "lucide-react";
-import type { Office, OfficeInfoFormRecord } from "@shared/schema";
+import type { Office, OfficeInfoFormRecord, ChangeRequest } from "@shared/schema";
 
 interface OfficeInfoFormData {
   establishmentNameCommercialReg: string;
@@ -92,6 +104,9 @@ export default function OfficeInfoForm2026() {
   });
 
   const [autoSaved, setAutoSaved] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editFormData, setEditFormData] = useState<OfficeInfoFormData | null>(null);
+  const { toast } = useToast();
 
   const { data: office, isLoading: officeLoading } = useQuery<Office>({
     queryKey: ["/api/office/profile"],
@@ -101,7 +116,64 @@ export default function OfficeInfoForm2026() {
     queryKey: ["/api/office-info-form"],
   });
 
+  const { data: pendingRequests } = useQuery<ChangeRequest[]>({
+    queryKey: ["/api/office/change-requests"],
+    select: (data) => data?.filter(r => r.status === "SUBMITTED" && r.requestType === "OFFICE_INFO") || [],
+  });
+
+  const hasPendingRequest = pendingRequests && pendingRequests.length > 0;
   const isFormLocked = !!existingForm;
+
+  const submitChangeRequestMutation = useMutation({
+    mutationFn: async (proposedData: OfficeInfoFormData) => {
+      const response = await apiRequest("POST", "/api/office/change-requests/submit", {
+        requestType: "OFFICE_INFO",
+        currentData: formData,
+        proposedData: proposedData,
+      });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/office/change-requests"] });
+      toast({
+        title: t("changeRequests.office.requestSubmitted"),
+        description: t("changeRequests.office.requestSubmittedDesc"),
+      });
+      setEditDialogOpen(false);
+      setEditFormData(null);
+    },
+    onError: () => {
+      toast({
+        title: t("common.error"),
+        description: t("changeRequests.office.submitError"),
+        variant: "destructive",
+      });
+    },
+  });
+
+  const openEditDialog = () => {
+    setEditFormData({ ...formData });
+    setEditDialogOpen(true);
+  };
+
+  const handleEditSubmit = () => {
+    if (!editFormData) return;
+    
+    const hasChanges = Object.keys(formData).some(
+      (key) => formData[key as keyof OfficeInfoFormData] !== editFormData[key as keyof OfficeInfoFormData]
+    );
+    
+    if (!hasChanges) {
+      toast({
+        title: t("common.error"),
+        description: t("changeRequests.office.noChangesDetected"),
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    submitChangeRequestMutation.mutate(editFormData);
+  };
 
   useEffect(() => {
     if (existingForm) {
@@ -201,12 +273,23 @@ export default function OfficeInfoForm2026() {
       <div className={`flex h-screen w-full ${language === 'ar' ? 'flex-row-reverse' : ''}`} dir={dir}>
         <OfficeSidebar key={`sidebar-${language}`} side={sidebarSide} />
         <SidebarInset className="flex-1 overflow-auto">
-          <header className="sticky top-0 z-10 flex items-center gap-2 border-b bg-background px-4 h-14">
-            <SidebarTrigger data-testid="button-sidebar-trigger" />
+          <header className="sticky top-0 z-10 flex items-center justify-between gap-2 border-b bg-background px-4 h-14">
             <div className="flex items-center gap-2">
+              <SidebarTrigger data-testid="button-sidebar-trigger" />
               <Building2 className="h-5 w-5 text-primary" />
               <h1 className="font-semibold text-lg">{t("officeInfoForm2026.title")}</h1>
             </div>
+            {isFormLocked && !hasPendingRequest && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={openEditDialog}
+                data-testid="button-edit-info"
+              >
+                <Pencil className="w-4 h-4 me-2" />
+                {t("changeRequests.office.editInfo")}
+              </Button>
+            )}
           </header>
           <main className="bg-muted/30 py-8">
             <div className="max-w-4xl mx-auto px-4">
@@ -228,6 +311,18 @@ export default function OfficeInfoForm2026() {
                   <AlertTitle className="text-blue-700 dark:text-blue-400">
                     {language === "ar" ? "جاري الحفظ التلقائي..." : "Auto-saving..."}
                   </AlertTitle>
+                </Alert>
+              )}
+
+              {hasPendingRequest && (
+                <Alert className="mb-6 border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950/30">
+                  <Clock className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+                  <AlertTitle className="text-yellow-700 dark:text-yellow-400">
+                    {t("changeRequests.office.pendingChanges")}
+                  </AlertTitle>
+                  <AlertDescription className="text-yellow-600 dark:text-yellow-300">
+                    {t("changeRequests.status.submitted")}
+                  </AlertDescription>
                 </Alert>
               )}
 
@@ -646,6 +741,156 @@ export default function OfficeInfoForm2026() {
           </main>
         </SidebarInset>
       </div>
+
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Pencil className="w-5 h-5" />
+              {t("changeRequests.office.editInfo")}
+            </DialogTitle>
+            <DialogDescription>
+              {t("changeRequests.office.editFields")}
+            </DialogDescription>
+          </DialogHeader>
+          
+          {editFormData && (
+            <div className="space-y-6 py-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>{t("officeInfoForm2026.fields.phone")}</Label>
+                  <Input
+                    value={editFormData.phone}
+                    onChange={(e) => setEditFormData({ ...editFormData, phone: e.target.value })}
+                    data-testid="edit-input-phone"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{t("officeInfoForm2026.fields.mobile")}</Label>
+                  <Input
+                    value={editFormData.mobile}
+                    onChange={(e) => setEditFormData({ ...editFormData, mobile: e.target.value })}
+                    data-testid="edit-input-mobile"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{t("officeInfoForm2026.fields.fax")}</Label>
+                  <Input
+                    value={editFormData.fax}
+                    onChange={(e) => setEditFormData({ ...editFormData, fax: e.target.value })}
+                    data-testid="edit-input-fax"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{t("officeInfoForm2026.fields.jstaEmail")}</Label>
+                  <Input
+                    value={editFormData.jstaEmail}
+                    onChange={(e) => setEditFormData({ ...editFormData, jstaEmail: e.target.value })}
+                    data-testid="edit-input-jsta-email"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{t("officeInfoForm2026.fields.additionalEmail")}</Label>
+                  <Input
+                    value={editFormData.additionalEmail}
+                    onChange={(e) => setEditFormData({ ...editFormData, additionalEmail: e.target.value })}
+                    data-testid="edit-input-additional-email"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{t("officeInfoForm2026.fields.website")}</Label>
+                  <Input
+                    value={editFormData.website}
+                    onChange={(e) => setEditFormData({ ...editFormData, website: e.target.value })}
+                    data-testid="edit-input-website"
+                  />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <Label>{t("officeInfoForm2026.fields.geographicLocationLink")}</Label>
+                  <Input
+                    value={editFormData.geographicLocationLink}
+                    onChange={(e) => setEditFormData({ ...editFormData, geographicLocationLink: e.target.value })}
+                    data-testid="edit-input-geography-link"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{t("officeInfoForm2026.fields.city")}</Label>
+                  <Input
+                    value={editFormData.city}
+                    onChange={(e) => setEditFormData({ ...editFormData, city: e.target.value })}
+                    data-testid="edit-input-city"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{t("officeInfoForm2026.fields.region")}</Label>
+                  <Input
+                    value={editFormData.region}
+                    onChange={(e) => setEditFormData({ ...editFormData, region: e.target.value })}
+                    data-testid="edit-input-region"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{t("officeInfoForm2026.fields.street")}</Label>
+                  <Input
+                    value={editFormData.street}
+                    onChange={(e) => setEditFormData({ ...editFormData, street: e.target.value })}
+                    data-testid="edit-input-street"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{t("officeInfoForm2026.fields.buildingNumber")}</Label>
+                  <Input
+                    value={editFormData.buildingNumber}
+                    onChange={(e) => setEditFormData({ ...editFormData, buildingNumber: e.target.value })}
+                    data-testid="edit-input-building-number"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{t("officeInfoForm2026.fields.poBox")}</Label>
+                  <Input
+                    value={editFormData.poBox}
+                    onChange={(e) => setEditFormData({ ...editFormData, poBox: e.target.value })}
+                    data-testid="edit-input-po-box"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{t("officeInfoForm2026.fields.zipCode")}</Label>
+                  <Input
+                    value={editFormData.zipCode}
+                    onChange={(e) => setEditFormData({ ...editFormData, zipCode: e.target.value })}
+                    data-testid="edit-input-zip-code"
+                  />
+                </div>
+              </div>
+
+              <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30">
+                <AlertCircle className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                <AlertDescription className="text-blue-700 dark:text-blue-300">
+                  {t("changeRequests.office.submitRequestDesc")}
+                </AlertDescription>
+              </Alert>
+            </div>
+          )}
+          
+          <DialogFooter className="gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setEditDialogOpen(false)}
+              data-testid="button-cancel-edit"
+            >
+              {t("changeRequests.office.cancelRequest")}
+            </Button>
+            <Button
+              onClick={handleEditSubmit}
+              disabled={submitChangeRequestMutation.isPending}
+              data-testid="button-submit-change-request"
+            >
+              {submitChangeRequestMutation.isPending && <Loader2 className="w-4 h-4 me-2 animate-spin" />}
+              {t("changeRequests.office.submitRequest")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </SidebarProvider>
   );
 }

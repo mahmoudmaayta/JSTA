@@ -760,6 +760,22 @@
       "staffDelete": "حذف موظف",
       "documentUpload": "رفع مستند",
       "documentDelete": "حذف مستند"
+    },
+    "office": {
+      "editInfo": "تعديل المعلومات",
+      "requestEdit": "طلب تعديل",
+      "pendingChanges": "لديك تعديلات معلقة بانتظار موافقة المسؤول",
+      "viewPending": "عرض الطلب المعلق",
+      "submitRequest": "تقديم طلب التعديل",
+      "submitRequestDesc": "سيتم مراجعة تعديلاتك من قبل المسؤول قبل تطبيقها.",
+      "requestSubmitted": "تم تقديم طلب التعديل",
+      "requestSubmittedDesc": "تم تقديم طلبك وهو بانتظار مراجعة المسؤول.",
+      "submitError": "فشل في تقديم طلب التعديل",
+      "cancelRequest": "إلغاء",
+      "editFields": "قم بتعديل الحقول التي تريد تغييرها",
+      "noChangesDetected": "لم يتم اكتشاف أي تعديلات. يرجى تعديل حقل واحد على الأقل.",
+      "myRequests": "طلبات التعديل الخاصة بي",
+      "noRequests": "ليس لديك طلبات تعديل"
     }
   },
   "registrationSuccess": {

@@ -760,6 +760,22 @@
       "staffDelete": "Delete Staff",
       "documentUpload": "Upload Document",
       "documentDelete": "Delete Document"
+    },
+    "office": {
+      "editInfo": "Edit Information",
+      "requestEdit": "Request Edit",
+      "pendingChanges": "You have pending changes awaiting admin approval",
+      "viewPending": "View Pending Request",
+      "submitRequest": "Submit Change Request",
+      "submitRequestDesc": "Your changes will be reviewed by the admin before being applied.",
+      "requestSubmitted": "Change Request Submitted",
+      "requestSubmittedDesc": "Your request has been submitted and is awaiting admin review.",
+      "submitError": "Failed to submit change request",
+      "cancelRequest": "Cancel",
+      "editFields": "Edit the fields you want to change",
+      "noChangesDetected": "No changes detected. Please modify at least one field.",
+      "myRequests": "My Change Requests",
+      "noRequests": "You have no change requests"
     }
   },
   "registrationSuccess": {
