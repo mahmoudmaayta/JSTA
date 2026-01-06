@@ -1,4 +1,5 @@
 import { Link, useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth";
 import { useTranslation } from "@/lib/i18n";
 import {
@@ -12,6 +13,7 @@ import {
   SidebarMenuItem,
   SidebarHeader,
   SidebarFooter,
+  SidebarMenuBadge,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -36,11 +38,18 @@ import {
   Bell,
   GitPullRequest,
 } from "lucide-react";
+import type { ChangeRequest } from "@shared/schema";
 
 export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
   const { t } = useTranslation();
+
+  const { data: pendingChangeRequests } = useQuery<ChangeRequest[]>({
+    queryKey: ["/api/admin/change-requests", { status: "SUBMITTED" }],
+  });
+  
+  const pendingCount = pendingChangeRequests?.length || 0;
 
   const mainMenuItems = [
     {
@@ -110,6 +119,7 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
       title: t("changeRequests.title") || "Change Requests",
       url: "/admin/change-requests",
       icon: GitPullRequest,
+      badge: "pendingCount",
     },
     {
       title: t("navigation.promoCodes"),
@@ -180,6 +190,11 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
+                  {item.badge === "pendingCount" && pendingCount > 0 && (
+                    <SidebarMenuBadge className="bg-destructive text-destructive-foreground">
+                      {pendingCount}
+                    </SidebarMenuBadge>
+                  )}
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

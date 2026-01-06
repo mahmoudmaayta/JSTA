@@ -9,8 +9,9 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { LoadingPage } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useTranslation, useLanguage } from "@/lib/i18n";
-import type { Office, LicenseRenewal, Payment } from "@shared/schema";
+import type { Office, LicenseRenewal, Payment, ChangeRequest } from "@shared/schema";
 import {
   PieChart,
   Pie,
@@ -38,6 +39,8 @@ import {
   CreditCard,
   Plane,
   MapPin,
+  GitPullRequest,
+  Bell,
 } from "lucide-react";
 
 interface DashboardStats {
@@ -137,6 +140,12 @@ export default function AdminDashboard() {
     queryKey: ["/api/admin/staff-analytics"],
   });
 
+  const { data: pendingChangeRequests } = useQuery<ChangeRequest[]>({
+    queryKey: ["/api/admin/change-requests", { status: "SUBMITTED" }],
+  });
+
+  const pendingChangeRequestsCount = pendingChangeRequests?.length || 0;
+
   const isLoading = statsLoading || officesLoading || renewalsLoading || paymentsLoading;
 
   const sidebarStyle = {
@@ -161,6 +170,68 @@ export default function AdminDashboard() {
               <LoadingPage message={t("common.loading")} />
             ) : (
               <div className="space-y-6">
+                {(pendingChangeRequestsCount > 0 || (stats?.offices.pending || 0) > 0 || pendingPayments.length > 0) && (
+                  <div className="space-y-3">
+                    {pendingChangeRequestsCount > 0 && (
+                      <Alert className="border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/20">
+                        <GitPullRequest className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                        <AlertTitle className="text-amber-800 dark:text-amber-200">
+                          {t("changeRequests.title")}
+                        </AlertTitle>
+                        <AlertDescription className="flex items-center justify-between gap-2 flex-wrap">
+                          <span className="text-amber-700 dark:text-amber-300">
+                            {t("changeRequests.pendingReview", { count: pendingChangeRequestsCount })}
+                          </span>
+                          <Button variant="outline" size="sm" asChild>
+                            <Link href="/admin/change-requests" data-testid="link-change-requests-alert">
+                              {t("common.view")}
+                              <ArrowRight className="ms-2 h-3 w-3" />
+                            </Link>
+                          </Button>
+                        </AlertDescription>
+                      </Alert>
+                    )}
+                    {(stats?.offices.pending || 0) > 0 && (
+                      <Alert className="border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950/20">
+                        <Building className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                        <AlertTitle className="text-blue-800 dark:text-blue-200">
+                          {t("admin.pendingOffices")}
+                        </AlertTitle>
+                        <AlertDescription className="flex items-center justify-between gap-2 flex-wrap">
+                          <span className="text-blue-700 dark:text-blue-300">
+                            {t("admin.pendingOfficesDesc", { count: stats?.offices.pending || 0 })}
+                          </span>
+                          <Button variant="outline" size="sm" asChild>
+                            <Link href="/admin/offices?status=PENDING_APPROVAL" data-testid="link-pending-offices-alert">
+                              {t("common.view")}
+                              <ArrowRight className="ms-2 h-3 w-3" />
+                            </Link>
+                          </Button>
+                        </AlertDescription>
+                      </Alert>
+                    )}
+                    {pendingPayments.length > 0 && (
+                      <Alert className="border-emerald-200 bg-emerald-50 dark:border-emerald-900 dark:bg-emerald-950/20">
+                        <CreditCard className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                        <AlertTitle className="text-emerald-800 dark:text-emerald-200">
+                          {t("payments.pendingPayments")}
+                        </AlertTitle>
+                        <AlertDescription className="flex items-center justify-between gap-2 flex-wrap">
+                          <span className="text-emerald-700 dark:text-emerald-300">
+                            {t("payments.pendingPaymentsDesc", { count: pendingPayments.length })}
+                          </span>
+                          <Button variant="outline" size="sm" asChild>
+                            <Link href="/admin/payments" data-testid="link-pending-payments-alert">
+                              {t("common.view")}
+                              <ArrowRight className="ms-2 h-3 w-3" />
+                            </Link>
+                          </Button>
+                        </AlertDescription>
+                      </Alert>
+                    )}
+                  </div>
+                )}
+
                 <div>
                   <h2 className="text-2xl font-bold">{t("admin.overview")}</h2>
                   <p className="text-muted-foreground">

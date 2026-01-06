@@ -293,6 +293,8 @@
     "renewalDetails": "تفاصيل التجديد",
     "officeApproved": "تمت الموافقة على المكتب",
     "officeRejected": "تم رفض المكتب",
+    "pendingOffices": "موافقات المكاتب المعلقة",
+    "pendingOfficesDesc": "{{count}} مكتب بانتظار موافقتك",
     "renewalApprovedDownload": "تمت الموافقة على التجديد للتحميل",
     "renewalFinalApproved": "تمت الموافقة النهائية على التجديد",
     "renewalRejected": "تم رفض التجديد",
@@ -323,6 +325,7 @@
     "renewalsAwaitingAction": "تجديدات بانتظار إجراءك",
     "noPendingRenewals": "لا توجد طلبات تجديد معلقة للمراجعة.",
     "pendingPayments": "مدفوعات في انتظار الموافقة",
+    "pendingPaymentsDesc": "{{count}} دفعة بانتظار موافقتك",
     "paymentsAwaitingApproval": "مدفوعات بانتظار مراجعتك",
     "noPendingPayments": "لا توجد مدفوعات معلقة للمراجعة.",
     "renewalKpis": {
@@ -718,6 +721,7 @@
   "changeRequests": {
     "title": "طلبات التعديل",
     "pendingRequests": "طلبات التعديل المعلقة",
+    "pendingReview": "{{count}} طلب تعديل بانتظار مراجعتك",
     "description": "مراجعة واعتماد طلبات تعديل البيانات من المكاتب",
     "office": "المكتب",
     "type": "نوع الطلب",
@@ -761,7 +765,7 @@
       "documentUpload": "رفع مستند",
       "documentDelete": "حذف مستند"
     },
-    "office": {
+    "officeForm": {
       "editInfo": "تعديل المعلومات",
       "requestEdit": "طلب تعديل",
       "pendingChanges": "لديك تعديلات معلقة بانتظار موافقة المسؤول",

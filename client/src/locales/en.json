@@ -293,6 +293,8 @@
     "renewalDetails": "Renewal Details",
     "officeApproved": "Office has been approved",
     "officeRejected": "Office has been rejected",
+    "pendingOffices": "Pending Office Approvals",
+    "pendingOfficesDesc": "{{count}} office(s) awaiting your approval",
     "renewalApprovedDownload": "Renewal approved for download",
     "renewalFinalApproved": "Renewal has been fully approved",
     "renewalRejected": "Renewal has been rejected",
@@ -323,6 +325,7 @@
     "renewalsAwaitingAction": "Renewals awaiting your action",
     "noPendingRenewals": "No pending renewal requests to review.",
     "pendingPayments": "Pending Payment Approvals",
+    "pendingPaymentsDesc": "{{count}} payment(s) awaiting your approval",
     "paymentsAwaitingApproval": "Payments awaiting your review",
     "noPendingPayments": "No pending payments to review.",
     "renewalKpis": {
@@ -718,6 +721,7 @@
   "changeRequests": {
     "title": "Change Requests",
     "pendingRequests": "Pending Change Requests",
+    "pendingReview": "{{count}} change request(s) awaiting your review",
     "description": "Review and approve data change requests from offices",
     "office": "Office",
     "type": "Request Type",
@@ -761,7 +765,7 @@
       "documentUpload": "Upload Document",
       "documentDelete": "Delete Document"
     },
-    "office": {
+    "officeForm": {
       "editInfo": "Edit Information",
       "requestEdit": "Request Edit",
       "pendingChanges": "You have pending changes awaiting admin approval",

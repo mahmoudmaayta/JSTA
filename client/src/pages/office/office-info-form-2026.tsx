@@ -136,8 +136,8 @@ export default function OfficeInfoForm2026() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/office/change-requests"] });
       toast({
-        title: t("changeRequests.office.requestSubmitted"),
-        description: t("changeRequests.office.requestSubmittedDesc"),
+        title: t("changeRequests.officeForm.requestSubmitted"),
+        description: t("changeRequests.officeForm.requestSubmittedDesc"),
       });
       setEditDialogOpen(false);
       setEditFormData(null);
@@ -145,7 +145,7 @@ export default function OfficeInfoForm2026() {
     onError: () => {
       toast({
         title: t("common.error"),
-        description: t("changeRequests.office.submitError"),
+        description: t("changeRequests.officeForm.submitError"),
         variant: "destructive",
       });
     },
@@ -166,7 +166,7 @@ export default function OfficeInfoForm2026() {
     if (!hasChanges) {
       toast({
         title: t("common.error"),
-        description: t("changeRequests.office.noChangesDetected"),
+        description: t("changeRequests.officeForm.noChangesDetected"),
         variant: "destructive",
       });
       return;
@@ -287,7 +287,7 @@ export default function OfficeInfoForm2026() {
                 data-testid="button-edit-info"
               >
                 <Pencil className="w-4 h-4 me-2" />
-                {t("changeRequests.office.editInfo")}
+                {t("changeRequests.officeForm.editInfo")}
               </Button>
             )}
           </header>
@@ -318,7 +318,7 @@ export default function OfficeInfoForm2026() {
                 <Alert className="mb-6 border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950/30">
                   <Clock className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
                   <AlertTitle className="text-yellow-700 dark:text-yellow-400">
-                    {t("changeRequests.office.pendingChanges")}
+                    {t("changeRequests.officeForm.pendingChanges")}
                   </AlertTitle>
                   <AlertDescription className="text-yellow-600 dark:text-yellow-300">
                     {t("changeRequests.status.submitted")}
@@ -747,10 +747,10 @@ export default function OfficeInfoForm2026() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Pencil className="w-5 h-5" />
-              {t("changeRequests.office.editInfo")}
+              {t("changeRequests.officeForm.editInfo")}
             </DialogTitle>
             <DialogDescription>
-              {t("changeRequests.office.editFields")}
+              {t("changeRequests.officeForm.editFields")}
             </DialogDescription>
           </DialogHeader>
           
@@ -866,7 +866,7 @@ export default function OfficeInfoForm2026() {
               <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30">
                 <AlertCircle className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                 <AlertDescription className="text-blue-700 dark:text-blue-300">
-                  {t("changeRequests.office.submitRequestDesc")}
+                  {t("changeRequests.officeForm.submitRequestDesc")}
                 </AlertDescription>
               </Alert>
             </div>
@@ -878,7 +878,7 @@ export default function OfficeInfoForm2026() {
               onClick={() => setEditDialogOpen(false)}
               data-testid="button-cancel-edit"
             >
-              {t("changeRequests.office.cancelRequest")}
+              {t("changeRequests.officeForm.cancelRequest")}
             </Button>
             <Button
               onClick={handleEditSubmit}
@@ -886,7 +886,7 @@ export default function OfficeInfoForm2026() {
               data-testid="button-submit-change-request"
             >
               {submitChangeRequestMutation.isPending && <Loader2 className="w-4 h-4 me-2 animate-spin" />}
-              {t("changeRequests.office.submitRequest")}
+              {t("changeRequests.officeForm.submitRequest")}
             </Button>
           </DialogFooter>
         </DialogContent>
