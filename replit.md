@@ -38,7 +38,9 @@ Preferred communication style: Simple, everyday language.
 
 **Password Security**: bcryptjs for hashing user passwords
 
-**File Upload Handling**: Multer middleware stores uploaded documents in local filesystem directories (`uploads/initial/` for registration documents, `uploads/ministry_docs/` for ministry-approved documents).
+**File Upload Handling**: Multer middleware with dual-mode storage support:
+- **Local Disk Storage (Development)**: Documents stored in local filesystem directories (`uploads/initial/`, `uploads/ministry_docs/`, `uploads/renewal_2026/`, `uploads/payment_proofs/`)
+- **S3-Compatible Bucket Storage (Production)**: When S3 environment variables are configured, files are stored in Railway/S3-compatible bucket storage with automatic signed URL generation for secure file access
 
 **PDF Generation**: PDFKit generates license renewal request PDFs that offices download and submit to the Ministry.
 
