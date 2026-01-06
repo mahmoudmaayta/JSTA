@@ -171,9 +171,11 @@ export default function AdminAuditLogs() {
     "--sidebar-width-icon": "3rem",
   };
 
+  const isRTL = language === 'ar';
+  
   return (
     <SidebarProvider style={sidebarStyle as React.CSSProperties}>
-      <div className="flex min-h-screen w-full">
+      <div className="flex min-h-screen w-full" dir={isRTL ? "rtl" : "ltr"}>
         <AdminSidebar key={`sidebar-${language}`} side={sidebarSide} />
         <SidebarInset className="flex-1">
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
