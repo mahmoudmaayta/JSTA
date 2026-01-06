@@ -1192,6 +1192,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         if (Object.keys(officeUpdates).length > 0) {
           await storage.updateOffice(request.officeId, officeUpdates);
         }
+        
+        // Also update the latest office info form with the approved changes
+        const latestForm = await storage.getOfficeInfoFormByOffice(request.officeId);
+        if (latestForm) {
+          // Update the form with the proposed data (using form field names directly)
+          const formUpdates: Record<string, any> = {};
+          if (formData.city !== undefined) formUpdates.city = formData.city;
+          if (formData.phone !== undefined) formUpdates.phone = formData.phone;
+          if (formData.street !== undefined) formUpdates.street = formData.street;
+          if (formData.mobile !== undefined) formUpdates.mobile = formData.mobile;
+          if (formData.jstaEmail !== undefined) formUpdates.jstaEmail = formData.jstaEmail;
+          if (formData.poBox !== undefined) formUpdates.poBox = formData.poBox;
+          if (formData.region !== undefined) formUpdates.region = formData.region;
+          if (formData.buildingNumber !== undefined) formUpdates.buildingNumber = formData.buildingNumber;
+          if (formData.fax !== undefined) formUpdates.fax = formData.fax;
+          if (formData.website !== undefined) formUpdates.website = formData.website;
+          if (formData.geographicLocationLink !== undefined) formUpdates.geographicLocationLink = formData.geographicLocationLink;
+          if (formData.additionalEmail !== undefined) formUpdates.additionalEmail = formData.additionalEmail;
+          if (formData.zipCode !== undefined) formUpdates.zipCode = formData.zipCode;
+          if (formData.tourismImported !== undefined) formUpdates.tourismImported = formData.tourismImported;
+          if (formData.airlineTickets !== undefined) formUpdates.airlineTickets = formData.airlineTickets;
+          if (formData.hajjUmrah !== undefined) formUpdates.hajjUmrah = formData.hajjUmrah;
+          if (formData.domesticTourism !== undefined) formUpdates.domesticTourism = formData.domesticTourism;
+          if (formData.outboundTourism !== undefined) formUpdates.outboundTourism = formData.outboundTourism;
+          
+          if (Object.keys(formUpdates).length > 0) {
+            await storage.updateOfficeInfoForm(latestForm.id, formUpdates);
+          }
+        }
       }
       
       const updated = await storage.approveChangeRequest(id, user.id, note);

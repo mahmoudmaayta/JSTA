@@ -147,6 +147,7 @@ export interface IStorage {
   getOfficeInfoFormByOffice(officeId: number, renewalId?: number): Promise<OfficeInfoFormRecord | undefined>;
   getAllOfficeInfoForms(): Promise<OfficeInfoFormRecord[]>;
   createOfficeInfoForm(form: InsertOfficeInfoForm): Promise<OfficeInfoFormRecord>;
+  updateOfficeInfoForm(id: number, data: Partial<OfficeInfoFormRecord>): Promise<OfficeInfoFormRecord | undefined>;
   
   getPayment(id: number): Promise<Payment | undefined>;
   getPaymentByOffice(officeId: number, renewalId?: number): Promise<Payment | undefined>;
@@ -748,6 +749,14 @@ export class DatabaseStorage implements IStorage {
   async createOfficeInfoForm(form: InsertOfficeInfoForm): Promise<OfficeInfoFormRecord> {
     const [created] = await db.insert(officeInfoForms).values(form).returning();
     return created;
+  }
+
+  async updateOfficeInfoForm(id: number, data: Partial<OfficeInfoFormRecord>): Promise<OfficeInfoFormRecord | undefined> {
+    const [updated] = await db.update(officeInfoForms)
+      .set(data)
+      .where(eq(officeInfoForms.id, id))
+      .returning();
+    return updated;
   }
 
   async getPayment(id: number): Promise<Payment | undefined> {
