@@ -363,18 +363,18 @@ export default function StaffForm2026() {
                 </Card>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-6">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
                 {sections.map((sec) => (
                   <Button
                     key={sec.key}
                     variant={activeSection === sec.key ? "default" : "outline"}
-                    className="flex items-center gap-2 justify-start h-auto py-3"
+                    className="flex items-center gap-2 justify-start h-auto py-2 px-3 whitespace-normal text-start"
                     onClick={() => setActiveSection(sec.key as any)}
                     data-testid={`tab-${sec.key}`}
                   >
-                    <sec.icon className="w-5 h-5" />
-                    <span className="text-sm">{t(sec.labelKey)}</span>
-                    {sec.required && <span className="text-xs text-red-500">*</span>}
+                    <sec.icon className="w-4 h-4 flex-shrink-0" />
+                    <span className="text-xs leading-tight">{t(sec.labelKey)}</span>
+                    {sec.required && <span className="text-xs text-red-500 flex-shrink-0">*</span>}
                   </Button>
                 ))}
               </div>
