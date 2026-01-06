@@ -34,6 +34,7 @@ import {
   ClipboardCheck,
   BarChart3,
   Bell,
+  GitPullRequest,
 } from "lucide-react";
 
 export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
@@ -104,6 +105,11 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
       title: t("navigation.auditLogs"),
       url: "/admin/audit-logs",
       icon: History,
+    },
+    {
+      title: t("changeRequests.title") || "Change Requests",
+      url: "/admin/change-requests",
+      icon: GitPullRequest,
     },
     {
       title: t("navigation.promoCodes"),

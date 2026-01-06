@@ -1069,6 +1069,283 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ logs: logsWithUser, total, limit, offset });
   });
 
+  // Change Request endpoints for admin
+  app.get("/api/admin/change-requests", ensureAdmin, async (req, res) => {
+    try {
+      const status = req.query.status as string | undefined;
+      let requests;
+      if (status === 'SUBMITTED') {
+        requests = await storage.getPendingChangeRequests();
+      } else if (status) {
+        requests = await storage.getChangeRequestsByStatus(status as any);
+      } else {
+        requests = await storage.getPendingChangeRequests();
+      }
+      
+      const requestsWithOffice = await Promise.all(
+        requests.map(async (request) => {
+          const office = await storage.getOffice(request.officeId);
+          const submitter = request.submittedBy ? await storage.getUser(request.submittedBy) : null;
+          return { 
+            ...request, 
+            office: { id: office?.id, tradeNameAr: office?.tradeNameAr, tradeNameEn: office?.tradeNameEn },
+            submitter: submitter ? { email: submitter.email } : null
+          };
+        })
+      );
+      
+      res.json(requestsWithOffice);
+    } catch (error) {
+      console.error("Error fetching change requests:", error);
+      res.status(500).json({ message: "Failed to fetch change requests" });
+    }
+  });
+
+  app.get("/api/admin/change-requests/:id", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid change request ID" });
+      }
+      
+      const request = await storage.getChangeRequest(id);
+      if (!request) {
+        return res.status(404).json({ message: "Change request not found" });
+      }
+      
+      const office = await storage.getOffice(request.officeId);
+      const submitter = request.submittedBy ? await storage.getUser(request.submittedBy) : null;
+      const reviewer = request.reviewedBy ? await storage.getUser(request.reviewedBy) : null;
+      
+      res.json({ 
+        ...request, 
+        office,
+        submitter: submitter ? { id: submitter.id, email: submitter.email } : null,
+        reviewer: reviewer ? { id: reviewer.id, email: reviewer.email } : null
+      });
+    } catch (error) {
+      console.error("Error fetching change request:", error);
+      res.status(500).json({ message: "Failed to fetch change request" });
+    }
+  });
+
+  app.post("/api/admin/change-requests/:id/approve", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid change request ID" });
+      }
+      
+      const { note } = req.body;
+      const user = (req as any).user;
+      
+      const request = await storage.getChangeRequest(id);
+      if (!request) {
+        return res.status(404).json({ message: "Change request not found" });
+      }
+      
+      if (request.status !== 'SUBMITTED') {
+        return res.status(400).json({ message: "Only submitted requests can be approved" });
+      }
+      
+      // Apply the changes based on request type
+      if (request.requestType === 'OFFICE_INFO' && request.proposedData) {
+        await storage.updateOffice(request.officeId, request.proposedData as any);
+      }
+      
+      const updated = await storage.approveChangeRequest(id, user.id, note);
+      
+      // Create audit log
+      const office = await storage.getOffice(request.officeId);
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "CHANGE_REQUEST_APPROVED",
+        targetType: "change_request",
+        targetId: id,
+        details: { 
+          officeName: office?.tradeNameAr, 
+          requestType: request.requestType,
+          note 
+        }
+      });
+      
+      res.json(updated);
+    } catch (error) {
+      console.error("Error approving change request:", error);
+      res.status(500).json({ message: "Failed to approve change request" });
+    }
+  });
+
+  app.post("/api/admin/change-requests/:id/reject", ensureAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid change request ID" });
+      }
+      
+      const { note } = req.body;
+      const user = (req as any).user;
+      
+      const request = await storage.getChangeRequest(id);
+      if (!request) {
+        return res.status(404).json({ message: "Change request not found" });
+      }
+      
+      if (request.status !== 'SUBMITTED') {
+        return res.status(400).json({ message: "Only submitted requests can be rejected" });
+      }
+      
+      const updated = await storage.rejectChangeRequest(id, user.id, note);
+      
+      // Create audit log
+      const office = await storage.getOffice(request.officeId);
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "CHANGE_REQUEST_REJECTED",
+        targetType: "change_request",
+        targetId: id,
+        details: { 
+          officeName: office?.tradeNameAr, 
+          requestType: request.requestType,
+          note 
+        }
+      });
+      
+      res.json(updated);
+    } catch (error) {
+      console.error("Error rejecting change request:", error);
+      res.status(500).json({ message: "Failed to reject change request" });
+    }
+  });
+
+  // Office-side change request endpoints
+  app.get("/api/office/change-requests", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "No office associated with user" });
+      }
+      
+      const requests = await storage.getChangeRequestsByOffice(user.officeId);
+      res.json(requests);
+    } catch (error) {
+      console.error("Error fetching office change requests:", error);
+      res.status(500).json({ message: "Failed to fetch change requests" });
+    }
+  });
+
+  app.post("/api/office/change-requests", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "No office associated with user" });
+      }
+      
+      const { requestType, targetId, currentData, proposedData } = req.body;
+      
+      const request = await storage.createChangeRequest({
+        officeId: user.officeId,
+        requestType,
+        targetId: targetId || null,
+        currentData,
+        proposedData,
+        status: 'DRAFT'
+      });
+      
+      res.json(request);
+    } catch (error) {
+      console.error("Error creating change request:", error);
+      res.status(500).json({ message: "Failed to create change request" });
+    }
+  });
+
+  app.post("/api/office/change-requests/:id/submit", ensureOffice, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid change request ID" });
+      }
+      
+      const user = (req as any).user;
+      
+      const request = await storage.getChangeRequest(id);
+      if (!request) {
+        return res.status(404).json({ message: "Change request not found" });
+      }
+      
+      if (request.officeId !== user.officeId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+      
+      if (request.status !== 'DRAFT') {
+        return res.status(400).json({ message: "Only draft requests can be submitted" });
+      }
+      
+      const updated = await storage.submitChangeRequest(id, user.id);
+      
+      // Create audit log
+      const office = await storage.getOffice(request.officeId);
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "CHANGE_REQUEST_SUBMITTED",
+        targetType: "change_request",
+        targetId: id,
+        details: { 
+          officeName: office?.tradeNameAr, 
+          requestType: request.requestType
+        }
+      });
+      
+      res.json(updated);
+    } catch (error) {
+      console.error("Error submitting change request:", error);
+      res.status(500).json({ message: "Failed to submit change request" });
+    }
+  });
+
+  // Combined create and submit in one step for convenience
+  app.post("/api/office/change-requests/submit", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (!user.officeId) {
+        return res.status(400).json({ message: "No office associated with user" });
+      }
+      
+      const { requestType, targetId, currentData, proposedData } = req.body;
+      
+      // Create the request
+      const request = await storage.createChangeRequest({
+        officeId: user.officeId,
+        requestType,
+        targetId: targetId || null,
+        currentData,
+        proposedData,
+        status: 'DRAFT'
+      });
+      
+      // Submit it immediately
+      const submitted = await storage.submitChangeRequest(request.id, user.id);
+      
+      // Create audit log
+      const office = await storage.getOffice(user.officeId);
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "CHANGE_REQUEST_SUBMITTED",
+        targetType: "change_request",
+        targetId: request.id,
+        details: { 
+          officeName: office?.tradeNameAr, 
+          requestType
+        }
+      });
+      
+      res.json(submitted);
+    } catch (error) {
+      console.error("Error creating and submitting change request:", error);
+      res.status(500).json({ message: "Failed to submit change request" });
+    }
+  });
+
   app.get("/api/admin/offices", ensureAdmin, async (req, res) => {
     const status = req.query.status as string | undefined;
     
