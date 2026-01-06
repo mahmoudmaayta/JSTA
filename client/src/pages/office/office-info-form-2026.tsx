@@ -205,7 +205,8 @@ export default function OfficeInfoForm2026() {
         domesticTourism: existingForm.domesticTourism || false,
         outboundTourism: existingForm.outboundTourism || false,
       });
-    } else if (office && !autoSaved) {
+    } else if (office && !autoSaved && !formLoading) {
+      // Only auto-save when we're sure there's no existing form (formLoading is false)
       const autoFormData: OfficeInfoFormData = {
         establishmentNameCommercialReg: office.legalNameAr || office.tradeNameAr || "",
         tradeNameAr: office.tradeNameAr || "",
@@ -225,7 +226,7 @@ export default function OfficeInfoForm2026() {
         buildingNumber: office.mainBuildingNumber || "",
         fax: office.fax || "",
         website: office.website || "",
-        geographicLocationLink: "",
+        geographicLocationLink: office.geographicLocationLink || "",
         additionalEmail: office.extraEmail || "",
         zipCode: office.postalCode || "",
         tourismImported: office.tourismImported || false,
@@ -238,7 +239,7 @@ export default function OfficeInfoForm2026() {
       setAutoSaved(true);
       saveMutation.mutate(autoFormData);
     }
-  }, [office, existingForm, autoSaved]);
+  }, [office, existingForm, autoSaved, formLoading]);
 
   const saveMutation = useMutation({
     mutationFn: async (data: OfficeInfoFormData) => {
