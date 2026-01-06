@@ -191,6 +191,7 @@ export const offices = pgTable("offices", {
   extraEmail: text("extra_email"),
   poBox: text("po_box"),
   postalCode: text("postal_code"),
+  geographicLocationLink: text("geographic_location_link"),
   managerFirstName: text("manager_first_name"),
   managerSecondName: text("manager_second_name"),
   managerMiddleName: text("manager_middle_name"),

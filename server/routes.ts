@@ -1150,7 +1150,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Apply the changes based on request type
       if (request.requestType === 'OFFICE_INFO' && request.proposedData) {
-        await storage.updateOffice(request.officeId, request.proposedData as any);
+        const formData = request.proposedData as Record<string, any>;
+        
+        // Map form field names to office table column names
+        const officeUpdates: Record<string, any> = {};
+        
+        // Direct mappings (same name in both)
+        if (formData.phone !== undefined) officeUpdates.phone = formData.phone;
+        if (formData.mobile !== undefined) officeUpdates.mobile = formData.mobile;
+        if (formData.fax !== undefined) officeUpdates.fax = formData.fax;
+        if (formData.website !== undefined) officeUpdates.website = formData.website;
+        if (formData.tradeNameAr !== undefined) officeUpdates.tradeNameAr = formData.tradeNameAr;
+        if (formData.tradeNameEn !== undefined) officeUpdates.tradeNameEn = formData.tradeNameEn;
+        if (formData.trademark !== undefined) officeUpdates.trademark = formData.trademark;
+        
+        // Renamed mappings (form field -> office table column)
+        if (formData.city !== undefined) officeUpdates.mainCity = formData.city;
+        if (formData.region !== undefined) officeUpdates.mainArea = formData.region;
+        if (formData.street !== undefined) officeUpdates.mainStreet = formData.street;
+        if (formData.buildingNumber !== undefined) officeUpdates.mainBuildingNumber = formData.buildingNumber;
+        if (formData.poBox !== undefined) officeUpdates.poBox = formData.poBox;
+        if (formData.zipCode !== undefined) officeUpdates.postalCode = formData.zipCode;
+        if (formData.jstaEmail !== undefined) officeUpdates.mainEmail = formData.jstaEmail;
+        if (formData.additionalEmail !== undefined) officeUpdates.extraEmail = formData.additionalEmail;
+        if (formData.nationalEstablishmentNumber !== undefined) officeUpdates.nationalEstablishmentNumber = formData.nationalEstablishmentNumber;
+        if (formData.awqafAccreditationNumber !== undefined) officeUpdates.awqafApprovalNo = formData.awqafAccreditationNumber;
+        if (formData.socialSecurityNumber !== undefined) officeUpdates.socialSecurityNumber = formData.socialSecurityNumber;
+        if (formData.guaranteeExpiryDate !== undefined) officeUpdates.guaranteeExpiryDate = formData.guaranteeExpiryDate;
+        
+        // Tourism activity flags
+        if (formData.tourismImported !== undefined) officeUpdates.tourismImported = formData.tourismImported;
+        if (formData.airlineTickets !== undefined) officeUpdates.airlineTickets = formData.airlineTickets;
+        if (formData.hajjUmrah !== undefined) officeUpdates.hajjUmrah = formData.hajjUmrah;
+        if (formData.domesticTourism !== undefined) officeUpdates.domesticTourism = formData.domesticTourism;
+        if (formData.outboundTourism !== undefined) officeUpdates.outboundTourism = formData.outboundTourism;
+        
+        // Geographic location link
+        if (formData.geographicLocationLink !== undefined) officeUpdates.geographicLocationLink = formData.geographicLocationLink;
+        
+        // Only update if there are actual office-level changes
+        if (Object.keys(officeUpdates).length > 0) {
+          await storage.updateOffice(request.officeId, officeUpdates);
+        }
       }
       
       const updated = await storage.approveChangeRequest(id, user.id, note);
