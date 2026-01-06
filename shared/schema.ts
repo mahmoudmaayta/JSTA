@@ -607,6 +607,63 @@ export const inspectionPhotos = pgTable("inspection_photos", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+export const ChangeRequestStatus = {
+  DRAFT: 'DRAFT',
+  SUBMITTED: 'SUBMITTED',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const;
+
+export type ChangeRequestStatusType = typeof ChangeRequestStatus[keyof typeof ChangeRequestStatus];
+
+export const ChangeRequestType = {
+  OFFICE_INFO: 'OFFICE_INFO',
+  BRANCH_CREATE: 'BRANCH_CREATE',
+  BRANCH_UPDATE: 'BRANCH_UPDATE',
+  BRANCH_DELETE: 'BRANCH_DELETE',
+  STAFF_CREATE: 'STAFF_CREATE',
+  STAFF_UPDATE: 'STAFF_UPDATE',
+  STAFF_DELETE: 'STAFF_DELETE',
+  DOCUMENT_UPLOAD: 'DOCUMENT_UPLOAD',
+  DOCUMENT_DELETE: 'DOCUMENT_DELETE'
+} as const;
+
+export type ChangeRequestTypeType = typeof ChangeRequestType[keyof typeof ChangeRequestType];
+
+export const changeRequests = pgTable("change_requests", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  officeId: integer("office_id").notNull(),
+  requestType: text("request_type").notNull().$type<ChangeRequestTypeType>(),
+  targetId: integer("target_id"),
+  status: text("status").notNull().$type<ChangeRequestStatusType>().default('DRAFT'),
+  currentData: jsonb("current_data"),
+  proposedData: jsonb("proposed_data"),
+  submittedBy: integer("submitted_by"),
+  submittedAt: timestamp("submitted_at"),
+  reviewedBy: integer("reviewed_by"),
+  reviewedAt: timestamp("reviewed_at"),
+  decisionNote: text("decision_note"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+export const insertChangeRequestSchema = z.object({
+  officeId: z.number(),
+  requestType: z.enum(['OFFICE_INFO', 'BRANCH_CREATE', 'BRANCH_UPDATE', 'BRANCH_DELETE', 'STAFF_CREATE', 'STAFF_UPDATE', 'STAFF_DELETE', 'DOCUMENT_UPLOAD', 'DOCUMENT_DELETE'] as const),
+  targetId: z.number().nullable().optional(),
+  status: z.enum(['DRAFT', 'SUBMITTED', 'APPROVED', 'REJECTED'] as const).optional(),
+  currentData: z.any().nullable().optional(),
+  proposedData: z.any().nullable().optional(),
+  submittedBy: z.number().nullable().optional(),
+  submittedAt: z.date().nullable().optional(),
+  reviewedBy: z.number().nullable().optional(),
+  reviewedAt: z.date().nullable().optional(),
+  decisionNote: z.string().nullable().optional()
+});
+
+export type InsertChangeRequest = z.infer<typeof insertChangeRequestSchema>;
+export type ChangeRequest = typeof changeRequests.$inferSelect;
+
 export const insertRenewalInviteSchema = z.object({
   officeId: z.number(),
   renewalId: z.number().nullable().optional(),

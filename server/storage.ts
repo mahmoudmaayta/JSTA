@@ -24,7 +24,9 @@ import {
   type Inspection, type InsertInspection, type InspectionStatusType,
   type OfficeStatusType, type RenewalStatusType, type PersonRoleTypeType,
   type OfficeUpdateForm, type DocumentCategoryType,
-  type City
+  type City,
+  type ChangeRequest, type InsertChangeRequest, type ChangeRequestStatusType,
+  changeRequests
 } from "@shared/schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import pkg from "pg";
@@ -182,6 +184,16 @@ export interface IStorage {
   createInspection(inspection: InsertInspection): Promise<Inspection>;
   updateInspection(id: number, data: Partial<Inspection>): Promise<Inspection | undefined>;
   updateInspectionStatus(id: number, status: InspectionStatusType): Promise<void>;
+  
+  getChangeRequest(id: number): Promise<ChangeRequest | undefined>;
+  getChangeRequestsByOffice(officeId: number): Promise<ChangeRequest[]>;
+  getChangeRequestsByStatus(status: ChangeRequestStatusType): Promise<ChangeRequest[]>;
+  getPendingChangeRequests(): Promise<ChangeRequest[]>;
+  createChangeRequest(request: InsertChangeRequest): Promise<ChangeRequest>;
+  updateChangeRequest(id: number, data: Partial<ChangeRequest>): Promise<ChangeRequest | undefined>;
+  submitChangeRequest(id: number, submittedBy: number): Promise<ChangeRequest | undefined>;
+  approveChangeRequest(id: number, reviewedBy: number, note?: string): Promise<ChangeRequest | undefined>;
+  rejectChangeRequest(id: number, reviewedBy: number, note?: string): Promise<ChangeRequest | undefined>;
   
   seedAdminUser(): Promise<void>;
 }
@@ -934,6 +946,83 @@ export class DatabaseStorage implements IStorage {
     await db.update(inspections)
       .set({ status, updatedAt: new Date() })
       .where(eq(inspections.id, id));
+  }
+
+  async getChangeRequest(id: number): Promise<ChangeRequest | undefined> {
+    const [request] = await db.select().from(changeRequests).where(eq(changeRequests.id, id));
+    return request;
+  }
+
+  async getChangeRequestsByOffice(officeId: number): Promise<ChangeRequest[]> {
+    return await db.select().from(changeRequests)
+      .where(eq(changeRequests.officeId, officeId))
+      .orderBy(desc(changeRequests.createdAt));
+  }
+
+  async getChangeRequestsByStatus(status: ChangeRequestStatusType): Promise<ChangeRequest[]> {
+    return await db.select().from(changeRequests)
+      .where(eq(changeRequests.status, status))
+      .orderBy(desc(changeRequests.createdAt));
+  }
+
+  async getPendingChangeRequests(): Promise<ChangeRequest[]> {
+    return await db.select().from(changeRequests)
+      .where(eq(changeRequests.status, 'SUBMITTED'))
+      .orderBy(desc(changeRequests.submittedAt));
+  }
+
+  async createChangeRequest(request: InsertChangeRequest): Promise<ChangeRequest> {
+    const [created] = await db.insert(changeRequests).values(request as any).returning();
+    return created;
+  }
+
+  async updateChangeRequest(id: number, data: Partial<ChangeRequest>): Promise<ChangeRequest | undefined> {
+    const [updated] = await db.update(changeRequests)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(changeRequests.id, id))
+      .returning();
+    return updated;
+  }
+
+  async submitChangeRequest(id: number, submittedBy: number): Promise<ChangeRequest | undefined> {
+    const [updated] = await db.update(changeRequests)
+      .set({ 
+        status: 'SUBMITTED' as ChangeRequestStatusType, 
+        submittedBy, 
+        submittedAt: new Date(),
+        updatedAt: new Date() 
+      })
+      .where(eq(changeRequests.id, id))
+      .returning();
+    return updated;
+  }
+
+  async approveChangeRequest(id: number, reviewedBy: number, note?: string): Promise<ChangeRequest | undefined> {
+    const [updated] = await db.update(changeRequests)
+      .set({ 
+        status: 'APPROVED' as ChangeRequestStatusType, 
+        reviewedBy, 
+        reviewedAt: new Date(),
+        decisionNote: note || null,
+        updatedAt: new Date() 
+      })
+      .where(eq(changeRequests.id, id))
+      .returning();
+    return updated;
+  }
+
+  async rejectChangeRequest(id: number, reviewedBy: number, note?: string): Promise<ChangeRequest | undefined> {
+    const [updated] = await db.update(changeRequests)
+      .set({ 
+        status: 'REJECTED' as ChangeRequestStatusType, 
+        reviewedBy, 
+        reviewedAt: new Date(),
+        decisionNote: note || null,
+        updatedAt: new Date() 
+      })
+      .where(eq(changeRequests.id, id))
+      .returning();
+    return updated;
   }
 }
 
