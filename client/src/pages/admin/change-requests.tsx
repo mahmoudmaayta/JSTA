@@ -241,7 +241,7 @@ export default function AdminChangeRequests() {
                         <TableHead>{t("changeRequests.type")}</TableHead>
                         <TableHead>{t("changeRequests.submittedBy")}</TableHead>
                         <TableHead>{t("changeRequests.submittedAt")}</TableHead>
-                        <TableHead>{t("changeRequests.status")}</TableHead>
+                        <TableHead>{t("changeRequests.statusLabel")}</TableHead>
                         <TableHead>{t("common.actions")}</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -328,7 +328,7 @@ export default function AdminChangeRequests() {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="text-muted-foreground">{t("changeRequests.status")}:</span>
+                  <span className="text-muted-foreground">{t("changeRequests.statusLabel")}:</span>
                   <Badge className={`ms-2 ${statusColors[selectedRequest.status]}`}>
                     {getStatusLabel(selectedRequest.status)}
                   </Badge>

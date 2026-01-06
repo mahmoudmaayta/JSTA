@@ -191,8 +191,11 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
                     </Link>
                   </SidebarMenuButton>
                   {item.badge === "pendingCount" && pendingCount > 0 && (
-                    <SidebarMenuBadge className="bg-destructive text-destructive-foreground">
-                      {pendingCount}
+                    <SidebarMenuBadge 
+                      className="bg-destructive text-destructive-foreground"
+                      data-testid="badge-pending-change-requests"
+                    >
+                      {pendingCount > 99 ? "99+" : pendingCount}
                     </SidebarMenuBadge>
                   )}
                 </SidebarMenuItem>

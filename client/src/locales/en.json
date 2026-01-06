@@ -748,6 +748,7 @@
     "confirmApproveDesc": "This will apply the requested changes to the office data.",
     "confirmReject": "Reject Change Request",
     "confirmRejectDesc": "This will reject the request and no changes will be made.",
+    "statusLabel": "Status",
     "status": {
       "draft": "Draft",
       "submitted": "Pending Review",

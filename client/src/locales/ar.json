@@ -748,6 +748,7 @@
     "confirmApproveDesc": "سيؤدي هذا إلى تطبيق التعديلات المطلوبة على بيانات المكتب.",
     "confirmReject": "رفض طلب التعديل",
     "confirmRejectDesc": "سيؤدي هذا إلى رفض الطلب ولن يتم إجراء أي تعديلات.",
+    "statusLabel": "الحالة",
     "status": {
       "draft": "مسودة",
       "submitted": "قيد المراجعة",
