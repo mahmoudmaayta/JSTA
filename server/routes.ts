@@ -47,6 +47,7 @@ import {
   type InsertRenewalAttachment,
   type PersonRoleTypeType,
 } from "@shared/schema";
+import { uploadFile, getFileUrl, getFileBuffer, isS3StorageEnabled } from "./file-storage";
 
 declare module "express-session" {
   interface SessionData {
@@ -62,27 +63,44 @@ if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 if (!fs.existsSync(initialDir)) fs.mkdirSync(initialDir, { recursive: true });
 if (!fs.existsSync(ministryDir)) fs.mkdirSync(ministryDir, { recursive: true });
 
-const initialUpload = multer({
-  storage: multer.diskStorage({
-    destination: initialDir,
-    filename: (req, file, cb) => {
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-      cb(null, uniqueSuffix + "-" + file.originalname);
-    },
-  }),
-  limits: { fileSize: 10 * 1024 * 1024 },
-});
+const createUploadMiddleware = (category: string, allowedTypes?: string[]) => {
+  const useS3 = isS3StorageEnabled();
+  
+  const fileFilter = allowedTypes ? (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (allowedTypes.includes(ext)) {
+      cb(null, true);
+    } else {
+      cb(new Error(`Invalid file type. Allowed: ${allowedTypes.join(", ")}`));
+    }
+  } : undefined;
 
-const ministryUpload = multer({
-  storage: multer.diskStorage({
-    destination: ministryDir,
-    filename: (req, file, cb) => {
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-      cb(null, uniqueSuffix + "-" + file.originalname);
-    },
-  }),
-  limits: { fileSize: 10 * 1024 * 1024 },
-});
+  if (useS3) {
+    return multer({
+      storage: multer.memoryStorage(),
+      limits: { fileSize: 10 * 1024 * 1024 },
+      fileFilter,
+    });
+  } else {
+    const dir = path.join(uploadsDir, category);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    
+    return multer({
+      storage: multer.diskStorage({
+        destination: dir,
+        filename: (req, file, cb) => {
+          const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+          cb(null, uniqueSuffix + "-" + file.originalname);
+        },
+      }),
+      limits: { fileSize: 10 * 1024 * 1024 },
+      fileFilter,
+    });
+  }
+};
+
+const initialUpload = createUploadMiddleware("initial");
+const ministryUpload = createUploadMiddleware("ministry_docs");
 
 async function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
   if (!req.session.userId) {
@@ -392,21 +410,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
           // Validate MIME type matches file extension
           if (!validateFileMimeType(file.originalname, file.mimetype)) {
-            // Delete already uploaded files
-            files.forEach(f => {
-              if (fs.existsSync(f.path)) fs.unlinkSync(f.path);
-            });
+            // Delete already uploaded files (only for disk storage)
+            if (!isS3StorageEnabled()) {
+              files.forEach(f => {
+                if (f.path && fs.existsSync(f.path)) fs.unlinkSync(f.path);
+              });
+            }
             return res.status(400).json({
               message: `Invalid file type: ${file.originalname}. File extension doesn't match content type.`
             });
           }
 
           const category = documentCategories[i] || "INITIAL_FIRST_FORMS";
+          
+          let filePath: string;
+          if (isS3StorageEnabled() && file.buffer) {
+            const result = await uploadFile(file.buffer, file.originalname, "initial", file.mimetype);
+            filePath = result.fileUrl;
+          } else {
+            filePath = file.path;
+          }
+          
           await storage.createDocument({
             officeId: office.id,
             renewalId: null,
             category: category as DocumentCategoryType,
-            filePath: file.path,
+            filePath,
             originalFilename: sanitizeFileName(file.originalname),
             uploadedByUserId: user.id,
           });
@@ -643,7 +672,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    await storage.updateRenewalMinistryDoc(renewal.id, file.path);
+    let filePath: string;
+    if (isS3StorageEnabled() && file.buffer) {
+      const result = await uploadFile(file.buffer, file.originalname, "ministry_docs", file.mimetype);
+      filePath = result.fileUrl;
+    } else {
+      filePath = file.path;
+    }
+
+    await storage.updateRenewalMinistryDoc(renewal.id, filePath);
 
     const office = await storage.getOffice(user.officeId);
     sendMinistryDocUploadedEmail("atallaabutaha@gmail.com", office?.tradeNameAr || "Unknown Office", renewal.year);
@@ -1645,25 +1682,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const renewalDocsDir = path.join(uploadsDir, "renewal_2026");
   if (!fs.existsSync(renewalDocsDir)) fs.mkdirSync(renewalDocsDir, { recursive: true });
 
-  const renewalUpload = multer({
-    storage: multer.diskStorage({
-      destination: renewalDocsDir,
-      filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-        cb(null, uniqueSuffix + "-" + file.originalname);
-      },
-    }),
-    limits: { fileSize: 10 * 1024 * 1024 },
-    fileFilter: (req, file, cb) => {
-      const allowedTypes = [".pdf", ".jpg", ".jpeg", ".png", ".doc", ".docx"];
-      const ext = path.extname(file.originalname).toLowerCase();
-      if (allowedTypes.includes(ext)) {
-        cb(null, true);
-      } else {
-        cb(new Error("Invalid file type. Allowed: PDF, JPG, PNG, DOC, DOCX"));
-      }
-    },
-  });
+  const renewalUpload = createUploadMiddleware("renewal_2026", [".pdf", ".jpg", ".jpeg", ".png", ".doc", ".docx"]);
 
   // Create new 2026 renewal for office
   app.post("/api/office/renewals-2026", ensureOffice, async (req, res) => {
@@ -2363,7 +2382,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Validate MIME type matches file extension
       if (!validateFileMimeType(file.originalname, file.mimetype)) {
-        fs.unlinkSync(file.path);
+        if (!isS3StorageEnabled() && file.path) {
+          fs.unlinkSync(file.path);
+        }
         return res.status(400).json({
           message: `Invalid file type: ${file.originalname}. File extension doesn't match content type.`
         });
@@ -2379,16 +2400,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       ];
 
       if (!validCategories.includes(category)) {
-        fs.unlinkSync(file.path);
+        if (!isS3StorageEnabled() && file.path) {
+          fs.unlinkSync(file.path);
+        }
         return res.status(400).json({ message: "Invalid document category" });
       }
 
-      // Use fileUrl and fileName per schema
+      let fileUrl: string;
+      if (isS3StorageEnabled() && file.buffer) {
+        const result = await uploadFile(file.buffer, file.originalname, "renewal_2026", file.mimetype);
+        fileUrl = result.fileUrl;
+      } else {
+        fileUrl = file.path;
+      }
+
       const attachment = await storage.createRenewalAttachment({
         renewalId: renewalId,
         officeId: user.officeId,
         category: category as DocumentCategoryType,
-        fileUrl: file.path,
+        fileUrl,
         fileName: sanitizeFileName(file.originalname),
         fileSize: file.size,
         mimeType: file.mimetype,
@@ -2866,29 +2896,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const paymentDir = path.join(uploadsDir, "payment_proofs");
   if (!fs.existsSync(paymentDir)) fs.mkdirSync(paymentDir, { recursive: true });
 
-  const paymentUpload = multer({
-    storage: multer.diskStorage({
-      destination: paymentDir,
-      filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-        cb(null, uniqueSuffix + "-" + sanitizeFileName(file.originalname));
-      },
-    }),
-    limits: { fileSize: 10 * 1024 * 1024 },
-    fileFilter: (req, file, cb) => {
-      const allowedMimeTypes = [
-        "image/jpeg",
-        "image/png",
-        "image/gif",
-        "application/pdf",
-      ];
-      if (allowedMimeTypes.includes(file.mimetype)) {
-        cb(null, true);
-      } else {
-        cb(new Error("Invalid file type. Only images and PDF allowed."));
-      }
-    },
-  });
+  const paymentUpload = createUploadMiddleware("payment_proofs", [".jpg", ".jpeg", ".png", ".gif", ".pdf"]);
 
   // Get current payment for office
   app.get("/api/payments/current", ensureOffice, async (req, res) => {
@@ -2980,9 +2988,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "No file uploaded" });
       }
       
+      let proofFileUrl: string;
+      if (isS3StorageEnabled() && file.buffer) {
+        const result = await uploadFile(file.buffer, file.originalname, "payment_proofs", file.mimetype);
+        proofFileUrl = result.fileUrl;
+      } else {
+        proofFileUrl = `/uploads/payment_proofs/${file.filename}`;
+      }
+      
       // Update payment with proof file
       const updatedPayment = await storage.updatePayment(paymentId, {
-        proofFileUrl: `/uploads/payment_proofs/${file.filename}`,
+        proofFileUrl,
         proofFileName: file.originalname,
         status: 'UPLOADED',
       });
