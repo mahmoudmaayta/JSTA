@@ -217,22 +217,22 @@ export default function AdminNotifications() {
                 </div>
 
                 <Tabs defaultValue="license" className="space-y-4">
-                  <TabsList className="grid grid-cols-4 w-full max-w-2xl">
-                    <TabsTrigger value="license" data-testid="tab-license">
-                      <Calendar className="h-4 w-4 me-2" />
-                      {t("admin.notifications.licenseExpiry")}
+                  <TabsList className="grid grid-cols-2 lg:grid-cols-4 w-full max-w-3xl h-auto gap-1 p-1">
+                    <TabsTrigger value="license" data-testid="tab-license" className="text-xs px-2 py-2 whitespace-normal">
+                      <Calendar className="h-4 w-4 me-1 flex-shrink-0" />
+                      <span className="truncate">{t("admin.notifications.licenseExpiry")}</span>
                     </TabsTrigger>
-                    <TabsTrigger value="payment" data-testid="tab-payment">
-                      <CreditCard className="h-4 w-4 me-2" />
-                      {t("admin.notifications.paymentDue")}
+                    <TabsTrigger value="payment" data-testid="tab-payment" className="text-xs px-2 py-2 whitespace-normal">
+                      <CreditCard className="h-4 w-4 me-1 flex-shrink-0" />
+                      <span className="truncate">{t("admin.notifications.paymentDue")}</span>
                     </TabsTrigger>
-                    <TabsTrigger value="security" data-testid="tab-security">
-                      <Shield className="h-4 w-4 me-2" />
-                      {t("admin.notifications.socialSecurity")}
+                    <TabsTrigger value="security" data-testid="tab-security" className="text-xs px-2 py-2 whitespace-normal">
+                      <Shield className="h-4 w-4 me-1 flex-shrink-0" />
+                      <span className="truncate">{t("admin.notifications.socialSecurity")}</span>
                     </TabsTrigger>
-                    <TabsTrigger value="guarantee" data-testid="tab-guarantee">
-                      <AlertCircle className="h-4 w-4 me-2" />
-                      {t("admin.notifications.guarantee")}
+                    <TabsTrigger value="guarantee" data-testid="tab-guarantee" className="text-xs px-2 py-2 whitespace-normal">
+                      <AlertCircle className="h-4 w-4 me-1 flex-shrink-0" />
+                      <span className="truncate">{t("admin.notifications.guarantee")}</span>
                     </TabsTrigger>
                   </TabsList>
 

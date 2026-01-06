@@ -227,6 +227,26 @@ export default function StaffForm2026() {
     setDeleteConfirm(null);
   };
 
+  // Get National IDs from specialized sections for deduplication
+  const getSpecializedNationalIds = (): Set<string> => {
+    const ids = new Set<string>();
+    [...ownersPartners, ...authorizedSignatories, ...dedicatedManagers].forEach(person => {
+      if (person.nationalId?.trim()) {
+        ids.add(person.nationalId.trim());
+      }
+    });
+    return ids;
+  };
+
+  // Filter employees to exclude those in specialized sections
+  const getFilteredEmployees = (): PersonRow[] => {
+    const specializedIds = getSpecializedNationalIds();
+    return employees.filter(emp => {
+      const empId = emp.nationalId?.trim();
+      return !empId || !specializedIds.has(empId);
+    });
+  };
+
   const handleSubmit = () => {
     if (!consentAccepted) {
       toast({
@@ -259,11 +279,14 @@ export default function StaffForm2026() {
       return;
     }
 
+    // Filter employees to exclude those in specialized sections before saving
+    const filteredEmployees = getFilteredEmployees().filter(r => r.fullNameAr.trim());
+    
     saveMutation.mutate({
       ownersPartners: ownersPartners.filter(r => r.fullNameAr.trim()),
       authorizedSignatories: authorizedSignatories.filter(r => r.fullNameAr.trim()),
       dedicatedManagers: dedicatedManagers.filter(r => r.fullNameAr.trim()),
-      employees: employees.filter(r => r.fullNameAr.trim()),
+      employees: filteredEmployees,
       consentAccepted,
     });
   };
@@ -277,7 +300,7 @@ export default function StaffForm2026() {
       case "managers":
         return { data: dedicatedManagers, section: "managers" };
       case "employees":
-        return { data: employees, section: "employees" };
+        return { data: getFilteredEmployees(), section: "employees" };
     }
   };
 

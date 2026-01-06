@@ -119,7 +119,10 @@ export default function StaffProfile() {
 
   const saveMutation = useMutation({
     mutationFn: async (data: PersonRow) => {
-      const res = await apiRequest("PUT", `/api/forms/staff-2026/person/${section}/${index}`, data);
+      if (!data.id) {
+        throw new Error("Person ID not found");
+      }
+      const res = await apiRequest("PUT", `/api/forms/staff-2026/person/${data.id}`, data);
       return res.json();
     },
     onSuccess: () => {
@@ -139,6 +142,15 @@ export default function StaffProfile() {
   });
 
   const handleFileUpload = async (file: File, type: "identity" | "criminal") => {
+    if (!personData?.id) {
+      toast({
+        title: t("common.error"),
+        description: "Person ID not found",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const setUploading = type === "identity" ? setUploadingIdentity : setUploadingCriminal;
     setUploading(true);
 
@@ -146,8 +158,7 @@ export default function StaffProfile() {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("category", type === "identity" ? "identity_card" : "no_criminal_record");
-      formData.append("section", section);
-      formData.append("personIndex", index.toString());
+      formData.append("personId", personData.id.toString());
 
       const response = await fetch("/api/forms/staff-2026/upload-document", {
         method: "POST",

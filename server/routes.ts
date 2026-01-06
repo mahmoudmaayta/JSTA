@@ -2075,6 +2075,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   if (!fs.existsSync(renewalDocsDir)) fs.mkdirSync(renewalDocsDir, { recursive: true });
 
   const renewalUpload = createUploadMiddleware("renewal_2026", [".pdf", ".jpg", ".jpeg", ".png", ".doc", ".docx"]);
+  
+  // Create staff docs upload middleware
+  const staffDocsDir = path.join(uploadsDir, "staff_docs");
+  if (!fs.existsSync(staffDocsDir)) fs.mkdirSync(staffDocsDir, { recursive: true });
+  const staffDocUpload = createUploadMiddleware("staff_docs", [".pdf", ".jpg", ".jpeg", ".png"]);
 
   // Create new 2026 renewal for office
   app.post("/api/office/renewals-2026", ensureOffice, async (req, res) => {
@@ -2748,6 +2753,137 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ message: "تم حذف الشخص بنجاح" });
     } catch (error) {
       console.error("Delete person error:", error);
+      res.status(500).json({ message: "خطأ داخلي في الخادم" });
+    }
+  });
+
+  // PUT update a person's profile
+  app.put("/api/forms/staff-2026/person/:personId", ensureOffice, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const personId = parseInt(req.params.personId);
+
+      if (isNaN(personId)) {
+        return res.status(400).json({ message: "رقم الشخص غير صالح" });
+      }
+
+      const person = await storage.getPerson(personId);
+      if (!person || person.officeId !== user.officeId) {
+        return res.status(404).json({ message: "الشخص غير موجود" });
+      }
+
+      const updateData = req.body;
+      
+      // Update person
+      const updatedPerson = await storage.updatePerson(personId, {
+        fullNameAr: updateData.fullNameAr,
+        fullNameEn: updateData.fullNameEn,
+        nationalId: updateData.nationalId,
+        socialSecurityNo: updateData.socialSecurityNo,
+        nationality: updateData.nationality,
+        gender: updateData.gender,
+        motherName: updateData.motherName,
+        mobile: updateData.mobile,
+        birthDate: updateData.birthDate,
+        job: updateData.currentPosition,
+      });
+
+      // Create audit log
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "PERSON_UPDATED",
+        targetType: "person",
+        targetId: personId,
+        details: { 
+          fullNameAr: updateData.fullNameAr, 
+          nationalId: updateData.nationalId,
+          officeId: user.officeId,
+        }
+      });
+
+      res.json(updatedPerson);
+    } catch (error) {
+      console.error("Update person error:", error);
+      res.status(500).json({ message: "خطأ داخلي في الخادم" });
+    }
+  });
+
+  // Upload staff document (identity card or criminal record)
+  app.post("/api/forms/staff-2026/upload-document", ensureOffice, rateLimitMiddleware(uploadRateLimiter), staffDocUpload.single("file"), async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const file = req.file;
+
+      if (!file) {
+        return res.status(400).json({ message: "لم يتم رفع أي ملف" });
+      }
+
+      const { category, personId } = req.body;
+      
+      if (!personId) {
+        if (!isS3StorageEnabled() && file.path) {
+          fs.unlinkSync(file.path);
+        }
+        return res.status(400).json({ message: "معرف الشخص مطلوب" });
+      }
+
+      const validCategories = ["identity_card", "no_criminal_record"];
+      if (!validCategories.includes(category)) {
+        if (!isS3StorageEnabled() && file.path) {
+          fs.unlinkSync(file.path);
+        }
+        return res.status(400).json({ message: "نوع المستند غير صالح" });
+      }
+
+      // Validate MIME type
+      if (!validateFileMimeType(file.originalname, file.mimetype)) {
+        if (!isS3StorageEnabled() && file.path) {
+          fs.unlinkSync(file.path);
+        }
+        return res.status(400).json({ message: "نوع الملف غير صالح" });
+      }
+
+      const person = await storage.getPerson(parseInt(personId));
+      if (!person || person.officeId !== user.officeId) {
+        if (!isS3StorageEnabled() && file.path) {
+          fs.unlinkSync(file.path);
+        }
+        return res.status(404).json({ message: "الشخص غير موجود" });
+      }
+
+      let fileUrl: string;
+      if (isS3StorageEnabled() && file.buffer) {
+        const result = await uploadFile(file.buffer, file.originalname, "staff_docs", file.mimetype);
+        fileUrl = result.fileUrl;
+      } else {
+        fileUrl = file.path;
+      }
+
+      // Update person with the document file path
+      const updateField = category === "identity_card" ? "identityCardFile" : "noCriminalRecordFile";
+      await storage.updatePerson(parseInt(personId), {
+        [updateField]: fileUrl,
+      });
+
+      // Create audit log
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "STAFF_DOCUMENT_UPLOADED",
+        targetType: "person",
+        targetId: parseInt(personId),
+        details: { 
+          category,
+          fileName: sanitizeFileName(file.originalname),
+          officeId: user.officeId,
+        }
+      });
+
+      res.json({ 
+        message: "تم رفع المستند بنجاح",
+        filePath: fileUrl,
+      });
+    } catch (error) {
+      console.error("Upload staff document error:", error);
       res.status(500).json({ message: "خطأ داخلي في الخادم" });
     }
   });
