@@ -693,6 +693,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(stats);
   });
 
+  // Sidebar notification counts - returns counts for all sidebar badges
+  app.get("/api/admin/sidebar-counts", ensureAdmin, async (req, res) => {
+    try {
+      const [offices, renewals, payments, changeRequestsList] = await Promise.all([
+        storage.getAllOffices(),
+        storage.getAllRenewals(),
+        storage.getAllPayments(),
+        storage.getPendingChangeRequests(),
+      ]);
+
+      // Count pending offices (PENDING_APPROVAL status)
+      const pendingOffices = offices.filter(o => o.status === "PENDING_APPROVAL").length;
+      
+      // Count renewals needing attention (SUBMITTED, MINISTRY_DOC_UPLOADED)
+      const pendingRenewals = renewals.filter(r => 
+        r.status === "SUBMITTED" || r.status === "MINISTRY_DOC_UPLOADED"
+      ).length;
+      
+      // Count pending payments
+      const pendingPayments = payments.filter(p => p.status === "PENDING").length;
+      
+      // Count pending change requests
+      const pendingChangeRequestsCount = changeRequestsList.length;
+      
+      // Count notifications (offices with expired/expiring licenses)
+      const now = new Date();
+      let criticalAlerts = 0;
+      let warningAlerts = 0;
+      
+      for (const office of offices) {
+        const renewalYear = office.lastRenewalYear || 0;
+        const expiryDate = new Date(renewalYear, 11, 31);
+        const daysUntilExpiry = Math.ceil((expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+        
+        if (daysUntilExpiry < 0 || !office.lastRenewalYear) {
+          criticalAlerts++;
+        } else if (daysUntilExpiry <= 30) {
+          criticalAlerts++;
+        } else if (daysUntilExpiry <= 60) {
+          warningAlerts++;
+        }
+        
+        // Check guarantee expiry
+        if (office.guaranteeExpiryDate) {
+          const guaranteeDate = new Date(office.guaranteeExpiryDate);
+          const guaranteeDays = Math.ceil((guaranteeDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+          if (guaranteeDays < 0) criticalAlerts++;
+          else if (guaranteeDays <= 30) warningAlerts++;
+        }
+      }
+      
+      res.json({
+        pendingOffices,
+        pendingRenewals,
+        pendingPayments,
+        pendingChangeRequests: pendingChangeRequestsCount,
+        criticalAlerts,
+        warningAlerts,
+        totalAlerts: criticalAlerts + warningAlerts,
+      });
+    } catch (error) {
+      console.error("Sidebar counts error:", error);
+      res.status(500).json({ message: "Failed to fetch sidebar counts" });
+    }
+  });
+
   app.get("/api/admin/analytics", ensureAdmin, async (req, res) => {
     const allOffices = await storage.getAllOffices();
     const activeOffices = allOffices.filter(office => office.lastRenewalYear === 2025);

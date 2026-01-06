@@ -40,91 +40,133 @@ import {
 } from "lucide-react";
 import type { ChangeRequest } from "@shared/schema";
 
+interface SidebarCounts {
+  pendingOffices: number;
+  pendingRenewals: number;
+  pendingPayments: number;
+  pendingChangeRequests: number;
+  criticalAlerts: number;
+  warningAlerts: number;
+  totalAlerts: number;
+}
+
 export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
   const { t } = useTranslation();
 
+  // Fetch all sidebar counts in a single request
+  const { data: sidebarCounts } = useQuery<SidebarCounts>({
+    queryKey: ["/api/admin/sidebar-counts"],
+    refetchInterval: 60000, // Refresh every minute
+  });
+
   const { data: pendingChangeRequests } = useQuery<ChangeRequest[]>({
     queryKey: ["/api/admin/change-requests", { status: "SUBMITTED" }],
   });
   
-  const pendingCount = pendingChangeRequests?.length || 0;
+  const pendingCount = sidebarCounts?.pendingChangeRequests || pendingChangeRequests?.length || 0;
 
   const mainMenuItems = [
     {
       title: t("navigation.dashboard"),
       url: "/admin",
       icon: LayoutDashboard,
+      badge: null as string | null,
     },
     {
       title: t("navigation.offices"),
       url: "/admin/offices",
       icon: Building,
+      badge: "pendingOffices" as string | null,
     },
     {
       title: t("navigation.renewals"),
       url: "/admin/renewals",
       icon: FileCheck,
+      badge: "pendingRenewals" as string | null,
     },
     {
       title: t("navigation.fieldInspection"),
       url: "/admin/field-inspection",
       icon: ClipboardCheck,
+      badge: null as string | null,
     },
     {
       title: t("navigation.payments"),
       url: "/admin/payments",
       icon: CreditCard,
+      badge: "pendingPayments" as string | null,
     },
     {
       title: t("navigation.staffDashboard"),
       url: "/admin/staff",
       icon: Users,
+      badge: null as string | null,
     },
   ];
+
+  // Helper function to get badge count
+  const getBadgeCount = (badgeKey: string | null): number => {
+    if (!badgeKey || !sidebarCounts) return 0;
+    switch (badgeKey) {
+      case "pendingOffices": return sidebarCounts.pendingOffices;
+      case "pendingRenewals": return sidebarCounts.pendingRenewals;
+      case "pendingPayments": return sidebarCounts.pendingPayments;
+      case "pendingCount": return pendingCount;
+      case "totalAlerts": return sidebarCounts.totalAlerts;
+      default: return 0;
+    }
+  };
 
   const secondaryMenuItems = [
     {
       title: t("navigation.renewalInvitations") || "Renewal Invitations",
       url: "/admin/renewal-invitations",
       icon: Mail,
+      badge: null as string | null,
     },
     {
       title: t("navigation.officeInfoForms") || "Office Info Forms",
       url: "/admin/office-info-forms",
       icon: FileText,
+      badge: null as string | null,
     },
     {
       title: t("navigation.commitmentsDashboard"),
       url: "/admin/commitments",
       icon: FileWarning,
+      badge: null as string | null,
     },
     {
       title: t("navigation.reports") || "Reports & Statistics",
       url: "/admin/reports",
       icon: BarChart3,
+      badge: null as string | null,
     },
     {
       title: t("navigation.notifications") || "Notifications",
       url: "/admin/notifications",
       icon: Bell,
+      badge: "totalAlerts" as string | null,
     },
     {
       title: t("navigation.auditLogs"),
       url: "/admin/audit-logs",
       icon: History,
+      badge: null as string | null,
     },
     {
       title: t("changeRequests.title") || "Change Requests",
       url: "/admin/change-requests",
       icon: GitPullRequest,
-      badge: "pendingCount",
+      badge: "pendingCount" as string | null,
     },
     {
       title: t("navigation.promoCodes"),
       url: "/admin/promo-codes",
       icon: Tag,
+      badge: null as string | null,
     },
   ];
 
@@ -159,19 +201,30 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
           <SidebarGroupLabel>{t("navigation.home")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {mainMenuItems.map((item) => (
-                <SidebarMenuItem key={item.url}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={location === item.url || (item.url !== "/admin" && location.startsWith(item.url))}
-                  >
-                    <Link href={item.url} data-testid={`nav-${item.url.split("/").pop()}`}>
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {mainMenuItems.map((item) => {
+                const badgeCount = getBadgeCount(item.badge);
+                return (
+                  <SidebarMenuItem key={item.url}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={location === item.url || (item.url !== "/admin" && location.startsWith(item.url))}
+                    >
+                      <Link href={item.url} data-testid={`nav-${item.url.split("/").pop()}`}>
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                    {badgeCount > 0 && (
+                      <SidebarMenuBadge 
+                        className="bg-destructive text-destructive-foreground"
+                        data-testid={`badge-${item.url.split("/").pop()}`}
+                      >
+                        {badgeCount > 99 ? "99+" : badgeCount}
+                      </SidebarMenuBadge>
+                    )}
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -179,27 +232,30 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
           <SidebarGroupLabel>{t("navigation.management")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {secondaryMenuItems.map((item) => (
-                <SidebarMenuItem key={item.url}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={location === item.url || (item.url !== "/admin" && location.startsWith(item.url))}
-                  >
-                    <Link href={item.url} data-testid={`nav-${item.url.split("/").pop()}`}>
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                  {item.badge === "pendingCount" && pendingCount > 0 && (
-                    <SidebarMenuBadge 
-                      className="bg-destructive text-destructive-foreground"
-                      data-testid="badge-pending-change-requests"
+              {secondaryMenuItems.map((item) => {
+                const badgeCount = getBadgeCount(item.badge);
+                return (
+                  <SidebarMenuItem key={item.url}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={location === item.url || (item.url !== "/admin" && location.startsWith(item.url))}
                     >
-                      {pendingCount > 99 ? "99+" : pendingCount}
-                    </SidebarMenuBadge>
-                  )}
-                </SidebarMenuItem>
-              ))}
+                      <Link href={item.url} data-testid={`nav-${item.url.split("/").pop()}`}>
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                    {badgeCount > 0 && (
+                      <SidebarMenuBadge 
+                        className="bg-destructive text-destructive-foreground"
+                        data-testid={`badge-${item.url.split("/").pop()}`}
+                      >
+                        {badgeCount > 99 ? "99+" : badgeCount}
+                      </SidebarMenuBadge>
+                    )}
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
