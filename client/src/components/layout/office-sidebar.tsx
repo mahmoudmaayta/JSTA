@@ -10,6 +10,7 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
+  SidebarMenuBadge,
   SidebarMenuItem,
   SidebarHeader,
   SidebarFooter,
@@ -46,6 +47,11 @@ interface Payment {
   status: 'PENDING' | 'UPLOADED' | 'APPROVED' | 'REJECTED';
 }
 
+interface ChangeRequest {
+  id: number;
+  status: 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'REJECTED';
+}
+
 export function OfficeSidebar({ side = "left" }: { side?: "left" | "right" }) {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
@@ -60,7 +66,12 @@ export function OfficeSidebar({ side = "left" }: { side?: "left" | "right" }) {
     queryKey: ["/api/payments/current"],
   });
 
+  const { data: changeRequests } = useQuery<ChangeRequest[]>({
+    queryKey: ["/api/office/change-requests"],
+  });
+
   const isPaymentApproved = payment?.status === 'APPROVED';
+  const pendingChangeRequests = changeRequests?.filter(r => r.status === 'SUBMITTED')?.length || 0;
 
   const officeMenuItems = [
     {
@@ -79,6 +90,7 @@ export function OfficeSidebar({ side = "left" }: { side?: "left" | "right" }) {
       icon: Building2,
       showStatus: true,
       completed: formStatus?.officeInfoFormCompleted,
+      showChangeRequestBadge: true,
     },
     {
       title: t("navigation.staffForm2026"),
@@ -150,6 +162,7 @@ export function OfficeSidebar({ side = "left" }: { side?: "left" | "right" }) {
                 const isLocked = 'locked' in item && item.locked;
                 const showStatus = 'showStatus' in item && item.showStatus;
                 const isCompleted = 'completed' in item && item.completed;
+                const showChangeRequestBadge = 'showChangeRequestBadge' in item && item.showChangeRequestBadge;
                 
                 if (isLocked) {
                   return (
@@ -191,6 +204,14 @@ export function OfficeSidebar({ side = "left" }: { side?: "left" | "right" }) {
                         )}
                       </Link>
                     </SidebarMenuButton>
+                    {showChangeRequestBadge && pendingChangeRequests > 0 && (
+                      <SidebarMenuBadge 
+                        className="bg-amber-500 text-white"
+                        data-testid="badge-pending-office-change-requests"
+                      >
+                        {pendingChangeRequests > 99 ? "99+" : pendingChangeRequests}
+                      </SidebarMenuBadge>
+                    )}
                   </SidebarMenuItem>
                 );
               })}
