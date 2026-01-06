@@ -47,7 +47,7 @@ import {
   type InsertRenewalAttachment,
   type PersonRoleTypeType,
 } from "@shared/schema";
-import { uploadFile, getFileUrl, getFileBuffer, isS3StorageEnabled } from "./file-storage";
+import { uploadFile, getFileUrl, getFileBuffer, isS3StorageEnabled, isS3Path, fileExists, deleteFile } from "./file-storage";
 
 declare module "express-session" {
   interface SessionData {
@@ -1566,11 +1566,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    if (!fs.existsSync(document.filePath)) {
+    try {
+      if (isS3Path(document.filePath)) {
+        const buffer = await getFileBuffer(document.filePath);
+        res.setHeader("Content-Disposition", `attachment; filename="${document.originalFilename}"`);
+        res.setHeader("Content-Type", "application/octet-stream");
+        res.send(buffer);
+      } else {
+        if (!fs.existsSync(document.filePath)) {
+          return res.status(404).json({ message: "File not found on server" });
+        }
+        res.download(document.filePath, document.originalFilename);
+      }
+    } catch (error) {
+      console.error("Error downloading document:", error);
       return res.status(404).json({ message: "File not found on server" });
     }
-
-    res.download(document.filePath, document.originalFilename);
   });
 
   app.get("/api/documents/:id/preview", ensureAuthenticated, async (req, res) => {
@@ -1589,10 +1600,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    if (!fs.existsSync(document.filePath)) {
-      return res.status(404).json({ message: "File not found on server" });
-    }
-
     const ext = path.extname(document.originalFilename).toLowerCase();
     const mimeTypes: Record<string, string> = {
       ".pdf": "application/pdf",
@@ -1605,11 +1612,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     };
 
     const contentType = mimeTypes[ext] || "application/octet-stream";
-    res.setHeader("Content-Type", contentType);
-    res.setHeader("Content-Disposition", `inline; filename="${document.originalFilename}"`);
-    
-    const fileStream = fs.createReadStream(document.filePath);
-    fileStream.pipe(res);
+
+    try {
+      if (isS3Path(document.filePath)) {
+        const buffer = await getFileBuffer(document.filePath);
+        res.setHeader("Content-Type", contentType);
+        res.setHeader("Content-Disposition", `inline; filename="${document.originalFilename}"`);
+        res.send(buffer);
+      } else {
+        if (!fs.existsSync(document.filePath)) {
+          return res.status(404).json({ message: "File not found on server" });
+        }
+        res.setHeader("Content-Type", contentType);
+        res.setHeader("Content-Disposition", `inline; filename="${document.originalFilename}"`);
+        const fileStream = fs.createReadStream(document.filePath);
+        fileStream.pipe(res);
+      }
+    } catch (error) {
+      console.error("Error previewing document:", error);
+      return res.status(404).json({ message: "File not found on server" });
+    }
   });
 
   app.get("/api/documents/ministry/:renewalId/download", ensureAuthenticated, async (req, res) => {
@@ -1628,11 +1650,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    if (!fs.existsSync(renewal.ministryDocumentPath)) {
+    try {
+      if (isS3Path(renewal.ministryDocumentPath)) {
+        const buffer = await getFileBuffer(renewal.ministryDocumentPath);
+        const ext = path.extname(renewal.ministryDocumentPath).toLowerCase();
+        res.setHeader("Content-Disposition", `attachment; filename="ministry-document${ext}"`);
+        res.setHeader("Content-Type", "application/octet-stream");
+        res.send(buffer);
+      } else {
+        if (!fs.existsSync(renewal.ministryDocumentPath)) {
+          return res.status(404).json({ message: "File not found on server" });
+        }
+        res.download(renewal.ministryDocumentPath);
+      }
+    } catch (error) {
+      console.error("Error downloading ministry document:", error);
       return res.status(404).json({ message: "File not found on server" });
     }
-
-    res.download(renewal.ministryDocumentPath);
   });
 
   // Preview ministry document
@@ -1652,10 +1686,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    if (!fs.existsSync(renewal.ministryDocumentPath)) {
-      return res.status(404).json({ message: "File not found on server" });
-    }
-
     const ext = path.extname(renewal.ministryDocumentPath).toLowerCase().replace(".", "");
     const mimeTypes: Record<string, string> = {
       pdf: "application/pdf",
@@ -1667,11 +1697,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     };
     
     const contentType = mimeTypes[ext] || "application/octet-stream";
-    res.setHeader("Content-Type", contentType);
-    res.setHeader("Content-Disposition", `inline; filename="ministry-document.${ext}"`);
-    
-    const fileStream = fs.createReadStream(renewal.ministryDocumentPath);
-    fileStream.pipe(res);
+
+    try {
+      if (isS3Path(renewal.ministryDocumentPath)) {
+        const buffer = await getFileBuffer(renewal.ministryDocumentPath);
+        res.setHeader("Content-Type", contentType);
+        res.setHeader("Content-Disposition", `inline; filename="ministry-document.${ext}"`);
+        res.send(buffer);
+      } else {
+        if (!fs.existsSync(renewal.ministryDocumentPath)) {
+          return res.status(404).json({ message: "File not found on server" });
+        }
+        res.setHeader("Content-Type", contentType);
+        res.setHeader("Content-Disposition", `inline; filename="ministry-document.${ext}"`);
+        const fileStream = fs.createReadStream(renewal.ministryDocumentPath);
+        fileStream.pipe(res);
+      }
+    } catch (error) {
+      console.error("Error previewing ministry document:", error);
+      return res.status(404).json({ message: "File not found on server" });
+    }
   });
 
   // ==========================================
@@ -2455,6 +2500,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Download renewal attachment
+  app.get("/api/office/renewals-2026/:id/attachments/:attachmentId/download", ensureAuthenticated, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const renewalId = parseInt(req.params.id);
+      const attachmentId = parseInt(req.params.attachmentId);
+      
+      if (isNaN(renewalId) || isNaN(attachmentId)) {
+        return res.status(400).json({ message: "Invalid ID" });
+      }
+      
+      const renewal = await storage.getRenewal(renewalId);
+      if (!renewal) {
+        return res.status(404).json({ message: "Renewal not found" });
+      }
+
+      if (user.role !== "ADMIN" && renewal.officeId !== user.officeId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+
+      const attachments = await storage.getRenewalAttachments(renewalId);
+      const attachment = attachments.find(a => a.id === attachmentId);
+      
+      if (!attachment) {
+        return res.status(404).json({ message: "Attachment not found" });
+      }
+
+      try {
+        if (isS3Path(attachment.fileUrl)) {
+          const buffer = await getFileBuffer(attachment.fileUrl);
+          res.setHeader("Content-Disposition", `attachment; filename="${attachment.fileName}"`);
+          res.setHeader("Content-Type", "application/octet-stream");
+          res.send(buffer);
+        } else {
+          if (!fs.existsSync(attachment.fileUrl)) {
+            return res.status(404).json({ message: "File not found on server" });
+          }
+          res.download(attachment.fileUrl, attachment.fileName);
+        }
+      } catch (error) {
+        console.error("Error downloading attachment:", error);
+        return res.status(404).json({ message: "File not found on server" });
+      }
+    } catch (error) {
+      console.error("Download attachment error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   // Delete renewal attachment
   app.delete("/api/office/renewals-2026/:id/attachments/:attachmentId", ensureOffice, async (req, res) => {
     try {
@@ -2478,9 +2572,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Attachment not found" });
       }
 
-      // Delete file from disk (use fileUrl per schema)
-      if (fs.existsSync(attachment.fileUrl)) {
-        fs.unlinkSync(attachment.fileUrl);
+      // Delete file from storage (handles both S3 and local disk)
+      try {
+        await deleteFile(attachment.fileUrl);
+      } catch (error) {
+        console.error("Error deleting file from storage:", error);
       }
 
       await storage.deleteRenewalAttachment(attachmentId);

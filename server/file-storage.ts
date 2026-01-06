@@ -157,3 +157,32 @@ export async function deleteFile(fileUrl: string): Promise<void> {
 export function isS3StorageEnabled(): boolean {
   return isS3Enabled();
 }
+
+export function isS3Path(filePath: string): boolean {
+  return filePath.startsWith("s3://");
+}
+
+export async function fileExists(filePath: string): Promise<boolean> {
+  if (isS3Path(filePath)) {
+    if (!isS3Enabled()) return false;
+    try {
+      const s3Client = getS3Client()!;
+      const bucketAndKey = filePath.replace("s3://", "");
+      const slashIndex = bucketAndKey.indexOf("/");
+      const bucket = bucketAndKey.substring(0, slashIndex);
+      const key = bucketAndKey.substring(slashIndex + 1);
+      
+      await s3Client.send(
+        new GetObjectCommand({
+          Bucket: bucket,
+          Key: key,
+        })
+      );
+      return true;
+    } catch {
+      return false;
+    }
+  } else {
+    return fs.existsSync(filePath);
+  }
+}
