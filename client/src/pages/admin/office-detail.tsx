@@ -400,6 +400,16 @@ export default function AdminOfficeDetail() {
                               <dt className="text-muted-foreground">{t("adminOffice.postal")}</dt>
                               <dd>{data.office.postalCode || "-"}</dd>
                             </div>
+                            <div className="flex justify-between gap-2">
+                              <dt className="text-muted-foreground">{t("adminOffice.geographyLink")}</dt>
+                              <dd>
+                                {data.office.geographicLocationLink ? (
+                                  <a href={data.office.geographicLocationLink} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                    {t("adminOffice.openMap")}
+                                  </a>
+                                ) : "-"}
+                              </dd>
+                            </div>
                           </dl>
                         </CardContent>
                       </Card>
