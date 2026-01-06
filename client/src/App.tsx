@@ -22,6 +22,7 @@ import OfficeRenewalDetail from "@/pages/office/renewal-detail";
 import OfficeRenewal2026 from "@/pages/office/renewal-2026";
 import OfficeProfile from "@/pages/office/profile";
 import StaffForm2026 from "@/pages/office/staff-form-2026";
+import StaffProfile from "@/pages/office/staff-profile";
 import CommitmentForm2026 from "@/pages/office/commitment-form-2026";
 import OfficeInfoForm2026 from "@/pages/office/office-info-form-2026";
 import PaymentForm from "@/pages/office/payment-form";
@@ -156,9 +157,15 @@ function Router() {
         </ProtectedRoute>
       </Route>
       
-      <Route path="/office/staff-form-2026">
+      <Route path="/office/staff-2026">
         <ProtectedRoute allowedRoles={['OFFICE']}>
           <StaffForm2026 />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/office/staff/:section/:index">
+        <ProtectedRoute allowedRoles={['OFFICE']}>
+          <StaffProfile />
         </ProtectedRoute>
       </Route>
       

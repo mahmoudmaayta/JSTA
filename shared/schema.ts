@@ -322,6 +322,8 @@ export const people = pgTable("people", {
   locationFile: text("location_file"),
   picture: text("picture"),
   cv: text("cv"),
+  identityCardFile: text("identity_card_file"),
+  noCriminalRecordFile: text("no_criminal_record_file"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
@@ -837,7 +839,9 @@ export const insertPersonSchema = z.object({
   passportFile: z.string().nullable().optional(),
   locationFile: z.string().nullable().optional(),
   picture: z.string().nullable().optional(),
-  cv: z.string().nullable().optional()
+  cv: z.string().nullable().optional(),
+  identityCardFile: z.string().nullable().optional(),
+  noCriminalRecordFile: z.string().nullable().optional()
 });
 
 export const insertEmployeeWorkHistorySchema = z.object({

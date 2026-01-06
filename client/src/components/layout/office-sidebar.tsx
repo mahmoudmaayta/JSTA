@@ -94,7 +94,7 @@ export function OfficeSidebar({ side = "left" }: { side?: "left" | "right" }) {
     },
     {
       title: t("navigation.staffForm2026"),
-      url: "/office/staff-form-2026",
+      url: "/office/staff-2026",
       icon: Users,
       showStatus: true,
       completed: formStatus?.staffFormCompleted,

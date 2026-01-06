@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
-import { useForm, useFieldArray } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useTranslation, useLanguage } from "@/lib/i18n";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
@@ -41,36 +38,33 @@ import { useToast } from "@/hooks/use-toast";
 import { 
   Plus, 
   Trash2, 
-  Edit2, 
   Save, 
-  ArrowRight, 
-  ArrowLeft,
+  ArrowRight,
   Users,
   Building2,
   UserCheck,
   Briefcase,
   AlertCircle,
-  CheckCircle2,
-  Loader2
+  Loader2,
+  Eye,
+  User
 } from "lucide-react";
 
-const personRowSchema = z.object({
-  id: z.number().optional(),
-  fullNameAr: z.string().min(1, "الاسم الرباعي مطلوب"),
-  fullNameEn: z.string().min(1, "الاسم باللغة الإنجليزية مطلوب"),
-  nationalId: z.string().min(1, "الرقم الوطني مطلوب"),
-  socialSecurityNo: z.string().optional(),
-  nationality: z.string().min(1, "الجنسية مطلوبة"),
-  gender: z.string().min(1, "الجنس مطلوب"),
-  motherName: z.string().min(1, "اسم الأم مطلوب"),
-  mobile: z.string().min(1, "رقم الموبايل مطلوب"),
-  birthDate: z.string().min(1, "تاريخ الميلاد مطلوب"),
-  currentPosition: z.string().min(1, "الوظيفة الحالية مطلوبة"),
-  startDate: z.string().min(1, "تاريخ مباشرة العمل مطلوب"),
-  branch: z.string().min(1, "الفرع مطلوب"),
-});
-
-type PersonRow = z.infer<typeof personRowSchema>;
+interface PersonRow {
+  id?: number;
+  fullNameAr: string;
+  fullNameEn: string;
+  nationalId: string;
+  socialSecurityNo?: string;
+  nationality: string;
+  gender: string;
+  motherName: string;
+  mobile: string;
+  birthDate: string;
+  currentPosition: string;
+  startDate: string;
+  branch: string;
+}
 
 const emptyRow: PersonRow = {
   fullNameAr: "",
@@ -88,40 +82,15 @@ const emptyRow: PersonRow = {
 };
 
 const nationalities = [
-  "أردني",
-  "سعودي",
-  "إماراتي",
-  "كويتي",
-  "قطري",
-  "عماني",
-  "بحريني",
-  "مصري",
-  "سوري",
-  "لبناني",
-  "فلسطيني",
-  "عراقي",
-  "يمني",
-  "سوداني",
-  "مغربي",
-  "جزائري",
-  "تونسي",
-  "ليبي",
-  "أخرى",
+  "أردني", "سعودي", "إماراتي", "كويتي", "قطري", "عماني", "بحريني",
+  "مصري", "سوري", "لبناني", "فلسطيني", "عراقي", "يمني", "سوداني",
+  "مغربي", "جزائري", "تونسي", "ليبي", "أخرى",
 ];
 
 const positions = [
-  "شريك",
-  "مفوض",
-  "المدير المتفرغ",
-  "مدير فرع",
-  "مسؤول حجوزات",
-  "خدمة عملاء",
-  "محاسب",
-  "سكرتير",
-  "موظف استقبال",
-  "مندوب مبيعات",
-  "موظف إداري",
-  "أخرى",
+  "شريك", "مفوض", "المدير المتفرغ", "مدير فرع", "مسؤول حجوزات",
+  "خدمة عملاء", "محاسب", "سكرتير", "موظف استقبال", "مندوب مبيعات",
+  "موظف إداري", "أخرى",
 ];
 
 interface StaffFormData {
@@ -141,14 +110,15 @@ export default function StaffForm2026() {
   const [, navigate] = useLocation();
   
   const [activeSection, setActiveSection] = useState<"owners" | "authorized" | "managers" | "employees">("owners");
-  const [editingRow, setEditingRow] = useState<{ section: string; index: number; data: PersonRow } | null>(null);
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [newPerson, setNewPerson] = useState<PersonRow>({ ...emptyRow });
   const [deleteConfirm, setDeleteConfirm] = useState<{ section: string; index: number } | null>(null);
   const [consentAccepted, setConsentAccepted] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
-  const [ownersPartners, setOwnersPartners] = useState<PersonRow[]>([{ ...emptyRow }]);
+  const [ownersPartners, setOwnersPartners] = useState<PersonRow[]>([]);
   const [authorizedSignatories, setAuthorizedSignatories] = useState<PersonRow[]>([]);
-  const [dedicatedManagers, setDedicatedManagers] = useState<PersonRow[]>([{ ...emptyRow }]);
+  const [dedicatedManagers, setDedicatedManagers] = useState<PersonRow[]>([]);
   const [employees, setEmployees] = useState<PersonRow[]>([]);
 
   const { data: staffData, isLoading: isLoadingStaff } = useQuery({
@@ -189,69 +159,66 @@ export default function StaffForm2026() {
     },
     onSuccess: (result: any) => {
       toast({
-        title: "تم الحفظ بنجاح",
-        description: `تم حفظ ${result.savedCount} من بيانات العاملين`,
+        title: t("staffForm.saveSuccess"),
+        description: `${t("staffForm.savedCount")} ${result.savedCount}`,
       });
       queryClient.invalidateQueries({ queryKey: ["/api/forms/staff-2026"] });
       setValidationErrors([]);
     },
     onError: (error: any) => {
-      const errors = error.errors || [error.message || "حدث خطأ أثناء الحفظ"];
+      const errors = error.errors || [error.message || t("common.error")];
       setValidationErrors(Array.isArray(errors) ? errors : [errors]);
       toast({
-        title: "خطأ في الحفظ",
-        description: "يرجى مراجعة الأخطاء وتصحيحها",
+        title: t("staffForm.saveError"),
+        description: t("staffForm.reviewErrors"),
         variant: "destructive",
       });
     },
   });
 
-  const handleAddRow = (section: string) => {
-    const newRow = { ...emptyRow };
-    switch (section) {
+  const handleAddPerson = () => {
+    if (!newPerson.fullNameAr.trim() || !newPerson.nationalId.trim()) {
+      toast({
+        title: t("common.error"),
+        description: t("staffForm.requiredFields"),
+        variant: "destructive",
+      });
+      return;
+    }
+
+    switch (activeSection) {
       case "owners":
-        setOwnersPartners([...ownersPartners, newRow]);
+        setOwnersPartners([...ownersPartners, { ...newPerson }]);
         break;
       case "authorized":
-        setAuthorizedSignatories([...authorizedSignatories, newRow]);
+        setAuthorizedSignatories([...authorizedSignatories, { ...newPerson }]);
         break;
       case "managers":
-        setDedicatedManagers([...dedicatedManagers, newRow]);
+        setDedicatedManagers([...dedicatedManagers, { ...newPerson }]);
         break;
       case "employees":
-        setEmployees([...employees, newRow]);
+        setEmployees([...employees, { ...newPerson }]);
         break;
     }
+
+    setNewPerson({ ...emptyRow });
+    setAddDialogOpen(false);
+    toast({
+      title: t("staffForm.personAdded"),
+      description: newPerson.fullNameAr,
+    });
   };
 
   const handleDeleteRow = (section: string, index: number) => {
     switch (section) {
       case "owners":
-        if (ownersPartners.length > 1 || authorizedSignatories.length > 0) {
-          setOwnersPartners(ownersPartners.filter((_, i) => i !== index));
-        } else {
-          toast({
-            title: "لا يمكن الحذف",
-            description: "مطلوب صف واحد على الأقل في مقطع المالك/الشركاء أو المفوّضين",
-            variant: "destructive",
-          });
-        }
+        setOwnersPartners(ownersPartners.filter((_, i) => i !== index));
         break;
       case "authorized":
-        if (authorizedSignatories.length > 0 || ownersPartners.length > 1) {
-          setAuthorizedSignatories(authorizedSignatories.filter((_, i) => i !== index));
-        }
+        setAuthorizedSignatories(authorizedSignatories.filter((_, i) => i !== index));
         break;
       case "managers":
-        if (dedicatedManagers.length > 1) {
-          setDedicatedManagers(dedicatedManagers.filter((_, i) => i !== index));
-        } else {
-          toast({
-            title: "لا يمكن الحذف",
-            description: "مطلوب صف واحد على الأقل في مقطع المدير المتفرّغ",
-            variant: "destructive",
-          });
-        }
+        setDedicatedManagers(dedicatedManagers.filter((_, i) => i !== index));
         break;
       case "employees":
         setEmployees(employees.filter((_, i) => i !== index));
@@ -260,94 +227,11 @@ export default function StaffForm2026() {
     setDeleteConfirm(null);
   };
 
-  const handleEditRow = (section: string, index: number) => {
-    let data: PersonRow;
-    switch (section) {
-      case "owners":
-        data = ownersPartners[index];
-        break;
-      case "authorized":
-        data = authorizedSignatories[index];
-        break;
-      case "managers":
-        data = dedicatedManagers[index];
-        break;
-      case "employees":
-        data = employees[index];
-        break;
-      default:
-        return;
-    }
-    setEditingRow({ section, index, data: { ...data } });
-  };
-
-  const handleSaveEdit = () => {
-    if (!editingRow) return;
-    
-    const { section, index, data } = editingRow;
-    switch (section) {
-      case "owners":
-        const newOwners = [...ownersPartners];
-        newOwners[index] = data;
-        setOwnersPartners(newOwners);
-        break;
-      case "authorized":
-        const newAuthorized = [...authorizedSignatories];
-        newAuthorized[index] = data;
-        setAuthorizedSignatories(newAuthorized);
-        break;
-      case "managers":
-        const newManagers = [...dedicatedManagers];
-        newManagers[index] = data;
-        setDedicatedManagers(newManagers);
-        break;
-      case "employees":
-        const newEmployees = [...employees];
-        newEmployees[index] = data;
-        setEmployees(newEmployees);
-        break;
-    }
-    setEditingRow(null);
-  };
-
-  const handleUpdateEditField = (field: keyof PersonRow, value: string) => {
-    if (!editingRow) return;
-    setEditingRow({
-      ...editingRow,
-      data: { ...editingRow.data, [field]: value },
-    });
-  };
-
-  const handleInlineUpdate = (section: string, index: number, field: keyof PersonRow, value: string) => {
-    switch (section) {
-      case "owners":
-        const newOwners = [...ownersPartners];
-        newOwners[index] = { ...newOwners[index], [field]: value };
-        setOwnersPartners(newOwners);
-        break;
-      case "authorized":
-        const newAuthorized = [...authorizedSignatories];
-        newAuthorized[index] = { ...newAuthorized[index], [field]: value };
-        setAuthorizedSignatories(newAuthorized);
-        break;
-      case "managers":
-        const newManagers = [...dedicatedManagers];
-        newManagers[index] = { ...newManagers[index], [field]: value };
-        setDedicatedManagers(newManagers);
-        break;
-      case "employees":
-        const newEmployees = [...employees];
-        newEmployees[index] = { ...newEmployees[index], [field]: value };
-        setEmployees(newEmployees);
-        break;
-    }
-  };
-
   const handleSubmit = () => {
     if (!consentAccepted) {
       toast({
-        title: "الموافقة مطلوبة",
-        description: "يجب الموافقة على صحة البيانات قبل الحفظ",
+        title: t("staffForm.consentRequired"),
+        description: t("staffForm.consentDescription"),
         variant: "destructive",
       });
       return;
@@ -359,8 +243,8 @@ export default function StaffForm2026() {
 
     if (!hasOwners && !hasAuthorized) {
       toast({
-        title: "بيانات ناقصة",
-        description: "مطلوب صف واحد على الأقل في مقطع المالك/الشركاء أو المفوّضين",
+        title: t("staffForm.missingData"),
+        description: t("staffForm.ownerOrAuthorizedRequired"),
         variant: "destructive",
       });
       return;
@@ -368,8 +252,8 @@ export default function StaffForm2026() {
 
     if (!hasManagers) {
       toast({
-        title: "بيانات ناقصة",
-        description: "مطلوب صف واحد على الأقل في مقطع المدير المتفرّغ",
+        title: t("staffForm.missingData"),
+        description: t("staffForm.managerRequired"),
         variant: "destructive",
       });
       return;
@@ -387,24 +271,34 @@ export default function StaffForm2026() {
   const getSectionData = () => {
     switch (activeSection) {
       case "owners":
-        return { data: ownersPartners, section: "owners", managersCount: 0 };
+        return { data: ownersPartners, section: "owners" };
       case "authorized":
-        return { data: authorizedSignatories, section: "authorized", managersCount: 0 };
+        return { data: authorizedSignatories, section: "authorized" };
       case "managers":
-        return { data: dedicatedManagers, section: "managers", managersCount: 0 };
+        return { data: dedicatedManagers, section: "managers" };
       case "employees":
-        // Combine managers (shown first, read-only) with employees
-        const validManagers = dedicatedManagers.filter(m => m.fullNameAr.trim());
-        const combinedData = [...validManagers, ...employees];
-        return { data: combinedData, section: "employees", managersCount: validManagers.length };
+        return { data: employees, section: "employees" };
+    }
+  };
+
+  const getRoleBadge = (section: string) => {
+    switch (section) {
+      case "owners":
+        return <Badge variant="default">{t("staffForm.sections.owner")}</Badge>;
+      case "authorized":
+        return <Badge variant="secondary">{t("staffForm.sections.authorized")}</Badge>;
+      case "managers":
+        return <Badge className="bg-primary/80">{t("staffForm.sections.manager")}</Badge>;
+      case "employees":
+        return <Badge variant="outline">{t("staffForm.sections.employee")}</Badge>;
     }
   };
 
   const sections = [
-    { key: "owners", icon: Building2, label: "المالك أو الشركاء حسب السجل التجاري", required: true },
-    { key: "authorized", icon: UserCheck, label: "المفوّضون حسب السجل التجاري", required: false },
-    { key: "managers", icon: Users, label: "المدير المتفرّغ للمكتب", required: true },
-    { key: "employees", icon: Briefcase, label: "الموظفون", required: false },
+    { key: "owners", icon: Building2, labelKey: "staffForm.sections.ownersLabel", required: true },
+    { key: "authorized", icon: UserCheck, labelKey: "staffForm.sections.authorizedLabel", required: false },
+    { key: "managers", icon: Users, labelKey: "staffForm.sections.managersLabel", required: true },
+    { key: "employees", icon: Briefcase, labelKey: "staffForm.sections.employeesLabel", required: false },
   ];
 
   if (isLoadingStaff) {
@@ -416,7 +310,7 @@ export default function StaffForm2026() {
             <div className="flex items-center justify-center min-h-screen">
               <div className="text-center">
                 <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-primary" />
-                <p>جاري تحميل البيانات...</p>
+                <p>{t("common.loading")}</p>
               </div>
             </div>
           </SidebarInset>
@@ -425,7 +319,7 @@ export default function StaffForm2026() {
     );
   }
 
-  const { data: currentData, section: currentSection, managersCount } = getSectionData();
+  const { data: currentData, section: currentSection } = getSectionData();
 
   return (
     <SidebarProvider>
@@ -436,360 +330,373 @@ export default function StaffForm2026() {
             <SidebarTrigger data-testid="button-sidebar-trigger" />
             <div className="flex items-center gap-2">
               <Users className="h-5 w-5 text-primary" />
-              <h1 className="font-semibold text-lg">
-                {language === "ar" ? "نموذج معلومات العاملين 2026" : "Staff Information Form 2026"}
-              </h1>
+              <h1 className="font-semibold text-lg">{t("staffForm.title")}</h1>
             </div>
           </header>
           <main className="p-4 md:p-6">
-            <div className="max-w-[1600px] mx-auto">
+            <div className="max-w-5xl mx-auto">
               <Card className="mb-6">
                 <CardHeader>
                   <CardTitle className="text-2xl flex items-center gap-2">
                     <Users className="w-6 h-6" />
-                    نموذج معلومات العاملين 2026
+                    {t("staffForm.title")}
                   </CardTitle>
-                  <CardDescription>
-                    أدخل بيانات جميع العاملين في المكتب وفروعه
-                  </CardDescription>
+                  <CardDescription>{t("staffForm.subtitle")}</CardDescription>
                 </CardHeader>
               </Card>
 
-        {validationErrors.length > 0 && (
-          <Card className="mb-6 border-destructive">
-            <CardContent className="pt-4">
-              <div className="flex items-start gap-2 text-destructive">
-                <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="font-semibold mb-2">أخطاء في البيانات:</p>
-                  <ul className="list-disc list-inside space-y-1">
-                    {validationErrors.map((error, index) => (
-                      <li key={index}>{error}</li>
-                    ))}
-                  </ul>
-                </div>
+              {validationErrors.length > 0 && (
+                <Card className="mb-6 border-destructive">
+                  <CardContent className="pt-4">
+                    <div className="flex items-start gap-2 text-destructive">
+                      <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="font-semibold mb-2">{t("staffForm.validationErrors")}</p>
+                        <ul className="list-disc list-inside space-y-1">
+                          {validationErrors.map((error, index) => (
+                            <li key={index}>{error}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-6">
+                {sections.map((sec) => (
+                  <Button
+                    key={sec.key}
+                    variant={activeSection === sec.key ? "default" : "outline"}
+                    className="flex items-center gap-2 justify-start h-auto py-3"
+                    onClick={() => setActiveSection(sec.key as any)}
+                    data-testid={`tab-${sec.key}`}
+                  >
+                    <sec.icon className="w-5 h-5" />
+                    <span className="text-sm">{t(sec.labelKey)}</span>
+                    {sec.required && <span className="text-xs text-red-500">*</span>}
+                  </Button>
+                ))}
               </div>
-            </CardContent>
-          </Card>
-        )}
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-6">
-          {sections.map((sec) => (
-            <Button
-              key={sec.key}
-              variant={activeSection === sec.key ? "default" : "outline"}
-              className="flex items-center gap-2 justify-start h-auto py-3"
-              onClick={() => setActiveSection(sec.key as any)}
-              data-testid={`tab-${sec.key}`}
-            >
-              <sec.icon className="w-5 h-5" />
-              <span className="text-sm">{sec.label}</span>
-              {sec.required && <span className="text-xs text-red-500">*</span>}
-            </Button>
-          ))}
-        </div>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-end gap-4">
-            <Button 
-              onClick={() => handleAddRow(currentSection)}
-              className="flex items-center gap-2"
-              data-testid="button-add-row"
-            >
-              <Plus className="w-4 h-4" />
-              إضافة صف
-            </Button>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="min-w-[150px]">الاسم الرباعي</TableHead>
-                    <TableHead className="min-w-[150px]">الاسم بالإنجليزية</TableHead>
-                    <TableHead className="min-w-[120px]">الرقم الوطني</TableHead>
-                    <TableHead className="min-w-[120px]">رقم الضمان</TableHead>
-                    <TableHead className="min-w-[100px]">الجنسية</TableHead>
-                    <TableHead className="min-w-[80px]">الجنس</TableHead>
-                    <TableHead className="min-w-[120px]">اسم الأم</TableHead>
-                    <TableHead className="min-w-[120px]">موبايل</TableHead>
-                    <TableHead className="min-w-[120px]">تاريخ الميلاد</TableHead>
-                    <TableHead className="min-w-[120px]">الوظيفة</TableHead>
-                    <TableHead className="min-w-[120px]">تاريخ المباشرة</TableHead>
-                    <TableHead className="min-w-[120px]">الفرع</TableHead>
-                    <TableHead className="min-w-[100px]">إجراءات</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between gap-4">
+                  <div>
+                    <CardTitle className="text-lg">{t(`staffForm.sections.${activeSection}Label`)}</CardTitle>
+                    <CardDescription>
+                      {currentData.length} {t("staffForm.persons")}
+                    </CardDescription>
+                  </div>
+                  <Button 
+                    onClick={() => {
+                      setNewPerson({ ...emptyRow });
+                      setAddDialogOpen(true);
+                    }}
+                    className="flex items-center gap-2"
+                    data-testid="button-add-person"
+                  >
+                    <Plus className="w-4 h-4" />
+                    {t("staffForm.addPerson")}
+                  </Button>
+                </CardHeader>
+                <CardContent>
                   {currentData.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={13} className="text-center text-muted-foreground py-8">
-                        لا توجد بيانات. انقر على "إضافة صف" لإضافة بيانات جديدة.
-                      </TableCell>
-                    </TableRow>
+                    <div className="text-center py-12 text-muted-foreground">
+                      <User className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                      <p>{t("staffForm.noPersons")}</p>
+                      <Button
+                        variant="outline"
+                        className="mt-4"
+                        onClick={() => {
+                          setNewPerson({ ...emptyRow });
+                          setAddDialogOpen(true);
+                        }}
+                      >
+                        <Plus className="w-4 h-4 me-2" />
+                        {t("staffForm.addFirstPerson")}
+                      </Button>
+                    </div>
                   ) : (
-                    currentData.map((row, index) => {
-                      const isManagerRow = activeSection === "employees" && index < managersCount;
-                      const actualIndex = isManagerRow ? index : (activeSection === "employees" ? index - managersCount : index);
-                      const actualSection = isManagerRow ? "managers" : currentSection;
-                      
-                      return (
-                      <TableRow key={index} className={isManagerRow ? "bg-primary/5" : ""}>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <Input
-                              value={row.fullNameAr}
-                              onChange={(e) => handleInlineUpdate(actualSection, actualIndex, "fullNameAr", e.target.value)}
-                              placeholder="أحمد محمد علي خالد"
-                              className="min-w-[150px]"
-                              disabled={isManagerRow}
-                              data-testid={`input-fullNameAr-${index}`}
-                            />
-                            {isManagerRow && (
-                              <Badge variant="secondary" className="whitespace-nowrap text-xs">
-                                مدير
-                              </Badge>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Input
-                            value={row.fullNameEn}
-                            onChange={(e) => handleInlineUpdate(actualSection, actualIndex, "fullNameEn", e.target.value)}
-                            placeholder="Ahmad M. Ali"
-                            className="min-w-[150px]"
-                            dir="ltr"
-                            disabled={isManagerRow}
-                            data-testid={`input-fullNameEn-${index}`}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Input
-                            value={row.nationalId}
-                            onChange={(e) => handleInlineUpdate(actualSection, actualIndex, "nationalId", e.target.value)}
-                            placeholder="1234567890"
-                            className="min-w-[120px]"
-                            dir="ltr"
-                            disabled={isManagerRow}
-                            data-testid={`input-nationalId-${index}`}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Input
-                            value={row.socialSecurityNo || ""}
-                            onChange={(e) => handleInlineUpdate(actualSection, actualIndex, "socialSecurityNo", e.target.value)}
-                            placeholder="اختياري"
-                            className="min-w-[120px]"
-                            dir="ltr"
-                            disabled={isManagerRow}
-                            data-testid={`input-socialSecurityNo-${index}`}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Select
-                            value={row.nationality}
-                            onValueChange={(value) => handleInlineUpdate(actualSection, actualIndex, "nationality", value)}
-                            disabled={isManagerRow}
-                          >
-                            <SelectTrigger className="min-w-[100px]" data-testid={`select-nationality-${index}`}>
-                              <SelectValue placeholder="اختر" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {nationalities.map((nat) => (
-                                <SelectItem key={nat} value={nat}>{nat}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </TableCell>
-                        <TableCell>
-                          <Select
-                            value={row.gender}
-                            onValueChange={(value) => handleInlineUpdate(actualSection, actualIndex, "gender", value)}
-                            disabled={isManagerRow}
-                          >
-                            <SelectTrigger className="min-w-[80px]" data-testid={`select-gender-${index}`}>
-                              <SelectValue placeholder="اختر" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="ذكر">ذكر</SelectItem>
-                              <SelectItem value="أنثى">أنثى</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </TableCell>
-                        <TableCell>
-                          <Input
-                            value={row.motherName}
-                            onChange={(e) => handleInlineUpdate(actualSection, actualIndex, "motherName", e.target.value)}
-                            placeholder="اسم الأم"
-                            className="min-w-[120px]"
-                            disabled={isManagerRow}
-                            data-testid={`input-motherName-${index}`}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Input
-                            value={row.mobile}
-                            onChange={(e) => handleInlineUpdate(actualSection, actualIndex, "mobile", e.target.value)}
-                            placeholder="07XXXXXXXX"
-                            className="min-w-[120px]"
-                            dir="ltr"
-                            disabled={isManagerRow}
-                            data-testid={`input-mobile-${index}`}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Input
-                            type="date"
-                            value={row.birthDate}
-                            onChange={(e) => handleInlineUpdate(actualSection, actualIndex, "birthDate", e.target.value)}
-                            className="min-w-[120px]"
-                            dir="ltr"
-                            max={new Date().toISOString().split("T")[0]}
-                            disabled={isManagerRow}
-                            data-testid={`input-birthDate-${index}`}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Select
-                            value={row.currentPosition}
-                            onValueChange={(value) => handleInlineUpdate(actualSection, actualIndex, "currentPosition", value)}
-                            disabled={isManagerRow}
-                          >
-                            <SelectTrigger className="min-w-[120px]" data-testid={`select-position-${index}`}>
-                              <SelectValue placeholder="اختر" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {positions.map((pos) => (
-                                <SelectItem key={pos} value={pos}>{pos}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </TableCell>
-                        <TableCell>
-                          <Input
-                            type="date"
-                            value={row.startDate}
-                            onChange={(e) => handleInlineUpdate(actualSection, actualIndex, "startDate", e.target.value)}
-                            className="min-w-[120px]"
-                            dir="ltr"
-                            max={new Date().toISOString().split("T")[0]}
-                            disabled={isManagerRow}
-                            data-testid={`input-startDate-${index}`}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Select
-                            value={row.branch}
-                            onValueChange={(value) => handleInlineUpdate(actualSection, actualIndex, "branch", value)}
-                            disabled={isManagerRow}
-                          >
-                            <SelectTrigger className="min-w-[120px]" data-testid={`select-branch-${index}`}>
-                              <SelectValue placeholder="اختر" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="الفرع الرئيسي">الفرع الرئيسي</SelectItem>
-                              {staffData?.branches?.map((b: any) => (
-                                <SelectItem key={b.id} value={b.name}>{b.name}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </TableCell>
-                        <TableCell>
-                          {isManagerRow ? (
-                            <span className="text-xs text-muted-foreground whitespace-nowrap">
-                              من قسم المدراء
-                            </span>
-                          ) : (
-                            <div className="flex items-center gap-1">
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => setDeleteConfirm({ section: currentSection, index: actualIndex })}
-                                className="text-destructive hover:text-destructive"
-                                data-testid={`button-delete-${index}`}
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </div>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    );})
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>{t("staffForm.fields.fullName")}</TableHead>
+                          <TableHead>{t("staffForm.fields.nationalId")}</TableHead>
+                          <TableHead>{t("staffForm.fields.role")}</TableHead>
+                          <TableHead>{t("staffForm.fields.mobile")}</TableHead>
+                          <TableHead className="text-center">{t("common.actions")}</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {currentData.map((row, index) => (
+                          <TableRow key={index} data-testid={`staff-row-${index}`}>
+                            <TableCell className="font-medium">{row.fullNameAr}</TableCell>
+                            <TableCell dir="ltr">{row.nationalId}</TableCell>
+                            <TableCell>{getRoleBadge(currentSection)}</TableCell>
+                            <TableCell dir="ltr">{row.mobile || "-"}</TableCell>
+                            <TableCell>
+                              <div className="flex items-center justify-center gap-1">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => navigate(`/office/staff/${currentSection}/${index}`)}
+                                  data-testid={`button-view-profile-${index}`}
+                                >
+                                  <Eye className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => setDeleteConfirm({ section: currentSection, index })}
+                                  className="text-destructive hover:text-destructive"
+                                  data-testid={`button-delete-${index}`}
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
                   )}
-                </TableBody>
-              </Table>
-            </div>
-          </CardContent>
-        </Card>
+                </CardContent>
+              </Card>
 
-        <Card className="mt-6">
-          <CardContent className="pt-6">
-            <div className="flex items-start gap-3 p-4 border rounded-lg bg-muted/50">
-              <Checkbox
-                id="consent"
-                checked={consentAccepted}
-                onCheckedChange={(checked) => setConsentAccepted(checked === true)}
-                data-testid="checkbox-consent"
-              />
-              <div className="space-y-1">
-                <Label htmlFor="consent" className="text-base font-medium cursor-pointer">
-                  الموافقة الإلكترونية
-                </Label>
-                <p className="text-sm text-muted-foreground">
-                  أُقرّ بصحة بيانات المالكين/المفوّضين/المدير/الموظفين، وأوافق على سياسة الخصوصية وشروط الجمعية.
-                </p>
-              </div>
-            </div>
+              <Card className="mt-6">
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-3 p-4 border rounded-lg bg-muted/50">
+                    <Checkbox
+                      id="consent"
+                      checked={consentAccepted}
+                      onCheckedChange={(checked) => setConsentAccepted(checked === true)}
+                      data-testid="checkbox-consent"
+                    />
+                    <div className="space-y-1">
+                      <Label htmlFor="consent" className="text-base font-medium cursor-pointer">
+                        {t("staffForm.electronicConsent")}
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
+                        {t("staffForm.consentText")}
+                      </p>
+                    </div>
+                  </div>
 
-            <div className="flex items-center justify-between mt-6 rtl:flex-row-reverse">
-              <Button
-                variant="outline"
-                onClick={() => navigate("/office/dashboard")}
-                data-testid="button-back"
-              >
-                <ArrowRight className="w-4 h-4 ms-2 rtl:rotate-180" />
-                العودة للوحة التحكم
-              </Button>
-              
-              <Button
-                onClick={handleSubmit}
-                disabled={saveMutation.isPending || !consentAccepted}
-                className="flex items-center gap-2"
-                data-testid="button-save"
-              >
-                {saveMutation.isPending ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Save className="w-4 h-4" />
-                )}
-                حفظ البيانات
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+                  <div className="flex items-center justify-between mt-6 gap-4 flex-wrap">
+                    <Button
+                      variant="outline"
+                      onClick={() => navigate("/office/dashboard")}
+                      data-testid="button-back"
+                    >
+                      <ArrowRight className="w-4 h-4 ms-2 rtl:rotate-180" />
+                      {t("common.backToDashboard")}
+                    </Button>
+                    
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={saveMutation.isPending || !consentAccepted}
+                      className="flex items-center gap-2"
+                      data-testid="button-save"
+                    >
+                      {saveMutation.isPending ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Save className="w-4 h-4" />
+                      )}
+                      {t("staffForm.saveData")}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
 
-        <Dialog open={!!deleteConfirm} onOpenChange={() => setDeleteConfirm(null)}>
-          <DialogContent dir={dir}>
-            <DialogHeader>
-              <DialogTitle>تأكيد الحذف</DialogTitle>
-              <DialogDescription>
-                هل أنت متأكد من حذف هذا الصف؟ لا يمكن التراجع عن هذا الإجراء.
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter className="gap-2">
-              <Button variant="outline" onClick={() => setDeleteConfirm(null)}>
-                إلغاء
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => deleteConfirm && handleDeleteRow(deleteConfirm.section, deleteConfirm.index)}
-                data-testid="button-confirm-delete"
-              >
-                حذف
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+              <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
+                <DialogContent dir={dir} className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>{t("staffForm.addNewPerson")}</DialogTitle>
+                    <DialogDescription>
+                      {t("staffForm.fillPersonDetails")}
+                    </DialogDescription>
+                  </DialogHeader>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+                    <div className="space-y-2">
+                      <Label>{t("staffForm.fields.fullNameAr")} *</Label>
+                      <Input
+                        value={newPerson.fullNameAr}
+                        onChange={(e) => setNewPerson({ ...newPerson, fullNameAr: e.target.value })}
+                        placeholder={t("staffForm.placeholders.fullNameAr")}
+                        data-testid="input-fullNameAr"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>{t("staffForm.fields.fullNameEn")}</Label>
+                      <Input
+                        value={newPerson.fullNameEn}
+                        onChange={(e) => setNewPerson({ ...newPerson, fullNameEn: e.target.value })}
+                        placeholder="Ahmad Mohammad Ali"
+                        dir="ltr"
+                        data-testid="input-fullNameEn"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>{t("staffForm.fields.nationalId")} *</Label>
+                      <Input
+                        value={newPerson.nationalId}
+                        onChange={(e) => setNewPerson({ ...newPerson, nationalId: e.target.value })}
+                        placeholder="9XXXXXXXXX"
+                        dir="ltr"
+                        data-testid="input-nationalId"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>{t("staffForm.fields.mobile")} *</Label>
+                      <Input
+                        value={newPerson.mobile}
+                        onChange={(e) => setNewPerson({ ...newPerson, mobile: e.target.value })}
+                        placeholder="07XXXXXXXX"
+                        dir="ltr"
+                        data-testid="input-mobile"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>{t("staffForm.fields.nationality")}</Label>
+                      <Select
+                        value={newPerson.nationality}
+                        onValueChange={(value) => setNewPerson({ ...newPerson, nationality: value })}
+                      >
+                        <SelectTrigger data-testid="select-nationality">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {nationalities.map((nat) => (
+                            <SelectItem key={nat} value={nat}>{nat}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>{t("staffForm.fields.gender")}</Label>
+                      <Select
+                        value={newPerson.gender}
+                        onValueChange={(value) => setNewPerson({ ...newPerson, gender: value })}
+                      >
+                        <SelectTrigger data-testid="select-gender">
+                          <SelectValue placeholder={t("common.select")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="ذكر">{t("staffForm.male")}</SelectItem>
+                          <SelectItem value="أنثى">{t("staffForm.female")}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>{t("staffForm.fields.motherName")}</Label>
+                      <Input
+                        value={newPerson.motherName}
+                        onChange={(e) => setNewPerson({ ...newPerson, motherName: e.target.value })}
+                        data-testid="input-motherName"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>{t("staffForm.fields.birthDate")}</Label>
+                      <Input
+                        type="date"
+                        value={newPerson.birthDate}
+                        onChange={(e) => setNewPerson({ ...newPerson, birthDate: e.target.value })}
+                        max={new Date().toISOString().split("T")[0]}
+                        dir="ltr"
+                        data-testid="input-birthDate"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>{t("staffForm.fields.currentPosition")}</Label>
+                      <Select
+                        value={newPerson.currentPosition}
+                        onValueChange={(value) => setNewPerson({ ...newPerson, currentPosition: value })}
+                      >
+                        <SelectTrigger data-testid="select-position">
+                          <SelectValue placeholder={t("common.select")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {positions.map((pos) => (
+                            <SelectItem key={pos} value={pos}>{pos}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>{t("staffForm.fields.startDate")}</Label>
+                      <Input
+                        type="date"
+                        value={newPerson.startDate}
+                        onChange={(e) => setNewPerson({ ...newPerson, startDate: e.target.value })}
+                        max={new Date().toISOString().split("T")[0]}
+                        dir="ltr"
+                        data-testid="input-startDate"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>{t("staffForm.fields.socialSecurityNo")}</Label>
+                      <Input
+                        value={newPerson.socialSecurityNo || ""}
+                        onChange={(e) => setNewPerson({ ...newPerson, socialSecurityNo: e.target.value })}
+                        dir="ltr"
+                        data-testid="input-socialSecurityNo"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>{t("staffForm.fields.branch")}</Label>
+                      <Select
+                        value={newPerson.branch}
+                        onValueChange={(value) => setNewPerson({ ...newPerson, branch: value })}
+                      >
+                        <SelectTrigger data-testid="select-branch">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="الفرع الرئيسي">{t("staffForm.mainBranch")}</SelectItem>
+                          {staffData?.branches?.map((b: any) => (
+                            <SelectItem key={b.id} value={b.name}>{b.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <DialogFooter className="gap-2">
+                    <Button variant="outline" onClick={() => setAddDialogOpen(false)}>
+                      {t("common.cancel")}
+                    </Button>
+                    <Button onClick={handleAddPerson} data-testid="button-confirm-add">
+                      <Plus className="w-4 h-4 me-2" />
+                      {t("staffForm.addPerson")}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
+              <Dialog open={!!deleteConfirm} onOpenChange={() => setDeleteConfirm(null)}>
+                <DialogContent dir={dir}>
+                  <DialogHeader>
+                    <DialogTitle>{t("staffForm.confirmDelete")}</DialogTitle>
+                    <DialogDescription>
+                      {t("staffForm.deleteWarning")}
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter className="gap-2">
+                    <Button variant="outline" onClick={() => setDeleteConfirm(null)}>
+                      {t("common.cancel")}
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={() => deleteConfirm && handleDeleteRow(deleteConfirm.section, deleteConfirm.index)}
+                      data-testid="button-confirm-delete"
+                    >
+                      {t("common.delete")}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </main>
         </SidebarInset>
