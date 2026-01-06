@@ -401,20 +401,9 @@ export default function StaffForm2026() {
                 </CardHeader>
                 <CardContent>
                   {currentData.length === 0 ? (
-                    <div className="text-center py-12 text-muted-foreground">
-                      <User className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                      <p>{t("staffForm.noPersons")}</p>
-                      <Button
-                        variant="outline"
-                        className="mt-4"
-                        onClick={() => {
-                          setNewPerson({ ...emptyRow });
-                          setAddDialogOpen(true);
-                        }}
-                      >
-                        <Plus className="w-4 h-4 me-2" />
-                        {t("staffForm.addFirstPerson")}
-                      </Button>
+                    <div className="flex items-center justify-center gap-3 py-3 text-muted-foreground text-sm">
+                      <User className="w-5 h-5 opacity-50" />
+                      <span>{t("staffForm.noData")}</span>
                     </div>
                   ) : (
                     <Table>
