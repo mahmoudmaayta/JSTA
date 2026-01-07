@@ -2221,6 +2221,84 @@ export async function registerRoutes(app: Express): Promise<Server> {
   if (!fs.existsSync(staffDocsDir)) fs.mkdirSync(staffDocsDir, { recursive: true });
   const staffDocUpload = createUploadMiddleware("staff_docs", [".pdf", ".jpg", ".jpeg", ".png"]);
 
+  // Admin upload staff document (identity card or criminal record)
+  app.post("/api/admin/staff/:personId/upload-document", ensureAdmin, rateLimitMiddleware(uploadRateLimiter), staffDocUpload.single("file"), async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const personId = parseInt(req.params.personId);
+      const file = req.file;
+
+      if (isNaN(personId)) {
+        return res.status(400).json({ message: "Invalid person ID" });
+      }
+
+      if (!file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      const { category } = req.body;
+      
+      const validCategories = ["identity_card", "no_criminal_record"];
+      if (!validCategories.includes(category)) {
+        if (!isS3StorageEnabled() && file.path) {
+          fs.unlinkSync(file.path);
+        }
+        return res.status(400).json({ message: "Invalid document type" });
+      }
+
+      // Validate MIME type
+      if (!validateFileMimeType(file.originalname, file.mimetype)) {
+        if (!isS3StorageEnabled() && file.path) {
+          fs.unlinkSync(file.path);
+        }
+        return res.status(400).json({ message: "Invalid file type" });
+      }
+
+      const person = await storage.getPerson(personId);
+      if (!person) {
+        if (!isS3StorageEnabled() && file.path) {
+          fs.unlinkSync(file.path);
+        }
+        return res.status(404).json({ message: "Person not found" });
+      }
+
+      let fileUrl: string;
+      if (isCloudStorageActive() && file.buffer) {
+        const result = await uploadFile(file.buffer, file.originalname, "staff_docs", file.mimetype);
+        fileUrl = result.fileUrl;
+      } else {
+        fileUrl = file.path;
+      }
+
+      // Update person with the document file path
+      const updateField = category === "identity_card" ? "identityCardFile" : "noCriminalRecordFile";
+      await storage.updatePerson(personId, {
+        [updateField]: fileUrl,
+      });
+
+      // Create audit log
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "ADMIN_STAFF_DOCUMENT_UPLOADED",
+        targetType: "person",
+        targetId: personId,
+        details: { 
+          category,
+          fileName: sanitizeFileName(file.originalname),
+          personId,
+        }
+      });
+
+      res.json({ 
+        message: "Document uploaded successfully",
+        filePath: fileUrl,
+      });
+    } catch (error) {
+      console.error("Admin upload staff document error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   // Create new 2026 renewal for office
   app.post("/api/office/renewals-2026", ensureOffice, async (req, res) => {
     try {

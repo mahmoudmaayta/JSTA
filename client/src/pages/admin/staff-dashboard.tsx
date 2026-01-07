@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
 import { useTranslation, useLanguage } from "@/lib/i18n";
 import { AdminSidebar } from "@/components/layout/admin-sidebar";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
@@ -47,7 +48,8 @@ import {
   IdCard,
   ShieldCheck,
   CheckCircle2,
-  XCircle
+  XCircle,
+  Upload
 } from "lucide-react";
 import type { Office, Person, RoleInOffice } from "@shared/schema";
 
@@ -83,6 +85,8 @@ export default function AdminStaffDashboard() {
   const [selectedRole, setSelectedRole] = useState<string>("all");
   const [selectedNationality, setSelectedNationality] = useState<string>("all");
   const [selectedPerson, setSelectedPerson] = useState<StaffDataItem | null>(null);
+  const [uploadingIdentity, setUploadingIdentity] = useState(false);
+  const [uploadingCriminal, setUploadingCriminal] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 25;
@@ -157,6 +161,60 @@ export default function AdminStaffDashboard() {
     setOfficeSearchQuery("");
     setSelectedRole("all");
     setSelectedNationality("all");
+  };
+
+  const handleDocumentUpload = async (
+    file: File,
+    personId: number,
+    type: "identity" | "criminal"
+  ) => {
+    const setUploading = type === "identity" ? setUploadingIdentity : setUploadingCriminal;
+    setUploading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("category", type === "identity" ? "identity_card" : "no_criminal_record");
+
+      const response = await fetch(`/api/admin/staff/${personId}/upload-document`, {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const result = await response.json();
+
+      if (selectedPerson) {
+        const updatedPerson = {
+          ...selectedPerson,
+          person: {
+            ...selectedPerson.person,
+            [type === "identity" ? "identityCardFile" : "noCriminalRecordFile"]: result.filePath,
+          },
+        };
+        setSelectedPerson(updatedPerson);
+      }
+
+      toast({
+        title: language === "ar" ? "تم الرفع بنجاح" : "Upload Successful",
+        description: language === "ar" ? "تم رفع المستند بنجاح" : "Document uploaded successfully",
+      });
+
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/staff"] });
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast({
+        title: language === "ar" ? "فشل الرفع" : "Upload Failed",
+        description: language === "ar" ? "حدث خطأ أثناء رفع المستند" : "An error occurred while uploading the document",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
   };
 
   const [isExporting, setIsExporting] = useState(false);
@@ -597,6 +655,44 @@ export default function AdminStaffDashboard() {
                         </span>
                       </div>
                     )}
+                    {/* Upload/Replace Button */}
+                    <div className="relative">
+                      <input
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        disabled={uploadingIdentity}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file && selectedPerson.person.id) {
+                            handleDocumentUpload(file, selectedPerson.person.id, "identity");
+                          }
+                          e.target.value = "";
+                        }}
+                        data-testid="input-upload-identity-card"
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full h-8 text-xs"
+                        disabled={uploadingIdentity}
+                        data-testid="button-upload-identity-card"
+                      >
+                        {uploadingIdentity ? (
+                          <>
+                            <Loader2 className="w-3 h-3 me-1 animate-spin" />
+                            {language === "ar" ? "جاري الرفع..." : "Uploading..."}
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-3 h-3 me-1" />
+                            {selectedPerson.person.identityCardFile
+                              ? (language === "ar" ? "استبدال" : "Replace")
+                              : (language === "ar" ? "رفع" : "Upload")}
+                          </>
+                        )}
+                      </Button>
+                    </div>
                   </div>
 
                   {/* No Criminal Record */}
@@ -632,6 +728,44 @@ export default function AdminStaffDashboard() {
                         </span>
                       </div>
                     )}
+                    {/* Upload/Replace Button */}
+                    <div className="relative">
+                      <input
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        disabled={uploadingCriminal}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file && selectedPerson.person.id) {
+                            handleDocumentUpload(file, selectedPerson.person.id, "criminal");
+                          }
+                          e.target.value = "";
+                        }}
+                        data-testid="input-upload-criminal-record"
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full h-8 text-xs"
+                        disabled={uploadingCriminal}
+                        data-testid="button-upload-criminal-record"
+                      >
+                        {uploadingCriminal ? (
+                          <>
+                            <Loader2 className="w-3 h-3 me-1 animate-spin" />
+                            {language === "ar" ? "جاري الرفع..." : "Uploading..."}
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-3 h-3 me-1" />
+                            {selectedPerson.person.noCriminalRecordFile
+                              ? (language === "ar" ? "استبدال" : "Replace")
+                              : (language === "ar" ? "رفع" : "Upload")}
+                          </>
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
