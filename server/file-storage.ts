@@ -310,6 +310,12 @@ export function isS3StorageEnabled(): boolean {
   return isExternalS3Enabled();
 }
 
+// Returns true if uploads should go to cloud storage (S3 or GCS)
+export function isCloudStorageActive(): boolean {
+  const backend = getStorageBackend();
+  return backend === "s3" || backend === "replit";
+}
+
 export function isCloudStoragePath(filePath: string): boolean {
   return filePath.startsWith("s3://") || filePath.startsWith("gcs://");
 }

@@ -47,7 +47,7 @@ import {
   type InsertRenewalAttachment,
   type PersonRoleTypeType,
 } from "@shared/schema";
-import { uploadFile, getFileUrl, getFileBuffer, isS3StorageEnabled, isS3Path, isGcsPath, isCloudStoragePath, fileExists, deleteFile, getActiveStorageBackend } from "./file-storage";
+import { uploadFile, getFileUrl, getFileBuffer, isS3StorageEnabled, isCloudStorageActive, isS3Path, isGcsPath, isCloudStoragePath, fileExists, deleteFile, getActiveStorageBackend } from "./file-storage";
 
 declare module "express-session" {
   interface SessionData {
@@ -64,7 +64,8 @@ if (!fs.existsSync(initialDir)) fs.mkdirSync(initialDir, { recursive: true });
 if (!fs.existsSync(ministryDir)) fs.mkdirSync(ministryDir, { recursive: true });
 
 const createUploadMiddleware = (category: string, allowedTypes?: string[]) => {
-  const useS3 = isS3StorageEnabled();
+  // Use memory storage for any cloud backend (S3 or GCS), disk storage for local only
+  const useCloudStorage = isCloudStorageActive();
   
   const fileFilter = allowedTypes ? (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
     const ext = path.extname(file.originalname).toLowerCase();
@@ -75,7 +76,7 @@ const createUploadMiddleware = (category: string, allowedTypes?: string[]) => {
     }
   } : undefined;
 
-  if (useS3) {
+  if (useCloudStorage) {
     return multer({
       storage: multer.memoryStorage(),
       limits: { fileSize: 10 * 1024 * 1024 },
@@ -411,7 +412,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Validate MIME type matches file extension
           if (!validateFileMimeType(file.originalname, file.mimetype)) {
             // Delete already uploaded files (only for disk storage)
-            if (!isS3StorageEnabled()) {
+            if (!isCloudStorageActive()) {
               files.forEach(f => {
                 if (f.path && fs.existsSync(f.path)) fs.unlinkSync(f.path);
               });
@@ -424,7 +425,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const category = documentCategories[i] || "INITIAL_FIRST_FORMS";
           
           let filePath: string;
-          if (isS3StorageEnabled() && file.buffer) {
+          if (isCloudStorageActive() && file.buffer) {
             const result = await uploadFile(file.buffer, file.originalname, "initial", file.mimetype);
             filePath = result.fileUrl;
           } else {
@@ -673,7 +674,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
 
     let filePath: string;
-    if (isS3StorageEnabled() && file.buffer) {
+    if (isCloudStorageActive() && file.buffer) {
       const result = await uploadFile(file.buffer, file.originalname, "ministry_docs", file.mimetype);
       filePath = result.fileUrl;
     } else {
@@ -2918,7 +2919,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       let fileUrl: string;
-      if (isS3StorageEnabled() && file.buffer) {
+      if (isCloudStorageActive() && file.buffer) {
         const result = await uploadFile(file.buffer, file.originalname, "staff_docs", file.mimetype);
         fileUrl = result.fileUrl;
       } else {
@@ -3001,7 +3002,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       let fileUrl: string;
-      if (isS3StorageEnabled() && file.buffer) {
+      if (isCloudStorageActive() && file.buffer) {
         const result = await uploadFile(file.buffer, file.originalname, "renewal_2026", file.mimetype);
         fileUrl = result.fileUrl;
       } else {
@@ -3634,7 +3635,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       let proofFileUrl: string;
-      if (isS3StorageEnabled() && file.buffer) {
+      if (isCloudStorageActive() && file.buffer) {
         const result = await uploadFile(file.buffer, file.originalname, "payment_proofs", file.mimetype);
         proofFileUrl = result.fileUrl;
       } else {
