@@ -2,6 +2,7 @@ import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
+import createMemoryStore from "memorystore";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -170,46 +171,68 @@ async function ensureCanTransact2026(req: Request, res: Response, next: NextFunc
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Test database connection with timeout before proceeding
+  let dbConnected = false;
   try {
     console.log('🔄 Testing database connection...');
     const testPromise = pool.query('SELECT 1');
     const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Database connection timeout')), 15000)
+      setTimeout(() => reject(new Error('Database connection timeout')), 10000)
     );
     await Promise.race([testPromise, timeoutPromise]);
     console.log('✅ Database connection successful');
+    dbConnected = true;
     
     // Seed admin user only if DB is available
     await storage.seedAdminUser();
   } catch (error: any) {
     console.error('❌ Database connection failed:', error.message);
-    console.error('   The application will start but database features will not work.');
+    console.error('   Using in-memory session store as fallback.');
     console.error('   Please check your DATABASE_URL and database status.');
   }
 
-  // Initialize PostgreSQL session store
-  const PgStore = connectPgSimple(session);
-
-  app.use(
-    session({
-      store: new PgStore({
-        pool: pool,
-        tableName: 'session',
-        createTableIfMissing: true,
-        // Cleanup expired sessions every hour
-        pruneSessionInterval: 60 * 60, // 1 hour in seconds
-      }),
-      secret: env.SESSION_SECRET, // From validated environment
-      resave: false,
-      saveUninitialized: false,
-      cookie: {
-        secure: env.isProduction, // HTTP in dev, HTTPS in production
-        httpOnly: true,
-        sameSite: 'strict', // Strict CSRF protection
-        maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      },
-    })
-  );
+  // Use PostgreSQL session store if DB is connected, otherwise use memory store
+  if (dbConnected) {
+    const PgStore = connectPgSimple(session);
+    app.use(
+      session({
+        store: new PgStore({
+          pool: pool,
+          tableName: 'session',
+          createTableIfMissing: true,
+          pruneSessionInterval: 60 * 60,
+        }),
+        secret: env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+          secure: env.isProduction,
+          httpOnly: true,
+          sameSite: 'strict',
+          maxAge: 24 * 60 * 60 * 1000,
+        },
+      })
+    );
+  } else {
+    // Fallback to memory session store
+    const MemoryStore = createMemoryStore(session);
+    app.use(
+      session({
+        store: new MemoryStore({
+          checkPeriod: 86400000 // 24 hours
+        }),
+        secret: env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+          secure: false, // Allow HTTP for development
+          httpOnly: true,
+          sameSite: 'lax',
+          maxAge: 24 * 60 * 60 * 1000,
+        },
+      })
+    );
+    console.log('⚠️  Sessions will not persist across restarts (memory store active)');
+  }
 
   app.get("/api/auth/me", async (req, res) => {
     if (!req.session.userId) {
