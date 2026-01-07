@@ -42,6 +42,7 @@ interface SidebarCounts {
   pendingRenewals: number;
   pendingPayments: number;
   pendingChangeRequests: number;
+  pendingInvitations: number;
   criticalAlerts: number;
   warningAlerts: number;
   totalAlerts: number;
@@ -110,6 +111,7 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
       case "pendingOffices": return sidebarCounts.pendingOffices;
       case "pendingRenewals": return sidebarCounts.pendingRenewals;
       case "pendingPayments": return sidebarCounts.pendingPayments;
+      case "pendingInvitations": return sidebarCounts.pendingInvitations || 0;
       case "pendingCount": return pendingCount;
       case "totalAlerts": return sidebarCounts.totalAlerts;
       default: return 0;
@@ -121,7 +123,7 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
       title: t("navigation.renewalInvitations") || "Renewal Invitations",
       url: "/admin/renewal-invitations",
       icon: Mail,
-      badge: null as string | null,
+      badge: "pendingInvitations" as string | null,
     },
     {
       title: t("navigation.auditLogs"),

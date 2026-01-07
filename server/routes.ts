@@ -697,11 +697,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Sidebar notification counts - returns counts for all sidebar badges
   app.get("/api/admin/sidebar-counts", ensureAdmin, async (req, res) => {
     try {
-      const [offices, renewals, payments, changeRequestsList] = await Promise.all([
+      const [offices, renewals, payments, changeRequestsList, activeOfficesFor2026] = await Promise.all([
         storage.getAllOffices(),
         storage.getAllRenewals(),
         storage.getAllPayments(),
         storage.getPendingChangeRequests(),
+        storage.getActiveOfficesForRenewal(2025),
       ]);
 
       // Count pending offices (PENDING_APPROVAL status)
@@ -717,6 +718,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Count pending change requests
       const pendingChangeRequestsCount = changeRequestsList.length;
+      
+      // Count pending invitations for 2026 renewal (offices not yet invited)
+      let pendingInvitations = 0;
+      for (const office of activeOfficesFor2026) {
+        const renewal = renewals.find(r => r.officeId === office.id && r.year === 2026);
+        if (!renewal) {
+          pendingInvitations++;
+        } else {
+          const invite = await storage.getLatestInviteForRenewal(renewal.id);
+          if (!invite || invite.status === 'NOT_INVITED' || invite.status === 'EXPIRED') {
+            pendingInvitations++;
+          }
+        }
+      }
       
       // Count notifications (offices with expired/expiring licenses)
       const now = new Date();
@@ -750,6 +765,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         pendingRenewals,
         pendingPayments,
         pendingChangeRequests: pendingChangeRequestsCount,
+        pendingInvitations,
         criticalAlerts,
         warningAlerts,
         totalAlerts: criticalAlerts + warningAlerts,
