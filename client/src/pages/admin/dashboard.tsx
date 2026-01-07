@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { LoadingPage } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useTranslation, useLanguage } from "@/lib/i18n";
 import type { Office, LicenseRenewal, Payment, ChangeRequest } from "@shared/schema";
@@ -31,16 +30,10 @@ import {
   CheckCircle2,
   ArrowRight,
   Users,
-  TrendingUp,
-  CalendarCheck,
-  AlertCircle,
-  XCircle,
-  Send,
   CreditCard,
   Plane,
   MapPin,
   GitPullRequest,
-  Bell,
 } from "lucide-react";
 
 interface DashboardStats {
@@ -58,18 +51,6 @@ interface DashboardStats {
   };
 }
 
-interface RenewalKPIs {
-  total: number;
-  draft: number;
-  submitted: number;
-  underReview: number;
-  approved: number;
-  rejected: number;
-  formsCompleted: number;
-  attachmentsUploaded: number;
-  avgCompletionRate: number;
-}
-
 interface PaymentWithOffice extends Payment {
   office?: Office;
 }
@@ -82,15 +63,6 @@ interface AnalyticsData {
   byRenewalYear: { year: number; count: number }[];
 }
 
-interface StaffAnalyticsData {
-  totalStaff: number;
-  linkedToOffices: number;
-  workHistoryRecords: number;
-  byGender: { name: string; value: number }[];
-  byJobTitle: { name: string; value: number }[];
-  byNationality: { name: string; value: number }[];
-  byOffice: { name: string; value: number }[];
-}
 
 const CHART_COLORS = [
   'hsl(221, 83%, 53%)',
@@ -128,16 +100,8 @@ export default function AdminDashboard() {
 
   const pendingPayments = allPayments?.filter(p => p.status === 'UPLOADED') || [];
 
-  const { data: kpis } = useQuery<RenewalKPIs>({
-    queryKey: ["/api/admin/renewals/kpis"],
-  });
-
-  const { data: analytics, isLoading: analyticsLoading } = useQuery<AnalyticsData>({
+  const { data: analytics } = useQuery<AnalyticsData>({
     queryKey: ["/api/admin/analytics"],
-  });
-
-  const { data: staffAnalytics, isLoading: staffAnalyticsLoading } = useQuery<StaffAnalyticsData>({
-    queryKey: ["/api/admin/staff-analytics"],
   });
 
   const { data: pendingChangeRequests } = useQuery<ChangeRequest[]>({
@@ -411,299 +375,6 @@ export default function AdminDashboard() {
                       </CardContent>
                     </Card>
                   </div>
-                )}
-
-                {/* Staff Analytics Section */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold flex items-center gap-2">
-                    <Users className="h-5 w-5" />
-                    {language === 'ar' ? 'تحليلات الموظفين' : 'Staff Analytics'}
-                  </h3>
-                  
-                  {staffAnalyticsLoading ? (
-                    <div className="grid gap-4 sm:grid-cols-3">
-                      {[1, 2, 3].map((i) => (
-                        <Card key={i} className="animate-pulse">
-                          <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-                            <div className="h-4 bg-muted rounded w-24" />
-                            <div className="h-4 w-4 bg-muted rounded" />
-                          </CardHeader>
-                          <CardContent>
-                            <div className="h-8 bg-muted rounded w-16" />
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  ) : staffAnalytics ? (
-                    <>
-                    {/* Staff Summary Cards */}
-                    <div className="grid gap-4 sm:grid-cols-3">
-                      <Card>
-                        <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-                          <CardTitle className="text-sm font-medium text-muted-foreground">
-                            {language === 'ar' ? 'إجمالي الموظفين' : 'Total Staff'}
-                          </CardTitle>
-                          <Users className="h-4 w-4 text-blue-500" />
-                        </CardHeader>
-                        <CardContent>
-                          <div className="text-2xl font-bold text-blue-600" data-testid="stat-total-staff">
-                            {staffAnalytics.totalStaff.toLocaleString()}
-                          </div>
-                        </CardContent>
-                      </Card>
-                      
-                      <Card>
-                        <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-                          <CardTitle className="text-sm font-medium text-muted-foreground">
-                            {language === 'ar' ? 'مرتبطين بمكاتب' : 'Linked to Offices'}
-                          </CardTitle>
-                          <Building className="h-4 w-4 text-emerald-500" />
-                        </CardHeader>
-                        <CardContent>
-                          <div className="text-2xl font-bold text-emerald-600" data-testid="stat-linked-staff">
-                            {staffAnalytics.linkedToOffices.toLocaleString()}
-                          </div>
-                        </CardContent>
-                      </Card>
-                      
-                      <Card>
-                        <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-                          <CardTitle className="text-sm font-medium text-muted-foreground">
-                            {language === 'ar' ? 'سجلات العمل' : 'Work History Records'}
-                          </CardTitle>
-                          <FileCheck className="h-4 w-4 text-purple-500" />
-                        </CardHeader>
-                        <CardContent>
-                          <div className="text-2xl font-bold text-purple-600" data-testid="stat-work-history">
-                            {staffAnalytics.workHistoryRecords.toLocaleString()}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-
-                    <div className="grid gap-6 lg:grid-cols-2">
-                      {/* Gender Distribution */}
-                      <Card>
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-base flex items-center gap-2">
-                            <Users className="h-4 w-4" />
-                            {language === 'ar' ? 'توزيع الموظفين حسب الجنس' : 'Staff by Gender'}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="flex gap-6">
-                            <div className="h-[180px] w-[180px] flex-shrink-0">
-                              <ResponsiveContainer width="100%" height="100%">
-                                <PieChart>
-                                  <Pie
-                                    data={staffAnalytics.byGender}
-                                    cx="50%"
-                                    cy="50%"
-                                    innerRadius={35}
-                                    outerRadius={65}
-                                    paddingAngle={2}
-                                    dataKey="value"
-                                    nameKey="name"
-                                  >
-                                    {staffAnalytics.byGender.map((_, index) => (
-                                      <Cell key={`gender-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
-                                    ))}
-                                  </Pie>
-                                  <Tooltip 
-                                    formatter={(value: number) => [value.toLocaleString(), language === 'ar' ? 'موظفين' : 'Staff']}
-                                    contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))', borderRadius: '6px' }}
-                                  />
-                                </PieChart>
-                              </ResponsiveContainer>
-                            </div>
-                            <div className="flex-1 space-y-3">
-                              {staffAnalytics.byGender.map((g, i) => (
-                                <div key={g.name} className="flex items-center justify-between text-sm">
-                                  <div className="flex items-center gap-2">
-                                    <span className="w-3 h-3 rounded-sm flex-shrink-0" style={{ backgroundColor: CHART_COLORS[i] }} />
-                                    <span>{g.name}</span>
-                                  </div>
-                                  <span className="font-medium">{g.value.toLocaleString()}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      {/* Top Job Titles */}
-                      <Card>
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-base flex items-center gap-2">
-                            <FileCheck className="h-4 w-4" />
-                            {language === 'ar' ? 'أكثر المسميات الوظيفية' : 'Top Job Titles'}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-3">
-                            {staffAnalytics.byJobTitle.slice(0, 6).map((job, i) => {
-                              const maxValue = Math.max(...staffAnalytics.byJobTitle.map(j => j.value));
-                              const percentage = (job.value / maxValue) * 100;
-                              return (
-                                <div key={job.name} className="space-y-1">
-                                  <div className="flex items-center justify-between text-sm">
-                                    <span className="truncate max-w-[200px]">{job.name}</span>
-                                    <span className="font-medium">{job.value.toLocaleString()}</span>
-                                  </div>
-                                  <div className="h-2 bg-muted rounded-full overflow-hidden">
-                                    <div 
-                                      className="h-full rounded-full transition-all"
-                                      style={{ 
-                                        width: `${percentage}%`,
-                                        backgroundColor: CHART_COLORS[i % CHART_COLORS.length]
-                                      }}
-                                    />
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      {/* Nationality Distribution */}
-                      <Card>
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-base flex items-center gap-2">
-                            <MapPin className="h-4 w-4" />
-                            {language === 'ar' ? 'توزيع الموظفين حسب الجنسية' : 'Staff by Nationality'}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-3">
-                            {staffAnalytics.byNationality.slice(0, 6).map((nat, i) => {
-                              const maxValue = Math.max(...staffAnalytics.byNationality.map(n => n.value));
-                              const percentage = (nat.value / maxValue) * 100;
-                              return (
-                                <div key={nat.name} className="space-y-1">
-                                  <div className="flex items-center justify-between text-sm">
-                                    <span>{nat.name}</span>
-                                    <span className="font-medium">{nat.value.toLocaleString()}</span>
-                                  </div>
-                                  <div className="h-2 bg-muted rounded-full overflow-hidden">
-                                    <div 
-                                      className="h-full rounded-full transition-all"
-                                      style={{ 
-                                        width: `${percentage}%`,
-                                        backgroundColor: CHART_COLORS[i % CHART_COLORS.length]
-                                      }}
-                                    />
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      {/* Top Offices by Employees */}
-                      <Card>
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-base flex items-center gap-2">
-                            <Building className="h-4 w-4" />
-                            {language === 'ar' ? 'المكاتب الأكثر توظيفاً' : 'Top Offices by Staff'}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-3">
-                            {staffAnalytics.byOffice.slice(0, 6).map((office, i) => {
-                              const maxValue = Math.max(...staffAnalytics.byOffice.map(o => o.value));
-                              const percentage = (office.value / maxValue) * 100;
-                              return (
-                                <div key={office.name} className="space-y-1">
-                                  <div className="flex items-center justify-between text-sm">
-                                    <span className="truncate max-w-[200px]">{office.name}</span>
-                                    <span className="font-medium">{office.value}</span>
-                                  </div>
-                                  <div className="h-2 bg-muted rounded-full overflow-hidden">
-                                    <div 
-                                      className="h-full rounded-full transition-all"
-                                      style={{ 
-                                        width: `${percentage}%`,
-                                        backgroundColor: CHART_COLORS[i % CHART_COLORS.length]
-                                      }}
-                                    />
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                    </>
-                  ) : null}
-                </div>
-
-                {/* 2026 Renewal KPIs Section */}
-                {kpis && kpis.total > 0 && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <TrendingUp className="h-5 w-5 text-primary" />
-                        {t("admin.renewalKpis.title")}
-                      </CardTitle>
-                      <CardDescription>{t("admin.renewalKpis.description")}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-6">
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">{t("admin.renewalKpis.draft")}</span>
-                            <Clock className="h-4 w-4 text-slate-400" />
-                          </div>
-                          <div className="text-2xl font-bold" data-testid="kpi-draft">{kpis.draft}</div>
-                        </div>
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">{t("admin.renewalKpis.submitted")}</span>
-                            <Send className="h-4 w-4 text-blue-500" />
-                          </div>
-                          <div className="text-2xl font-bold text-blue-600" data-testid="kpi-submitted">{kpis.submitted}</div>
-                        </div>
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">{t("admin.renewalKpis.approved")}</span>
-                            <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                          </div>
-                          <div className="text-2xl font-bold text-emerald-600" data-testid="kpi-approved">{kpis.approved}</div>
-                        </div>
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">{t("admin.renewalKpis.rejected")}</span>
-                            <XCircle className="h-4 w-4 text-red-500" />
-                          </div>
-                          <div className="text-2xl font-bold text-red-600" data-testid="kpi-rejected">{kpis.rejected}</div>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="text-muted-foreground">{t("admin.renewalKpis.completionRate")}</span>
-                            <span className="font-medium">{kpis.avgCompletionRate}%</span>
-                          </div>
-                          <Progress value={kpis.avgCompletionRate} className="h-2" />
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-4 pt-2 border-t">
-                          <div className="text-sm">
-                            <span className="text-muted-foreground">{t("admin.renewalKpis.formsCompleted")}: </span>
-                            <span className="font-medium">{kpis.formsCompleted}</span>
-                          </div>
-                          <div className="text-sm">
-                            <span className="text-muted-foreground">{t("admin.renewalKpis.attachmentsUploaded")}: </span>
-                            <span className="font-medium">{kpis.attachmentsUploaded}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
                 )}
 
                 <div className="grid gap-6 lg:grid-cols-2">
