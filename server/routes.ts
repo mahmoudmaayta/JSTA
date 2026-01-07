@@ -747,13 +747,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Count pending offices (PENDING_APPROVAL status)
       const pendingOffices = offices.filter(o => o.status === "PENDING_APPROVAL").length;
       
-      // Count renewals needing attention (SUBMITTED, MINISTRY_DOC_UPLOADED)
+      // Count renewals needing attention from admin or office
+      // Exclude only terminal states: FINAL_APPROVED (completed) and REJECTED (closed)
       const pendingRenewals = renewals.filter(r => 
-        r.status === "SUBMITTED" || r.status === "MINISTRY_DOC_UPLOADED"
+        r.status !== "FINAL_APPROVED" && r.status !== "REJECTED"
       ).length;
       
-      // Count pending payments (UPLOADED status = proof uploaded, awaiting admin review)
-      const pendingPayments = payments.filter(p => p.status === "UPLOADED").length;
+      // Count payments needing attention from admin or office
+      // PENDING = office needs to pay, UPLOADED = admin needs to review
+      const pendingPayments = payments.filter(p => 
+        p.status === "PENDING" || p.status === "UPLOADED"
+      ).length;
       
       // Count pending change requests
       const pendingChangeRequestsCount = changeRequestsList.length;
