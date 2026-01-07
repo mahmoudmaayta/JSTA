@@ -4,6 +4,7 @@ import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/s
 import { AdminSidebar } from "@/components/layout/admin-sidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { LoadingPage } from "@/components/ui/loading-spinner";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -28,6 +29,7 @@ import {
   Clock,
   CheckCircle2,
   ArrowRight,
+  Users,
   CreditCard,
   Plane,
   MapPin,
@@ -84,6 +86,10 @@ export default function AdminDashboard() {
     queryKey: ["/api/admin/stats"],
   });
 
+  const { data: pendingOffices, isLoading: officesLoading } = useQuery<Office[]>({
+    queryKey: ["/api/admin/offices", { status: "PENDING_APPROVAL" }],
+  });
+
   const { data: pendingRenewals, isLoading: renewalsLoading } = useQuery<LicenseRenewal[]>({
     queryKey: ["/api/admin/renewals", { pending: true }],
   });
@@ -104,7 +110,7 @@ export default function AdminDashboard() {
 
   const pendingChangeRequestsCount = pendingChangeRequests?.length || 0;
 
-  const isLoading = statsLoading || renewalsLoading || paymentsLoading;
+  const isLoading = statsLoading || officesLoading || renewalsLoading || paymentsLoading;
 
   const sidebarStyle = {
     "--sidebar-width": "16rem",
@@ -370,6 +376,76 @@ export default function AdminDashboard() {
                     </Card>
                   </div>
                 )}
+
+                {/* Pending Office Registrations - Priority Section */}
+                <Card className="border-amber-200 dark:border-amber-800 bg-gradient-to-br from-amber-50/50 to-orange-50/30 dark:from-amber-950/20 dark:to-orange-950/10">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between gap-4 flex-wrap">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-900/40">
+                          <Users className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-lg">
+                            {t("admin.pendingRegistrations")}
+                          </CardTitle>
+                          <CardDescription>
+                            {t("admin.officesAwaitingApproval")}
+                          </CardDescription>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        {pendingOffices && pendingOffices.length > 0 && (
+                          <Badge variant="secondary" className="bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 text-base px-3 py-1">
+                            {pendingOffices.length}
+                          </Badge>
+                        )}
+                        <Link href="/admin/offices?status=PENDING_APPROVAL">
+                          <Button variant="outline" size="sm" className="gap-1" data-testid="link-all-offices">
+                            {t("common.viewAll")}
+                            <ArrowRight className="h-3 w-3 rtl-flip" />
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    {pendingOffices && pendingOffices.length > 0 ? (
+                      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        {pendingOffices.slice(0, 6).map((office) => (
+                          <div
+                            key={office.id}
+                            className="flex items-center justify-between rounded-lg border bg-background/80 p-4 hover-elevate transition-all"
+                          >
+                            <div className="flex items-center gap-3 flex-1 min-w-0">
+                              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-amber-100 dark:bg-amber-900/30">
+                                <Building className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <p className="font-medium truncate">{office.tradeNameAr}</p>
+                                <p className="text-xs text-muted-foreground">
+                                  {new Date(office.createdAt).toLocaleDateString(language === 'ar' ? 'ar-JO' : 'en-US')}
+                                </p>
+                              </div>
+                            </div>
+                            <Link href={`/admin/offices/${office.id}`}>
+                              <Button variant="ghost" size="sm" className="gap-1 flex-shrink-0" data-testid={`link-office-${office.id}`}>
+                                {t("common.review")}
+                                <ArrowRight className="h-3 w-3 rtl-flip" />
+                              </Button>
+                            </Link>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <EmptyState
+                        icon={CheckCircle2}
+                        title={t("admin.allCaughtUp")}
+                        description={t("admin.noPendingRegistrations")}
+                      />
+                    )}
+                  </CardContent>
+                </Card>
 
                 <div className="grid gap-6 lg:grid-cols-2">
                   {/* Pending Renewals */}
