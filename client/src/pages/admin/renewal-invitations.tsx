@@ -164,7 +164,7 @@ export default function AdminRenewalInvitations() {
 
   const filteredInvitations = invitations?.filter((inv) => {
     const matchesSearch = 
-      inv.officeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      inv.officeName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       inv.officeNameEn?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       inv.email?.toLowerCase().includes(searchTerm.toLowerCase());
     
