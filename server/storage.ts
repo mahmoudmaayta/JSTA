@@ -34,59 +34,8 @@ const { Pool } = pkg;
 import { eq, desc, inArray, sql, and, gte, lte, count, avg } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
-const connectionString = process.env.DATABASE_URL;
-if (!connectionString) {
-  throw new Error("DATABASE_URL environment variable is required");
-}
-
-export const pool = new Pool({ 
-  connectionString,
-  connectionTimeoutMillis: 5000,
-  idleTimeoutMillis: 30000,
-  max: 5,
-});
+export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 export const db = drizzle(pool);
-
-let isDatabaseAvailable = false;
-
-export async function testDatabaseConnection(timeoutMs: number = 5000): Promise<boolean> {
-  return new Promise((resolve) => {
-    const timeout = setTimeout(() => {
-      console.error('Database connection timed out after', timeoutMs, 'ms');
-      isDatabaseAvailable = false;
-      resolve(false);
-    }, timeoutMs);
-
-    pool.connect()
-      .then(client => {
-        clearTimeout(timeout);
-        client.query('SELECT 1')
-          .then(() => {
-            client.release();
-            console.log('Database connection successful');
-            isDatabaseAvailable = true;
-            resolve(true);
-          })
-          .catch(err => {
-            clearTimeout(timeout);
-            client.release();
-            console.error('Database query failed:', err.message);
-            isDatabaseAvailable = false;
-            resolve(false);
-          });
-      })
-      .catch(err => {
-        clearTimeout(timeout);
-        console.error('Database connection failed:', err.message);
-        isDatabaseAvailable = false;
-        resolve(false);
-      });
-  });
-}
-
-export function isDatabaseConnected(): boolean {
-  return isDatabaseAvailable;
-}
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -962,7 +911,7 @@ export class DatabaseStorage implements IStorage {
     return await db.select()
       .from(offices)
       .where(eq(offices.lastRenewalYear, lastRenewalYear))
-      .orderBy(offices.tradeNameAr);
+      .orderBy(offices.name);
   }
 
   async getLatestInviteForRenewal(renewalId: number): Promise<RenewalInvite | undefined> {

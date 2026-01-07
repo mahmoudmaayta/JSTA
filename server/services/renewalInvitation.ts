@@ -79,8 +79,8 @@ export async function createRenewalInvitation(officeId: number, renewalId: numbe
     let emailSent = false;
     if (sentToEmail) {
       try {
-        const officeName = office[0].tradeNameAr || 'Office';
-        const officeNameEn = office[0].tradeNameEn || undefined;
+        const officeName = office[0].name || office[0].tradeNameAr || 'Office';
+        const officeNameEn = office[0].nameEn || office[0].tradeNameEn;
         const portalUrl = process.env.REPLIT_DOMAINS 
           ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}` 
           : 'http://localhost:5000';

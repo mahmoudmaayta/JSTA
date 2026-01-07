@@ -2,12 +2,11 @@ import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
-import createMemoryStore from "memorystore";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
 import bcrypt from "bcryptjs";
-import { storage, pool, testDatabaseConnection, isDatabaseConnected } from "./storage";
+import { storage, pool } from "./storage";
 import { generateRenewalPDF } from "./pdf";
 import {
   loginRateLimiter,
@@ -169,39 +168,20 @@ async function ensureCanTransact2026(req: Request, res: Response, next: NextFunc
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  console.log('Testing database connection...');
-  const dbConnected = await testDatabaseConnection(10000);
-  
-  if (dbConnected) {
-    console.log('Database connected, seeding admin user...');
-    await storage.seedAdminUser();
-  } else {
-    console.warn('Database not available - running in degraded mode. Admin seeding skipped.');
-  }
+  await storage.seedAdminUser();
 
-  // Initialize session store - use PostgreSQL if available, otherwise MemoryStore
-  let sessionStore: session.Store;
-  
-  if (dbConnected) {
-    console.log('Using PostgreSQL session store');
-    const PgStore = connectPgSimple(session);
-    sessionStore = new PgStore({
-      pool: pool,
-      tableName: 'session',
-      createTableIfMissing: true,
-      pruneSessionInterval: 60 * 60,
-    });
-  } else {
-    console.log('Using in-memory session store (sessions will not persist across restarts)');
-    const MemoryStore = createMemoryStore(session);
-    sessionStore = new MemoryStore({
-      checkPeriod: 86400000, // prune expired entries every 24h
-    });
-  }
+  // Initialize PostgreSQL session store
+  const PgStore = connectPgSimple(session);
 
   app.use(
     session({
-      store: sessionStore,
+      store: new PgStore({
+        pool: pool,
+        tableName: 'session',
+        createTableIfMissing: true,
+        // Cleanup expired sessions every hour
+        pruneSessionInterval: 60 * 60, // 1 hour in seconds
+      }),
       secret: env.SESSION_SECRET, // From validated environment
       resave: false,
       saveUninitialized: false,
@@ -717,12 +697,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Sidebar notification counts - returns counts for all sidebar badges
   app.get("/api/admin/sidebar-counts", ensureAdmin, async (req, res) => {
     try {
-      const [offices, renewals, payments, changeRequestsList, activeOfficesFor2026] = await Promise.all([
+      const [offices, renewals, payments, changeRequestsList] = await Promise.all([
         storage.getAllOffices(),
         storage.getAllRenewals(),
         storage.getAllPayments(),
         storage.getPendingChangeRequests(),
-        storage.getActiveOfficesForRenewal(2025),
       ]);
 
       // Count pending offices (PENDING_APPROVAL status)
@@ -738,20 +717,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Count pending change requests
       const pendingChangeRequestsCount = changeRequestsList.length;
-      
-      // Count pending invitations for 2026 renewal (offices not yet invited)
-      let pendingInvitations = 0;
-      for (const office of activeOfficesFor2026) {
-        const renewal = renewals.find(r => r.officeId === office.id && r.year === 2026);
-        if (!renewal) {
-          pendingInvitations++;
-        } else {
-          const invite = await storage.getLatestInviteForRenewal(renewal.id);
-          if (!invite || invite.status === 'EXPIRED') {
-            pendingInvitations++;
-          }
-        }
-      }
       
       // Count notifications (offices with expired/expiring licenses)
       const now = new Date();
@@ -785,7 +750,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         pendingRenewals,
         pendingPayments,
         pendingChangeRequests: pendingChangeRequestsCount,
-        pendingInvitations,
         criticalAlerts,
         warningAlerts,
         totalAlerts: criticalAlerts + warningAlerts,
@@ -876,11 +840,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       for (const office of offices) {
         if (office.hajjUmrah) activityCounts.hajjUmrah++;
-        if (office.tourismImported) activityCounts.inboundTourism++;
+        if (office.tourismImported || office.imported) activityCounts.inboundTourism++;
         if (office.outboundTourism) activityCounts.outboundTourism++;
         if (office.domesticTourism) activityCounts.domesticTourism++;
-        if (office.airlineTickets) activityCounts.airlineTickets++;
-        if (office.tourismImported) activityCounts.imported++;
+        if (office.tickets) activityCounts.airlineTickets++;
+        if (office.imported) activityCounts.imported++;
       }
       
       res.json({
@@ -4153,9 +4117,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         notes: notes || null,
         status: 'PENDING',
         city: office.mainCity || null,
-        region: office.mainArea || null,
-        street: office.mainStreet || null,
-        buildingNumber: office.mainBuildingNumber || null
+        region: office.area || null,
+        street: office.street || null,
+        buildingNumber: office.buildingNumber || null
       });
       
       // Create audit log
@@ -4731,15 +4695,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json({
         id: office.id,
-        name: office.tradeNameAr,
-        nameEn: office.tradeNameEn,
+        name: office.name,
+        nameEn: office.nameEn,
         registrationNumber: office.registrationNumber,
         licenseCategory: office.licenseCategory,
-        email: office.mainEmail,
-        phone: office.phone || office.mobile,
-        city: office.mainCity,
-        address: office.fullAddress,
-        managerName: [office.managerFirstName, office.managerSecondName, office.managerLastName].filter(Boolean).join(' ')
+        email: office.email,
+        phone: office.phone,
+        city: office.city,
+        address: office.address,
+        managerName: [office.managerFirst, office.managerSecond, office.managerLast].filter(Boolean).join(' ')
       });
     } catch (error) {
       console.error("Office info error:", error);
@@ -4751,7 +4715,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/renew/:renewalId/approve-info", ensureOffice, async (req, res) => {
     try {
       const renewalId = parseInt(req.params.renewalId);
-      const officeId = (req.session as any).officeId;
+      const officeId = req.session.officeId;
 
       const renewal = await storage.getLicenseRenewal(renewalId);
       if (!renewal || renewal.officeId !== officeId) {
@@ -4804,7 +4768,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/renew/:renewalId/accept-declarations", ensureOffice, async (req, res) => {
     try {
       const renewalId = parseInt(req.params.renewalId);
-      const officeId = (req.session as any).officeId;
+      const officeId = req.session.officeId;
 
       const renewal = await storage.getLicenseRenewal(renewalId);
       if (!renewal || renewal.officeId !== officeId) {
@@ -4857,7 +4821,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/renew/:renewalId/initiate-payment", ensureOffice, async (req, res) => {
     try {
       const renewalId = parseInt(req.params.renewalId);
-      const officeId = (req.session as any).officeId;
+      const officeId = req.session.officeId;
 
       const renewal = await storage.getLicenseRenewal(renewalId);
       if (!renewal || renewal.officeId !== officeId) {
@@ -4899,7 +4863,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/renew/:renewalId/confirm-payment", ensureOffice, async (req, res) => {
     try {
       const renewalId = parseInt(req.params.renewalId);
-      const officeId = (req.session as any).officeId;
+      const officeId = req.session.officeId;
 
       const renewal = await storage.getLicenseRenewal(renewalId);
       if (!renewal || renewal.officeId !== officeId) {
@@ -4957,7 +4921,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Office: Get renewal status
   app.get("/api/renew/status", ensureOffice, async (req, res) => {
     try {
-      const officeId = (req.session as any).officeId;
+      const officeId = req.session.officeId;
       const status = await getOfficeRenewalStatus(officeId!, 2026);
       res.json(status);
     } catch (error) {
@@ -4992,9 +4956,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         return {
           officeId: office.id,
-          officeName: office.tradeNameAr,
-          officeNameEn: office.tradeNameEn,
-          email: office.mainEmail,
+          officeName: office.name,
+          officeNameEn: office.nameEn,
+          email: office.email,
           lastRenewalYear: office.lastRenewalYear,
           inviteStatus: invite?.status || 'NOT_INVITED',
           renewalState: renewal?.renewalState || null,
@@ -5035,6 +4999,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         renewal = await storage.createLicenseRenewal({
           officeId,
           year,
+          status: 'DRAFT',
           renewalState: 'NOT_STARTED'
         });
       }

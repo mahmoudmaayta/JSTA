@@ -377,93 +377,76 @@ export default function AdminDashboard() {
                   </div>
                 )}
 
-                {/* Pending Office Registrations - Priority Section */}
-                <Card className="border-amber-200 dark:border-amber-800 bg-gradient-to-br from-amber-50/50 to-orange-50/30 dark:from-amber-950/20 dark:to-orange-950/10">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between gap-4 flex-wrap">
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-900/40">
-                          <Users className="h-6 w-6 text-amber-600 dark:text-amber-400" />
-                        </div>
+                <div className="grid gap-6 lg:grid-cols-2">
+                  <Card>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
                         <div>
-                          <CardTitle className="text-lg">
+                          <CardTitle className="flex items-center gap-2">
+                            <Users className="h-5 w-5" />
                             {t("admin.pendingRegistrations")}
                           </CardTitle>
                           <CardDescription>
                             {t("admin.officesAwaitingApproval")}
                           </CardDescription>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        {pendingOffices && pendingOffices.length > 0 && (
-                          <Badge variant="secondary" className="bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 text-base px-3 py-1">
-                            {pendingOffices.length}
-                          </Badge>
-                        )}
-                        <Link href="/admin/offices?status=PENDING_APPROVAL">
+                        <Link href="/admin/offices">
                           <Button variant="outline" size="sm" className="gap-1" data-testid="link-all-offices">
                             {t("common.viewAll")}
                             <ArrowRight className="h-3 w-3 rtl-flip" />
                           </Button>
                         </Link>
                       </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    {pendingOffices && pendingOffices.length > 0 ? (
-                      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                        {pendingOffices.slice(0, 6).map((office) => (
-                          <div
-                            key={office.id}
-                            className="flex items-center justify-between rounded-lg border bg-background/80 p-4 hover-elevate transition-all"
-                          >
-                            <div className="flex items-center gap-3 flex-1 min-w-0">
-                              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-amber-100 dark:bg-amber-900/30">
-                                <Building className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                    </CardHeader>
+                    <CardContent>
+                      {pendingOffices && pendingOffices.length > 0 ? (
+                        <div className="space-y-3">
+                          {pendingOffices.slice(0, 5).map((office) => (
+                            <div
+                              key={office.id}
+                              className="flex items-center justify-between rounded-lg border p-3"
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30">
+                                  <Building className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                                </div>
+                                <div>
+                                  <p className="font-medium">{office.tradeNameAr}</p>
+                                  <p className="text-xs text-muted-foreground">
+                                    {new Date(office.createdAt).toLocaleDateString()}
+                                  </p>
+                                </div>
                               </div>
-                              <div className="min-w-0 flex-1">
-                                <p className="font-medium truncate">{office.tradeNameAr}</p>
-                                <p className="text-xs text-muted-foreground">
-                                  {new Date(office.createdAt).toLocaleDateString(language === 'ar' ? 'ar-JO' : 'en-US')}
-                                </p>
-                              </div>
+                              <Link href={`/admin/offices/${office.id}`}>
+                                <Button variant="ghost" size="sm" className="gap-1" data-testid={`link-office-${office.id}`}>
+                                  {t("common.review")}
+                                  <ArrowRight className="h-3 w-3 rtl-flip" />
+                                </Button>
+                              </Link>
                             </div>
-                            <Link href={`/admin/offices/${office.id}`}>
-                              <Button variant="ghost" size="sm" className="gap-1 flex-shrink-0" data-testid={`link-office-${office.id}`}>
-                                {t("common.review")}
-                                <ArrowRight className="h-3 w-3 rtl-flip" />
-                              </Button>
-                            </Link>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <EmptyState
-                        icon={CheckCircle2}
-                        title={t("admin.allCaughtUp")}
-                        description={t("admin.noPendingRegistrations")}
-                      />
-                    )}
-                  </CardContent>
-                </Card>
+                          ))}
+                        </div>
+                      ) : (
+                        <EmptyState
+                          icon={CheckCircle2}
+                          title={t("admin.allCaughtUp")}
+                          description={t("admin.noPendingRegistrations")}
+                        />
+                      )}
+                    </CardContent>
+                  </Card>
 
-                <div className="grid gap-6 lg:grid-cols-2">
-                  {/* Pending Renewals */}
                   <Card>
-                    <CardHeader className="pb-3">
-                      <div className="flex items-center justify-between gap-2 flex-wrap">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30">
-                            <FileCheck className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                          </div>
-                          <div>
-                            <CardTitle className="text-base">
-                              {t("admin.pendingRenewalRequests")}
-                            </CardTitle>
-                            <CardDescription className="text-xs">
-                              {t("admin.renewalsAwaitingAction")}
-                            </CardDescription>
-                          </div>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <CardTitle className="flex items-center gap-2">
+                            <FileCheck className="h-5 w-5" />
+                            {t("admin.pendingRenewalRequests")}
+                          </CardTitle>
+                          <CardDescription>
+                            {t("admin.renewalsAwaitingAction")}
+                          </CardDescription>
                         </div>
                         <Link href="/admin/renewals">
                           <Button variant="outline" size="sm" className="gap-1" data-testid="link-all-renewals">
@@ -475,30 +458,30 @@ export default function AdminDashboard() {
                     </CardHeader>
                     <CardContent>
                       {pendingRenewals && pendingRenewals.length > 0 ? (
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                           {pendingRenewals.slice(0, 5).map((renewal: any) => (
                             <div
                               key={renewal.id}
-                              className="flex items-center justify-between rounded-lg border p-3 hover-elevate"
+                              className="flex items-center justify-between rounded-lg border p-3"
                             >
-                              <div className="flex items-center gap-3 min-w-0 flex-1">
-                                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900/20">
-                                  <FileCheck className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                              <div className="flex items-center gap-3">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
+                                  <FileCheck className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                                 </div>
-                                <div className="min-w-0 flex-1">
-                                  <p className="font-medium text-sm truncate">
+                                <div>
+                                  <p className="font-medium">
                                     {renewal.office?.tradeNameAr || `${t("navigation.offices")} #${renewal.officeId}`}
                                   </p>
                                   <div className="flex items-center gap-2">
                                     <span className="text-xs text-muted-foreground">
-                                      {renewal.year}
+                                      {t("renewal.year")} {renewal.year}
                                     </span>
                                     <StatusBadge status={renewal.status} size="sm" showIcon={false} />
                                   </div>
                                 </div>
                               </div>
                               <Link href={`/admin/renewals/${renewal.id}`}>
-                                <Button variant="ghost" size="sm" className="gap-1 flex-shrink-0" data-testid={`link-renewal-${renewal.id}`}>
+                                <Button variant="ghost" size="sm" className="gap-1" data-testid={`link-renewal-${renewal.id}`}>
                                   {t("common.review")}
                                   <ArrowRight className="h-3 w-3 rtl-flip" />
                                 </Button>
@@ -516,22 +499,17 @@ export default function AdminDashboard() {
                     </CardContent>
                   </Card>
 
-                  {/* Pending Payments */}
                   <Card>
-                    <CardHeader className="pb-3">
-                      <div className="flex items-center justify-between gap-2 flex-wrap">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-900/30">
-                            <CreditCard className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                          </div>
-                          <div>
-                            <CardTitle className="text-base">
-                              {t("admin.pendingPayments")}
-                            </CardTitle>
-                            <CardDescription className="text-xs">
-                              {t("admin.paymentsAwaitingApproval")}
-                            </CardDescription>
-                          </div>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <CardTitle className="flex items-center gap-2">
+                            <CreditCard className="h-5 w-5" />
+                            {t("admin.pendingPayments")}
+                          </CardTitle>
+                          <CardDescription>
+                            {t("admin.paymentsAwaitingApproval")}
+                          </CardDescription>
                         </div>
                         <Link href="/admin/payments">
                           <Button variant="outline" size="sm" className="gap-1" data-testid="link-all-payments">
@@ -543,18 +521,18 @@ export default function AdminDashboard() {
                     </CardHeader>
                     <CardContent>
                       {pendingPayments.length > 0 ? (
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                           {pendingPayments.slice(0, 5).map((payment) => (
                             <div
                               key={payment.id}
-                              className="flex items-center justify-between rounded-lg border p-3 hover-elevate"
+                              className="flex items-center justify-between rounded-lg border p-3"
                             >
-                              <div className="flex items-center gap-3 min-w-0 flex-1">
-                                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-900/20">
-                                  <CreditCard className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                              <div className="flex items-center gap-3">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
+                                  <CreditCard className="h-5 w-5 text-green-600 dark:text-green-400" />
                                 </div>
-                                <div className="min-w-0 flex-1">
-                                  <p className="font-medium text-sm truncate">
+                                <div>
+                                  <p className="font-medium">
                                     {payment.office?.tradeNameAr || `${t("adminPayments.officeIdFallback")}${payment.officeId}`}
                                   </p>
                                   <p className="text-xs text-muted-foreground">
@@ -563,7 +541,7 @@ export default function AdminDashboard() {
                                 </div>
                               </div>
                               <Link href="/admin/payments">
-                                <Button variant="ghost" size="sm" className="gap-1 flex-shrink-0" data-testid={`link-payment-${payment.id}`}>
+                                <Button variant="ghost" size="sm" className="gap-1" data-testid={`link-payment-${payment.id}`}>
                                   {t("common.review")}
                                   <ArrowRight className="h-3 w-3 rtl-flip" />
                                 </Button>
