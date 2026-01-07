@@ -911,7 +911,7 @@ export class DatabaseStorage implements IStorage {
     return await db.select()
       .from(offices)
       .where(eq(offices.lastRenewalYear, lastRenewalYear))
-      .orderBy(offices.name);
+      .orderBy(offices.tradeNameAr);
   }
 
   async getLatestInviteForRenewal(renewalId: number): Promise<RenewalInvite | undefined> {
