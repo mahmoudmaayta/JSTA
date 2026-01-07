@@ -1,0 +1,1 @@
+# JSTA Certificate Templates\n\nThis folder contains PDF templates for generating certificates.\n\n## Files\n- jsta-membership-certificate.pdf - Template for membership certificates (to be added)\n\n## Usage\nThe certificate API endpoint will use pdf-lib or similar to fill in the template fields with office data.

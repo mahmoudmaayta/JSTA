@@ -22,6 +22,7 @@ import {
   Clock,
   AlertCircle,
   XCircle,
+  Award,
 } from "lucide-react";
 
 export default function OfficeRenewalDetail() {
@@ -260,13 +261,35 @@ export default function OfficeRenewalDetail() {
                 )}
 
                 {renewal.status === "FINAL_APPROVED" && (
-                  <Alert className="border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                    <AlertTitle className="text-emerald-700 dark:text-emerald-400">{t("renewalDetail.renewalApproved")}</AlertTitle>
-                    <AlertDescription className="text-emerald-600 dark:text-emerald-300">
-                      {t("renewalDetail.renewalApprovedDesc")}
-                    </AlertDescription>
-                  </Alert>
+                  <>
+                    <Alert className="border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                      <AlertTitle className="text-emerald-700 dark:text-emerald-400">{t("renewalDetail.renewalApproved")}</AlertTitle>
+                      <AlertDescription className="text-emerald-600 dark:text-emerald-300">
+                        {t("renewalDetail.renewalApprovedDesc")}
+                      </AlertDescription>
+                    </Alert>
+
+                    <Card className="border-amber-200 bg-amber-50/50 dark:border-amber-800 dark:bg-amber-900/20">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-amber-700 dark:text-amber-400">
+                          <Award className="h-5 w-5" />
+                          {t("renewalDetail.downloadCertificate")}
+                        </CardTitle>
+                        <CardDescription>
+                          {t("renewalDetail.downloadCertificateDesc")}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <a href={`/api/office/renewals/${renewal.id}/certificate`} data-testid="button-download-certificate">
+                          <Button className="gap-2">
+                            <Download className="h-4 w-4" />
+                            {t("renewalDetail.downloadCertificateButton")}
+                          </Button>
+                        </a>
+                      </CardContent>
+                    </Card>
+                  </>
                 )}
 
                 <Card>
