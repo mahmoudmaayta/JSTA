@@ -404,6 +404,7 @@ export default function AdminChangeRequests() {
             </Button>
             <Button
               variant={reviewAction === "approve" ? "default" : "destructive"}
+              className={reviewAction === "approve" ? "bg-green-600 hover:bg-green-700" : ""}
               onClick={confirmReview}
               disabled={approveMutation.isPending || rejectMutation.isPending}
               data-testid="button-confirm-review"

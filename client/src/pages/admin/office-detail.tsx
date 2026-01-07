@@ -237,7 +237,7 @@ export default function AdminOfficeDetail() {
                         <Button
                           onClick={() => approveMutation.mutate()}
                           disabled={approveMutation.isPending}
-                          className="gap-2"
+                          className="gap-2 bg-green-600 hover:bg-green-700"
                           data-testid="button-approve"
                         >
                           {approveMutation.isPending ? (

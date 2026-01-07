@@ -143,7 +143,7 @@ export default function AdminRenewalDetail() {
             <Button
               onClick={() => approveDownloadMutation.mutate()}
               disabled={approveDownloadMutation.isPending}
-              className="gap-2"
+              className="gap-2 bg-green-600 hover:bg-green-700"
               data-testid="button-approve-download"
             >
               {approveDownloadMutation.isPending ? (
@@ -170,7 +170,7 @@ export default function AdminRenewalDetail() {
             <Button
               onClick={() => finalApproveMutation.mutate()}
               disabled={finalApproveMutation.isPending}
-              className="gap-2"
+              className="gap-2 bg-green-600 hover:bg-green-700"
               data-testid="button-final-approve"
             >
               {finalApproveMutation.isPending ? (
