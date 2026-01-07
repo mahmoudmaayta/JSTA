@@ -3792,6 +3792,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin: Download payment proof file
+  app.get("/api/admin/payments/:id/proof", ensureAdmin, async (req, res) => {
+    try {
+      const paymentId = parseInt(req.params.id);
+      if (isNaN(paymentId)) {
+        return res.status(400).json({ message: "Invalid payment ID" });
+      }
+      
+      const payment = await storage.getPayment(paymentId);
+      if (!payment) {
+        return res.status(404).json({ message: "Payment not found" });
+      }
+      
+      if (!payment.proofFileUrl) {
+        return res.status(404).json({ message: "No proof file uploaded for this payment" });
+      }
+      
+      const filename = payment.proofFileName || "payment-proof";
+      const ext = path.extname(filename).toLowerCase();
+      const mimeTypes: Record<string, string> = {
+        ".pdf": "application/pdf",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".png": "image/png",
+        ".gif": "image/gif",
+        ".webp": "image/webp",
+      };
+      const contentType = mimeTypes[ext] || "application/octet-stream";
+      
+      if (isS3Path(payment.proofFileUrl)) {
+        const buffer = await getFileBuffer(payment.proofFileUrl);
+        res.setHeader("Content-Type", contentType);
+        res.setHeader("Content-Disposition", `inline; filename="${filename}"`);
+        res.send(buffer);
+      } else {
+        // Normalize local file path - handle both relative paths and paths with leading slashes
+        let localFilePath = payment.proofFileUrl;
+        if (localFilePath.startsWith("/")) {
+          // Remove leading slash and resolve from project root
+          localFilePath = path.join(process.cwd(), localFilePath.replace(/^\//, ""));
+        } else if (!path.isAbsolute(localFilePath)) {
+          // Relative path - resolve from project root
+          localFilePath = path.join(process.cwd(), localFilePath);
+        }
+        
+        if (!fs.existsSync(localFilePath)) {
+          return res.status(404).json({ message: "File not found on server" });
+        }
+        res.setHeader("Content-Type", contentType);
+        res.setHeader("Content-Disposition", `inline; filename="${filename}"`);
+        const fileStream = fs.createReadStream(localFilePath);
+        fileStream.pipe(res);
+      }
+    } catch (error) {
+      console.error("Download payment proof error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   // Admin: Get all inspections
   app.get("/api/admin/inspections", ensureAdmin, async (req, res) => {
     try {

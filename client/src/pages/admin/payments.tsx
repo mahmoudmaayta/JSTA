@@ -318,7 +318,7 @@ export default function AdminPayments() {
                                 <TableCell>
                                   {payment.proofFileUrl ? (
                                     <a 
-                                      href={payment.proofFileUrl} 
+                                      href={`/api/admin/payments/${payment.id}/proof`} 
                                       target="_blank" 
                                       rel="noopener noreferrer"
                                       className="flex items-center gap-1 text-primary hover:underline"
