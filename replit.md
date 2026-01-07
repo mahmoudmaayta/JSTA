@@ -29,9 +29,10 @@ Preferred communication style: Simple, everyday language.
 - **API Design**: RESTful endpoints (`/api/auth`, `/api/offices`, `/api/renewals`, `/api/documents`).
 
 ### Data Storage
-- **Database**: PostgreSQL via Drizzle ORM with NeonDB serverless driver.
+- **Database**: PostgreSQL via Drizzle ORM with node-postgres driver.
     - **Core Entities**: `users`, `offices`, `branches`, `documents`, `license_renewals`, `cities`.
-- **File Storage**: Documents stored on the filesystem, not in the database.
+    - **Degraded Mode**: App can start with in-memory session storage if database is unavailable.
+- **File Storage**: Documents stored on cloud storage (S3/GCS) or local filesystem.
 
 ### Authentication and Authorization
 - **Session Management**: Cookie-based sessions with server-side storage.
