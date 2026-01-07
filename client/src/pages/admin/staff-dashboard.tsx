@@ -42,7 +42,12 @@ import {
   Loader2,
   UserCheck,
   Briefcase,
-  User
+  User,
+  FileText,
+  IdCard,
+  ShieldCheck,
+  CheckCircle2,
+  XCircle
 } from "lucide-react";
 import type { Office, Person, RoleInOffice } from "@shared/schema";
 
@@ -549,6 +554,85 @@ export default function AdminStaffDashboard() {
                   <Badge variant={getRoleBadgeVariant(selectedPerson.role?.roleType || 'EMPLOYEE')} className="text-sm">
                     {getRoleLabel(selectedPerson.role?.roleType || 'EMPLOYEE')}
                   </Badge>
+                </div>
+              </div>
+              
+              {/* Documents Section */}
+              <div className="col-span-2 mt-4 pt-4 border-t">
+                <Label className="text-muted-foreground font-medium text-base flex items-center gap-2 mb-3">
+                  <FileText className="w-4 h-4" />
+                  {language === "ar" ? "المستندات" : "Documents"}
+                </Label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Identity Card */}
+                  <div className="border rounded-lg p-3 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <IdCard className="w-4 h-4 text-primary" />
+                      <span className="font-medium text-sm">
+                        {language === "ar" ? "صورة الهوية" : "Identity Card"}
+                      </span>
+                    </div>
+                    {selectedPerson.person.identityCardFile ? (
+                      <div className="flex items-center gap-2 p-2 bg-green-50 dark:bg-green-950 rounded-md">
+                        <CheckCircle2 className="w-4 h-4 text-green-600" />
+                        <span className="text-xs text-green-700 dark:text-green-400 flex-1">
+                          {language === "ar" ? "تم الرفع" : "Uploaded"}
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 text-xs text-primary"
+                          onClick={() => window.open(`/api/documents/staff/${selectedPerson.person.id}/identity`, "_blank")}
+                          data-testid="button-view-identity-card"
+                        >
+                          <Download className="w-3 h-3 me-1" />
+                          {language === "ar" ? "عرض" : "View"}
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 p-2 bg-muted rounded-md">
+                        <XCircle className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-xs text-muted-foreground">
+                          {language === "ar" ? "لم يتم الرفع" : "Not uploaded"}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* No Criminal Record */}
+                  <div className="border rounded-lg p-3 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-primary" />
+                      <span className="font-medium text-sm">
+                        {language === "ar" ? "شهادة عدم محكومية" : "Criminal Record Certificate"}
+                      </span>
+                    </div>
+                    {selectedPerson.person.noCriminalRecordFile ? (
+                      <div className="flex items-center gap-2 p-2 bg-green-50 dark:bg-green-950 rounded-md">
+                        <CheckCircle2 className="w-4 h-4 text-green-600" />
+                        <span className="text-xs text-green-700 dark:text-green-400 flex-1">
+                          {language === "ar" ? "تم الرفع" : "Uploaded"}
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 text-xs text-primary"
+                          onClick={() => window.open(`/api/documents/staff/${selectedPerson.person.id}/criminal`, "_blank")}
+                          data-testid="button-view-criminal-record"
+                        >
+                          <Download className="w-3 h-3 me-1" />
+                          {language === "ar" ? "عرض" : "View"}
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 p-2 bg-muted rounded-md">
+                        <XCircle className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-xs text-muted-foreground">
+                          {language === "ar" ? "لم يتم الرفع" : "Not uploaded"}
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

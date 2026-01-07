@@ -2048,6 +2048,79 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Download staff member documents (identity card or criminal record)
+  app.get("/api/documents/staff/:personId/:docType", ensureAdmin, async (req, res) => {
+    const personId = parseInt(req.params.personId);
+    const docType = req.params.docType; // "identity" or "criminal"
+    
+    if (isNaN(personId)) {
+      return res.status(400).json({ message: "Invalid person ID" });
+    }
+    
+    if (docType !== "identity" && docType !== "criminal") {
+      return res.status(400).json({ message: "Invalid document type. Use 'identity' or 'criminal'" });
+    }
+    
+    const person = await storage.getPerson(personId);
+    if (!person) {
+      return res.status(404).json({ message: "Person not found" });
+    }
+    
+    const filePath = docType === "identity" ? person.identityCardFile : person.noCriminalRecordFile;
+    if (!filePath) {
+      return res.status(404).json({ message: "Document not uploaded" });
+    }
+    
+    const ext = path.extname(filePath).toLowerCase();
+    const mimeTypes: Record<string, string> = {
+      ".pdf": "application/pdf",
+      ".jpg": "image/jpeg",
+      ".jpeg": "image/jpeg",
+      ".png": "image/png",
+      ".gif": "image/gif",
+      ".webp": "image/webp",
+    };
+    const contentType = mimeTypes[ext] || "application/octet-stream";
+    const filename = docType === "identity" ? `identity-card-${personId}${ext}` : `criminal-record-${personId}${ext}`;
+    
+    try {
+      if (isCloudStoragePath(filePath)) {
+        const buffer = await getFileBuffer(filePath);
+        res.setHeader("Content-Type", contentType);
+        res.setHeader("Content-Disposition", `inline; filename="${filename}"`);
+        res.send(buffer);
+      } else {
+        // Normalize local file path
+        let localFilePath = filePath;
+        
+        // Check for app-relative paths (like /uploads/...) vs true absolute paths (like /home/runner/...)
+        const appRelativePrefixes = ["/uploads/", "/uploads"];
+        const isAppRelative = appRelativePrefixes.some(prefix => localFilePath.startsWith(prefix));
+        
+        if (isAppRelative) {
+          // App-relative path - resolve from project root
+          localFilePath = path.join(process.cwd(), localFilePath.replace(/^\//, ""));
+        } else if (path.isAbsolute(localFilePath)) {
+          // True absolute path (e.g., /home/runner/workspace/...) - use as-is
+        } else {
+          // Relative path without leading slash - resolve from project root
+          localFilePath = path.join(process.cwd(), localFilePath);
+        }
+        
+        if (!fs.existsSync(localFilePath)) {
+          return res.status(404).json({ message: "File not found on server" });
+        }
+        res.setHeader("Content-Type", contentType);
+        res.setHeader("Content-Disposition", `inline; filename="${filename}"`);
+        const fileStream = fs.createReadStream(localFilePath);
+        fileStream.pipe(res);
+      }
+    } catch (error) {
+      console.error("Error downloading staff document:", error);
+      return res.status(500).json({ message: "Error downloading document" });
+    }
+  });
+
   app.get("/api/documents/ministry/:renewalId/download", ensureAuthenticated, async (req, res) => {
     const renewalId = parseInt(req.params.renewalId);
     if (isNaN(renewalId)) {
