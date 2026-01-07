@@ -47,7 +47,7 @@ import {
   type InsertRenewalAttachment,
   type PersonRoleTypeType,
 } from "@shared/schema";
-import { uploadFile, getFileUrl, getFileBuffer, isS3StorageEnabled, isS3Path, fileExists, deleteFile } from "./file-storage";
+import { uploadFile, getFileUrl, getFileBuffer, isS3StorageEnabled, isS3Path, isGcsPath, isCloudStoragePath, fileExists, deleteFile, getActiveStorageBackend } from "./file-storage";
 
 declare module "express-session" {
   interface SessionData {
@@ -3821,7 +3821,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
       const contentType = mimeTypes[ext] || "application/octet-stream";
       
-      if (isS3Path(payment.proofFileUrl)) {
+      if (isCloudStoragePath(payment.proofFileUrl)) {
+        // S3 or GCS cloud storage
         const buffer = await getFileBuffer(payment.proofFileUrl);
         res.setHeader("Content-Type", contentType);
         res.setHeader("Content-Disposition", `inline; filename="${filename}"`);
