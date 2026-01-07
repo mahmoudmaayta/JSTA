@@ -26,16 +26,12 @@ import {
   Shield,
   History,
   Users,
-  FileWarning,
   Tag,
   CreditCard,
   Mail,
-  FileText,
   BookOpen,
   Download,
   ClipboardCheck,
-  BarChart3,
-  Bell,
   GitPullRequest,
 } from "lucide-react";
 import type { ChangeRequest } from "@shared/schema";
@@ -125,30 +121,6 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
       url: "/admin/renewal-invitations",
       icon: Mail,
       badge: null as string | null,
-    },
-    {
-      title: t("navigation.officeInfoForms") || "Office Info Forms",
-      url: "/admin/office-info-forms",
-      icon: FileText,
-      badge: null as string | null,
-    },
-    {
-      title: t("navigation.commitmentsDashboard"),
-      url: "/admin/commitments",
-      icon: FileWarning,
-      badge: null as string | null,
-    },
-    {
-      title: t("navigation.reports") || "Reports & Statistics",
-      url: "/admin/reports",
-      icon: BarChart3,
-      badge: null as string | null,
-    },
-    {
-      title: t("navigation.notifications") || "Notifications",
-      url: "/admin/notifications",
-      icon: Bell,
-      badge: "totalAlerts" as string | null,
     },
     {
       title: t("navigation.auditLogs"),
