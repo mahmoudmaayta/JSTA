@@ -69,14 +69,28 @@ const STATUS_COLORS: Record<string, string> = {
   EXPIRED: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
 };
 
-const RENEWAL_STATE_LABELS: Record<string, string> = {
-  NOT_STARTED: "Not Started",
-  INVITED: "Invited",
-  ACCESS_GRANTED: "Access Granted",
-  CREDENTIALS_UPDATED: "Credentials Set",
-  INFO_APPROVED: "Info Approved",
-  PAYMENT_PENDING: "Payment Pending",
-  COMPLETED: "Completed",
+const getInviteStatusLabel = (status: string, t: (key: string) => string): string => {
+  const labels: Record<string, string> = {
+    NOT_INVITED: t("adminRenewalInvitations.notInvited"),
+    PENDING: t("adminRenewalInvitations.pending"),
+    SENT: t("adminRenewalInvitations.sentStatus"),
+    CONSUMED: t("adminRenewalInvitations.consumed"),
+    EXPIRED: t("adminRenewalInvitations.expired"),
+  };
+  return labels[status] || status.replace(/_/g, " ");
+};
+
+const getRenewalStateLabel = (state: string, t: (key: string) => string): string => {
+  const labels: Record<string, string> = {
+    NOT_STARTED: t("adminRenewalInvitations.stateNotStarted"),
+    INVITED: t("adminRenewalInvitations.stateInvited"),
+    ACCESS_GRANTED: t("adminRenewalInvitations.stateAccessGranted"),
+    CREDENTIALS_UPDATED: t("adminRenewalInvitations.stateCredentialsSet"),
+    INFO_APPROVED: t("adminRenewalInvitations.stateInfoApproved"),
+    PAYMENT_PENDING: t("adminRenewalInvitations.statePaymentPending"),
+    COMPLETED: t("adminRenewalInvitations.stateCompleted"),
+  };
+  return labels[state] || state;
 };
 
 export default function AdminRenewalInvitations() {
@@ -108,13 +122,13 @@ export default function AdminRenewalInvitations() {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/renewal-invitations"] });
       toast({
-        title: "Invitation Sent",
-        description: `Invitation sent to ${data.email}`,
+        title: t("adminRenewalInvitations.invitationSent"),
+        description: t("adminRenewalInvitations.invitationSentDesc", { email: data.email }),
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Error",
+        title: t("adminRenewalInvitations.error"),
         description: error.message,
         variant: "destructive",
       });
@@ -133,13 +147,13 @@ export default function AdminRenewalInvitations() {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/renewal-invitations"] });
       toast({
-        title: "Bulk Invitations Sent",
-        description: `Sent ${data.count} invitations`,
+        title: t("adminRenewalInvitations.bulkInvitationsSent"),
+        description: t("adminRenewalInvitations.bulkInvitationsSentDesc", { count: data.count }),
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Error",
+        title: t("adminRenewalInvitations.error"),
         description: error.message,
         variant: "destructive",
       });
@@ -169,7 +183,7 @@ export default function AdminRenewalInvitations() {
   };
 
   if (isLoading) {
-    return <LoadingPage message="Loading renewal invitations..." />;
+    return <LoadingPage message={t("adminRenewalInvitations.loading")} />;
   }
 
   return (
@@ -180,7 +194,7 @@ export default function AdminRenewalInvitations() {
           <header className="flex items-center justify-between gap-2 p-4 border-b">
             <div className="flex items-center gap-2">
               <SidebarTrigger data-testid="button-sidebar-toggle" />
-              <h1 className="text-xl font-semibold">2026 Renewal Invitations</h1>
+              <h1 className="text-xl font-semibold">{t("adminRenewalInvitations.title")}</h1>
             </div>
             <Button
               onClick={() => sendBulkInvitationsMutation.mutate()}
@@ -190,9 +204,9 @@ export default function AdminRenewalInvitations() {
               {sendBulkInvitationsMutation.isPending ? (
                 <LoadingSpinner />
               ) : (
-                <Send className="w-4 h-4 mr-2" />
+                <Send className={`w-4 h-4 ${language === 'ar' ? 'ml-2' : 'mr-2'}`} />
               )}
-              Send All Pending Invitations
+              {t("adminRenewalInvitations.sendAllPending")}
             </Button>
           </header>
 
@@ -200,81 +214,81 @@ export default function AdminRenewalInvitations() {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Active Offices</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t("adminRenewalInvitations.activeOffices")}</CardTitle>
                   <Building2 className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{stats?.totalActiveOffices || 0}</div>
-                  <p className="text-xs text-muted-foreground">Offices with 2025 renewal</p>
+                  <p className="text-xs text-muted-foreground">{t("adminRenewalInvitations.activeOfficesDesc")}</p>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Invites Sent</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t("adminRenewalInvitations.invitesSent")}</CardTitle>
                   <Mail className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{stats?.invitesSent || 0}</div>
-                  <p className="text-xs text-muted-foreground">Email invitations sent</p>
+                  <p className="text-xs text-muted-foreground">{t("adminRenewalInvitations.invitesSentDesc")}</p>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Credentials Set</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t("adminRenewalInvitations.credentialsSet")}</CardTitle>
                   <Key className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{stats?.credentialsUpdated || 0}</div>
-                  <p className="text-xs text-muted-foreground">Accounts created</p>
+                  <p className="text-xs text-muted-foreground">{t("adminRenewalInvitations.credentialsSetDesc")}</p>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Completed</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t("adminRenewalInvitations.completed")}</CardTitle>
                   <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{stats?.renewalsCompleted || 0}</div>
-                  <p className="text-xs text-muted-foreground">Renewals finalized</p>
+                  <p className="text-xs text-muted-foreground">{t("adminRenewalInvitations.completedDesc")}</p>
                 </CardContent>
               </Card>
             </div>
 
             <Card>
               <CardHeader>
-                <CardTitle>Renewal Progress</CardTitle>
-                <CardDescription>Overall 2026 renewal campaign progress</CardDescription>
+                <CardTitle>{t("adminRenewalInvitations.renewalProgress")}</CardTitle>
+                <CardDescription>{t("adminRenewalInvitations.renewalProgressDesc")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between text-sm">
-                    <span>Completion Rate</span>
+                    <span>{t("adminRenewalInvitations.completionRate")}</span>
                     <span className="font-medium">{completionRate}%</span>
                   </div>
                   <Progress value={completionRate} />
                   <div className="grid gap-2 md:grid-cols-5 text-sm">
                     <div className="flex items-center gap-2">
                       <Mail className="w-4 h-4 text-blue-500" />
-                      <span>Sent: {stats?.invitesSent || 0}</span>
+                      <span>{t("adminRenewalInvitations.sent")}: {stats?.invitesSent || 0}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <MailOpen className="w-4 h-4 text-orange-500" />
-                      <span>Redeemed: {stats?.tokensRedeemed || 0}</span>
+                      <span>{t("adminRenewalInvitations.redeemed")}: {stats?.tokensRedeemed || 0}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Key className="w-4 h-4 text-purple-500" />
-                      <span>Credentials: {stats?.credentialsUpdated || 0}</span>
+                      <span>{t("adminRenewalInvitations.credentials")}: {stats?.credentialsUpdated || 0}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <FileCheck className="w-4 h-4 text-teal-500" />
-                      <span>Info OK: {stats?.infoApproved || 0}</span>
+                      <span>{t("adminRenewalInvitations.infoOk")}: {stats?.infoApproved || 0}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CreditCard className="w-4 h-4 text-green-500" />
-                      <span>Paid: {stats?.paymentsCompleted || 0}</span>
+                      <span>{t("adminRenewalInvitations.paid")}: {stats?.paymentsCompleted || 0}</span>
                     </div>
                   </div>
                 </div>
@@ -285,32 +299,32 @@ export default function AdminRenewalInvitations() {
               <CardHeader>
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
-                    <CardTitle>Invitation Status</CardTitle>
-                    <CardDescription>Manage renewal invitations for active offices</CardDescription>
+                    <CardTitle>{t("adminRenewalInvitations.invitationStatus")}</CardTitle>
+                    <CardDescription>{t("adminRenewalInvitations.invitationStatusDesc")}</CardDescription>
                   </div>
                   <div className="flex gap-2">
                     <div className="relative">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <Search className={`absolute ${language === 'ar' ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground`} />
                       <Input
-                        placeholder="Search offices..."
+                        placeholder={t("adminRenewalInvitations.searchOffices")}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-9 w-64"
+                        className={`${language === 'ar' ? 'pr-9' : 'pl-9'} w-64`}
                         data-testid="input-search-offices"
                       />
                     </div>
                     <select
                       value={filterStatus}
                       onChange={(e) => setFilterStatus(e.target.value)}
-                      className="border rounded-md px-3 py-2 text-sm"
+                      className="border rounded-md px-3 py-2 text-sm bg-background"
                       data-testid="select-filter-status"
                     >
-                      <option value="all">All Status</option>
-                      <option value="NOT_INVITED">Not Invited</option>
-                      <option value="PENDING">Pending</option>
-                      <option value="SENT">Sent</option>
-                      <option value="CONSUMED">Consumed</option>
-                      <option value="EXPIRED">Expired</option>
+                      <option value="all">{t("adminRenewalInvitations.allStatus")}</option>
+                      <option value="NOT_INVITED">{t("adminRenewalInvitations.notInvited")}</option>
+                      <option value="PENDING">{t("adminRenewalInvitations.pending")}</option>
+                      <option value="SENT">{t("adminRenewalInvitations.sentStatus")}</option>
+                      <option value="CONSUMED">{t("adminRenewalInvitations.consumed")}</option>
+                      <option value="EXPIRED">{t("adminRenewalInvitations.expired")}</option>
                     </select>
                     <Button
                       variant="outline"
@@ -327,19 +341,19 @@ export default function AdminRenewalInvitations() {
                 {filteredInvitations.length === 0 ? (
                   <EmptyState
                     icon={Building2}
-                    title="No offices found"
-                    description="No offices match your search criteria"
+                    title={t("adminRenewalInvitations.noOfficesFound")}
+                    description={t("adminRenewalInvitations.noMatchingCriteria")}
                   />
                 ) : (
                   <div className="rounded-md border">
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead>Office</TableHead>
-                          <TableHead>Email</TableHead>
-                          <TableHead>Invite Status</TableHead>
-                          <TableHead>Renewal State</TableHead>
-                          <TableHead className="text-right">Actions</TableHead>
+                          <TableHead>{t("adminRenewalInvitations.office")}</TableHead>
+                          <TableHead>{t("adminRenewalInvitations.email")}</TableHead>
+                          <TableHead>{t("adminRenewalInvitations.inviteStatus")}</TableHead>
+                          <TableHead>{t("adminRenewalInvitations.renewalState")}</TableHead>
+                          <TableHead className={language === 'ar' ? 'text-left' : 'text-right'}>{t("adminRenewalInvitations.actions")}</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -354,19 +368,19 @@ export default function AdminRenewalInvitations() {
                             <TableCell className="text-sm">{inv.email || "-"}</TableCell>
                             <TableCell>
                               <Badge className={STATUS_COLORS[inv.inviteStatus] || ""}>
-                                {inv.inviteStatus.replace(/_/g, " ")}
+                                {getInviteStatusLabel(inv.inviteStatus, t)}
                               </Badge>
                             </TableCell>
                             <TableCell>
                               {inv.renewalState ? (
                                 <span className="text-sm">
-                                  {RENEWAL_STATE_LABELS[inv.renewalState] || inv.renewalState}
+                                  {getRenewalStateLabel(inv.renewalState, t)}
                                 </span>
                               ) : (
                                 <span className="text-muted-foreground">-</span>
                               )}
                             </TableCell>
-                            <TableCell className="text-right">
+                            <TableCell className={language === 'ar' ? 'text-left' : 'text-right'}>
                               {(inv.inviteStatus === 'NOT_INVITED' || inv.inviteStatus === 'EXPIRED') && (
                                 <Button
                                   size="sm"
@@ -374,8 +388,8 @@ export default function AdminRenewalInvitations() {
                                   disabled={sendInvitationMutation.isPending || !inv.email}
                                   data-testid={`button-send-${inv.officeId}`}
                                 >
-                                  <Send className="w-4 h-4 mr-1" />
-                                  Send
+                                  <Send className={`w-4 h-4 ${language === 'ar' ? 'ml-1' : 'mr-1'}`} />
+                                  {t("adminRenewalInvitations.send")}
                                 </Button>
                               )}
                               {inv.inviteStatus === 'SENT' && (
@@ -386,8 +400,8 @@ export default function AdminRenewalInvitations() {
                                   disabled={sendInvitationMutation.isPending}
                                   data-testid={`button-resend-${inv.officeId}`}
                                 >
-                                  <RefreshCw className="w-4 h-4 mr-1" />
-                                  Resend
+                                  <RefreshCw className={`w-4 h-4 ${language === 'ar' ? 'ml-1' : 'mr-1'}`} />
+                                  {t("adminRenewalInvitations.resend")}
                                 </Button>
                               )}
                             </TableCell>
@@ -399,7 +413,7 @@ export default function AdminRenewalInvitations() {
                 )}
                 {filteredInvitations.length > 25 && (
                   <p className="text-sm text-muted-foreground mt-4 text-center">
-                    Showing 25 of {filteredInvitations.length} offices
+                    {t("adminRenewalInvitations.showing", { count: 25, total: filteredInvitations.length })}
                   </p>
                 )}
               </CardContent>
