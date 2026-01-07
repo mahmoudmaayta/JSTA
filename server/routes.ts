@@ -712,8 +712,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         r.status === "SUBMITTED" || r.status === "MINISTRY_DOC_UPLOADED"
       ).length;
       
-      // Count pending payments
-      const pendingPayments = payments.filter(p => p.status === "PENDING").length;
+      // Count pending payments (UPLOADED status = proof uploaded, awaiting admin review)
+      const pendingPayments = payments.filter(p => p.status === "UPLOADED").length;
       
       // Count pending change requests
       const pendingChangeRequestsCount = changeRequestsList.length;
