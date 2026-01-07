@@ -34,6 +34,7 @@ import {
   ClipboardCheck,
   GitPullRequest,
 } from "lucide-react";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import type { ChangeRequest } from "@shared/schema";
 
 interface SidebarCounts {
@@ -254,8 +255,9 @@ export function AdminSidebar({ side = "left" }: { side?: "left" | "right" }) {
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupContent>
-            <div className="px-2">
+            <div className="flex items-center gap-2 px-2">
               <LanguageSwitcher />
+              <ThemeToggle />
             </div>
           </SidebarGroupContent>
         </SidebarGroup>
