@@ -413,6 +413,93 @@ export default function AdminDashboard() {
                   </div>
                 )}
 
+                {/* Staff Analytics Section */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <Users className="h-5 w-5" />
+                    {language === 'ar' ? 'تحليلات الموظفين' : 'Staff Analytics'}
+                  </h3>
+                  
+                  {staffAnalyticsLoading ? (
+                    <div className="grid gap-4 sm:grid-cols-3">
+                      {[1, 2, 3].map((i) => (
+                        <Card key={i} className="animate-pulse">
+                          <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
+                            <div className="h-4 bg-muted rounded w-24" />
+                            <div className="h-4 w-4 bg-muted rounded" />
+                          </CardHeader>
+                          <CardContent>
+                            <div className="h-8 bg-muted rounded w-16" />
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  ) : staffAnalytics ? (
+                    <>
+                    {/* Staff Summary Cards */}
+                    <div className="grid gap-4 sm:grid-cols-3">
+                      <Card>
+                        <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
+                          <CardTitle className="text-sm font-medium text-muted-foreground">
+                            {language === 'ar' ? 'إجمالي الموظفين' : 'Total Staff'}
+                          </CardTitle>
+                          <Users className="h-4 w-4 text-blue-500" />
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold text-blue-600" data-testid="stat-total-staff">
+                            {staffAnalytics.totalStaff.toLocaleString()}
+                          </div>
+                        </CardContent>
+                      </Card>
+                      
+                      <Card>
+                        <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
+                          <CardTitle className="text-sm font-medium text-muted-foreground">
+                            {language === 'ar' ? 'مرتبطين بمكاتب' : 'Linked to Offices'}
+                          </CardTitle>
+                          <Building className="h-4 w-4 text-emerald-500" />
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold text-emerald-600" data-testid="stat-linked-staff">
+                            {staffAnalytics.linkedToOffices.toLocaleString()}
+                          </div>
+                        </CardContent>
+                      </Card>
+                      
+                      <Card>
+                        <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
+                          <CardTitle className="text-sm font-medium text-muted-foreground">
+                            {language === 'ar' ? 'سجلات العمل' : 'Work History Records'}
+                          </CardTitle>
+                          <FileCheck className="h-4 w-4 text-purple-500" />
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold text-purple-600" data-testid="stat-work-history">
+                            {staffAnalytics.workHistoryRecords.toLocaleString()}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+
+                    <div className="grid gap-6 lg:grid-cols-2">
+                      {/* Gender Distribution */}
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base flex items-center gap-2">
+                            <Users className="h-4 w-4" />
+                            {language === 'ar' ? 'توزيع الموظفين حسب الجنس' : 'Staff by Gender'}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="flex gap-6">
+                            <div className="h-[180px] w-[180px] flex-shrink-0">
+                              <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                  <Pie
+                                    data={staffAnalytics.byGender}
+                                    cx="50%"
+                                    cy="50%"
+                                    innerRadius={35}
                                     outerRadius={65}
                                     paddingAngle={2}
                                     dataKey="value"
