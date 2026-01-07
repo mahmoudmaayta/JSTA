@@ -34,7 +34,12 @@ const { Pool } = pkg;
 import { eq, desc, inArray, sql, and, gte, lte, count, avg } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+export const pool = new Pool({ 
+  connectionString: process.env.DATABASE_URL,
+  connectionTimeoutMillis: 30000,
+  idleTimeoutMillis: 30000,
+  max: 10
+});
 export const db = drizzle(pool);
 
 export interface IStorage {
@@ -911,7 +916,7 @@ export class DatabaseStorage implements IStorage {
     return await db.select()
       .from(offices)
       .where(eq(offices.lastRenewalYear, lastRenewalYear))
-      .orderBy(offices.name);
+      .orderBy(offices.tradeNameAr);
   }
 
   async getLatestInviteForRenewal(renewalId: number): Promise<RenewalInvite | undefined> {

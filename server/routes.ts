@@ -52,6 +52,7 @@ import { uploadFile, getFileUrl, getFileBuffer, isS3StorageEnabled, isCloudStora
 declare module "express-session" {
   interface SessionData {
     userId?: number;
+    officeId?: number;
   }
 }
 
@@ -168,7 +169,23 @@ async function ensureCanTransact2026(req: Request, res: Response, next: NextFunc
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  await storage.seedAdminUser();
+  // Test database connection with timeout before proceeding
+  try {
+    console.log('🔄 Testing database connection...');
+    const testPromise = pool.query('SELECT 1');
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Database connection timeout')), 15000)
+    );
+    await Promise.race([testPromise, timeoutPromise]);
+    console.log('✅ Database connection successful');
+    
+    // Seed admin user only if DB is available
+    await storage.seedAdminUser();
+  } catch (error: any) {
+    console.error('❌ Database connection failed:', error.message);
+    console.error('   The application will start but database features will not work.');
+    console.error('   Please check your DATABASE_URL and database status.');
+  }
 
   // Initialize PostgreSQL session store
   const PgStore = connectPgSimple(session);
@@ -840,11 +857,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       for (const office of offices) {
         if (office.hajjUmrah) activityCounts.hajjUmrah++;
-        if (office.tourismImported || office.imported) activityCounts.inboundTourism++;
+        if (office.tourismImported) activityCounts.inboundTourism++;
         if (office.outboundTourism) activityCounts.outboundTourism++;
         if (office.domesticTourism) activityCounts.domesticTourism++;
-        if (office.tickets) activityCounts.airlineTickets++;
-        if (office.imported) activityCounts.imported++;
+        if (office.airlineTickets) activityCounts.airlineTickets++;
+        if (office.tourismImported) activityCounts.imported++;
       }
       
       res.json({
@@ -4117,9 +4134,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         notes: notes || null,
         status: 'PENDING',
         city: office.mainCity || null,
-        region: office.area || null,
-        street: office.street || null,
-        buildingNumber: office.buildingNumber || null
+        region: office.mainCity || null,
+        street: office.mainStreet || null,
+        buildingNumber: office.mainBuildingNumber || null
       });
       
       // Create audit log
@@ -4695,15 +4712,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json({
         id: office.id,
-        name: office.name,
-        nameEn: office.nameEn,
+        name: office.tradeNameAr,
+        nameEn: office.tradeNameEn,
         registrationNumber: office.registrationNumber,
         licenseCategory: office.licenseCategory,
-        email: office.email,
+        email: office.mainEmail,
         phone: office.phone,
-        city: office.city,
-        address: office.address,
-        managerName: [office.managerFirst, office.managerSecond, office.managerLast].filter(Boolean).join(' ')
+        city: office.mainCity,
+        address: office.mainStreet,
+        managerName: [office.managerFirstName, office.managerSecondName, office.managerLastName].filter(Boolean).join(' ')
       });
     } catch (error) {
       console.error("Office info error:", error);
@@ -4746,7 +4763,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       // Audit log: Info approved
-      const user = req.user as any;
+      const user = (req as any).user;
       if (user) {
         await storage.createAuditLog({
           userId: user.id,
@@ -4799,7 +4816,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       // Audit log: Declarations accepted
-      const user = req.user as any;
+      const user = (req as any).user;
       if (user) {
         await storage.createAuditLog({
           userId: user.id,
@@ -4956,9 +4973,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         return {
           officeId: office.id,
-          officeName: office.name,
-          officeNameEn: office.nameEn,
-          email: office.email,
+          officeName: office.tradeNameAr,
+          officeNameEn: office.tradeNameEn,
+          email: office.mainEmail,
           lastRenewalYear: office.lastRenewalYear,
           inviteStatus: invite?.status || 'NOT_INVITED',
           renewalState: renewal?.renewalState || null,
@@ -4991,7 +5008,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const officeId = parseInt(req.params.officeId);
       const year = parseInt(req.body.year) || 2026;
-      const user = req.user as any;
+      const user = (req as any).user;
 
       // Find or create renewal for this office
       let renewal = await storage.getRenewalByOfficeAndYear(officeId, year);
@@ -4999,7 +5016,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         renewal = await storage.createLicenseRenewal({
           officeId,
           year,
-          status: 'DRAFT',
           renewalState: 'NOT_STARTED'
         });
       }
