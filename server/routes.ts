@@ -2221,6 +2221,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
   if (!fs.existsSync(staffDocsDir)) fs.mkdirSync(staffDocsDir, { recursive: true });
   const staffDocUpload = createUploadMiddleware("staff_docs", [".pdf", ".jpg", ".jpeg", ".png"]);
 
+  // Get staff person by ID for admin
+  app.get("/api/admin/staff/:personId", ensureAdmin, async (req, res) => {
+    try {
+      const personId = parseInt(req.params.personId);
+      if (isNaN(personId)) {
+        return res.status(400).json({ message: "Invalid person ID" });
+      }
+
+      const person = await storage.getPerson(personId);
+      if (!person) {
+        return res.status(404).json({ message: "Person not found" });
+      }
+
+      // Get office info
+      const office = person.officeId ? await storage.getOffice(person.officeId) : null;
+      
+      // Get work history
+      const workHistory = await pool.query(`
+        SELECT * FROM employee_work_history 
+        WHERE person_id = $1 
+        ORDER BY date_in DESC NULLS LAST
+      `, [personId]);
+
+      res.json({
+        person,
+        office,
+        workHistory: workHistory.rows[0] || null,
+      });
+    } catch (error) {
+      console.error("Get admin staff person error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Update staff person by ID for admin
+  app.put("/api/admin/staff/:personId", ensureAdmin, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const personId = parseInt(req.params.personId);
+      if (isNaN(personId)) {
+        return res.status(400).json({ message: "Invalid person ID" });
+      }
+
+      const person = await storage.getPerson(personId);
+      if (!person) {
+        return res.status(404).json({ message: "Person not found" });
+      }
+
+      const updateData = req.body;
+      await storage.updatePerson(personId, updateData);
+
+      // Create audit log
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "ADMIN_STAFF_UPDATED",
+        targetType: "person",
+        targetId: personId,
+        details: { updatedFields: Object.keys(updateData) }
+      });
+
+      res.json({ message: "Person updated successfully" });
+    } catch (error) {
+      console.error("Update admin staff person error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   // Admin upload staff document (identity card or criminal record)
   app.post("/api/admin/staff/:personId/upload-document", ensureAdmin, rateLimitMiddleware(uploadRateLimiter), staffDocUpload.single("file"), async (req, res) => {
     try {

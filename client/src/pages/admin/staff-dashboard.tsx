@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { queryClient } from "@/lib/queryClient";
+import { useLocation } from "wouter";
 import { useTranslation, useLanguage } from "@/lib/i18n";
 import { AdminSidebar } from "@/components/layout/admin-sidebar";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
@@ -24,13 +24,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Users, 
@@ -43,13 +36,7 @@ import {
   Loader2,
   UserCheck,
   Briefcase,
-  User,
-  FileText,
-  IdCard,
-  ShieldCheck,
-  CheckCircle2,
-  XCircle,
-  Upload
+  User
 } from "lucide-react";
 import type { Office, Person, RoleInOffice } from "@shared/schema";
 
@@ -79,14 +66,12 @@ export default function AdminStaffDashboard() {
   const dir = isRTL ? "rtl" : "ltr";
   const sidebarSide = language === 'ar' ? 'right' : 'left';
   const { toast } = useToast();
+  const [, navigate] = useLocation();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [officeSearchQuery, setOfficeSearchQuery] = useState("");
   const [selectedRole, setSelectedRole] = useState<string>("all");
   const [selectedNationality, setSelectedNationality] = useState<string>("all");
-  const [selectedPerson, setSelectedPerson] = useState<StaffDataItem | null>(null);
-  const [uploadingIdentity, setUploadingIdentity] = useState(false);
-  const [uploadingCriminal, setUploadingCriminal] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 25;
@@ -161,60 +146,6 @@ export default function AdminStaffDashboard() {
     setOfficeSearchQuery("");
     setSelectedRole("all");
     setSelectedNationality("all");
-  };
-
-  const handleDocumentUpload = async (
-    file: File,
-    personId: number,
-    type: "identity" | "criminal"
-  ) => {
-    const setUploading = type === "identity" ? setUploadingIdentity : setUploadingCriminal;
-    setUploading(true);
-
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("category", type === "identity" ? "identity_card" : "no_criminal_record");
-
-      const response = await fetch(`/api/admin/staff/${personId}/upload-document`, {
-        method: "POST",
-        body: formData,
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error("Upload failed");
-      }
-
-      const result = await response.json();
-
-      if (selectedPerson) {
-        const updatedPerson = {
-          ...selectedPerson,
-          person: {
-            ...selectedPerson.person,
-            [type === "identity" ? "identityCardFile" : "noCriminalRecordFile"]: result.filePath,
-          },
-        };
-        setSelectedPerson(updatedPerson);
-      }
-
-      toast({
-        title: language === "ar" ? "تم الرفع بنجاح" : "Upload Successful",
-        description: language === "ar" ? "تم رفع المستند بنجاح" : "Document uploaded successfully",
-      });
-
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/staff"] });
-    } catch (error) {
-      console.error("Upload error:", error);
-      toast({
-        title: language === "ar" ? "فشل الرفع" : "Upload Failed",
-        description: language === "ar" ? "حدث خطأ أثناء رفع المستند" : "An error occurred while uploading the document",
-        variant: "destructive",
-      });
-    } finally {
-      setUploading(false);
-    }
   };
 
   const [isExporting, setIsExporting] = useState(false);
@@ -493,7 +424,7 @@ export default function AdminStaffDashboard() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() => setSelectedPerson(item)}
+                                onClick={() => navigate(`/admin/staff/${item.person.id}`)}
                                 data-testid={`button-view-${index}`}
                               >
                                 <Eye className="w-4 h-4" />
@@ -544,235 +475,6 @@ export default function AdminStaffDashboard() {
           </main>
         </SidebarInset>
       </div>
-
-      <Dialog open={!!selectedPerson} onOpenChange={() => setSelectedPerson(null)}>
-        <DialogContent className="max-w-2xl" dir={dir}>
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <User className="w-5 h-5" />
-              {language === "ar" ? "تفاصيل الموظف" : "Staff Details"}
-            </DialogTitle>
-            <DialogDescription>
-              {selectedPerson?.office.tradeNameAr}
-            </DialogDescription>
-          </DialogHeader>
-          {selectedPerson && (
-            <div className="grid grid-cols-2 gap-4 pt-4">
-              <div>
-                <Label className="text-muted-foreground">{language === "ar" ? "الاسم الرباعي" : "Full Name (Arabic)"}</Label>
-                <p className="font-medium">{selectedPerson.person.fullNameAr}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">{language === "ar" ? "الاسم بالإنجليزية" : "Full Name (English)"}</Label>
-                <p className="font-medium" dir="ltr">{selectedPerson.person.fullNameEn}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">{language === "ar" ? "الرقم الوطني" : "National ID"}</Label>
-                <p className="font-medium" dir="ltr">{selectedPerson.person.nationalId}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">{language === "ar" ? "رقم الضمان" : "Social Security"}</Label>
-                <p className="font-medium" dir="ltr">{selectedPerson.person.socialSecurityNo || "-"}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">{language === "ar" ? "الجنسية" : "Nationality"}</Label>
-                <p className="font-medium">{selectedPerson.person.nationality}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">{language === "ar" ? "الجنس" : "Gender"}</Label>
-                <p className="font-medium">{selectedPerson.person.gender}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">{language === "ar" ? "اسم الأم" : "Mother's Name"}</Label>
-                <p className="font-medium">{selectedPerson.person.motherName}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">{language === "ar" ? "الموبايل" : "Mobile"}</Label>
-                <p className="font-medium" dir="ltr">{selectedPerson.person.mobile}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">{language === "ar" ? "تاريخ الميلاد" : "Birth Date"}</Label>
-                <p className="font-medium">{selectedPerson.person.birthDate}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">{language === "ar" ? "الوظيفة الحالية" : "Current Position"}</Label>
-                <p className="font-medium">{selectedPerson.person.currentPosition}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">{language === "ar" ? "تاريخ المباشرة" : "Start Date"}</Label>
-                <p className="font-medium">{selectedPerson.person.startDate}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">{language === "ar" ? "الفرع" : "Branch"}</Label>
-                <p className="font-medium">{selectedPerson.person.branch || "-"}</p>
-              </div>
-              <div className="col-span-2">
-                <Label className="text-muted-foreground">{language === "ar" ? "الدور" : "Role"}</Label>
-                <div className="mt-1">
-                  <Badge variant={getRoleBadgeVariant(selectedPerson.role?.roleType || 'EMPLOYEE')} className="text-sm">
-                    {getRoleLabel(selectedPerson.role?.roleType || 'EMPLOYEE')}
-                  </Badge>
-                </div>
-              </div>
-              
-              {/* Documents Section */}
-              <div className="col-span-2 mt-4 pt-4 border-t">
-                <Label className="text-muted-foreground font-medium text-base flex items-center gap-2 mb-3">
-                  <FileText className="w-4 h-4" />
-                  {language === "ar" ? "المستندات" : "Documents"}
-                </Label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Identity Card */}
-                  <div className="border rounded-lg p-3 space-y-2">
-                    <div className="flex items-center gap-2">
-                      <IdCard className="w-4 h-4 text-primary" />
-                      <span className="font-medium text-sm">
-                        {language === "ar" ? "صورة الهوية" : "Identity Card"}
-                      </span>
-                    </div>
-                    {selectedPerson.person.identityCardFile ? (
-                      <div className="flex items-center gap-2 p-2 bg-green-50 dark:bg-green-950 rounded-md">
-                        <CheckCircle2 className="w-4 h-4 text-green-600" />
-                        <span className="text-xs text-green-700 dark:text-green-400 flex-1">
-                          {language === "ar" ? "تم الرفع" : "Uploaded"}
-                        </span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-7 text-xs text-primary"
-                          onClick={() => window.open(`/api/documents/staff/${selectedPerson.person.id}/identity`, "_blank")}
-                          data-testid="button-view-identity-card"
-                        >
-                          <Download className="w-3 h-3 me-1" />
-                          {language === "ar" ? "عرض" : "View"}
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2 p-2 bg-muted rounded-md">
-                        <XCircle className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground">
-                          {language === "ar" ? "لم يتم الرفع" : "Not uploaded"}
-                        </span>
-                      </div>
-                    )}
-                    {/* Upload/Replace Button */}
-                    <div className="relative">
-                      <input
-                        type="file"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                        disabled={uploadingIdentity}
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file && selectedPerson.person.id) {
-                            handleDocumentUpload(file, selectedPerson.person.id, "identity");
-                          }
-                          e.target.value = "";
-                        }}
-                        data-testid="input-upload-identity-card"
-                      />
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full h-8 text-xs"
-                        disabled={uploadingIdentity}
-                        data-testid="button-upload-identity-card"
-                      >
-                        {uploadingIdentity ? (
-                          <>
-                            <Loader2 className="w-3 h-3 me-1 animate-spin" />
-                            {language === "ar" ? "جاري الرفع..." : "Uploading..."}
-                          </>
-                        ) : (
-                          <>
-                            <Upload className="w-3 h-3 me-1" />
-                            {selectedPerson.person.identityCardFile
-                              ? (language === "ar" ? "استبدال" : "Replace")
-                              : (language === "ar" ? "رفع" : "Upload")}
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* No Criminal Record */}
-                  <div className="border rounded-lg p-3 space-y-2">
-                    <div className="flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4 text-primary" />
-                      <span className="font-medium text-sm">
-                        {language === "ar" ? "شهادة عدم محكومية" : "Criminal Record Certificate"}
-                      </span>
-                    </div>
-                    {selectedPerson.person.noCriminalRecordFile ? (
-                      <div className="flex items-center gap-2 p-2 bg-green-50 dark:bg-green-950 rounded-md">
-                        <CheckCircle2 className="w-4 h-4 text-green-600" />
-                        <span className="text-xs text-green-700 dark:text-green-400 flex-1">
-                          {language === "ar" ? "تم الرفع" : "Uploaded"}
-                        </span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-7 text-xs text-primary"
-                          onClick={() => window.open(`/api/documents/staff/${selectedPerson.person.id}/criminal`, "_blank")}
-                          data-testid="button-view-criminal-record"
-                        >
-                          <Download className="w-3 h-3 me-1" />
-                          {language === "ar" ? "عرض" : "View"}
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2 p-2 bg-muted rounded-md">
-                        <XCircle className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground">
-                          {language === "ar" ? "لم يتم الرفع" : "Not uploaded"}
-                        </span>
-                      </div>
-                    )}
-                    {/* Upload/Replace Button */}
-                    <div className="relative">
-                      <input
-                        type="file"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                        disabled={uploadingCriminal}
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file && selectedPerson.person.id) {
-                            handleDocumentUpload(file, selectedPerson.person.id, "criminal");
-                          }
-                          e.target.value = "";
-                        }}
-                        data-testid="input-upload-criminal-record"
-                      />
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full h-8 text-xs"
-                        disabled={uploadingCriminal}
-                        data-testid="button-upload-criminal-record"
-                      >
-                        {uploadingCriminal ? (
-                          <>
-                            <Loader2 className="w-3 h-3 me-1 animate-spin" />
-                            {language === "ar" ? "جاري الرفع..." : "Uploading..."}
-                          </>
-                        ) : (
-                          <>
-                            <Upload className="w-3 h-3 me-1" />
-                            {selectedPerson.person.noCriminalRecordFile
-                              ? (language === "ar" ? "استبدال" : "Replace")
-                              : (language === "ar" ? "رفع" : "Upload")}
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </SidebarProvider>
   );
 }

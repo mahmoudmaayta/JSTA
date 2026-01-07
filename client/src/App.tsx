@@ -36,6 +36,7 @@ import AdminPayments from "@/pages/admin/payments";
 import AdminAuditLogs from "@/pages/admin/audit-logs";
 import AdminChangeRequests from "@/pages/admin/change-requests";
 import AdminStaffDashboard from "@/pages/admin/staff-dashboard";
+import AdminStaffDetail from "@/pages/admin/staff-detail";
 import AdminCommitmentDashboard from "@/pages/admin/commitment-dashboard";
 import AdminPromoCodes from "@/pages/admin/promo-codes";
 import AdminRenewalInvitations from "@/pages/admin/renewal-invitations";
@@ -248,6 +249,12 @@ function Router() {
       <Route path="/admin/change-requests">
         <ProtectedRoute allowedRoles={['ADMIN']}>
           <AdminChangeRequests />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/admin/staff/:id">
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminStaffDetail />
         </ProtectedRoute>
       </Route>
       
