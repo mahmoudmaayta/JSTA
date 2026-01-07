@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link, useParams, useLocation } from "wouter";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
@@ -126,6 +126,13 @@ export default function Renewal2026Page() {
   const { data: renewal, isLoading } = useQuery<LicenseRenewal>({
     queryKey: ["/api/office/renewals", renewalId],
   });
+
+  // Redirect to detail page if renewal is already submitted (not DRAFT)
+  useEffect(() => {
+    if (!isLoading && renewal && renewal.status !== "DRAFT") {
+      setLocation(`/office/renewals/${renewalId}`);
+    }
+  }, [isLoading, renewal, renewalId, setLocation]);
 
   // Fetch staff (people + roles)
   const { data: staffData } = useQuery<{ people: Person[]; roles: RoleInOffice[] }>({
