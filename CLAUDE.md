@@ -23,6 +23,7 @@ npm run check     # TypeScript type checking across full stack
 ### Database
 ```bash
 npm run db:push   # Push schema changes to PostgreSQL using Drizzle Kit
+npm run db:migrate # Apply migrations from scripts/apply-migrations.ts
 ```
 
 **Environment Requirements**:
@@ -35,39 +36,77 @@ npm run db:push   # Push schema changes to PostgreSQL using Drizzle Kit
 
 ## Architecture
 
-### Monorepo Structure
+### Project Structure
 
 ```
-client/src/
-  pages/          # Route components
-    admin/        # Admin-only pages (offices, renewals, audit logs)
-    office/       # Office user pages (dashboard, renewals, documents)
-  components/
-    ui/           # shadcn/ui components (50+ components)
-    layout/       # Shared layout components
-  lib/
-    auth.tsx      # Authentication context
-    i18n.tsx      # Internationalization context
-    queryClient.ts # TanStack Query configuration
-  locales/
-    en.json       # English translations (900+ keys)
-    ar.json       # Arabic translations (900+ keys)
-
-server/
-  routes.ts       # All API endpoints (~2000 lines)
-  storage.ts      # Database access layer via Drizzle ORM
-  pdf.ts          # PDFKit license renewal PDF generation
-  email.ts        # Email notifications (currently console logging)
-  app.ts          # Express configuration and middleware
-  index-dev.ts    # Development entry point
-  index-prod.ts   # Production entry point
-
-shared/
-  schema.ts       # Drizzle schema + Zod validation schemas
-
-uploads/          # File storage (not in git)
-  initial/        # Registration documents
-  ministry_docs/  # Ministry-approved documents
+JSTA/
+├── client/src/           # Frontend React application
+│   ├── pages/            # Route components
+│   │   ├── admin/        # Admin-only pages (offices, renewals, audit logs)
+│   │   └── office/       # Office user pages (dashboard, renewals, documents)
+│   ├── components/
+│   │   ├── ui/           # shadcn/ui components (50+ components)
+│   │   └── layout/       # Shared layout components
+│   ├── lib/
+│   │   ├── auth.tsx      # Authentication context
+│   │   ├── i18n.tsx      # Internationalization context
+│   │   └── queryClient.ts # TanStack Query configuration
+│   └── locales/
+│       ├── en.json       # English translations (900+ keys)
+│       └── ar.json       # Arabic translations (900+ keys)
+│
+├── server/               # Backend Express application
+│   ├── routes.ts         # All API endpoints (~2000 lines)
+│   ├── storage.ts        # Database access layer via Drizzle ORM
+│   ├── pdf.ts            # PDFKit license renewal PDF generation
+│   ├── email.ts          # Email notifications (currently console logging)
+│   ├── app.ts            # Express configuration and middleware
+│   ├── index-dev.ts      # Development entry point
+│   └── index-prod.ts     # Production entry point
+│
+├── shared/               # Shared code between client and server
+│   └── schema.ts         # Drizzle schema + Zod validation schemas
+│
+├── scripts/              # Utility scripts
+│   ├── tests/            # Test shell scripts
+│   │   ├── full_system_test.sh
+│   │   ├── test-complete-workflow.sh
+│   │   ├── test-full-workflow.sh
+│   │   └── test-office-workflow.sh
+│   ├── migration/        # Legacy data migration scripts
+│   │   ├── *.cjs         # Migration step scripts
+│   │   └── output/       # Migration output (gitignored)
+│   ├── apply-migrations.ts
+│   ├── generate-manual.ts
+│   └── seed-railway.ts   # Railway database seeding
+│
+├── migrations/           # SQL migration files
+│   └── *.sql
+│
+├── data/                 # Static data files
+│   └── cities.json       # Cities reference data
+│
+├── backups/              # Database dumps (gitignored)
+│   ├── *.dump
+│   ├── *.bak
+│   └── *_dump.sql
+│
+├── docs/                 # Documentation
+│   ├── design_guidelines.md
+│   ├── fixes/            # Bug fix documentation
+│   └── guides/           # Setup and deployment guides
+│
+├── test_files/           # Test data files
+│   ├── *.pdf             # Sample PDF documents
+│   ├── cookies.txt       # Test cookies (gitignored)
+│   └── office_cookies.txt
+│
+├── uploads/              # File storage (gitignored)
+│   ├── initial/          # Registration documents
+│   └── ministry_docs/    # Ministry-approved documents
+│
+├── attached_assets/      # Static assets (logos, images)
+└── public/               # Public static files
 ```
 
 **TypeScript Path Aliases**:
@@ -89,6 +128,13 @@ uploads/          # File storage (not in git)
 - **consents**: User agreement records
 - **audit_logs**: System activity tracking
 - **renewal_attachments**: Additional renewal documents
+- **employee_work_history**: Employment history records
+- **job_titles**: Job title reference data
+- **cities**: City reference data
+- **payments**: Payment tracking
+- **promo_codes**: Promotional codes
+- **inspections**: Office inspection records
+- **change_requests**: Office change request workflow
 
 **Key Enums**:
 - `OfficeStatus`: PENDING_APPROVAL, ACTIVE, REJECTED
@@ -133,6 +179,9 @@ All routes defined in `server/routes.ts`:
 
 **Admin** (`/api/admin/*`):
 - GET `/audit-logs` - Activity logs
+- GET `/stats` - Dashboard statistics
+- GET `/analytics` - Office analytics
+- GET `/staff-analytics` - Staff statistics
 
 **Authentication Middleware**:
 - `requireAuth`: Checks session
@@ -233,7 +282,7 @@ const { t } = useLanguage();
 
 ### Status Badge Colors
 
-Follow design system in `design_guidelines.md`:
+Follow design system in `docs/design_guidelines.md`:
 - PENDING_APPROVAL / SUBMITTED: Amber
 - ACTIVE / APPROVED / FINAL_APPROVED: Green
 - REJECTED: Red
@@ -277,7 +326,7 @@ For production/scaling:
 
 ## Design System
 
-From `design_guidelines.md`:
+From `docs/design_guidelines.md`:
 
 - **Font**: Roboto, 2rem titles → 1.5rem sections → 1rem body
 - **Spacing**: Tailwind scale (4, 8, 12, 16, 24, 32, 48)
@@ -305,3 +354,11 @@ From `design_guidelines.md`:
 - Update status badge UI
 - Add translations
 - Update workflow logic in routes
+
+**Run test scripts**:
+- Located in `scripts/tests/`
+- Run with `bash scripts/tests/<script-name>.sh`
+
+**Database backup/restore**:
+- Backups stored in `backups/` (gitignored)
+- Use `scripts/seed-railway.ts` for Railway deployment

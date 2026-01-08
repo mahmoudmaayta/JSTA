@@ -23,20 +23,18 @@ vite.config.ts.*
 # Uploads (sensitive files)
 uploads/
 
-# Development assets (large files)
-replit_dump.bak
+# Backups and database dumps (may contain sensitive data)
+backups/
 *.bak
-
-# SQL dumps (may contain sensitive data) - but keep migrations/
-*_dump.sql
 *.dump
+*_dump.sql
+
+# Keep migrations folder but ignore output
 scripts/migration/output/
 
-# Test files
-test_files/
-test-*.sh
-cookies.txt
-office_cookies.txt
+# Test files and artifacts
+test_files/cookies.txt
+test_files/office_cookies.txt
 
 # Platform-specific
 .replit
