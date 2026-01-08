@@ -1,9 +1,12 @@
 /**
- * Email notification stub
- * 
- * TODO: Integrate real SMTP service (e.g., SendGrid, AWS SES, Nodemailer)
- * For now, this function just logs the email to console
+ * Email notification service
+ *
+ * Uses Nodemailer for SMTP when configured, otherwise logs to console.
+ * Configure via environment variables:
+ *   SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM
  */
+
+import nodemailer from "nodemailer";
 
 interface EmailOptions {
   to: string;
@@ -11,9 +14,53 @@ interface EmailOptions {
   body: string;
 }
 
-export function sendEmail({ to, subject, body }: EmailOptions): void {
+// Create transporter if SMTP is configured
+const transporter = process.env.SMTP_HOST
+  ? nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: parseInt(process.env.SMTP_PORT || "587"),
+      secure: process.env.SMTP_PORT === "465", // true for 465, false for other ports
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    })
+  : null;
+
+// Log SMTP status on startup
+if (transporter) {
+  console.log(`[EMAIL] SMTP configured: ${process.env.SMTP_HOST}:${process.env.SMTP_PORT}`);
+} else {
+  console.log("[EMAIL] SMTP not configured - emails will be logged to console");
+}
+
+export async function sendEmail({ to, subject, body }: EmailOptions): Promise<void> {
+  // If SMTP is configured, send real email
+  if (transporter) {
+    try {
+      await transporter.sendMail({
+        from: process.env.SMTP_FROM || "noreply@jsta.gov.jo",
+        to,
+        subject,
+        html: body.replace(/\n/g, "<br>"), // Convert newlines to HTML
+        text: body, // Plain text fallback
+      });
+      console.log(`[EMAIL] Sent to ${to}: ${subject}`);
+    } catch (error) {
+      console.error(`[EMAIL] Failed to send to ${to}:`, error);
+      // Fall back to console logging on error
+      logEmail({ to, subject, body });
+    }
+    return;
+  }
+
+  // Otherwise, log to console (development mode)
+  logEmail({ to, subject, body });
+}
+
+function logEmail({ to, subject, body }: EmailOptions): void {
   console.log("=".repeat(60));
-  console.log("EMAIL NOTIFICATION (STUB)");
+  console.log("EMAIL NOTIFICATION (DEV MODE)");
   console.log("=".repeat(60));
   console.log(`To: ${to}`);
   console.log(`Subject: ${subject}`);

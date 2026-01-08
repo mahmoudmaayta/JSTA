@@ -64,3 +64,24 @@ Thumbs.db
 .replit
 replit.md
 replit.nix
+
+# Development assets (large files, not needed in container)
+attached_assets/
+replit_dump.bak
+*.bak
+
+# SQL dumps
+*.sql
+
+# Test files
+test_files/
+test-*.sh
+cookies.txt
+office_cookies.txt
+
+# Additional documentation
+CLAUDE.md
+design_guidelines.md
+
+# Claude Code settings
+.claude/
