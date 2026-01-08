@@ -30,6 +30,7 @@ replit_dump.bak
 
 # SQL dumps (may contain sensitive data) - but keep migrations/
 *_dump.sql
+*.dump
 scripts/migration/output/
 
 # Test files
