@@ -24,7 +24,6 @@ vite.config.ts.*
 uploads/
 
 # Development assets (large files)
-attached_assets/
 replit_dump.bak
 *.bak
 

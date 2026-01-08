@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Header } from "@/components/layout/header";
 import { useTranslation } from "@/lib/i18n";
 import { ArrowRight, Shield, FileText, RefreshCw } from "lucide-react";
-import heroImage from "@/assets/login-jsta-image.jpg";
+import heroImage from "@assets/login-jsta-image.jpg";
 
 export default function LandingPage() {
   const { t, isRTL } = useTranslation();

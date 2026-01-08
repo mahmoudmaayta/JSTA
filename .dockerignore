@@ -66,7 +66,7 @@ replit.md
 replit.nix
 
 # Development assets (large files, not needed in container)
-attached_assets/
+# Note: attached_assets/ is needed during build for image imports (e.g., login-jsta-image.jpg)
 replit_dump.bak
 *.bak
 
