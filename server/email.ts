@@ -1,9 +1,15 @@
 /**
- * Email notification stub
- * 
- * TODO: Integrate real SMTP service (e.g., SendGrid, AWS SES, Nodemailer)
- * For now, this function just logs the email to console
+ * Email notifications.
+ *
+ * Sends over SMTP when SMTP_HOST is configured; otherwise falls back to
+ * logging the message to the console, so local development needs no relay.
+ *
+ * Every helper below funnels through sendEmail(), which stays synchronous and
+ * fire-and-forget: callers are request handlers that must not block on, or fail
+ * because of, a slow relay. Delivery failures are logged, never thrown.
  */
+
+import nodemailer, { type Transporter } from "nodemailer";
 
 interface EmailOptions {
   to: string;
@@ -11,9 +17,33 @@ interface EmailOptions {
   body: string;
 }
 
-export function sendEmail({ to, subject, body }: EmailOptions): void {
+// undefined = not resolved yet, null = deliberately disabled (no SMTP_HOST)
+let transporter: Transporter | null | undefined;
+
+function getTransporter(): Transporter | null {
+  if (transporter !== undefined) return transporter;
+
+  if (!process.env.SMTP_HOST) {
+    console.log("[email] SMTP_HOST not set - emails will be logged, not sent");
+    transporter = null;
+    return null;
+  }
+
+  transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT || "587", 10),
+    // false = STARTTLS on 587, true = implicit TLS on 465
+    secure: process.env.SMTP_SECURE === "true",
+    auth: process.env.SMTP_USER
+      ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
+      : undefined,
+  });
+  return transporter;
+}
+
+function logToConsole({ to, subject, body }: EmailOptions): void {
   console.log("=".repeat(60));
-  console.log("EMAIL NOTIFICATION (STUB)");
+  console.log("EMAIL NOTIFICATION (NOT SENT - no SMTP configured)");
   console.log("=".repeat(60));
   console.log(`To: ${to}`);
   console.log(`Subject: ${subject}`);
@@ -21,6 +51,28 @@ export function sendEmail({ to, subject, body }: EmailOptions): void {
   console.log(body);
   console.log("=".repeat(60));
   console.log("");
+}
+
+export function sendEmail({ to, subject, body }: EmailOptions): void {
+  const mailer = getTransporter();
+
+  if (!mailer) {
+    logToConsole({ to, subject, body });
+    return;
+  }
+
+  mailer
+    .sendMail({
+      from: process.env.SMTP_FROM || "JSTA Portal <support@fulfula.com>",
+      replyTo: process.env.SMTP_REPLY_TO || undefined,
+      to,
+      subject,
+      text: body,
+    })
+    .then((info) => console.log(`[email] sent to ${to} (${info.messageId})`))
+    .catch((err) =>
+      console.error(`[email] failed to send to ${to}: ${err?.message ?? err}`),
+    );
 }
 
 export function sendAccountApprovedEmail(email: string, officeName: string): void {
@@ -37,7 +89,7 @@ You can now log in to the portal to:
 - Request license renewals
 - Manage your documents
 
-Please log in at: [Portal URL]
+Please log in at: ${process.env.APP_URL || 'http://localhost:5000'}
 
 Best regards,
 Tourism Association
