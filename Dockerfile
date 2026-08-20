@@ -2,7 +2,7 @@
 # Optimized for Coolify deployment with pnpm
 
 # Stage 1: Build
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@10.33.0 --activate
@@ -22,7 +22,7 @@ COPY . .
 RUN pnpm run build
 
 # Stage 2: Production
-FROM node:20-alpine
+FROM node:22-alpine
 
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@10.33.0 --activate
@@ -40,7 +40,6 @@ RUN pnpm install --prod --frozen-lockfile && \
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/shared ./shared
-COPY --from=builder /app/attached_assets ./attached_assets
 
 # Create uploads directory with proper permissions
 RUN mkdir -p uploads/initial uploads/ministry_docs && \
