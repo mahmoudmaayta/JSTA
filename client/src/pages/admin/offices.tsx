@@ -114,7 +114,7 @@ export default function AdminOffices() {
         office.licenseCategory || '',
         office.mainCity || '',
         office.mainEmail || '',
-        office.mainPhone || '',
+        office.phone || '',
         office.iataNumber || '',
         office.lastRenewalYear || '',
         isOfficeActive(office) ? 'Active' : 'Inactive'
