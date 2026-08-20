@@ -9,6 +9,8 @@ server/public
 .env
 .env.local
 .env.*.local
+.env.backup*
+.env.bak
 
 # OS files
 .DS_Store
