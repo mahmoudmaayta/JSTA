@@ -64,3 +64,8 @@ Thumbs.db
 .replit
 replit.md
 replit.nix
+
+# Legacy SQL dumps - kept in git as migration source, but they contain
+# real member data and are not needed at build or runtime (Vite only uses
+# the images in this folder). Keeps them out of the production image.
+attached_assets/*.sql
