@@ -60,4 +60,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
   CMD node -e "require('http').get('http://localhost:5000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
 # Start script: run migrations then start app
-CMD ["sh", "-c", "pnpm run db:push && node dist/index.js"]
+CMD ["sh", "-c", "node_modules/.bin/drizzle-kit push && node dist/index.js"]
