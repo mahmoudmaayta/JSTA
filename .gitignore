@@ -21,3 +21,12 @@ vite.config.ts.*
 
 # Uploads (sensitive files)
 uploads/
+
+# Session cookies from curl test scripts
+cookies.txt
+office_cookies.txt
+*_cookies.txt
+
+# Database dumps and backups (contain real member data)
+*.bak
+*_dump.sql
