@@ -48,10 +48,6 @@ export default function AdminRenewalDetail() {
   const approveDownloadMutation = useMutation({
     mutationFn: async () => {
       const response = await apiRequest("POST", `/api/admin/renewals/${renewalId}/approve-download`);
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || t("adminRenewalDetail.approveFailed"));
-      }
       return response.json();
     },
     onSuccess: () => {
@@ -75,10 +71,6 @@ export default function AdminRenewalDetail() {
   const finalApproveMutation = useMutation({
     mutationFn: async () => {
       const response = await apiRequest("POST", `/api/admin/renewals/${renewalId}/final-approve`);
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || t("adminRenewalDetail.finalApproveFailed"));
-      }
       return response.json();
     },
     onSuccess: () => {
@@ -102,10 +94,6 @@ export default function AdminRenewalDetail() {
   const rejectMutation = useMutation({
     mutationFn: async (comment: string) => {
       const response = await apiRequest("POST", `/api/admin/renewals/${renewalId}/reject`, { comment });
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || t("adminRenewalDetail.rejectFailed"));
-      }
       return response.json();
     },
     onSuccess: () => {

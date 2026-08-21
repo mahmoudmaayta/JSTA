@@ -130,10 +130,6 @@ export default function AdminOfficeDetail() {
   const approveMutation = useMutation({
     mutationFn: async () => {
       const response = await apiRequest("POST", `/api/admin/offices/${officeId}/approve`);
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || t("adminOffice.approveFailed"));
-      }
       return response.json();
     },
     onSuccess: () => {
@@ -157,10 +153,6 @@ export default function AdminOfficeDetail() {
   const rejectMutation = useMutation({
     mutationFn: async (comment: string) => {
       const response = await apiRequest("POST", `/api/admin/offices/${officeId}/reject`, { comment });
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || t("adminOffice.rejectFailed"));
-      }
       return response.json();
     },
     onSuccess: () => {

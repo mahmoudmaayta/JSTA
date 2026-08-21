@@ -35,10 +35,6 @@ export default function LoginPage() {
   const loginMutation = useMutation({
     mutationFn: async (data: LoginForm) => {
       const response = await apiRequest("POST", "/api/auth/login", data);
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || t("auth.invalidCredentials"));
-      }
       return response.json();
     },
     onSuccess: async (data) => {

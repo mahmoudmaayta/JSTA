@@ -81,10 +81,6 @@ export default function OfficeProfile() {
   const updateMutation = useMutation({
     mutationFn: async (data: OfficeUpdateForm) => {
       const response = await apiRequest("PATCH", "/api/office/profile", data);
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to update profile");
-      }
       return response.json();
     },
     onSuccess: () => {
@@ -109,10 +105,6 @@ export default function OfficeProfile() {
         currentPassword: data.currentPassword,
         newPassword: data.newPassword,
       });
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to change password");
-      }
       return response.json();
     },
     onSuccess: () => {

@@ -32,10 +32,6 @@ export default function OfficeRenewals() {
   const createRenewalMutation = useMutation({
     mutationFn: async () => {
       const response = await apiRequest("POST", "/api/office/renewals");
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to create renewal");
-      }
       return response.json();
     },
     onSuccess: (data) => {

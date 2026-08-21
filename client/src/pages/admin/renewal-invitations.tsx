@@ -113,10 +113,6 @@ export default function AdminRenewalInvitations() {
   const sendInvitationMutation = useMutation({
     mutationFn: async (officeId: number) => {
       const response = await apiRequest("POST", `/api/admin/renewal-invitations/send/${officeId}`);
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to send invitation");
-      }
       return response.json();
     },
     onSuccess: (data) => {
@@ -138,10 +134,6 @@ export default function AdminRenewalInvitations() {
   const sendBulkInvitationsMutation = useMutation({
     mutationFn: async () => {
       const response = await apiRequest("POST", "/api/admin/renewal-invitations/send-bulk");
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to send invitations");
-      }
       return response.json();
     },
     onSuccess: (data) => {

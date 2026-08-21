@@ -140,10 +140,6 @@ export default function Renewal2026Page() {
   const deleteAttachmentMutation = useMutation({
     mutationFn: async (attachmentId: number) => {
       const response = await apiRequest("DELETE", `/api/office/renewals-2026/${renewalId}/attachments/${attachmentId}`);
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Delete failed");
-      }
       return response.json();
     },
     onSuccess: () => {
@@ -166,10 +162,6 @@ export default function Renewal2026Page() {
   const submitRenewalMutation = useMutation({
     mutationFn: async () => {
       const response = await apiRequest("POST", `/api/office/renewals-2026/${renewalId}/submit`);
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Submission failed");
-      }
       return response.json();
     },
     onSuccess: () => {
