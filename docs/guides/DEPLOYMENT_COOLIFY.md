@@ -1,5 +1,12 @@
 # Deploying GoaTourismPortal to Coolify
 
+> **Superseded.** The portal is no longer deployed on Coolify. It runs on
+> **Dokploy** and auto-deploys from the **`dev`** branch — a push to `dev` builds
+> and releases production, with no manual step. The Docker build, environment
+> variables and health check described below still apply, because both platforms
+> build the same `Dockerfile`; the platform-specific UI instructions do not.
+> See the *Deployment* section of `CLAUDE.md` for the current facts.
+
 This guide will walk you through deploying your GoaTourismPortal application to Coolify.
 
 ## ✅ Pre-Deployment Checklist
@@ -54,7 +61,7 @@ Your application is **already configured** correctly for Coolify deployment:
 2. Click **"+ New"** → **"Application"**
 3. Select your Git repository source (GitHub, GitLab, etc.)
 4. Choose your repository: `GoaTourismPortal`
-5. Select branch: `main` (or your primary branch)
+5. Select branch: `dev` (the branch production deploys from)
 
 ### Step 3: Configure Build Settings
 
@@ -314,7 +321,7 @@ npm ERR! code ELIFECYCLE
 1. Check build logs in Coolify
 2. Verify `package.json` scripts are correct
 3. Ensure all dependencies are in `dependencies` (not just `devDependencies`)
-4. Try: `npm ci` instead of `npm install`
+4. Regenerate the lockfile with `pnpm install` — this repo has no `package-lock.json`, so `npm ci` will fail
 
 ### Issue: Application Crashes on Start
 
@@ -363,7 +370,7 @@ Coolify can automatically deploy when you push to your repository:
 1. In Coolify application settings
 2. Enable **"Auto Deploy"**
 3. Choose trigger: **"Push to branch"**
-4. Select branch: `main`
+4. Select branch: `dev`
 
 Now every push to `main` will trigger a deployment!
 

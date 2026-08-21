@@ -1,5 +1,5 @@
-# Multi-stage Dockerfile for GoaTourismPortal
-# Optimized for Coolify deployment with pnpm
+# Multi-stage Dockerfile for the JSTA portal
+# Built by Dokploy on every push to the dev branch
 
 # Stage 1: Build
 FROM node:22-alpine AS builder
@@ -50,7 +50,7 @@ RUN mkdir -p uploads/initial uploads/ministry_docs && \
 # Use non-root user for security
 USER node
 
-# Expose port (Coolify will override with PORT env var)
+# Expose port (the platform overrides this with the PORT env var)
 EXPOSE 5000
 
 # Set environment to production

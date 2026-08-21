@@ -6,7 +6,7 @@ Before deploying, ensure you have:
 
 1. ✅ Neon PostgreSQL database URL
 2. ✅ Session secret key (generate with `openssl rand -base64 32`)
-3. ✅ Deployment platform (Coolify, Railway, Render, etc.)
+3. ✅ Deployment platform (Dokploy — see `CLAUDE.md`; the Dockerfile also works on Railway, Render, etc.)
 
 ## Environment Variables Required
 
@@ -26,7 +26,7 @@ NODE_ENV=production
 
 ## Deployment Steps
 
-### Option 1: Coolify / Docker-based Platforms
+### Option 1: Dokploy / Docker-based Platforms
 
 1. **Push your code to GitHub** (ensure `.env` is NOT pushed)
    ```bash

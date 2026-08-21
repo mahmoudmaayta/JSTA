@@ -27,7 +27,7 @@ validateEnvironment();
 
 export const app = express();
 
-// Trust proxy for Coolify/reverse proxy deployments
+// Trust proxy for Dokploy/reverse proxy deployments
 // This allows secure cookies to work correctly behind a proxy
 app.set('trust proxy', 1);
 

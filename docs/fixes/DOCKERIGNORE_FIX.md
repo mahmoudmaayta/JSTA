@@ -1,5 +1,9 @@
 # Critical Fix: pnpm-lock.yaml Missing from Docker Build
 
+> **Historical record.** This describes a Coolify-era incident and is kept for
+> context. The portal now deploys on Dokploy from the `dev` branch, building the
+> same `Dockerfile`. The underlying lesson still holds.
+
 ## Issue
 Coolify deployment continued to fail even after regenerating `pnpm-lock.yaml`:
 

@@ -56,8 +56,9 @@ client/src/
 server/
   routes.ts       # All API endpoints (~2000 lines)
   storage.ts      # Database access layer via Drizzle ORM
-  pdf.ts          # PDFKit license renewal PDF generation
-  email.ts        # Email notifications (currently console logging)
+  pdf.ts          # PDFKit renewal request + certificate PDFs
+  pdf-fonts.ts    # Embedded Arabic fonts and bidirectional text layout
+  email.ts        # Email notifications over SMTP (nodemailer)
   app.ts          # Express configuration and middleware
   index-dev.ts    # Development entry point
   index-prod.ts   # Production entry point
@@ -243,29 +244,39 @@ Follow design system in `design_guidelines.md`:
 
 ### Email Service
 
-`server/email.ts` currently logs to console. To enable real emails:
-1. Install SMTP library (nodemailer recommended)
-2. Replace console.log with actual email sending
-3. Configure SMTP credentials in environment
-4. Functions ready: `sendAccountApprovedEmail`, `sendRenewalFinalApprovedEmail`, etc.
+`server/email.ts` sends over SMTP via nodemailer. Credentials come from the
+environment; with none configured it logs the message instead of sending, so
+local development does not need an SMTP server.
 
 ### Session Storage
 
-Current: In-memory (lost on restart)
-
-For production:
-1. Uncomment `connect-pg-simple` in `server/app.ts`
-2. Ensure `DATABASE_URL` is set
-3. Sessions persist in `session` table
+Sessions are stored in PostgreSQL via `connect-pg-simple` (`server/routes.ts`,
+table `session`, created on demand). If the database is unreachable at startup
+the server falls back to an in-memory store and logs a warning — that fallback
+is for local development, and sessions do not survive a restart under it.
 
 ### File Storage
 
-Current: Local filesystem
+Uploads go to Cloudflare R2 through the S3 API (`server/file-storage.ts`),
+selected by environment variables alone. With none set it writes to the local
+`uploads/` directory instead; `isCloudStorageActive()` is the switch, and both
+the upload and download paths honour it.
 
-For production/scaling:
-- Consider S3, Azure Blob, or Google Cloud Storage
-- Update multer configuration in `server/routes.ts`
-- Update download endpoints
+### PDF Generation
+
+`server/pdf.ts` builds the renewal request and the renewal certificate.
+Arabic needs the embedded Cairo fonts in `server/assets/fonts` — PDFKit's
+built-in fonts are Latin-only and render Arabic as mojibake. `server/pdf-fonts.ts`
+registers them and handles bidirectional text; see its comments before changing
+any text placement there.
+
+### Deployment
+
+The portal runs on **Dokploy** and auto-deploys from the **`dev`** branch: a push
+to `dev` builds and releases production. The build is the repository `Dockerfile`
+(pnpm, `--frozen-lockfile`), and `drizzle-kit push` runs at container start, so
+schema changes apply on deploy. `pnpm-lock.yaml` is the only lockfile — do not
+use `npm install`, which would leave it stale and fail the build.
 
 ### Security Notes
 

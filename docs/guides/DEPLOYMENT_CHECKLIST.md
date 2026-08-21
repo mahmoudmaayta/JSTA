@@ -1,5 +1,12 @@
 # Coolify Deployment Checklist
 
+> **Superseded.** The portal is no longer deployed on Coolify. It runs on
+> **Dokploy** and auto-deploys from the **`dev`** branch — a push to `dev` builds
+> and releases production, with no manual step. The Docker build, environment
+> variables and health check described below still apply, because both platforms
+> build the same `Dockerfile`; the platform-specific UI instructions do not.
+> See the *Deployment* section of `CLAUDE.md` for the current facts.
+
 Use this checklist to ensure a smooth deployment to Coolify.
 
 ## ✅ Pre-Deployment
@@ -28,7 +35,7 @@ Use this checklist to ensure a smooth deployment to Coolify.
 ### Application Creation
 - [ ] Create new application in Coolify
 - [ ] Connect git repository
-- [ ] Select correct branch (`main`)
+- [ ] Select correct branch (`dev`)
 - [ ] Set build pack to **Node.js**
 
 ### Build Settings
@@ -108,7 +115,7 @@ Use this checklist to ensure a smooth deployment to Coolify.
 ### Auto-Deploy Setup
 - [ ] Enable "Auto Deploy" in Coolify
 - [ ] Select trigger: "Push to branch"
-- [ ] Choose branch: `main`
+- [ ] Choose branch: `dev`
 - [ ] Test by pushing a small change
 
 ## 🐛 Troubleshooting
