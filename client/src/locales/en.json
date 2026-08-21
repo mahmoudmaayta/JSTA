@@ -1981,7 +1981,8 @@
       "redirectBody": "You can now log in with your new credentials to continue.",
       "emailInUse": "This email address is already in use. Please use a different one.",
       "invalidState": "Please open your invitation link again before setting your credentials.",
-      "tokenMismatch": "This invitation link does not match your renewal."
+      "tokenMismatch": "This invitation link does not match your renewal.",
+      "progressNotSaved": "Your progress could not be saved, but you can continue."
     }
   }
 }

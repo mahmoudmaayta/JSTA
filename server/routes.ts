@@ -4486,6 +4486,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  /**
+   * Resolves the renewal a public wizard request is acting on. These endpoints are
+   * reached from the emailed invitation link, before the office has signed in, so
+   * the token is the only proof of identity — exactly as for /credentials. Returns
+   * null after answering, so callers just `if (!ctx) return;`.
+   */
+  const resolveRenewalFromToken = async (req: Request, res: Response) => {
+    const renewalId = parseInt(req.params.renewalId);
+    const token = (req.body?.token ?? req.query.token) as string | undefined;
+
+    if (isNaN(renewalId)) {
+      res.status(400).json({ success: false, message: "Invalid renewal ID" });
+      return null;
+    }
+    if (!token) {
+      res.status(401).json({ success: false, message: "Token required" });
+      return null;
+    }
+
+    const validation = await resolveRedeemedInvitationToken(token);
+    if (!validation.valid || validation.renewalId !== renewalId) {
+      res.status(403).json({ success: false, message: "Token does not match renewal" });
+      return null;
+    }
+
+    const renewal = await storage.getLicenseRenewal(renewalId);
+    if (!renewal) {
+      res.status(404).json({ success: false, message: "Renewal not found" });
+      return null;
+    }
+
+    return { renewalId, renewal, officeId: renewal.officeId };
+  };
+
   // Protected: Update credentials during renewal (requires redeemed token)
   app.post("/api/renew/:renewalId/credentials", async (req, res) => {
     try {
@@ -4635,18 +4669,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Office: Approve office information
-  app.post("/api/renew/:renewalId/approve-info", ensureOffice, async (req, res) => {
+  app.post("/api/renew/:renewalId/approve-info", async (req, res) => {
     try {
-      const renewalId = parseInt(req.params.renewalId);
-      const officeId = (req as any).user?.officeId as number | undefined;
-      if (!officeId) {
-        return res.status(403).json({ success: false, message: "Office not associated with user" });
-      }
-
-      const renewal = await storage.getLicenseRenewal(renewalId);
-      if (!renewal || renewal.officeId !== officeId) {
-        return res.status(403).json({ success: false, message: "Not authorized" });
-      }
+      const ctx = await resolveRenewalFromToken(req, res);
+      if (!ctx) return;
+      const { renewalId, renewal, officeId } = ctx;
 
       // State guard: must have updated credentials first
       if (renewal.renewalState !== 'CREDENTIALS_UPDATED' && renewal.renewalState !== 'INFO_APPROVED') {
@@ -4671,11 +4698,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userAgent: req.headers['user-agent']
       });
 
-      // Audit log: Info approved
-      const user = (req as any).user;
-      if (user) {
+      // Audit log: Info approved. There is no session here, so the office's own
+      // user is looked up from the renewal.
+      const officeUser = await storage.getUserByOfficeId(officeId);
+      if (officeUser) {
         await storage.createAuditLog({
-          userId: user.id,
+          userId: officeUser.id,
           action: 'RENEWAL_INFO_APPROVED',
           targetType: 'renewal',
           targetId: renewalId,
@@ -4691,18 +4719,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Office: Accept declarations
-  app.post("/api/renew/:renewalId/accept-declarations", ensureOffice, async (req, res) => {
+  app.post("/api/renew/:renewalId/accept-declarations", async (req, res) => {
     try {
-      const renewalId = parseInt(req.params.renewalId);
-      const officeId = (req as any).user?.officeId as number | undefined;
-      if (!officeId) {
-        return res.status(403).json({ success: false, message: "Office not associated with user" });
-      }
-
-      const renewal = await storage.getLicenseRenewal(renewalId);
-      if (!renewal || renewal.officeId !== officeId) {
-        return res.status(403).json({ success: false, message: "Not authorized" });
-      }
+      const ctx = await resolveRenewalFromToken(req, res);
+      if (!ctx) return;
+      const { renewalId, renewal, officeId } = ctx;
 
       // State guard: must have approved info first
       if (renewal.renewalState !== 'INFO_APPROVED' && renewal.renewalState !== 'PAYMENT_PENDING') {
@@ -4727,11 +4748,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userAgent: req.headers['user-agent']
       });
 
-      // Audit log: Declarations accepted
-      const user = (req as any).user;
-      if (user) {
+      // Audit log: Declarations accepted. No session here, so resolve the
+      // office's user from the renewal.
+      const officeUser = await storage.getUserByOfficeId(officeId);
+      if (officeUser) {
         await storage.createAuditLog({
-          userId: user.id,
+          userId: officeUser.id,
           action: 'RENEWAL_DECLARATIONS_ACCEPTED',
           targetType: 'renewal',
           targetId: renewalId,
@@ -4747,18 +4769,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Office: Initiate payment
-  app.post("/api/renew/:renewalId/initiate-payment", ensureOffice, async (req, res) => {
+  app.post("/api/renew/:renewalId/initiate-payment", async (req, res) => {
     try {
-      const renewalId = parseInt(req.params.renewalId);
-      const officeId = (req as any).user?.officeId as number | undefined;
-      if (!officeId) {
-        return res.status(403).json({ success: false, message: "Office not associated with user" });
-      }
-
-      const renewal = await storage.getLicenseRenewal(renewalId);
-      if (!renewal || renewal.officeId !== officeId) {
-        return res.status(403).json({ success: false, message: "Not authorized" });
-      }
+      const ctx = await resolveRenewalFromToken(req, res);
+      if (!ctx) return;
+      const { renewalId, renewal, officeId } = ctx;
 
       // State guard: must have accepted declarations first
       if (renewal.renewalState !== 'PAYMENT_PENDING') {

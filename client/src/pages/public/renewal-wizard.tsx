@@ -250,6 +250,30 @@ export default function RenewalWizardPage() {
     },
   });
 
+  /**
+   * These record the office's progress through the wizard so renewalState — and
+   * the admin invitation dashboard built on it — reflects where they actually
+   * got to. A failure must not trap the office on a step, so each advances the
+   * wizard regardless and only surfaces the error.
+   */
+  const advanceMutation = useMutation({
+    mutationFn: async (step: "approve-info" | "accept-declarations" | "initiate-payment") => {
+      const response = await fetch(`/api/renew/${renewalId}/${step}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      });
+      return response.json();
+    },
+    onError: () => {
+      toast({
+        title: t("renewalWizard.toast.errorTitle"),
+        description: t("renewalWizard.toast.progressNotSaved"),
+        variant: "destructive",
+      });
+    },
+  });
+
   const { data: officeInfo, isLoading: officeLoading } = useQuery<OfficeInfo>({
     queryKey: ["/api/renew", renewalId, "office-info", token],
     queryFn: async () => {
@@ -493,7 +517,10 @@ export default function RenewalWizardPage() {
         >
           <ArrowLeft className="mr-2 w-4 h-4" />{t("renewalWizard.back")}</Button>
         <Button 
-          onClick={() => setCurrentStep("declarations")}
+          onClick={() => {
+            advanceMutation.mutate("approve-info");
+            setCurrentStep("declarations");
+          }}
           data-testid="button-proceed-declarations"
         >{t("renewalWizard.review.confirm")}<ArrowRight className="ml-2 w-4 h-4" />
         </Button>
@@ -543,7 +570,18 @@ export default function RenewalWizardPage() {
         >
           <ArrowLeft className="mr-2 w-4 h-4" />{t("renewalWizard.back")}</Button>
         <Button 
-          onClick={() => setCurrentStep("payment")}
+          onClick={async () => {
+            setCurrentStep("payment");
+            // initiate-payment requires the PAYMENT_PENDING state that
+            // accept-declarations sets, so these run in order, not together.
+            try {
+              await advanceMutation.mutateAsync("accept-declarations");
+              await advanceMutation.mutateAsync("initiate-payment");
+            } catch {
+              // advanceMutation.onError has already told the office; the wizard
+              // deliberately continues either way.
+            }
+          }}
           disabled={!allDeclarationsAccepted}
           data-testid="button-proceed-payment"
         >{t("renewalWizard.declarations.submit")}<ArrowRight className="ml-2 w-4 h-4" />
