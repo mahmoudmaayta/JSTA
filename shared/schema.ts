@@ -121,7 +121,7 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
   role: text("role").notNull().$type<UserRoleType>(),
-  officeId: integer("office_id"),
+  officeId: integer("office_id").references(() => offices.id, { onDelete: "set null" }),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
@@ -216,7 +216,7 @@ export const offices = pgTable("offices", {
 export const branches = pgTable("branches", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   legacyId: integer("legacy_id"),
-  officeId: integer("office_id").notNull(),
+  officeId: integer("office_id").notNull().references(() => offices.id, { onDelete: "cascade" }),
   fileNum: text("file_num"),
   openDate: text("open_date"),
   closeDate: text("close_date"),
@@ -252,8 +252,8 @@ export const cities = pgTable("cities", {
 
 export const documents = pgTable("documents", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  officeId: integer("office_id").notNull(),
-  renewalId: integer("renewal_id"),
+  officeId: integer("office_id").notNull().references(() => offices.id, { onDelete: "cascade" }),
+  renewalId: integer("renewal_id").references(() => licenseRenewals.id, { onDelete: "set null" }),
   category: text("category").notNull().$type<DocumentCategoryType>(),
   filePath: text("file_path").notNull(),
   originalFilename: text("original_filename").notNull(),
@@ -263,7 +263,7 @@ export const documents = pgTable("documents", {
 
 export const licenseRenewals = pgTable("license_renewals", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  officeId: integer("office_id").notNull(),
+  officeId: integer("office_id").notNull().references(() => offices.id, { onDelete: "cascade" }),
   year: integer("year").notNull(),
   status: text("status").notNull().$type<RenewalStatusType>().default('SUBMITTED'),
   renewalState: text("renewal_state").$type<RenewalStateType>().default('NOT_STARTED'),
@@ -288,8 +288,8 @@ export const licenseRenewals = pgTable("license_renewals", {
 export const people = pgTable("people", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   legacyId: integer("legacy_id"),
-  officeId: integer("office_id"),
-  renewalId: integer("renewal_id"),
+  officeId: integer("office_id").references(() => offices.id, { onDelete: "cascade" }),
+  renewalId: integer("renewal_id").references(() => licenseRenewals.id, { onDelete: "set null" }),
   firstName: text("first_name"),
   secondName: text("second_name"),
   middleName: text("middle_name"),
@@ -331,7 +331,7 @@ export const people = pgTable("people", {
 export const employeeWorkHistory = pgTable("employee_work_history", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   legacyId: integer("legacy_id"),
-  personId: integer("person_id").notNull(),
+  personId: integer("person_id").notNull().references(() => people.id, { onDelete: "cascade" }),
   officeId: integer("office_id").notNull(),
   branchId: integer("branch_id"),
   dateIn: text("date_in"),
@@ -360,18 +360,18 @@ export const jobTitles = pgTable("job_titles", {
 
 export const rolesInOffice = pgTable("roles_in_office", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  officeId: integer("office_id").notNull(),
-  personId: integer("person_id").notNull(),
-  renewalId: integer("renewal_id"),
+  officeId: integer("office_id").notNull().references(() => offices.id, { onDelete: "cascade" }),
+  personId: integer("person_id").notNull().references(() => people.id, { onDelete: "cascade" }),
+  renewalId: integer("renewal_id").references(() => licenseRenewals.id, { onDelete: "set null" }),
   roleType: text("role_type").notNull().$type<PersonRoleTypeType>(),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
 export const consents = pgTable("consents", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  officeId: integer("office_id").notNull(),
-  renewalId: integer("renewal_id"),
-  userId: integer("user_id"),
+  officeId: integer("office_id").notNull().references(() => offices.id, { onDelete: "cascade" }),
+  renewalId: integer("renewal_id").references(() => licenseRenewals.id, { onDelete: "set null" }),
+  userId: integer("user_id").references(() => users.id, { onDelete: "set null" }),
   consentType: text("consent_type").notNull().$type<ConsentTypeType>(),
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
@@ -381,8 +381,8 @@ export const consents = pgTable("consents", {
 
 export const renewalAttachments = pgTable("renewal_attachments", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  officeId: integer("office_id").notNull(),
-  renewalId: integer("renewal_id"),
+  officeId: integer("office_id").notNull().references(() => offices.id, { onDelete: "cascade" }),
+  renewalId: integer("renewal_id").references(() => licenseRenewals.id, { onDelete: "set null" }),
   category: text("category").notNull().$type<DocumentCategoryType>(),
   fileUrl: text("file_url").notNull(),
   fileName: text("file_name").notNull(),
@@ -403,7 +403,7 @@ export type ComplaintAuthorityType = typeof ComplaintAuthority[keyof typeof Comp
 
 export const complaints = pgTable("complaints", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  officeId: integer("office_id").notNull(),
+  officeId: integer("office_id").notNull().references(() => offices.id, { onDelete: "cascade" }),
   renewalId: integer("renewal_id"),
   commitmentId: integer("commitment_id"),
   complaintNumber: text("complaint_number").notNull(),
@@ -416,8 +416,8 @@ export const complaints = pgTable("complaints", {
 
 export const officeInfoForms = pgTable("office_info_forms", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  officeId: integer("office_id").notNull(),
-  renewalId: integer("renewal_id"),
+  officeId: integer("office_id").notNull().references(() => offices.id, { onDelete: "cascade" }),
+  renewalId: integer("renewal_id").references(() => licenseRenewals.id, { onDelete: "set null" }),
   establishmentNameCommercialReg: text("establishment_name_commercial_reg").notNull(),
   tradeNameAr: text("trade_name_ar").notNull(),
   tradeNameEn: text("trade_name_en"),
@@ -455,8 +455,8 @@ export const officeInfoForms = pgTable("office_info_forms", {
 
 export const commitmentForms = pgTable("commitment_forms", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  officeId: integer("office_id").notNull(),
-  renewalId: integer("renewal_id"),
+  officeId: integer("office_id").notNull().references(() => offices.id, { onDelete: "cascade" }),
+  renewalId: integer("renewal_id").references(() => licenseRenewals.id, { onDelete: "set null" }),
   officeName: text("office_name").notNull(),
   licenseNo: text("license_no").notNull(),
   contactName: text("contact_name").notNull(),
@@ -533,8 +533,8 @@ export const promoCodes = pgTable("promo_codes", {
 
 export const payments = pgTable("payments", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  officeId: integer("office_id").notNull(),
-  renewalId: integer("renewal_id"),
+  officeId: integer("office_id").notNull().references(() => offices.id, { onDelete: "cascade" }),
+  renewalId: integer("renewal_id").references(() => licenseRenewals.id, { onDelete: "set null" }),
   amount: integer("amount").notNull(),
   promoCodeId: integer("promo_code_id"),
   discountAmount: integer("discount_amount").default(0),
@@ -551,8 +551,8 @@ export const payments = pgTable("payments", {
 
 export const renewalInvites = pgTable("renewal_invites", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  officeId: integer("office_id").notNull(),
-  renewalId: integer("renewal_id"),
+  officeId: integer("office_id").notNull().references(() => offices.id, { onDelete: "cascade" }),
+  renewalId: integer("renewal_id").references(() => licenseRenewals.id, { onDelete: "set null" }),
   tokenHash: text("token_hash").notNull(),
   status: text("status").notNull().$type<RenewalInviteStatusType>().default('PENDING'),
   expiresAt: timestamp("expires_at").notNull(),
@@ -566,8 +566,8 @@ export const renewalInvites = pgTable("renewal_invites", {
 
 export const renewalSteps = pgTable("renewal_steps", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  renewalId: integer("renewal_id").notNull(),
-  officeId: integer("office_id").notNull(),
+  renewalId: integer("renewal_id").notNull().references(() => licenseRenewals.id, { onDelete: "cascade" }),
+  officeId: integer("office_id").notNull().references(() => offices.id, { onDelete: "cascade" }),
   stepType: text("step_type").notNull().$type<RenewalStepTypeType>(),
   payload: jsonb("payload"),
   ipAddress: text("ip_address"),
@@ -577,7 +577,7 @@ export const renewalSteps = pgTable("renewal_steps", {
 
 export const inspections = pgTable("inspections", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  officeId: integer("office_id").notNull(),
+  officeId: integer("office_id").notNull().references(() => offices.id, { onDelete: "cascade" }),
   renewalId: integer("renewal_id"),
   inspectorUserId: integer("inspector_user_id"),
   inspectorName: text("inspector_name"),
@@ -635,7 +635,7 @@ export type ChangeRequestTypeType = typeof ChangeRequestType[keyof typeof Change
 
 export const changeRequests = pgTable("change_requests", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  officeId: integer("office_id").notNull(),
+  officeId: integer("office_id").notNull().references(() => offices.id, { onDelete: "cascade" }),
   requestType: text("request_type").notNull().$type<ChangeRequestTypeType>(),
   targetId: integer("target_id"),
   status: text("status").notNull().$type<ChangeRequestStatusType>().default('DRAFT'),
