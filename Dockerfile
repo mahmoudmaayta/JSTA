@@ -40,6 +40,8 @@ RUN pnpm install --prod --frozen-lockfile && \
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/shared ./shared
+# Fonts embedded into generated PDFs (Arabic office names)
+COPY --from=builder /app/server/assets ./server/assets
 
 # Create uploads directory with proper permissions
 RUN mkdir -p uploads/initial uploads/ministry_docs && \
