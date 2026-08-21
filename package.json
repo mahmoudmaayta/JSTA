@@ -53,6 +53,7 @@
     "@types/pdfkit": "^0.17.3",
     "@types/pg": "^8.15.6",
     "bcryptjs": "^3.0.3",
+    "bidi-js": "^1.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
