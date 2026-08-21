@@ -8,11 +8,13 @@ import {
   FileCheck, 
   Upload, 
   AlertCircle,
-  Loader2
+  Loader2,
+  FileEdit
 } from "lucide-react";
 
 type OfficeStatus = "PENDING_APPROVAL" | "ACTIVE" | "INACTIVE" | "REJECTED";
 type RenewalStatus = 
+  | "DRAFT"
   | "SUBMITTED" 
   | "UNDER_REVIEW" 
   | "APPROVED_FOR_DOWNLOAD" 
@@ -55,6 +57,12 @@ const statusConfig: Record<string, {
     variant: "destructive",
     className: "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800",
     icon: XCircle,
+  },
+  DRAFT: {
+    label: { en: "Draft", ar: "مسودة" },
+    variant: "secondary",
+    className: "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800/50 dark:text-slate-300 dark:border-slate-700",
+    icon: FileEdit,
   },
   SUBMITTED: {
     label: { en: "Submitted", ar: "مُقَدَّم" },
