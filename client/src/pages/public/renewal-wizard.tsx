@@ -63,13 +63,15 @@ interface OfficeInfo {
   managerName: string;
 }
 
+// Labels are stored as translation keys, not resolved text: this is module
+// scope, where the `t` from useLanguage() is not available.
 const STEP_CONFIG = {
-  validate: { icon: Key, label: "Validate Token", order: 1 },
-  credentials: { icon: Lock, label: "Set Credentials", order: 2 },
-  review: { icon: Building2, label: "Review Information", order: 3 },
-  declarations: { icon: FileCheck, label: "Declarations", order: 4 },
-  payment: { icon: CreditCard, label: "Payment", order: 5 },
-  complete: { icon: CheckCircle2, label: "Complete", order: 6 },
+  validate: { icon: Key, labelKey: "renewalWizard.steps.validate", order: 1 },
+  credentials: { icon: Lock, labelKey: "renewalWizard.credentials.submit", order: 2 },
+  review: { icon: Building2, labelKey: "renewalWizard.steps.review", order: 3 },
+  declarations: { icon: FileCheck, labelKey: "renewalWizard.steps.declarations", order: 4 },
+  payment: { icon: CreditCard, labelKey: "renewalWizard.steps.payment", order: 5 },
+  complete: { icon: CheckCircle2, labelKey: "renewalWizard.steps.complete", order: 6 },
 };
 
 const DECLARATIONS = [
@@ -111,12 +113,31 @@ function resumeStepFor(renewalState?: string): WizardStep {
   }
 }
 
+
+/**
+ * The public renewal endpoints answer in English. Most of their messages are no
+ * more actionable than our own wording, so they are replaced with the translated
+ * text; the few that tell the office something specific are mapped to their own
+ * key rather than shown raw in an Arabic UI.
+ */
+const SERVER_MESSAGE_KEYS: Record<string, string> = {
+  "Email already in use": "renewalWizard.toast.emailInUse",
+  "Invalid renewal state. Please redeem your invitation link first.":
+    "renewalWizard.toast.invalidState",
+  "Token does not match renewal": "renewalWizard.toast.tokenMismatch",
+};
+
 export default function RenewalWizardPage() {
   const params = useParams();
   const token = params.token as string;
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
+
+  const translateServerMessage = (message: string | undefined, fallbackKey: string) => {
+    const key = message ? SERVER_MESSAGE_KEYS[message] : undefined;
+    return t(key ?? fallbackKey);
+  };
 
   const [currentStep, setCurrentStep] = useState<WizardStep>("validate");
   const [validationResult, setValidationResult] = useState<ValidationResult | null>(null);
@@ -155,8 +176,8 @@ export default function RenewalWizardPage() {
     },
     onError: () => {
       toast({
-        title: "Validation Error",
-        description: "Unable to validate token. Please try again.",
+        title: t("renewalWizard.toast.validationErrorTitle"),
+        description: t("renewalWizard.toast.validationErrorBody"),
         variant: "destructive",
       });
     },
@@ -176,21 +197,21 @@ export default function RenewalWizardPage() {
         setOfficeId(data.officeId || null);
         setCurrentStep("credentials");
         toast({
-          title: "Token Redeemed",
-          description: "Your invitation has been accepted. Please set your credentials.",
+          title: t("renewalWizard.toast.redeemedTitle"),
+          description: t("renewalWizard.toast.redeemedBody"),
         });
       } else {
         toast({
-          title: "Redemption Failed",
-          description: data.message || "Unable to redeem token.",
+          title: t("renewalWizard.toast.redeemFailedTitle"),
+          description: translateServerMessage(data.message, "renewalWizard.toast.redeemFailedBody"),
           variant: "destructive",
         });
       }
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Unable to redeem token. Please try again.",
+        title: t("renewalWizard.toast.errorTitle"),
+        description: t("renewalWizard.toast.redeemRetryBody"),
         variant: "destructive",
       });
     },
@@ -209,21 +230,21 @@ export default function RenewalWizardPage() {
       if (data.success) {
         setCurrentStep("review");
         toast({
-          title: "Credentials Updated",
-          description: "Your login credentials have been set successfully.",
+          title: t("renewalWizard.toast.credentialsSetTitle"),
+          description: t("renewalWizard.toast.credentialsSetBody"),
         });
       } else {
         toast({
-          title: "Error",
-          description: data.message || "Failed to update credentials.",
+          title: t("renewalWizard.toast.errorTitle"),
+          description: translateServerMessage(data.message, "renewalWizard.toast.credentialsFailedBody"),
           variant: "destructive",
         });
       }
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Unable to update credentials. Please try again.",
+        title: t("renewalWizard.toast.errorTitle"),
+        description: t("renewalWizard.toast.credentialsRetryBody"),
         variant: "destructive",
       });
     },
@@ -249,15 +270,15 @@ export default function RenewalWizardPage() {
 
   const handleCredentialSubmit = () => {
     if (!email) {
-      toast({ title: "Email Required", description: "Please enter your email address.", variant: "destructive" });
+      toast({ title: t("renewalWizard.toast.emailRequiredTitle"), description: t("renewalWizard.toast.emailRequiredBody"), variant: "destructive" });
       return;
     }
     if (password.length < 8) {
-      toast({ title: "Password Too Short", description: "Password must be at least 8 characters.", variant: "destructive" });
+      toast({ title: t("renewalWizard.toast.passwordShortTitle"), description: t("renewalWizard.toast.passwordShortBody"), variant: "destructive" });
       return;
     }
     if (password !== confirmPassword) {
-      toast({ title: "Passwords Don't Match", description: "Please confirm your password.", variant: "destructive" });
+      toast({ title: t("renewalWizard.toast.passwordMismatchTitle"), description: t("renewalWizard.toast.passwordMismatchBody"), variant: "destructive" });
       return;
     }
     updateCredentialsMutation.mutate();
@@ -294,6 +315,7 @@ export default function RenewalWizardPage() {
                 ${!isActive && !isCompleted ? "bg-muted text-muted-foreground border-muted" : ""}
               `}>
                 {isCompleted ? <CheckCircle2 className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
+                <span className="sr-only">{t(config.labelKey)}</span>
               </div>
               {index < steps.length - 1 && (
                 <div className={`w-8 h-0.5 mx-2 ${isCompleted ? "bg-primary" : "bg-muted"}`} />
@@ -311,10 +333,8 @@ export default function RenewalWizardPage() {
         <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
           <Key className="w-8 h-8 text-primary" />
         </div>
-        <CardTitle>Validating Your Invitation</CardTitle>
-        <CardDescription>
-          Please wait while we verify your renewal invitation...
-        </CardDescription>
+        <CardTitle>{t("renewalWizard.validate.title")}</CardTitle>
+        <CardDescription>{t("renewalWizard.validate.description")}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col items-center gap-4">
         {validateTokenMutation.isPending || redeemTokenMutation.isPending ? (
@@ -322,9 +342,9 @@ export default function RenewalWizardPage() {
         ) : (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Invalid Token</AlertTitle>
+            <AlertTitle>{t("renewalWizard.validate.invalidTitle")}</AlertTitle>
             <AlertDescription>
-              {validationResult?.message || "This invitation link is invalid or has expired."}
+              {t("renewalWizard.validate.invalidDescription")}
             </AlertDescription>
           </Alert>
         )}
@@ -340,16 +360,14 @@ export default function RenewalWizardPage() {
             <Lock className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <CardTitle>Set Your Login Credentials</CardTitle>
-            <CardDescription>
-              Create your account to access the JSTA renewal portal
-            </CardDescription>
+            <CardTitle>{t("renewalWizard.credentials.title")}</CardTitle>
+            <CardDescription>{t("renewalWizard.credentials.description")}</CardDescription>
           </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email">Email Address</Label>
+          <Label htmlFor="email">{t("renewalWizard.credentials.email")}</Label>
           <Input
             id="email"
             type="email"
@@ -360,12 +378,12 @@ export default function RenewalWizardPage() {
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">{t("renewalWizard.credentials.password")}</Label>
           <div className="relative">
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
-              placeholder="Minimum 8 characters"
+              placeholder={t("renewalWizard.credentials.passwordHint")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               data-testid="input-password"
@@ -383,11 +401,11 @@ export default function RenewalWizardPage() {
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Label htmlFor="confirmPassword">{t("renewalWizard.credentials.confirmPassword")}</Label>
           <Input
             id="confirmPassword"
             type="password"
-            placeholder="Re-enter your password"
+            placeholder={t("renewalWizard.credentials.confirmHint")}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             data-testid="input-confirm-password"
@@ -400,7 +418,7 @@ export default function RenewalWizardPage() {
           disabled={updateCredentialsMutation.isPending}
           data-testid="button-set-credentials"
         >
-          {updateCredentialsMutation.isPending ? <LoadingSpinner /> : "Set Credentials"}
+          {updateCredentialsMutation.isPending ? <LoadingSpinner /> : t("renewalWizard.credentials.submit")}
           <ArrowRight className="ml-2 w-4 h-4" />
         </Button>
       </CardFooter>
@@ -415,10 +433,8 @@ export default function RenewalWizardPage() {
             <Building2 className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <CardTitle>Review Your Office Information</CardTitle>
-            <CardDescription>
-              Please verify that your information is correct before proceeding
-            </CardDescription>
+            <CardTitle>{t("renewalWizard.review.title")}</CardTitle>
+            <CardDescription>{t("renewalWizard.review.description")}</CardDescription>
           </div>
         </div>
       </CardHeader>
@@ -430,42 +446,42 @@ export default function RenewalWizardPage() {
         ) : officeInfo ? (
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Office Name (Arabic)</p>
+              <p className="text-sm text-muted-foreground">{t("renewalWizard.review.nameAr")}</p>
               <p className="font-medium">{officeInfo.name || "-"}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Office Name (English)</p>
+              <p className="text-sm text-muted-foreground">{t("renewalWizard.review.nameEn")}</p>
               <p className="font-medium">{officeInfo.nameEn || "-"}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Registration Number</p>
+              <p className="text-sm text-muted-foreground">{t("renewalWizard.review.registrationNumber")}</p>
               <p className="font-medium">{officeInfo.registrationNumber || "-"}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">License Category</p>
+              <p className="text-sm text-muted-foreground">{t("renewalWizard.review.licenseCategory")}</p>
               <p className="font-medium">{officeInfo.licenseCategory || "-"}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Email</p>
+              <p className="text-sm text-muted-foreground">{t("renewalWizard.review.email")}</p>
               <p className="font-medium">{officeInfo.email || "-"}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Phone</p>
+              <p className="text-sm text-muted-foreground">{t("renewalWizard.review.phone")}</p>
               <p className="font-medium">{officeInfo.phone || "-"}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">City</p>
+              <p className="text-sm text-muted-foreground">{t("renewalWizard.review.city")}</p>
               <p className="font-medium">{officeInfo.city || "-"}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Manager</p>
+              <p className="text-sm text-muted-foreground">{t("renewalWizard.review.manager")}</p>
               <p className="font-medium">{officeInfo.managerName || "-"}</p>
             </div>
           </div>
         ) : (
           <Alert>
             <AlertCircle className="h-4 w-4" />
-            <AlertDescription>Unable to load office information.</AlertDescription>
+            <AlertDescription>{t("renewalWizard.review.loadError")}</AlertDescription>
           </Alert>
         )}
       </CardContent>
@@ -475,15 +491,11 @@ export default function RenewalWizardPage() {
           onClick={() => setCurrentStep("credentials")}
           data-testid="button-back-to-credentials"
         >
-          <ArrowLeft className="mr-2 w-4 h-4" />
-          Back
-        </Button>
+          <ArrowLeft className="mr-2 w-4 h-4" />{t("renewalWizard.back")}</Button>
         <Button 
           onClick={() => setCurrentStep("declarations")}
           data-testid="button-proceed-declarations"
-        >
-          Information is Correct
-          <ArrowRight className="ml-2 w-4 h-4" />
+        >{t("renewalWizard.review.confirm")}<ArrowRight className="ml-2 w-4 h-4" />
         </Button>
       </CardFooter>
     </Card>
@@ -497,10 +509,8 @@ export default function RenewalWizardPage() {
             <FileCheck className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <CardTitle>Declarations & Commitments</CardTitle>
-            <CardDescription>
-              Please read and accept the following declarations to proceed
-            </CardDescription>
+            <CardTitle>{t("renewalWizard.declarations.title")}</CardTitle>
+            <CardDescription>{t("renewalWizard.declarations.description")}</CardDescription>
           </div>
         </div>
       </CardHeader>
@@ -531,16 +541,12 @@ export default function RenewalWizardPage() {
           onClick={() => setCurrentStep("review")}
           data-testid="button-back-to-review"
         >
-          <ArrowLeft className="mr-2 w-4 h-4" />
-          Back
-        </Button>
+          <ArrowLeft className="mr-2 w-4 h-4" />{t("renewalWizard.back")}</Button>
         <Button 
           onClick={() => setCurrentStep("payment")}
           disabled={!allDeclarationsAccepted}
           data-testid="button-proceed-payment"
-        >
-          Accept & Continue
-          <ArrowRight className="ml-2 w-4 h-4" />
+        >{t("renewalWizard.declarations.submit")}<ArrowRight className="ml-2 w-4 h-4" />
         </Button>
       </CardFooter>
     </Card>
@@ -554,10 +560,8 @@ export default function RenewalWizardPage() {
             <CreditCard className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <CardTitle>Renewal Payment</CardTitle>
-            <CardDescription>
-              Complete your payment to finalize the 2026 license renewal
-            </CardDescription>
+            <CardTitle>{t("renewalWizard.payment.title")}</CardTitle>
+            <CardDescription>{t("renewalWizard.payment.description")}</CardDescription>
           </div>
         </div>
       </CardHeader>
@@ -566,7 +570,7 @@ export default function RenewalWizardPage() {
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-muted mb-4">
             <Shield className="w-10 h-10 text-muted-foreground" />
           </div>
-          <h3 className="text-lg font-semibold mb-2">Payment Integration Coming Soon</h3>
+          <h3 className="text-lg font-semibold mb-2">{t("renewalWizard.payment.comingSoon")}</h3>
           <p className="text-muted-foreground max-w-md mx-auto">
             The payment gateway integration is being configured. 
             For now, please contact JSTA to complete your renewal payment.
@@ -574,8 +578,8 @@ export default function RenewalWizardPage() {
         </div>
         <Separator className="my-6" />
         <div className="flex items-center justify-between p-4 rounded-lg bg-muted">
-          <span className="font-medium">2026 Renewal Fee</span>
-          <span className="text-lg font-bold">Contact JSTA</span>
+          <span className="font-medium">{t("renewalWizard.payment.fee")}</span>
+          <span className="text-lg font-bold">{t("renewalWizard.payment.contact")}</span>
         </div>
       </CardContent>
       <CardFooter className="flex justify-between gap-2">
@@ -584,21 +588,17 @@ export default function RenewalWizardPage() {
           onClick={() => setCurrentStep("declarations")}
           data-testid="button-back-to-declarations"
         >
-          <ArrowLeft className="mr-2 w-4 h-4" />
-          Back
-        </Button>
+          <ArrowLeft className="mr-2 w-4 h-4" />{t("renewalWizard.back")}</Button>
         <Button 
           onClick={() => {
             toast({
-              title: "Redirecting to Login",
-              description: "You can now log in with your new credentials to continue.",
+              title: t("renewalWizard.toast.redirectTitle"),
+              description: t("renewalWizard.toast.redirectBody"),
             });
             setLocation("/login");
           }}
           data-testid="button-go-to-login"
-        >
-          Go to Login
-          <ArrowRight className="ml-2 w-4 h-4" />
+        >{t("renewalWizard.payment.goToLogin")}<ArrowRight className="ml-2 w-4 h-4" />
         </Button>
       </CardFooter>
     </Card>
@@ -610,18 +610,12 @@ export default function RenewalWizardPage() {
         <div className="mx-auto mb-4 w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
           <CheckCircle2 className="w-10 h-10 text-green-600 dark:text-green-400" />
         </div>
-        <CardTitle className="text-2xl">Renewal Complete!</CardTitle>
-        <CardDescription>
-          Your 2026 license renewal has been successfully processed
-        </CardDescription>
+        <CardTitle className="text-2xl">{t("renewalWizard.complete.title")}</CardTitle>
+        <CardDescription>{t("renewalWizard.complete.description")}</CardDescription>
       </CardHeader>
       <CardContent className="text-center">
-        <p className="text-muted-foreground mb-6">
-          You can now log in to your account and transact for 2026.
-        </p>
-        <Button onClick={() => setLocation("/login")} data-testid="button-login-complete">
-          Go to Login
-        </Button>
+        <p className="text-muted-foreground mb-6">{t("renewalWizard.complete.body")}</p>
+        <Button onClick={() => setLocation("/login")} data-testid="button-login-complete">{t("renewalWizard.payment.goToLogin")}</Button>
       </CardContent>
     </Card>
   );
@@ -630,10 +624,8 @@ export default function RenewalWizardPage() {
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
       <div className="container max-w-3xl mx-auto py-12 px-4">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">JSTA 2026 License Renewal</h1>
-          <p className="text-muted-foreground">
-            Jordan Society of Tourism and Travel Agents
-          </p>
+          <h1 className="text-3xl font-bold mb-2">{t("renewalWizard.title")}</h1>
+          <p className="text-muted-foreground">{t("renewalWizard.subtitle")}</p>
         </div>
 
         <Progress value={getProgress()} className="mb-8" />

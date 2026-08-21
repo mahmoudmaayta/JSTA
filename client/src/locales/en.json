@@ -1898,5 +1898,90 @@
     "recentCriminalRecordCertificate": "Recent criminal record certificate",
     "uploadCertificate": "Upload Certificate",
     "saveChanges": "Save Changes"
+  },
+  "renewalWizard": {
+    "title": "JSTA 2026 License Renewal",
+    "subtitle": "Jordan Society of Tourism and Travel Agents",
+    "steps": {
+      "validate": "Validate Token",
+      "review": "Review Information",
+      "declarations": "Declarations",
+      "payment": "Payment",
+      "complete": "Complete"
+    },
+    "validate": {
+      "title": "Validating Your Invitation",
+      "description": "Please wait while we verify your renewal invitation...",
+      "invalidTitle": "Invalid Token",
+      "invalidDescription": "This invitation link is invalid or has expired."
+    },
+    "credentials": {
+      "title": "Set Your Login Credentials",
+      "description": "Create your account to access the JSTA renewal portal",
+      "email": "Email Address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "passwordHint": "Minimum 8 characters",
+      "confirmHint": "Re-enter your password",
+      "submit": "Set Credentials"
+    },
+    "review": {
+      "title": "Review Your Office Information",
+      "description": "Please verify that your information is correct before proceeding",
+      "nameAr": "Office Name (Arabic)",
+      "nameEn": "Office Name (English)",
+      "registrationNumber": "Registration Number",
+      "licenseCategory": "License Category",
+      "email": "Email",
+      "phone": "Phone",
+      "city": "City",
+      "manager": "Manager",
+      "loadError": "Unable to load office information.",
+      "confirm": "Information is Correct"
+    },
+    "declarations": {
+      "title": "Declarations & Commitments",
+      "description": "Please read and accept the following declarations to proceed",
+      "submit": "Accept & Continue"
+    },
+    "payment": {
+      "title": "Renewal Payment",
+      "description": "Complete your payment to finalize the 2026 license renewal",
+      "comingSoon": "Payment Integration Coming Soon",
+      "fee": "2026 Renewal Fee",
+      "contact": "Contact JSTA",
+      "goToLogin": "Go to Login"
+    },
+    "complete": {
+      "title": "Renewal Complete!",
+      "description": "Your 2026 license renewal has been successfully processed",
+      "body": "You can now log in to your account and transact for 2026."
+    },
+    "back": "Back",
+    "toast": {
+      "validationErrorTitle": "Validation Error",
+      "validationErrorBody": "Unable to validate token. Please try again.",
+      "redeemedTitle": "Token Redeemed",
+      "redeemedBody": "Your invitation has been accepted. Please set your credentials.",
+      "redeemFailedTitle": "Redemption Failed",
+      "redeemFailedBody": "Unable to redeem token.",
+      "errorTitle": "Error",
+      "redeemRetryBody": "Unable to redeem token. Please try again.",
+      "credentialsSetTitle": "Credentials Updated",
+      "credentialsSetBody": "Your login credentials have been set successfully.",
+      "credentialsFailedBody": "Failed to update credentials.",
+      "credentialsRetryBody": "Unable to update credentials. Please try again.",
+      "emailRequiredTitle": "Email Required",
+      "emailRequiredBody": "Please enter your email address.",
+      "passwordShortTitle": "Password Too Short",
+      "passwordShortBody": "Password must be at least 8 characters.",
+      "passwordMismatchTitle": "Passwords Don't Match",
+      "passwordMismatchBody": "Please confirm your password.",
+      "redirectTitle": "Redirecting to Login",
+      "redirectBody": "You can now log in with your new credentials to continue.",
+      "emailInUse": "This email address is already in use. Please use a different one.",
+      "invalidState": "Please open your invitation link again before setting your credentials.",
+      "tokenMismatch": "This invitation link does not match your renewal."
+    }
   }
 }
