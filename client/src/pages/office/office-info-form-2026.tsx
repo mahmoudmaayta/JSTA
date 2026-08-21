@@ -312,7 +312,7 @@ export default function OfficeInfoForm2026() {
                 <Alert className="mb-6 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30">
                   <Loader2 className="h-4 w-4 text-blue-600 dark:text-blue-400 animate-spin" />
                   <AlertTitle className="text-blue-700 dark:text-blue-400">
-                    {language === "ar" ? "جاري الحفظ التلقائي..." : "Auto-saving..."}
+                    {t("officeInfoForm2026.autoSaving")}
                   </AlertTitle>
                 </Alert>
               )}
@@ -649,7 +649,7 @@ export default function OfficeInfoForm2026() {
                         value={formData.geographicLocationLink}
                         readOnly
                         className="bg-muted cursor-default"
-                        placeholder={language === "ar" ? "رابط خرائط جوجل" : "Google Maps link"}
+                        placeholder={t("officeInfoForm2026.googleMapsLink")}
                         data-testid="input-geographic-location"
                       />
                     </div>

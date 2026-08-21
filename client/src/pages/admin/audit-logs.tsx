@@ -148,7 +148,7 @@ export default function AdminAuditLogs() {
           data-testid={`badge-email-sent-${log.id}`}
         >
           <MailCheck className="h-3 w-3 mr-1" />
-          {language === 'ar' ? 'تم إرسال البريد' : 'Email Sent'}
+          {t("auditLogs.emailSent")}
           {emailRecipient && <span className="opacity-70 ml-1">({emailRecipient})</span>}
         </Badge>
       );
@@ -160,7 +160,7 @@ export default function AdminAuditLogs() {
           data-testid={`badge-email-not-sent-${log.id}`}
         >
           <MailX className="h-3 w-3 mr-1" />
-          {language === 'ar' ? 'لم يتم إرسال البريد' : 'Email Not Sent'}
+          {t("auditLogs.emailNotSent")}
         </Badge>
       );
     }
@@ -187,10 +187,10 @@ export default function AdminAuditLogs() {
               <Select value={actionFilter} onValueChange={setActionFilter}>
                 <SelectTrigger className="w-40" data-testid="select-action-filter">
                   <Filter className="h-4 w-4 mr-2" />
-                  <SelectValue placeholder={language === 'ar' ? 'نوع الإجراء' : 'Action Type'} />
+                  <SelectValue placeholder={t("auditLogs.actionType")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">{language === 'ar' ? 'جميع الإجراءات' : 'All Actions'}</SelectItem>
+                  <SelectItem value="all">{t("auditLogs.allActions")}</SelectItem>
                   {actionTypes.map(action => (
                     <SelectItem key={action.value} value={action.value}>
                       {action.label}
@@ -206,7 +206,7 @@ export default function AdminAuditLogs() {
                 data-testid="button-export-logs"
               >
                 <Download className="h-4 w-4 mr-2" />
-                {language === 'ar' ? 'تصدير' : 'Export'}
+                {t("auditLogs.export")}
               </Button>
               <Button
                 variant="outline"

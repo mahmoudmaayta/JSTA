@@ -146,7 +146,7 @@ export default function AdminCommitmentDashboard() {
             <div className="flex-1">
               <h1 className="text-lg font-semibold flex items-center gap-2">
                 <FileWarning className="h-5 w-5 text-primary" />
-                {language === "ar" ? "لوحة الالتزامات والشكاوى" : "Commitment Forms Dashboard"}
+                {t("commitmentDashboard.commitmentFormsDashboard")}
               </h1>
             </div>
           </header>
@@ -162,7 +162,7 @@ export default function AdminCommitmentDashboard() {
                     <div>
                       <p className="text-2xl font-bold">{stats.total}</p>
                       <p className="text-sm text-muted-foreground">
-                        {language === "ar" ? "إجمالي النماذج" : "Total Forms"}
+                        {t("commitmentDashboard.totalForms")}
                       </p>
                     </div>
                   </div>
@@ -178,7 +178,7 @@ export default function AdminCommitmentDashboard() {
                     <div>
                       <p className="text-2xl font-bold">{stats.withComplaints}</p>
                       <p className="text-sm text-muted-foreground">
-                        {language === "ar" ? "مكاتب لديها شكاوى" : "With Complaints"}
+                        {t("commitmentDashboard.withComplaints")}
                       </p>
                     </div>
                   </div>
@@ -194,7 +194,7 @@ export default function AdminCommitmentDashboard() {
                     <div>
                       <p className="text-2xl font-bold">{stats.withoutComplaints}</p>
                       <p className="text-sm text-muted-foreground">
-                        {language === "ar" ? "مكاتب بدون شكاوى" : "No Complaints"}
+                        {t("commitmentDashboard.noComplaints")}
                       </p>
                     </div>
                   </div>
@@ -210,7 +210,7 @@ export default function AdminCommitmentDashboard() {
                     <div>
                       <p className="text-2xl font-bold">{totalComplaints}</p>
                       <p className="text-sm text-muted-foreground">
-                        {language === "ar" ? "إجمالي الشكاوى" : "Total Complaints"}
+                        {t("commitmentDashboard.totalComplaints")}
                       </p>
                     </div>
                   </div>
@@ -224,12 +224,10 @@ export default function AdminCommitmentDashboard() {
                   <div>
                     <CardTitle className="flex items-center gap-2">
                       <FileWarning className="w-5 h-5" />
-                      {language === "ar" ? "نماذج الالتزام المقدمة" : "Submitted Commitment Forms"}
+                      {t("commitmentDashboard.submittedCommitmentForms")}
                     </CardTitle>
                     <CardDescription>
-                      {language === "ar" 
-                        ? "عرض جميع نماذج الالتزام والشكاوى المقدمة من المكاتب"
-                        : "View all commitment forms and complaints submitted by offices"
+                      {t("commitmentDashboard.viewAllCommitmentFormsAnd")
                       }
                     </CardDescription>
                   </div>
@@ -238,7 +236,7 @@ export default function AdminCommitmentDashboard() {
                     <div className="relative flex-1 md:w-64">
                       <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                       <Input
-                        placeholder={language === "ar" ? "بحث..." : "Search..."}
+                        placeholder={t("commitmentDashboard.search")}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="ps-9"
@@ -248,12 +246,12 @@ export default function AdminCommitmentDashboard() {
                     
                     <Select value={selectedHasComplaints} onValueChange={setSelectedHasComplaints}>
                       <SelectTrigger className="w-40" data-testid="select-complaints-filter">
-                        <SelectValue placeholder={language === "ar" ? "حالة الشكاوى" : "Complaints"} />
+                        <SelectValue placeholder={t("commitmentDashboard.complaints")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">{language === "ar" ? "الكل" : "All"}</SelectItem>
-                        <SelectItem value="yes">{language === "ar" ? "لديها شكاوى" : "Has Complaints"}</SelectItem>
-                        <SelectItem value="no">{language === "ar" ? "بدون شكاوى" : "No Complaints"}</SelectItem>
+                        <SelectItem value="all">{t("commitmentDashboard.all")}</SelectItem>
+                        <SelectItem value="yes">{t("commitmentDashboard.hasComplaints")}</SelectItem>
+                        <SelectItem value="no">{t("commitmentDashboard.noComplaints2")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -265,19 +263,19 @@ export default function AdminCommitmentDashboard() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>{language === "ar" ? "اسم المكتب" : "Office Name"}</TableHead>
-                        <TableHead>{language === "ar" ? "رقم الترخيص" : "License No."}</TableHead>
-                        <TableHead>{language === "ar" ? "المسؤول" : "Contact"}</TableHead>
-                        <TableHead>{language === "ar" ? "حالة الشكاوى" : "Complaints"}</TableHead>
-                        <TableHead>{language === "ar" ? "تاريخ التقديم" : "Submitted"}</TableHead>
-                        <TableHead className="w-24">{language === "ar" ? "الإجراءات" : "Actions"}</TableHead>
+                        <TableHead>{t("commitmentDashboard.officeName")}</TableHead>
+                        <TableHead>{t("commitmentDashboard.licenseNo")}</TableHead>
+                        <TableHead>{t("commitmentDashboard.contact")}</TableHead>
+                        <TableHead>{t("commitmentDashboard.complaints")}</TableHead>
+                        <TableHead>{t("commitmentDashboard.submitted")}</TableHead>
+                        <TableHead className="w-24">{t("commitmentDashboard.actions")}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredForms.length === 0 ? (
                         <TableRow>
                           <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                            {language === "ar" ? "لا توجد نماذج للعرض" : "No forms to display"}
+                            {t("commitmentDashboard.noFormsToDisplay")}
                           </TableCell>
                         </TableRow>
                       ) : (
@@ -309,12 +307,12 @@ export default function AdminCommitmentDashboard() {
                                 {form.hasComplaints ? (
                                   <Badge variant="destructive" className="gap-1">
                                     <AlertTriangle className="w-3 h-3" />
-                                    {form.complaints?.length || 0} {language === "ar" ? "شكوى" : "complaints"}
+                                    {form.complaints?.length || 0} {t("commitmentDashboard.complaints2")}
                                   </Badge>
                                 ) : (
                                   <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
                                     <CheckCircle2 className="w-3 h-3 me-1" />
-                                    {language === "ar" ? "لا يوجد" : "None"}
+                                    {t("commitmentDashboard.none")}
                                   </Badge>
                                 )}
                               </TableCell>
@@ -329,7 +327,7 @@ export default function AdminCommitmentDashboard() {
                                   data-testid={`button-view-form-${form.id}`}
                                 >
                                   <Eye className="w-4 h-4 me-1" />
-                                  {language === "ar" ? "عرض" : "View"}
+                                  {t("commitmentDashboard.view")}
                                 </Button>
                               </TableCell>
                             </TableRow>
@@ -350,7 +348,7 @@ export default function AdminCommitmentDashboard() {
             <div className="flex items-center justify-between">
               <DialogTitle className="flex items-center gap-2">
                 <FileWarning className="w-5 h-5 text-primary" />
-                {language === "ar" ? "تفاصيل نموذج الالتزام" : "Commitment Form Details"}
+                {t("commitmentDashboard.commitmentFormDetails")}
               </DialogTitle>
             </div>
           </DialogHeader>
@@ -361,43 +359,43 @@ export default function AdminCommitmentDashboard() {
                 <CardHeader>
                   <CardTitle className="text-base flex items-center gap-2">
                     <Building2 className="w-4 h-4" />
-                    {language === "ar" ? "معلومات المكتب" : "Office Information"}
+                    {t("commitmentDashboard.officeInformation")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="text-muted-foreground">{language === "ar" ? "اسم المكتب" : "Office Name"}</p>
+                    <p className="text-muted-foreground">{t("commitmentDashboard.officeName")}</p>
                     <p className="font-medium">{selectedForm.officeName}</p>
                   </div>
                   <div>
-                    <p className="text-muted-foreground">{language === "ar" ? "رقم الترخيص" : "License No."}</p>
+                    <p className="text-muted-foreground">{t("commitmentDashboard.licenseNo")}</p>
                     <p className="font-medium font-mono">{selectedForm.licenseNo}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <User className="w-4 h-4 text-muted-foreground" />
                     <div>
-                      <p className="text-muted-foreground">{language === "ar" ? "المسؤول" : "Contact"}</p>
+                      <p className="text-muted-foreground">{t("commitmentDashboard.contact")}</p>
                       <p className="font-medium">{selectedForm.contactName}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Mail className="w-4 h-4 text-muted-foreground" />
                     <div>
-                      <p className="text-muted-foreground">{language === "ar" ? "البريد" : "Email"}</p>
+                      <p className="text-muted-foreground">{t("commitmentDashboard.email")}</p>
                       <p className="font-medium ltr">{selectedForm.contactEmail}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Phone className="w-4 h-4 text-muted-foreground" />
                     <div>
-                      <p className="text-muted-foreground">{language === "ar" ? "الموبايل" : "Mobile"}</p>
+                      <p className="text-muted-foreground">{t("commitmentDashboard.mobile")}</p>
                       <p className="font-medium ltr">{selectedForm.contactMobile}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-muted-foreground" />
                     <div>
-                      <p className="text-muted-foreground">{language === "ar" ? "تاريخ التقديم" : "Submitted"}</p>
+                      <p className="text-muted-foreground">{t("commitmentDashboard.submitted")}</p>
                       <p className="font-medium">{formatDate(selectedForm.submittedAt)}</p>
                     </div>
                   </div>
@@ -408,23 +406,23 @@ export default function AdminCommitmentDashboard() {
                 <CardHeader>
                   <CardTitle className="text-base flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4" />
-                    {language === "ar" ? "حالة الشكاوى" : "Complaints Status"}
+                    {t("commitmentDashboard.complaintsStatus")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   {selectedForm.hasComplaints && selectedForm.complaints && selectedForm.complaints.length > 0 ? (
                     <div className="space-y-4">
                       <Badge variant="destructive" className="mb-4">
-                        {selectedForm.complaints.length} {language === "ar" ? "شكوى مسجلة" : "complaint(s) registered"}
+                        {selectedForm.complaints.length} {t("commitmentDashboard.complaintSRegistered")}
                       </Badge>
                       
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead>{language === "ar" ? "رقم الشكوى" : "Complaint No."}</TableHead>
-                            <TableHead>{language === "ar" ? "الجهة" : "Authority"}</TableHead>
-                            <TableHead>{language === "ar" ? "تاريخ التبليغ" : "Notified"}</TableHead>
-                            <TableHead>{language === "ar" ? "ملخص" : "Summary"}</TableHead>
+                            <TableHead>{t("commitmentDashboard.complaintNo")}</TableHead>
+                            <TableHead>{t("commitmentDashboard.authority")}</TableHead>
+                            <TableHead>{t("commitmentDashboard.notified")}</TableHead>
+                            <TableHead>{t("commitmentDashboard.summary")}</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -448,7 +446,7 @@ export default function AdminCommitmentDashboard() {
                   ) : (
                     <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
                       <CheckCircle2 className="w-5 h-5" />
-                      <p>{language === "ar" ? "لا توجد شكاوى مسجلة على هذا المكتب" : "No complaints registered for this office"}</p>
+                      <p>{t("commitmentDashboard.noComplaintsRegisteredForThis")}</p>
                     </div>
                   )}
                 </CardContent>

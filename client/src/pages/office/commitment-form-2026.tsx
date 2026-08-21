@@ -162,19 +162,19 @@ export default function CommitmentForm2026() {
     const newErrors: Record<string, string> = {};
 
     if (!formData.contactName.trim()) {
-      newErrors.contactName = language === "ar" ? "اسم المسؤول مطلوب" : "Contact name is required";
+      newErrors.contactName = t("commitmentForm2026.contactNameIsRequired");
     }
 
     if (formData.hasComplaints && formData.complaints.length > 0) {
       formData.complaints.forEach((complaint, index) => {
         if (!complaint.complaintNumber.trim()) {
-          newErrors[`complaint_${index}_number`] = language === "ar" ? "رقم الشكوى مطلوب" : "Complaint number is required";
+          newErrors[`complaint_${index}_number`] = t("commitmentForm2026.complaintNumberIsRequired");
         }
         if (!complaint.notifiedAt) {
-          newErrors[`complaint_${index}_date`] = language === "ar" ? "تاريخ التبليغ مطلوب" : "Notification date is required";
+          newErrors[`complaint_${index}_date`] = t("commitmentForm2026.notificationDateIsRequired");
         }
         if (complaint.summary && complaint.summary.length > 200) {
-          newErrors[`complaint_${index}_summary`] = language === "ar" ? "الملخص طويل جداً" : "Summary is too long";
+          newErrors[`complaint_${index}_summary`] = t("commitmentForm2026.summaryIsTooLong");
         }
       });
     }
@@ -272,9 +272,7 @@ export default function CommitmentForm2026() {
           <CardContent className="space-y-4">
             <div className="p-3 bg-muted/50 rounded-lg border mb-2">
               <p className="text-xs text-muted-foreground">
-                {language === "ar" 
-                  ? "هذه البيانات معبأة تلقائياً من ملف المكتب ولا يمكن تعديلها هنا"
-                  : "This information is auto-filled from your office profile and cannot be edited here"
+                {t("commitmentForm2026.thisInformationIsAutoFilled")
                 }
               </p>
             </div>
@@ -306,7 +304,7 @@ export default function CommitmentForm2026() {
                   id="contactName"
                   value={formData.contactName}
                   onChange={(e) => setFormData(prev => ({ ...prev, contactName: e.target.value }))}
-                  placeholder={language === "ar" ? "أدخل اسم المسؤول / المالك / المفوض" : "Enter owner/authorized person name"}
+                  placeholder={t("commitmentForm2026.enterOwnerAuthorizedPersonName")}
                   data-testid="input-contact-name"
                 />
                 {errors.contactName && (
@@ -377,7 +375,7 @@ export default function CommitmentForm2026() {
                 <div className="flex items-center gap-2 mb-3">
                   <FileText className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                   <h3 className="font-semibold text-amber-800 dark:text-amber-300">
-                    {language === "ar" ? "تعهد" : "Pledge"}
+                    {t("commitmentForm2026.pledge")}
                   </h3>
                 </div>
                 <p className="text-base leading-relaxed text-amber-900 dark:text-amber-200" data-testid="pledge-text">
@@ -396,7 +394,7 @@ export default function CommitmentForm2026() {
                 {formData.complaints.length > 0 && formData.complaints.some(c => c.complaintNumber || c.summary) && (
                   <div className="mt-4 pt-4 border-t border-amber-200 dark:border-amber-700">
                     <p className="text-sm font-medium text-amber-800 dark:text-amber-300 mb-2">
-                      {language === "ar" ? "الشكاوى المسجلة:" : "Registered Complaints:"}
+                      {t("commitmentForm2026.registeredComplaints")}
                     </p>
                     <ul className="space-y-2">
                       {formData.complaints.map((complaint, index) => (
@@ -432,7 +430,7 @@ export default function CommitmentForm2026() {
               <div>
                 <h4 className="font-medium mb-3 flex items-center gap-2">
                   <AlertTriangle className="w-4 h-4 text-amber-500" />
-                  {language === "ar" ? "تفاصيل الشكاوى" : "Complaint Details"}
+                  {t("commitmentForm2026.complaintDetails")}
                 </h4>
                 <div className="overflow-x-auto">
                   <Table>

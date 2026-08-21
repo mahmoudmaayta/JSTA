@@ -36,7 +36,7 @@ const STEP_CONFIG: Record<string, { icon: typeof Mail; color: string; labelEn: s
 };
 
 export function RenewalStepsTimeline({ officeId }: { officeId: number }) {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   
   const { data: steps, isLoading } = useQuery<RenewalStep[]>({
     queryKey: ['/api/admin/offices', officeId, 'renewal-steps'],
@@ -49,7 +49,7 @@ export function RenewalStepsTimeline({ officeId }: { officeId: number }) {
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <Clock className="h-4 w-4" />
-            {language === 'ar' ? 'سجل خطوات التجديد' : 'Renewal Steps Timeline'}
+            {t("renewalSteps.renewalStepsTimeline")}
           </CardTitle>
         </CardHeader>
         <CardContent className="flex justify-center py-8">
@@ -65,12 +65,12 @@ export function RenewalStepsTimeline({ officeId }: { officeId: number }) {
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <Clock className="h-4 w-4" />
-            {language === 'ar' ? 'سجل خطوات التجديد' : 'Renewal Steps Timeline'}
+            {t("renewalSteps.renewalStepsTimeline")}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground text-center py-4">
-            {language === 'ar' ? 'لا توجد خطوات تجديد مسجلة بعد' : 'No renewal steps recorded yet'}
+            {t("renewalSteps.noRenewalStepsRecordedYet")}
           </p>
         </CardContent>
       </Card>
@@ -82,9 +82,9 @@ export function RenewalStepsTimeline({ officeId }: { officeId: number }) {
       <CardHeader>
         <CardTitle className="text-base flex items-center gap-2">
           <Clock className="h-4 w-4" />
-          {language === 'ar' ? 'سجل خطوات التجديد' : 'Renewal Steps Timeline'}
+          {t("renewalSteps.renewalStepsTimeline")}
           <Badge variant="secondary" className="text-xs" data-testid="badge-step-count">
-            {steps.length} {language === 'ar' ? 'خطوة' : 'steps'}
+            {steps.length} {t("renewalSteps.steps")}
           </Badge>
         </CardTitle>
       </CardHeader>
@@ -120,7 +120,7 @@ export function RenewalStepsTimeline({ officeId }: { officeId: number }) {
                       <span className="font-medium text-sm" data-testid={`text-step-label-${step.id}`}>{label}</span>
                       {index === 0 && (
                         <Badge variant="outline" className="text-xs">
-                          {language === 'ar' ? 'الأحدث' : 'Latest'}
+                          {t("renewalSteps.latest")}
                         </Badge>
                       )}
                     </div>

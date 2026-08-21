@@ -279,7 +279,7 @@ export default function AdminOfficeDetail() {
                       {t("adminOffice.tabPledge")} {commitmentForm ? "✓" : ""}
                     </TabsTrigger>
                     <TabsTrigger value="timeline" data-testid="tab-timeline">
-                      {language === 'ar' ? 'سجل التجديد' : 'Renewal Timeline'}
+                      {t("adminOffice.renewalTimeline")}
                     </TabsTrigger>
                   </TabsList>
 
@@ -812,7 +812,7 @@ export default function AdminOfficeDetail() {
                                         <span className="font-medium">{person.fullNameAr || notFilled}</span>
                                         {person.isLegacy && (
                                           <Badge variant="outline" className="text-xs">
-                                            {language === "ar" ? "بيانات مستوردة" : "Imported"}
+                                            {t("adminOffice.imported")}
                                           </Badge>
                                         )}
                                       </div>

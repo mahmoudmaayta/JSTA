@@ -73,14 +73,14 @@ export default function FieldInspection() {
       setScheduledDate("");
       setNotes("");
       toast({
-        title: language === 'ar' ? "تم إنشاء الكشف الحسي" : "Inspection Created",
-        description: language === 'ar' ? "تم إنشاء طلب الكشف الحسي بنجاح" : "Field inspection request created successfully",
+        title: t("fieldInspection.inspectionCreated"),
+        description: t("fieldInspection.fieldInspectionRequestCreatedSuccessfully"),
       });
     },
     onError: () => {
       toast({
-        title: language === 'ar' ? "خطأ" : "Error",
-        description: language === 'ar' ? "حدث خطأ أثناء إنشاء الكشف الحسي" : "Failed to create inspection",
+        title: t("fieldInspection.error"),
+        description: t("fieldInspection.failedToCreateInspection"),
         variant: "destructive",
       });
     }
@@ -93,8 +93,8 @@ export default function FieldInspection() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/inspections"] });
       toast({
-        title: language === 'ar' ? "تم التحديث" : "Updated",
-        description: language === 'ar' ? "تم تحديث حالة الكشف بنجاح" : "Inspection status updated successfully",
+        title: t("fieldInspection.updated"),
+        description: t("fieldInspection.inspectionStatusUpdatedSuccessfully"),
       });
     }
   });
@@ -141,8 +141,8 @@ export default function FieldInspection() {
   const handleCreateInspection = () => {
     if (!selectedOfficeId || !scheduledDate) {
       toast({
-        title: language === 'ar' ? "خطأ" : "Error",
-        description: language === 'ar' ? "يرجى تعبئة جميع الحقول المطلوبة" : "Please fill all required fields",
+        title: t("fieldInspection.error"),
+        description: t("fieldInspection.pleaseFillAllRequiredFields"),
         variant: "destructive",
       });
       return;
@@ -169,55 +169,55 @@ export default function FieldInspection() {
 
           <main className="flex-1 p-4 sm:p-6">
             {isLoading ? (
-              <LoadingPage message={language === 'ar' ? 'جاري التحميل...' : 'Loading...'} />
+              <LoadingPage message={t("fieldInspection.loading")} />
             ) : (
               <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div>
                     <h2 className="text-2xl font-bold">
-                      {language === 'ar' ? 'الكشف الحسي' : 'Field Inspection'}
+                      {t("fieldInspection.fieldInspection")}
                     </h2>
                     <p className="text-muted-foreground">
-                      {language === 'ar' ? 'إدارة زيارات الكشف الميداني للمكاتب' : 'Manage field inspection visits for offices'}
+                      {t("fieldInspection.manageFieldInspectionVisitsFor")}
                     </p>
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="secondary" className="gap-1">
                       <ClipboardCheck className="h-3 w-3" />
-                      {totalCount} {language === 'ar' ? 'كشف' : 'Inspections'}
+                      {totalCount} {t("fieldInspection.inspections")}
                     </Badge>
                     <Badge variant="outline" className="gap-1 text-yellow-600">
                       <Clock className="h-3 w-3" />
-                      {pendingCount} {language === 'ar' ? 'معلق' : 'Pending'}
+                      {pendingCount} {t("fieldInspection.pending")}
                     </Badge>
                     <Badge variant="outline" className="gap-1 text-green-600">
                       <CheckCircle2 className="h-3 w-3" />
-                      {completedCount} {language === 'ar' ? 'مكتمل' : 'Completed'}
+                      {completedCount} {t("fieldInspection.completed")}
                     </Badge>
                     <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
                       <DialogTrigger asChild>
                         <Button data-testid="button-create-inspection">
                           <Plus className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
-                          {language === 'ar' ? 'كشف جديد' : 'New Inspection'}
+                          {t("fieldInspection.newInspection")}
                         </Button>
                       </DialogTrigger>
                       <DialogContent className="sm:max-w-[500px]">
                         <DialogHeader>
                           <DialogTitle>
-                            {language === 'ar' ? 'إنشاء كشف حسي جديد' : 'Create New Field Inspection'}
+                            {t("fieldInspection.createNewFieldInspection")}
                           </DialogTitle>
                           <DialogDescription>
-                            {language === 'ar' ? 'أدخل بيانات الكشف الحسي الجديد' : 'Enter the details for the new field inspection'}
+                            {t("fieldInspection.enterTheDetailsForThe")}
                           </DialogDescription>
                         </DialogHeader>
                         <div className="grid gap-4 py-4">
                           <div className="grid gap-2">
                             <Label htmlFor="office">
-                              {language === 'ar' ? 'المكتب' : 'Office'} *
+                              {t("fieldInspection.office")} *
                             </Label>
                             <Select value={selectedOfficeId} onValueChange={setSelectedOfficeId}>
                               <SelectTrigger data-testid="select-office">
-                                <SelectValue placeholder={language === 'ar' ? 'اختر المكتب' : 'Select office'} />
+                                <SelectValue placeholder={t("fieldInspection.selectOffice")} />
                               </SelectTrigger>
                               <SelectContent>
                                 {offices?.map((office) => (
@@ -230,19 +230,19 @@ export default function FieldInspection() {
                           </div>
                           <div className="grid gap-2">
                             <Label htmlFor="inspector">
-                              {language === 'ar' ? 'اسم المفتش' : 'Inspector Name'}
+                              {t("fieldInspection.inspectorName")}
                             </Label>
                             <Input
                               id="inspector"
                               value={inspectorName}
                               onChange={(e) => setInspectorName(e.target.value)}
-                              placeholder={language === 'ar' ? 'أدخل اسم المفتش' : 'Enter inspector name'}
+                              placeholder={t("fieldInspection.enterInspectorName")}
                               data-testid="input-inspector-name"
                             />
                           </div>
                           <div className="grid gap-2">
                             <Label htmlFor="date">
-                              {language === 'ar' ? 'تاريخ الزيارة المجدول' : 'Scheduled Visit Date'} *
+                              {t("fieldInspection.scheduledVisitDate")} *
                             </Label>
                             <Input
                               id="date"
@@ -254,20 +254,20 @@ export default function FieldInspection() {
                           </div>
                           <div className="grid gap-2">
                             <Label htmlFor="notes">
-                              {language === 'ar' ? 'ملاحظات' : 'Notes'}
+                              {t("fieldInspection.notes")}
                             </Label>
                             <Textarea
                               id="notes"
                               value={notes}
                               onChange={(e) => setNotes(e.target.value)}
-                              placeholder={language === 'ar' ? 'أدخل ملاحظات إضافية' : 'Enter additional notes'}
+                              placeholder={t("fieldInspection.enterAdditionalNotes")}
                               data-testid="input-notes"
                             />
                           </div>
                         </div>
                         <DialogFooter>
                           <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
-                            {language === 'ar' ? 'إلغاء' : 'Cancel'}
+                            {t("fieldInspection.cancel")}
                           </Button>
                           <Button 
                             onClick={handleCreateInspection}
@@ -275,8 +275,8 @@ export default function FieldInspection() {
                             data-testid="button-submit-inspection"
                           >
                             {createInspectionMutation.isPending 
-                              ? (language === 'ar' ? 'جاري الإنشاء...' : 'Creating...') 
-                              : (language === 'ar' ? 'إنشاء' : 'Create')}
+                              ? (t("fieldInspection.creating")) 
+                              : (t("fieldInspection.create"))}
                           </Button>
                         </DialogFooter>
                       </DialogContent>
@@ -290,7 +290,7 @@ export default function FieldInspection() {
                       <div className="relative flex-1">
                         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground rtl:left-auto rtl:right-3" />
                         <Input
-                          placeholder={language === 'ar' ? 'بحث بالاسم أو المدينة...' : 'Search by name or city...'}
+                          placeholder={t("fieldInspection.searchByNameOrCity")}
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           className="pl-9 rtl:pl-3 rtl:pr-9"
@@ -299,15 +299,15 @@ export default function FieldInspection() {
                       </div>
                       <Select value={statusFilter} onValueChange={setStatusFilter}>
                         <SelectTrigger className="sm:w-48" data-testid="select-status">
-                          <SelectValue placeholder={language === 'ar' ? 'الحالة' : 'Status'} />
+                          <SelectValue placeholder={t("fieldInspection.status")} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="all">{language === 'ar' ? 'جميع الحالات' : 'All Statuses'}</SelectItem>
-                          <SelectItem value="PENDING">{language === 'ar' ? 'معلق' : 'Pending'}</SelectItem>
-                          <SelectItem value="SCHEDULED">{language === 'ar' ? 'مجدول' : 'Scheduled'}</SelectItem>
-                          <SelectItem value="IN_PROGRESS">{language === 'ar' ? 'قيد التنفيذ' : 'In Progress'}</SelectItem>
-                          <SelectItem value="COMPLETED">{language === 'ar' ? 'مكتمل' : 'Completed'}</SelectItem>
-                          <SelectItem value="CANCELLED">{language === 'ar' ? 'ملغي' : 'Cancelled'}</SelectItem>
+                          <SelectItem value="all">{t("fieldInspection.allStatuses")}</SelectItem>
+                          <SelectItem value="PENDING">{t("fieldInspection.pending")}</SelectItem>
+                          <SelectItem value="SCHEDULED">{t("fieldInspection.scheduled")}</SelectItem>
+                          <SelectItem value="IN_PROGRESS">{t("fieldInspection.inProgress")}</SelectItem>
+                          <SelectItem value="COMPLETED">{t("fieldInspection.completed")}</SelectItem>
+                          <SelectItem value="CANCELLED">{t("fieldInspection.cancelled")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -316,21 +316,21 @@ export default function FieldInspection() {
                     {filteredInspections.length === 0 ? (
                       <EmptyState
                         icon={ClipboardCheck}
-                        title={language === 'ar' ? 'لا توجد كشوفات' : 'No Inspections'}
-                        description={language === 'ar' ? 'لم يتم العثور على أي كشوفات حسية' : 'No field inspections found'}
+                        title={t("fieldInspection.noInspections")}
+                        description={t("fieldInspection.noFieldInspectionsFound")}
                       />
                     ) : (
                       <div className="overflow-x-auto">
                         <Table>
                           <TableHeader>
                             <TableRow>
-                              <TableHead className="rtl:text-right">{language === 'ar' ? 'المكتب' : 'Office'}</TableHead>
-                              <TableHead className="rtl:text-right">{language === 'ar' ? 'المفتش' : 'Inspector'}</TableHead>
-                              <TableHead className="rtl:text-right">{language === 'ar' ? 'التاريخ المجدول' : 'Scheduled Date'}</TableHead>
-                              <TableHead className="rtl:text-right">{language === 'ar' ? 'تاريخ الزيارة' : 'Visit Date'}</TableHead>
-                              <TableHead className="rtl:text-right">{language === 'ar' ? 'المدينة' : 'City'}</TableHead>
-                              <TableHead className="rtl:text-right">{language === 'ar' ? 'الحالة' : 'Status'}</TableHead>
-                              <TableHead className="rtl:text-right">{language === 'ar' ? 'الإجراءات' : 'Actions'}</TableHead>
+                              <TableHead className="rtl:text-right">{t("fieldInspection.office")}</TableHead>
+                              <TableHead className="rtl:text-right">{t("fieldInspection.inspector")}</TableHead>
+                              <TableHead className="rtl:text-right">{t("fieldInspection.scheduledDate")}</TableHead>
+                              <TableHead className="rtl:text-right">{t("fieldInspection.visitDate")}</TableHead>
+                              <TableHead className="rtl:text-right">{t("fieldInspection.city")}</TableHead>
+                              <TableHead className="rtl:text-right">{t("fieldInspection.status")}</TableHead>
+                              <TableHead className="rtl:text-right">{t("fieldInspection.actions")}</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -385,7 +385,7 @@ export default function FieldInspection() {
                                         onClick={() => updateStatusMutation.mutate({ id: inspection.id, status: 'SCHEDULED' })}
                                         data-testid={`button-schedule-${inspection.id}`}
                                       >
-                                        {language === 'ar' ? 'جدولة' : 'Schedule'}
+                                        {t("fieldInspection.schedule")}
                                       </Button>
                                     )}
                                     {inspection.status === 'SCHEDULED' && (
@@ -395,7 +395,7 @@ export default function FieldInspection() {
                                         onClick={() => updateStatusMutation.mutate({ id: inspection.id, status: 'IN_PROGRESS' })}
                                         data-testid={`button-start-${inspection.id}`}
                                       >
-                                        {language === 'ar' ? 'بدء' : 'Start'}
+                                        {t("fieldInspection.start")}
                                       </Button>
                                     )}
                                     {inspection.status === 'IN_PROGRESS' && (
@@ -405,7 +405,7 @@ export default function FieldInspection() {
                                         onClick={() => updateStatusMutation.mutate({ id: inspection.id, status: 'COMPLETED' })}
                                         data-testid={`button-complete-${inspection.id}`}
                                       >
-                                        {language === 'ar' ? 'إكمال' : 'Complete'}
+                                        {t("fieldInspection.complete")}
                                       </Button>
                                     )}
                                   </div>

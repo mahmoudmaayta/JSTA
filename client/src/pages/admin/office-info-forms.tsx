@@ -30,7 +30,7 @@ interface OfficeInfoFormRecord {
 }
 
 export default function AdminOfficeInfoForms() {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const sidebarSide = language === 'ar' ? 'right' : 'left';
   const dir = language === 'ar' ? 'rtl' : 'ltr';
   const [searchQuery, setSearchQuery] = useState("");
@@ -69,7 +69,7 @@ export default function AdminOfficeInfoForms() {
             <SidebarTrigger data-testid="button-sidebar-toggle" />
             <div className="flex-1">
               <h1 className="font-semibold">
-                {language === 'ar' ? 'نماذج معلومات المكاتب' : 'Office Info Forms'}
+                {t("officeInfoForms.officeInfoForms")}
               </h1>
             </div>
           </header>
@@ -80,8 +80,8 @@ export default function AdminOfficeInfoForms() {
             ) : !forms || forms.length === 0 ? (
               <EmptyState
                 icon={FileText}
-                title={language === 'ar' ? 'لا توجد نماذج' : 'No Forms'}
-                description={language === 'ar' ? 'لم يتم تقديم أي نماذج معلومات بعد' : 'No office info forms have been submitted yet'}
+                title={t("officeInfoForms.noForms")}
+                description={t("officeInfoForms.noOfficeInfoFormsHave")}
               />
             ) : (
               <div className="space-y-4">
@@ -91,7 +91,7 @@ export default function AdminOfficeInfoForms() {
                       <div>
                         <CardTitle className="text-lg flex items-center gap-2">
                           <FileText className="h-5 w-5" />
-                          {language === 'ar' ? 'نماذج معلومات المكاتب المقدمة' : 'Submitted Office Info Forms'}
+                          {t("officeInfoForms.submittedOfficeInfoForms")}
                         </CardTitle>
                         <CardDescription>
                           {language === 'ar' 
@@ -102,7 +102,7 @@ export default function AdminOfficeInfoForms() {
                       <div className="relative w-full max-w-sm">
                         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
-                          placeholder={language === 'ar' ? 'البحث عن مكتب...' : 'Search offices...'}
+                          placeholder={t("officeInfoForms.searchOffices")}
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           className="pl-9"
@@ -132,7 +132,7 @@ export default function AdminOfficeInfoForms() {
                                 <span data-testid={`text-date-${form.id}`}>{formatDate(form.submittedAt)}</span>
                                 <Badge variant="secondary" className="text-xs" data-testid={`badge-status-${form.id}`}>
                                   <CheckCircle2 className="h-3 w-3 mr-1" />
-                                  {language === 'ar' ? 'مقدم' : 'Submitted'}
+                                  {t("officeInfoForms.submitted")}
                                 </Badge>
                               </div>
                             </div>
@@ -140,14 +140,14 @@ export default function AdminOfficeInfoForms() {
                           <Link href={`/admin/offices/${form.officeId}`}>
                             <Button variant="outline" size="sm" data-testid={`button-view-${form.id}`}>
                               <Eye className="h-4 w-4 mr-1" />
-                              {language === 'ar' ? 'عرض' : 'View'}
+                              {t("officeInfoForms.view")}
                             </Button>
                           </Link>
                         </div>
                       ))}
                       {filteredForms?.length === 0 && (
                         <p className="text-center text-muted-foreground py-8">
-                          {language === 'ar' ? 'لم يتم العثور على نتائج' : 'No results found'}
+                          {t("officeInfoForms.noResultsFound")}
                         </p>
                       )}
                     </div>

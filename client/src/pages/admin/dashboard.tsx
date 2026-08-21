@@ -198,7 +198,7 @@ export default function AdminDashboard() {
                       <CardHeader className="pb-2">
                         <CardTitle className="text-base flex items-center gap-2">
                           <Building className="h-4 w-4" />
-                          {language === 'ar' ? 'توزيع المكاتب حسب الفئة' : 'Offices by License Category'}
+                          {t("admin.officesByLicenseCategory")}
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
@@ -221,7 +221,7 @@ export default function AdminDashboard() {
                                   ))}
                                 </Pie>
                                 <Tooltip 
-                                  formatter={(value: number) => [value, language === 'ar' ? 'مكاتب' : 'Offices']}
+                                  formatter={(value: number) => [value, t("admin.offices")]}
                                   contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))', borderRadius: '6px' }}
                                 />
                               </PieChart>
@@ -246,7 +246,7 @@ export default function AdminDashboard() {
                       <CardHeader className="pb-2">
                         <CardTitle className="text-base flex items-center gap-2">
                           <MapPin className="h-4 w-4" />
-                          {language === 'ar' ? 'توزيع المكاتب حسب المدينة' : 'Offices by City'}
+                          {t("admin.officesByCity")}
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
@@ -280,7 +280,7 @@ export default function AdminDashboard() {
                       <CardHeader className="pb-2">
                         <CardTitle className="text-base flex items-center gap-2">
                           <Plane className="h-4 w-4" />
-                          {language === 'ar' ? 'العضويات الدولية' : 'International Memberships'}
+                          {t("admin.internationalMemberships")}
                         </CardTitle>
                       </CardHeader>
                       <CardContent>

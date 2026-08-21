@@ -5,7 +5,7 @@ import { useLanguage } from "@/lib/i18n";
 
 export function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
 
   return (
     <Button
@@ -13,8 +13,8 @@ export function ThemeToggle() {
       size="icon"
       onClick={toggleTheme}
       title={theme === "light" 
-        ? (language === "ar" ? "تفعيل الوضع الداكن" : "Switch to dark mode")
-        : (language === "ar" ? "تفعيل الوضع الفاتح" : "Switch to light mode")}
+        ? (t("common.switchToDarkMode"))
+        : (t("common.switchToLightMode"))}
       data-testid="button-theme-toggle"
     >
       {theme === "light" ? (

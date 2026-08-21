@@ -171,8 +171,8 @@ export default function AdminStaffDashboard() {
       
       if (!exportData.length) {
         toast({
-          title: language === "ar" ? "لا توجد بيانات" : "No Data",
-          description: language === "ar" ? "لا توجد بيانات للتصدير" : "No data to export",
+          title: t("staffDashboard.noData"),
+          description: t("staffDashboard.noDataToExport"),
           variant: "destructive",
         });
         return;
@@ -222,7 +222,7 @@ export default function AdminStaffDashboard() {
       link.click();
       
       toast({
-        title: language === "ar" ? "تم التصدير" : "Export Complete",
+        title: t("staffDashboard.exportComplete"),
         description: language === "ar" 
           ? `تم تصدير ${exportData.length} سجل` 
           : `Exported ${exportData.length} records`,
@@ -230,8 +230,8 @@ export default function AdminStaffDashboard() {
     } catch (error) {
       console.error("Export error:", error);
       toast({
-        title: language === "ar" ? "خطأ في التصدير" : "Export Error",
-        description: language === "ar" ? "فشل تصدير البيانات" : "Failed to export data",
+        title: t("staffDashboard.exportError"),
+        description: t("staffDashboard.failedToExportData"),
         variant: "destructive",
       });
     } finally {
@@ -250,7 +250,7 @@ export default function AdminStaffDashboard() {
             <SidebarTrigger data-testid="button-sidebar-toggle" />
             <div className="flex-1">
               <h1 className="text-lg font-semibold">
-                {language === "ar" ? "لوحة بيانات العاملين" : "Staff Dashboard"}
+                {t("staffDashboard.staffDashboard")}
               </h1>
             </div>
           </header>
@@ -262,12 +262,10 @@ export default function AdminStaffDashboard() {
                   <div>
                     <CardTitle className="flex items-center gap-2">
                       <Users className="w-5 h-5" />
-                      {language === "ar" ? "بحث وتصفية" : "Search & Filter"}
+                      {t("staffDashboard.searchFilter")}
                     </CardTitle>
                     <CardDescription>
-                      {language === "ar"
-                        ? "ابحث عن العاملين وفلتر النتائج حسب المكتب أو الدور"
-                        : "Search for staff and filter results by office or role"}
+                      {t("staffDashboard.searchForStaffAndFilter")}
                     </CardDescription>
                   </div>
                   <Button
@@ -279,8 +277,8 @@ export default function AdminStaffDashboard() {
                   >
                     <Download className="w-4 h-4" />
                     {isExporting 
-                      ? (language === "ar" ? "جاري التصدير..." : "Exporting...") 
-                      : (language === "ar" ? "تصدير CSV" : "Export CSV")}
+                      ? (t("staffDashboard.exporting")) 
+                      : (t("staffDashboard.exportCsv"))}
                   </Button>
                 </div>
               </CardHeader>
@@ -288,7 +286,7 @@ export default function AdminStaffDashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                   <div className="md:col-span-2">
                     <Label htmlFor="search">
-                      {language === "ar" ? "البحث" : "Search"}
+                      {t("staffDashboard.search")}
                     </Label>
                     <div className="relative">
                       <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -296,7 +294,7 @@ export default function AdminStaffDashboard() {
                         id="search"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder={language === "ar" ? "ابحث بالاسم أو الرقم الوطني أو الموبايل..." : "Search by name, national ID, or mobile..."}
+                        placeholder={t("staffDashboard.searchByNameNationalId")}
                         className="ps-9"
                         data-testid="input-search"
                       />
@@ -304,13 +302,13 @@ export default function AdminStaffDashboard() {
                   </div>
 
                   <div>
-                    <Label>{language === "ar" ? "المكتب" : "Office"}</Label>
+                    <Label>{t("staffDashboard.office")}</Label>
                     <div className="relative">
                       <Building2 className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                       <Input
                         value={officeSearchQuery}
                         onChange={(e) => setOfficeSearchQuery(e.target.value)}
-                        placeholder={language === "ar" ? "ابحث باسم المكتب..." : "Search by office name..."}
+                        placeholder={t("staffDashboard.searchByOfficeName")}
                         className="ps-9"
                         data-testid="input-office-search"
                       />
@@ -318,13 +316,13 @@ export default function AdminStaffDashboard() {
                   </div>
 
                   <div>
-                    <Label>{language === "ar" ? "الدور" : "Role"}</Label>
+                    <Label>{t("staffDashboard.role")}</Label>
                     <Select value={selectedRole} onValueChange={setSelectedRole}>
                       <SelectTrigger data-testid="select-role">
-                        <SelectValue placeholder={language === "ar" ? "جميع الأدوار" : "All Roles"} />
+                        <SelectValue placeholder={t("staffDashboard.allRoles")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">{language === "ar" ? "جميع الأدوار" : "All Roles"}</SelectItem>
+                        <SelectItem value="all">{t("staffDashboard.allRoles")}</SelectItem>
                         {Object.entries(roleTypeLabels).map(([key, label]) => (
                           <SelectItem key={key} value={key}>
                             {language === "ar" ? label.ar : label.en}
@@ -335,13 +333,13 @@ export default function AdminStaffDashboard() {
                   </div>
 
                   <div>
-                    <Label>{language === "ar" ? "الجنسية" : "Nationality"}</Label>
+                    <Label>{t("staffDashboard.nationality")}</Label>
                     <Select value={selectedNationality} onValueChange={setSelectedNationality}>
                       <SelectTrigger data-testid="select-nationality">
-                        <SelectValue placeholder={language === "ar" ? "جميع الجنسيات" : "All Nationalities"} />
+                        <SelectValue placeholder={t("staffDashboard.allNationalities")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">{language === "ar" ? "جميع الجنسيات" : "All Nationalities"}</SelectItem>
+                        <SelectItem value="all">{t("staffDashboard.allNationalities")}</SelectItem>
                         {uniqueNationalities.map((nat) => (
                           <SelectItem key={nat} value={nat as string}>
                             {nat}
@@ -356,11 +354,11 @@ export default function AdminStaffDashboard() {
                   <div className="mt-4 flex items-center gap-2">
                     <Badge variant="secondary" className="gap-1">
                       <Filter className="w-3 h-3" />
-                      {filteredStaff.length} {language === "ar" ? "نتيجة" : "results"}
+                      {filteredStaff.length} {t("staffDashboard.results")}
                     </Badge>
                     <Button variant="ghost" size="sm" onClick={resetFilters} data-testid="button-reset-filters">
                       <X className="w-4 h-4 me-1" />
-                      {language === "ar" ? "مسح الفلاتر" : "Clear Filters"}
+                      {t("staffDashboard.clearFilters")}
                     </Button>
                   </div>
                 )}
@@ -372,18 +370,16 @@ export default function AdminStaffDashboard() {
                 {isLoading ? (
                   <div className="flex items-center justify-center py-12">
                     <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                    <span className="ms-2">{language === "ar" ? "جاري التحميل..." : "Loading..."}</span>
+                    <span className="ms-2">{t("staffDashboard.loading")}</span>
                   </div>
                 ) : filteredStaff.length === 0 ? (
                   <div className="text-center py-12 text-muted-foreground">
                     <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
                     <p className="text-lg">
-                      {language === "ar" ? "لا توجد بيانات" : "No Data Found"}
+                      {t("staffDashboard.noDataFound")}
                     </p>
                     <p className="text-sm">
-                      {language === "ar"
-                        ? "جرّب تغيير معايير البحث أو الفلترة"
-                        : "Try changing your search or filter criteria"}
+                      {t("staffDashboard.tryChangingYourSearchOr")}
                     </p>
                   </div>
                 ) : (
@@ -391,14 +387,14 @@ export default function AdminStaffDashboard() {
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead className="min-w-[150px]">{language === "ar" ? "المكتب" : "Office"}</TableHead>
-                          <TableHead className="min-w-[150px]">{language === "ar" ? "الاسم الرباعي" : "Full Name (AR)"}</TableHead>
-                          <TableHead className="min-w-[150px]">{language === "ar" ? "الاسم بالإنجليزية" : "Full Name (EN)"}</TableHead>
-                          <TableHead className="min-w-[120px]">{language === "ar" ? "الرقم الوطني" : "National ID"}</TableHead>
-                          <TableHead className="min-w-[100px]">{language === "ar" ? "الجنسية" : "Nationality"}</TableHead>
-                          <TableHead className="min-w-[120px]">{language === "ar" ? "الوظيفة" : "Position"}</TableHead>
-                          <TableHead className="min-w-[100px]">{language === "ar" ? "الدور" : "Role"}</TableHead>
-                          <TableHead className="min-w-[80px]">{language === "ar" ? "إجراءات" : "Actions"}</TableHead>
+                          <TableHead className="min-w-[150px]">{t("staffDashboard.office")}</TableHead>
+                          <TableHead className="min-w-[150px]">{t("staffDashboard.fullNameAr")}</TableHead>
+                          <TableHead className="min-w-[150px]">{t("staffDashboard.fullNameEn")}</TableHead>
+                          <TableHead className="min-w-[120px]">{t("staffDashboard.nationalId")}</TableHead>
+                          <TableHead className="min-w-[100px]">{t("staffDashboard.nationality")}</TableHead>
+                          <TableHead className="min-w-[120px]">{t("staffDashboard.position")}</TableHead>
+                          <TableHead className="min-w-[100px]">{t("staffDashboard.role")}</TableHead>
+                          <TableHead className="min-w-[80px]">{t("staffDashboard.actions")}</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -450,7 +446,7 @@ export default function AdminStaffDashboard() {
                           onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                           data-testid="button-prev-page"
                         >
-                          {language === "ar" ? "السابق" : "Previous"}
+                          {t("staffDashboard.previous")}
                         </Button>
                         <span className="text-sm">
                           {language === "ar" 
@@ -464,7 +460,7 @@ export default function AdminStaffDashboard() {
                           onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                           data-testid="button-next-page"
                         >
-                          {language === "ar" ? "التالي" : "Next"}
+                          {t("staffDashboard.next")}
                         </Button>
                       </div>
                     </div>

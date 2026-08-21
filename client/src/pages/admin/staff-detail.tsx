@@ -113,15 +113,15 @@ export default function AdminStaffDetail() {
     },
     onSuccess: () => {
       toast({
-        title: language === "ar" ? "تم الحفظ بنجاح" : "Save Successful",
-        description: language === "ar" ? "تم حفظ البيانات بنجاح" : "Data saved successfully",
+        title: t("staffDetail.saveSuccessful"),
+        description: t("staffDetail.dataSavedSuccessfully"),
       });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/staff"] });
     },
     onError: (error: any) => {
       toast({
-        title: language === "ar" ? "خطأ" : "Error",
-        description: error.message || (language === "ar" ? "فشل في حفظ البيانات" : "Failed to save data"),
+        title: t("staffDetail.error"),
+        description: error.message || (t("staffDetail.failedToSaveData")),
         variant: "destructive",
       });
     },
@@ -154,15 +154,15 @@ export default function AdminStaffDetail() {
       });
 
       toast({
-        title: language === "ar" ? "تم الرفع بنجاح" : "Upload Successful",
-        description: language === "ar" ? "تم رفع المستند بنجاح" : "Document uploaded successfully",
+        title: t("staffDetail.uploadSuccessful"),
+        description: t("staffDetail.documentUploadedSuccessfully"),
       });
 
       queryClient.invalidateQueries({ queryKey: ["/api/admin/staff"] });
     } catch (error) {
       toast({
-        title: language === "ar" ? "خطأ" : "Error",
-        description: language === "ar" ? "فشل في رفع المستند" : "Failed to upload document",
+        title: t("staffDetail.error"),
+        description: t("staffDetail.failedToUploadDocument"),
         variant: "destructive",
       });
     } finally {
@@ -185,7 +185,7 @@ export default function AdminStaffDetail() {
             <div className="flex items-center justify-center min-h-screen">
               <div className="text-center">
                 <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-primary" />
-                <p>{language === "ar" ? "جاري التحميل..." : "Loading..."}</p>
+                <p>{t("staffDetail.loading")}</p>
               </div>
             </div>
           </SidebarInset>
@@ -204,7 +204,7 @@ export default function AdminStaffDetail() {
               <div className="text-center">
                 <User className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
                 <p className="text-muted-foreground">
-                  {language === "ar" ? "لم يتم العثور على الموظف" : "Employee not found"}
+                  {t("staffDetail.employeeNotFound")}
                 </p>
                 <Button
                   variant="outline"
@@ -212,7 +212,7 @@ export default function AdminStaffDetail() {
                   onClick={() => navigate("/admin/staff")}
                   data-testid="button-back-to-list"
                 >
-                  {language === "ar" ? "العودة للقائمة" : "Back to List"}
+                  {t("staffDetail.backToList")}
                 </Button>
               </div>
             </div>
@@ -240,7 +240,7 @@ export default function AdminStaffDetail() {
               </Button>
               <User className="h-5 w-5 text-primary" />
               <h1 className="font-semibold text-lg">
-                {language === "ar" ? "ملف الموظف" : "Employee Profile"}
+                {t("staffDetail.employeeProfile")}
               </h1>
             </div>
             {staffData?.office && (
@@ -272,7 +272,7 @@ export default function AdminStaffDetail() {
                     <div className="space-y-2">
                       <Label className="flex items-center gap-2">
                         <User className="w-4 h-4" />
-                        {language === "ar" ? "الاسم الكامل (عربي)" : "Full Name (Arabic)"}
+                        {t("staffDetail.fullNameArabic")}
                       </Label>
                       <Input
                         value={personData.fullNameAr}
@@ -283,7 +283,7 @@ export default function AdminStaffDetail() {
                     <div className="space-y-2">
                       <Label className="flex items-center gap-2">
                         <User className="w-4 h-4" />
-                        {language === "ar" ? "الاسم الكامل (إنجليزي)" : "Full Name (English)"}
+                        {t("staffDetail.fullNameEnglish")}
                       </Label>
                       <Input
                         value={personData.fullNameEn}
@@ -295,7 +295,7 @@ export default function AdminStaffDetail() {
                     <div className="space-y-2">
                       <Label className="flex items-center gap-2">
                         <IdCard className="w-4 h-4" />
-                        {language === "ar" ? "الرقم الوطني" : "National ID"}
+                        {t("staffDetail.nationalId")}
                       </Label>
                       <Input
                         value={personData.nationalId}
@@ -307,7 +307,7 @@ export default function AdminStaffDetail() {
                     <div className="space-y-2">
                       <Label className="flex items-center gap-2">
                         <Phone className="w-4 h-4" />
-                        {language === "ar" ? "رقم الموبايل" : "Mobile"}
+                        {t("staffDetail.mobile")}
                       </Label>
                       <Input
                         value={personData.mobile}
@@ -317,7 +317,7 @@ export default function AdminStaffDetail() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>{language === "ar" ? "الجنسية" : "Nationality"}</Label>
+                      <Label>{t("staffDetail.nationality")}</Label>
                       <Select
                         value={personData.nationality}
                         onValueChange={(value) => setPersonData({ ...personData, nationality: value })}
@@ -333,22 +333,22 @@ export default function AdminStaffDetail() {
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label>{language === "ar" ? "الجنس" : "Gender"}</Label>
+                      <Label>{t("staffDetail.gender")}</Label>
                       <Select
                         value={personData.gender}
                         onValueChange={(value) => setPersonData({ ...personData, gender: value })}
                       >
                         <SelectTrigger data-testid="select-gender">
-                          <SelectValue placeholder={language === "ar" ? "اختر" : "Select"} />
+                          <SelectValue placeholder={t("staffDetail.select")} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="ذكر">{language === "ar" ? "ذكر" : "Male"}</SelectItem>
-                          <SelectItem value="أنثى">{language === "ar" ? "أنثى" : "Female"}</SelectItem>
+                          <SelectItem value="ذكر">{t("staffDetail.male")}</SelectItem>
+                          <SelectItem value="أنثى">{t("staffDetail.female")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label>{language === "ar" ? "اسم الأم" : "Mother's Name"}</Label>
+                      <Label>{t("staffDetail.motherSName")}</Label>
                       <Input
                         value={personData.motherName}
                         onChange={(e) => setPersonData({ ...personData, motherName: e.target.value })}
@@ -358,7 +358,7 @@ export default function AdminStaffDetail() {
                     <div className="space-y-2">
                       <Label className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
-                        {language === "ar" ? "تاريخ الميلاد" : "Birth Date"}
+                        {t("staffDetail.birthDate")}
                       </Label>
                       <Input
                         type="date"
@@ -370,7 +370,7 @@ export default function AdminStaffDetail() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>{language === "ar" ? "رقم الضمان الاجتماعي" : "Social Security No."}</Label>
+                      <Label>{t("staffDetail.socialSecurityNo")}</Label>
                       <Input
                         value={personData.socialSecurityNo || ""}
                         onChange={(e) => setPersonData({ ...personData, socialSecurityNo: e.target.value })}
@@ -379,13 +379,13 @@ export default function AdminStaffDetail() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>{language === "ar" ? "الوظيفة" : "Position"}</Label>
+                      <Label>{t("staffDetail.position")}</Label>
                       <Select
                         value={personData.job || ""}
                         onValueChange={(value) => setPersonData({ ...personData, job: value })}
                       >
                         <SelectTrigger data-testid="select-position">
-                          <SelectValue placeholder={language === "ar" ? "اختر" : "Select"} />
+                          <SelectValue placeholder={t("staffDetail.select")} />
                         </SelectTrigger>
                         <SelectContent>
                           {positions.map((pos) => (
@@ -402,12 +402,10 @@ export default function AdminStaffDetail() {
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
                     <FileText className="w-5 h-5" />
-                    {language === "ar" ? "المستندات" : "Documents"}
+                    {t("staffDetail.documents")}
                   </CardTitle>
                   <CardDescription>
-                    {language === "ar" 
-                      ? "يمكنك رفع أو استبدال مستندات الموظف"
-                      : "You can upload or replace employee documents"}
+                    {t("staffDetail.youCanUploadOrReplace")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -416,19 +414,17 @@ export default function AdminStaffDetail() {
                       <div className="flex items-center gap-2">
                         <IdCard className="w-5 h-5 text-primary" />
                         <Label className="font-medium">
-                          {language === "ar" ? "صورة الهوية (الوجهين)" : "Identity Card (Front)"}
+                          {t("staffDetail.identityCardFront")}
                         </Label>
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        {language === "ar" 
-                          ? "صورة واضحة للهوية الشخصية"
-                          : "Clear copy of personal ID"}
+                        {t("staffDetail.clearCopyOfPersonalId")}
                       </p>
                       {personData.identityCardFile ? (
                         <div className="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-950 rounded-md">
                           <CheckCircle2 className="w-5 h-5 text-green-600" />
                           <span className="text-sm text-green-700 dark:text-green-400">
-                            {language === "ar" ? "تم الرفع" : "Uploaded"}
+                            {t("staffDetail.uploaded")}
                           </span>
                           <Button
                             variant="ghost"
@@ -437,13 +433,13 @@ export default function AdminStaffDetail() {
                             onClick={() => window.open(`/api/documents/staff/${personData.id}/identity`, "_blank")}
                             data-testid="button-view-identity"
                           >
-                            {language === "ar" ? "عرض" : "View"}
+                            {t("staffDetail.view")}
                           </Button>
                         </div>
                       ) : (
                         <div className="flex items-center gap-2 p-3 bg-muted rounded-md">
                           <span className="text-sm text-muted-foreground">
-                            {language === "ar" ? "لم يتم الرفع بعد" : "Not uploaded yet"}
+                            {t("staffDetail.notUploadedYet")}
                           </span>
                         </div>
                       )}
@@ -472,8 +468,8 @@ export default function AdminStaffDetail() {
                             <Upload className="w-4 h-4 me-2" />
                           )}
                           {personData.identityCardFile 
-                            ? (language === "ar" ? "استبدال" : "Replace")
-                            : (language === "ar" ? "رفع صورة الهوية" : "Upload Identity Card")}
+                            ? (t("staffDetail.replace"))
+                            : (t("staffDetail.uploadIdentityCard"))}
                         </Button>
                       </div>
                     </div>
@@ -482,19 +478,17 @@ export default function AdminStaffDetail() {
                       <div className="flex items-center gap-2">
                         <ShieldCheck className="w-5 h-5 text-primary" />
                         <Label className="font-medium">
-                          {language === "ar" ? "شهادة عدم محكومية" : "Criminal Record Certificate"}
+                          {t("staffDetail.criminalRecordCertificate")}
                         </Label>
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        {language === "ar" 
-                          ? "شهادة عدم محكومية حديثة"
-                          : "Recent criminal record certificate"}
+                        {t("staffDetail.recentCriminalRecordCertificate")}
                       </p>
                       {personData.noCriminalRecordFile ? (
                         <div className="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-950 rounded-md">
                           <CheckCircle2 className="w-5 h-5 text-green-600" />
                           <span className="text-sm text-green-700 dark:text-green-400">
-                            {language === "ar" ? "تم الرفع" : "Uploaded"}
+                            {t("staffDetail.uploaded")}
                           </span>
                           <Button
                             variant="ghost"
@@ -503,13 +497,13 @@ export default function AdminStaffDetail() {
                             onClick={() => window.open(`/api/documents/staff/${personData.id}/criminal`, "_blank")}
                             data-testid="button-view-criminal"
                           >
-                            {language === "ar" ? "عرض" : "View"}
+                            {t("staffDetail.view")}
                           </Button>
                         </div>
                       ) : (
                         <div className="flex items-center gap-2 p-3 bg-muted rounded-md">
                           <span className="text-sm text-muted-foreground">
-                            {language === "ar" ? "لم يتم الرفع بعد" : "Not uploaded yet"}
+                            {t("staffDetail.notUploadedYet")}
                           </span>
                         </div>
                       )}
@@ -538,8 +532,8 @@ export default function AdminStaffDetail() {
                             <Upload className="w-4 h-4 me-2" />
                           )}
                           {personData.noCriminalRecordFile 
-                            ? (language === "ar" ? "استبدال" : "Replace")
-                            : (language === "ar" ? "رفع الشهادة" : "Upload Certificate")}
+                            ? (t("staffDetail.replace"))
+                            : (t("staffDetail.uploadCertificate"))}
                         </Button>
                       </div>
                     </div>
@@ -554,7 +548,7 @@ export default function AdminStaffDetail() {
                   data-testid="button-back-bottom"
                 >
                   {isRTL ? <ArrowRight className="w-4 h-4 ms-2" /> : <ArrowLeft className="w-4 h-4 me-2" />}
-                  {language === "ar" ? "العودة للقائمة" : "Back to List"}
+                  {t("staffDetail.backToList")}
                 </Button>
                 
                 <Button
@@ -567,7 +561,7 @@ export default function AdminStaffDetail() {
                   ) : (
                     <Save className="w-4 h-4 me-2" />
                   )}
-                  {language === "ar" ? "حفظ التغييرات" : "Save Changes"}
+                  {t("staffDetail.saveChanges")}
                 </Button>
               </div>
             </div>

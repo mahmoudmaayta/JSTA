@@ -47,12 +47,12 @@ export default function AdminOffices() {
   ];
 
   const cities = [
-    { value: "عمان", label: language === 'ar' ? "عمان" : "Amman" },
-    { value: "اربد", label: language === 'ar' ? "اربد" : "Irbid" },
-    { value: "الزرقاء", label: language === 'ar' ? "الزرقاء" : "Zarqa" },
-    { value: "العقبة", label: language === 'ar' ? "العقبة" : "Aqaba" },
-    { value: "السلط", label: language === 'ar' ? "السلط" : "Salt" },
-    { value: "المفرق", label: language === 'ar' ? "المفرق" : "Mafraq" },
+    { value: "عمان", label: t("adminOffices.amman") },
+    { value: "اربد", label: t("adminOffices.irbid") },
+    { value: "الزرقاء", label: t("adminOffices.zarqa") },
+    { value: "العقبة", label: t("adminOffices.aqaba") },
+    { value: "السلط", label: t("adminOffices.salt") },
+    { value: "المفرق", label: t("adminOffices.mafraq") },
   ];
 
   // Helper function to determine if office is active (renewed in 2025)
@@ -161,10 +161,10 @@ export default function AdminOffices() {
                   <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="secondary" className="gap-1">
                       <Building2 className="h-3 w-3" />
-                      {totalCount} {language === 'ar' ? 'مكتب' : 'Offices'}
+                      {totalCount} {t("adminOffices.offices")}
                     </Badge>
                     <Badge variant="outline" className="gap-1 text-green-600">
-                      {activeCount} {language === 'ar' ? 'نشط' : 'Active'}
+                      {activeCount} {t("adminOffices.active")}
                     </Badge>
                     <Badge variant="outline" className="gap-1">
                       <Plane className="h-3 w-3" />
@@ -178,7 +178,7 @@ export default function AdminOffices() {
                       data-testid="button-export-csv"
                     >
                       <Download className="h-4 w-4 mr-2" />
-                      {language === 'ar' ? 'تصدير CSV' : 'Export CSV'}
+                      {t("adminOffices.exportCsv")}
                     </Button>
                   </div>
                 </div>
@@ -190,7 +190,7 @@ export default function AdminOffices() {
                         <div className="relative flex-1">
                           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground rtl:left-auto rtl:right-3" />
                           <Input
-                            placeholder={language === 'ar' ? 'بحث بالاسم أو البريد الإلكتروني...' : 'Search by name or email...'}
+                            placeholder={t("adminOffices.searchByNameOrEmail")}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="pl-9 rtl:pl-3 rtl:pr-9"
@@ -200,7 +200,7 @@ export default function AdminOffices() {
                         <div className="relative sm:w-48">
                           <FolderOpen className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground rtl:left-auto rtl:right-3" />
                           <Input
-                            placeholder={language === 'ar' ? 'رقم الملف...' : 'File No...'}
+                            placeholder={t("adminOffices.fileNo")}
                             value={fileNoQuery}
                             onChange={(e) => setFileNoQuery(e.target.value)}
                             className="pl-9 rtl:pl-3 rtl:pr-9"
@@ -221,10 +221,10 @@ export default function AdminOffices() {
                         </Select>
                         <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                           <SelectTrigger data-testid="select-category">
-                            <SelectValue placeholder={language === 'ar' ? 'الفئة' : 'Category'} />
+                            <SelectValue placeholder={t("adminOffices.category")} />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="all">{language === 'ar' ? 'جميع الفئات' : 'All Categories'}</SelectItem>
+                            <SelectItem value="all">{t("adminOffices.allCategories")}</SelectItem>
                             {licenseCategories.map((cat) => (
                               <SelectItem key={cat.value} value={cat.value}>
                                 {language === 'ar' ? `فئة ${cat.label}` : `Category ${cat.label}`}
@@ -234,10 +234,10 @@ export default function AdminOffices() {
                         </Select>
                         <Select value={cityFilter} onValueChange={setCityFilter}>
                           <SelectTrigger data-testid="select-city">
-                            <SelectValue placeholder={language === 'ar' ? 'المدينة' : 'City'} />
+                            <SelectValue placeholder={t("adminOffices.city")} />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="all">{language === 'ar' ? 'جميع المدن' : 'All Cities'}</SelectItem>
+                            <SelectItem value="all">{t("adminOffices.allCities")}</SelectItem>
                             {cities.map((city) => (
                               <SelectItem key={city.value} value={city.value}>
                                 {city.label}
@@ -247,10 +247,10 @@ export default function AdminOffices() {
                         </Select>
                         <Select value={renewalYearFilter} onValueChange={setRenewalYearFilter}>
                           <SelectTrigger data-testid="select-renewal-year">
-                            <SelectValue placeholder={language === 'ar' ? 'سنة التجديد' : 'Renewal Year'} />
+                            <SelectValue placeholder={t("adminOffices.renewalYear")} />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="all">{language === 'ar' ? 'كل السنوات' : 'All Years'}</SelectItem>
+                            <SelectItem value="all">{t("adminOffices.allYears")}</SelectItem>
                             {renewalYears.map((year) => (
                               <SelectItem key={year} value={year!.toString()}>
                                 {year}
@@ -260,16 +260,16 @@ export default function AdminOffices() {
                         </Select>
                         <Select value={membershipFilter} onValueChange={setMembershipFilter}>
                           <SelectTrigger data-testid="select-membership">
-                            <SelectValue placeholder={language === 'ar' ? 'العضويات' : 'Memberships'} />
+                            <SelectValue placeholder={t("adminOffices.memberships")} />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="all">{language === 'ar' ? 'الكل' : 'All'}</SelectItem>
-                            <SelectItem value="any">{language === 'ar' ? 'أي عضوية' : 'Any Membership'}</SelectItem>
+                            <SelectItem value="all">{t("adminOffices.all")}</SelectItem>
+                            <SelectItem value="any">{t("adminOffices.anyMembership")}</SelectItem>
                             <SelectItem value="iata">IATA</SelectItem>
                             <SelectItem value="uftaa">UFTAA</SelectItem>
                             <SelectItem value="asta">ASTA</SelectItem>
                             <SelectItem value="wto">WTO</SelectItem>
-                            <SelectItem value="none">{language === 'ar' ? 'بدون عضوية' : 'No Membership'}</SelectItem>
+                            <SelectItem value="none">{t("adminOffices.noMembership")}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -286,12 +286,12 @@ export default function AdminOffices() {
                         <Table>
                           <TableHeader>
                             <TableRow>
-                              <TableHead className="w-[100px]">{language === 'ar' ? 'رقم الملف' : 'File No.'}</TableHead>
-                              <TableHead>{language === 'ar' ? 'الاسم التجاري' : 'Trade Name'}</TableHead>
-                              <TableHead className="w-[60px] text-center">{language === 'ar' ? 'الفئة' : 'Cat.'}</TableHead>
-                              <TableHead className="hidden md:table-cell">{language === 'ar' ? 'المدينة' : 'City'}</TableHead>
-                              <TableHead className="hidden lg:table-cell">{language === 'ar' ? 'العضويات الدولية' : 'Memberships'}</TableHead>
-                              <TableHead className="hidden xl:table-cell">{language === 'ar' ? 'آخر تجديد' : 'Last Renewal'}</TableHead>
+                              <TableHead className="w-[100px]">{t("adminOffices.fileNo2")}</TableHead>
+                              <TableHead>{t("adminOffices.tradeName")}</TableHead>
+                              <TableHead className="w-[60px] text-center">{t("adminOffices.cat")}</TableHead>
+                              <TableHead className="hidden md:table-cell">{t("adminOffices.city")}</TableHead>
+                              <TableHead className="hidden lg:table-cell">{t("adminOffices.memberships2")}</TableHead>
+                              <TableHead className="hidden xl:table-cell">{t("adminOffices.lastRenewal")}</TableHead>
                               <TableHead>{t("adminOffices.status")}</TableHead>
                               <TableHead className="text-right">{t("adminOffices.actions")}</TableHead>
                             </TableRow>
@@ -371,9 +371,7 @@ export default function AdminOffices() {
                     )}
                     {filteredOffices.length > 25 && (
                       <div className="mt-4 text-center text-sm text-muted-foreground">
-                        {language === 'ar' 
-                          ? `عرض أول 25 نتيجة. استخدم الفلاتر لتضييق البحث.`
-                          : `Showing first 25 results. Use filters to narrow down.`}
+                        {t("adminOffices.showingFirst25ResultsUse")}
                       </div>
                     )}
                   </CardContent>
