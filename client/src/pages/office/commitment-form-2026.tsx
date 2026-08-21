@@ -140,6 +140,8 @@ export default function CommitmentForm2026() {
     onSuccess: (result) => {
       if (result.ok) {
         queryClient.invalidateQueries({ queryKey: ["/api/office/commitment-form"] });
+        // Unlocks the Renewals nav item, which is gated on form completion.
+        queryClient.invalidateQueries({ queryKey: ["/api/office/form-completion-status"] });
         toast({
           title: t("commitmentForm2026.messages.savedSuccess"),
           description: t("commitmentForm2026.messages.savedDesc"),

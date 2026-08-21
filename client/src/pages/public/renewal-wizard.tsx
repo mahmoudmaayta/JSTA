@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { useLanguage } from "@/lib/i18n";
 import {
   Key,
   User,
@@ -33,12 +34,13 @@ type WizardStep = "validate" | "credentials" | "review" | "declarations" | "paym
 interface ValidationResult {
   valid: boolean;
   message?: string;
-  status?: string;
   officeId?: number;
   officeName?: string;
   year?: number;
   renewalId?: number;
+  /** PENDING / SENT means the invite still needs redeeming; CONSUMED means resume. */
   inviteStatus?: string;
+  renewalState?: string;
 }
 
 interface RedemptionResult {
@@ -93,11 +95,28 @@ const DECLARATIONS = [
   },
 ];
 
+/** Where a returning office picks the wizard back up, based on renewal state. */
+function resumeStepFor(renewalState?: string): WizardStep {
+  switch (renewalState) {
+    case "CREDENTIALS_UPDATED":
+      return "review";
+    case "INFO_APPROVED":
+      return "declarations";
+    case "PAYMENT_PENDING":
+      return "payment";
+    case "COMPLETED":
+      return "complete";
+    default:
+      return "credentials";
+  }
+}
+
 export default function RenewalWizardPage() {
   const params = useParams();
   const token = params.token as string;
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { language } = useLanguage();
 
   const [currentStep, setCurrentStep] = useState<WizardStep>("validate");
   const [validationResult, setValidationResult] = useState<ValidationResult | null>(null);
@@ -118,13 +137,21 @@ export default function RenewalWizardPage() {
     },
     onSuccess: (data) => {
       setValidationResult(data);
-      if (data.valid && data.status === "ACCESS_GRANTED") {
-        setRenewalId(data.renewalId || null);
-        setOfficeId(data.officeId || null);
-        setCurrentStep("credentials");
-      } else if (data.valid && data.inviteStatus === "PENDING") {
-        redeemTokenMutation.mutate(token);
+      if (!data.valid) {
+        return;
       }
+
+      setRenewalId(data.renewalId ?? null);
+      setOfficeId(data.officeId ?? null);
+
+      // A fresh invite still has to be redeemed (that is what grants access and
+      // records the step). An already-consumed one resumes where the office left off.
+      if (data.inviteStatus === "PENDING" || data.inviteStatus === "SENT") {
+        redeemTokenMutation.mutate(token);
+        return;
+      }
+
+      setCurrentStep(resumeStepFor(data.renewalState));
     },
     onError: () => {
       toast({
@@ -206,6 +233,9 @@ export default function RenewalWizardPage() {
     queryKey: ["/api/renew", renewalId, "office-info", token],
     queryFn: async () => {
       const response = await fetch(`/api/renew/${renewalId}/office-info?token=${encodeURIComponent(token)}`);
+      if (!response.ok) {
+        throw new Error("Unable to load office information");
+      }
       return response.json();
     },
     enabled: currentStep === "review" && !!renewalId && !!token,
@@ -289,15 +319,15 @@ export default function RenewalWizardPage() {
       <CardContent className="flex flex-col items-center gap-4">
         {validateTokenMutation.isPending || redeemTokenMutation.isPending ? (
           <LoadingSpinner />
-        ) : validationResult && !validationResult.valid ? (
+        ) : (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Invalid Token</AlertTitle>
             <AlertDescription>
-              {validationResult.message || "This invitation link is invalid or has expired."}
+              {validationResult?.message || "This invitation link is invalid or has expired."}
             </AlertDescription>
           </Alert>
-        ) : null}
+        )}
       </CardContent>
     </Card>
   );
@@ -490,7 +520,7 @@ export default function RenewalWizardPage() {
               htmlFor={declaration.id}
               className="text-sm leading-relaxed cursor-pointer"
             >
-              {declaration.labelEn}
+              {language === "ar" ? declaration.labelAr : declaration.labelEn}
             </Label>
           </div>
         ))}

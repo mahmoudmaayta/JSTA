@@ -19,6 +19,8 @@ export interface TokenValidationResult {
   inviteId?: number;
   officeId?: number;
   renewalId?: number;
+  /** Invite status at lookup time: PENDING / SENT / CONSUMED. */
+  status?: string;
   error?: string;
 }
 
@@ -120,16 +122,24 @@ export async function createRenewalInvitation(officeId: number, renewalId: numbe
   }
 }
 
-export async function validateInvitationToken(token: string): Promise<TokenValidationResult> {
+async function lookupInvitationByToken(
+  token: string,
+  allowedStatuses: string[]
+): Promise<TokenValidationResult> {
   try {
+    if (typeof token !== 'string' || token.length === 0) {
+      return { valid: false, error: 'Invalid or expired token' };
+    }
+
     const tokenHash = hashTokenSHA256(token);
-    
+    const statusList = sql.join(allowedStatuses.map((s) => sql`${s}`), sql`, `);
+
     const [invite] = await db.select()
       .from(renewalInvites)
       .where(
         and(
           eq(renewalInvites.tokenHash, tokenHash),
-          sql`${renewalInvites.status} IN ('PENDING', 'SENT')`,
+          sql`${renewalInvites.status} IN (${statusList})`,
           sql`${renewalInvites.expiresAt} > NOW()`
         )
       )
@@ -143,12 +153,26 @@ export async function validateInvitationToken(token: string): Promise<TokenValid
       valid: true,
       inviteId: invite.id,
       officeId: invite.officeId,
-      renewalId: invite.renewalId ?? undefined
+      renewalId: invite.renewalId ?? undefined,
+      status: invite.status
     };
   } catch (error) {
     console.error('Token validation error:', error);
     return { valid: false, error: 'Token validation failed' };
   }
+}
+
+export async function validateInvitationToken(token: string): Promise<TokenValidationResult> {
+  return lookupInvitationByToken(token, ['PENDING', 'SENT']);
+}
+
+/**
+ * Resolves a token that may already have been redeemed. Used by the credential-set
+ * step, which runs after the invitation has been consumed but must still prove that
+ * the caller holds the token issued for that renewal.
+ */
+export async function resolveRedeemedInvitationToken(token: string): Promise<TokenValidationResult> {
+  return lookupInvitationByToken(token, ['PENDING', 'SENT', 'CONSUMED']);
 }
 
 export async function redeemInvitationToken(

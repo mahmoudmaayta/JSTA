@@ -39,7 +39,11 @@
     "to": "to",
     "entries": "entries",
     "welcome": "Welcome",
-    "unknown": "Unknown"
+    "unknown": "Unknown",
+    "creating": "Creating...",
+    "select": "Select",
+    "backToDashboard": "Back to Dashboard",
+    "inactive": "Inactive"
   },
   "auth": {
     "login": "Login",
@@ -1174,6 +1178,26 @@
       "readyToSubmit": "Ready to Submit",
       "readyToSubmitDesc": "All requirements have been met. You can now submit your renewal application.",
       "submitButton": "Submit Renewal Application"
+    },
+    "forms": {
+      "office": {
+        "title": "Office Information Form",
+        "description": "Your office details for the renewal year are filled in on the office information form."
+      },
+      "staff": {
+        "title": "Staff Form",
+        "description": "Partners, authorized signatories, the dedicated manager and employees are recorded on the staff form."
+      },
+      "commitment": {
+        "title": "Commitment Form",
+        "description": "The declarations and commitments for this renewal are signed on the commitment form."
+      },
+      "completed": "Completed",
+      "completedDesc": "This form has been submitted. You can review or update it.",
+      "notCompleted": "Not completed yet",
+      "notCompletedDesc": "Complete this form before submitting your renewal.",
+      "open": "Open form",
+      "review": "Review form"
     }
   },
   "staffForm2026": {
@@ -1361,7 +1385,8 @@
     "validationErrors": "Data Errors:",
     "confirmDelete": "Confirm Delete",
     "deleteWarning": "Are you sure you want to delete this person? This action cannot be undone.",
-    "noData": "No data added yet"
+    "noData": "No data added yet",
+    "saveBeforeOpening": "Save the form before opening this person"
   },
   "staffProfile": {
     "title": "Staff Profile",

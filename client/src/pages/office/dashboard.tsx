@@ -246,7 +246,7 @@ export default function OfficeDashboard() {
                           <p className="text-sm mb-3">{t("renewal.formsRequiredDesc")}</p>
                           <div className="flex flex-wrap gap-2">
                             {!formStatus?.staffFormCompleted && (
-                              <Link href="/office/staff-form-2026">
+                              <Link href="/office/staff-2026">
                                 <Button variant="outline" size="sm" className="gap-1 border-amber-300 hover:bg-amber-100 dark:border-amber-700 dark:hover:bg-amber-900/40">
                                   {t("navigation.staffForm2026")}
                                   <ArrowRight className="h-3 w-3 rtl-flip" />

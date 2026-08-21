@@ -112,7 +112,7 @@ export default function StaffForm2026() {
   const [activeSection, setActiveSection] = useState<"owners" | "authorized" | "managers" | "employees">("owners");
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [newPerson, setNewPerson] = useState<PersonRow>({ ...emptyRow });
-  const [deleteConfirm, setDeleteConfirm] = useState<{ section: string; index: number } | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<{ section: string; person: PersonRow } | null>(null);
   const [consentAccepted, setConsentAccepted] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
@@ -163,6 +163,8 @@ export default function StaffForm2026() {
         description: `${t("staffForm.savedCount")} ${result.savedCount}`,
       });
       queryClient.invalidateQueries({ queryKey: ["/api/forms/staff-2026"] });
+      // Unlocks the Renewals nav item, which is gated on form completion.
+      queryClient.invalidateQueries({ queryKey: ["/api/office/form-completion-status"] });
       setValidationErrors([]);
     },
     onError: (error: any) => {
@@ -209,19 +211,22 @@ export default function StaffForm2026() {
     });
   };
 
-  const handleDeleteRow = (section: string, index: number) => {
+  // Matched by object identity, not by index: the employees table renders a
+  // deduplicated view, so a row's position there does not match its position in
+  // the underlying state array.
+  const handleDeleteRow = (section: string, person: PersonRow) => {
     switch (section) {
       case "owners":
-        setOwnersPartners(ownersPartners.filter((_, i) => i !== index));
+        setOwnersPartners(ownersPartners.filter((p) => p !== person));
         break;
       case "authorized":
-        setAuthorizedSignatories(authorizedSignatories.filter((_, i) => i !== index));
+        setAuthorizedSignatories(authorizedSignatories.filter((p) => p !== person));
         break;
       case "managers":
-        setDedicatedManagers(dedicatedManagers.filter((_, i) => i !== index));
+        setDedicatedManagers(dedicatedManagers.filter((p) => p !== person));
         break;
       case "employees":
-        setEmployees(employees.filter((_, i) => i !== index));
+        setEmployees(employees.filter((p) => p !== person));
         break;
     }
     setDeleteConfirm(null);
@@ -451,7 +456,9 @@ export default function StaffForm2026() {
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  onClick={() => navigate(`/office/staff/${currentSection}/${index}`)}
+                                  disabled={!row.id}
+                                  title={row.id ? undefined : t("staffForm.saveBeforeOpening")}
+                                  onClick={() => row.id && navigate(`/office/staff/${currentSection}/${row.id}`)}
                                   data-testid={`button-view-profile-${index}`}
                                 >
                                   <Eye className="w-4 h-4" />
@@ -459,7 +466,7 @@ export default function StaffForm2026() {
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  onClick={() => setDeleteConfirm({ section: currentSection, index })}
+                                  onClick={() => setDeleteConfirm({ section: currentSection, person: row })}
                                   className="text-destructive hover:text-destructive"
                                   data-testid={`button-delete-${index}`}
                                 >
@@ -701,7 +708,7 @@ export default function StaffForm2026() {
                     </Button>
                     <Button
                       variant="destructive"
-                      onClick={() => deleteConfirm && handleDeleteRow(deleteConfirm.section, deleteConfirm.index)}
+                      onClick={() => deleteConfirm && handleDeleteRow(deleteConfirm.section, deleteConfirm.person)}
                       data-testid="button-confirm-delete"
                     >
                       {t("common.delete")}

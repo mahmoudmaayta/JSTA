@@ -789,6 +789,7 @@ export const insertDocumentSchema = z.object({
 export const insertLicenseRenewalSchema = z.object({
   officeId: z.number(),
   year: z.number(),
+  status: z.enum(['DRAFT', 'SUBMITTED', 'UNDER_REVIEW', 'APPROVED_FOR_DOWNLOAD', 'MINISTRY_DOC_UPLOADED', 'FINAL_APPROVED', 'REJECTED']).optional(),
   renewalState: z.enum(['NOT_STARTED', 'INVITED', 'ACCESS_GRANTED', 'CREDENTIALS_UPDATED', 'INFO_APPROVED', 'PAYMENT_PENDING', 'COMPLETED']).optional(),
   canTransact2026: z.boolean().optional(),
   officialLicenseUrl: z.string().nullable().optional(),

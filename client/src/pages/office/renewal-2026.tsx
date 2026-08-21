@@ -5,13 +5,7 @@ import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/s
 import { OfficeSidebar } from "@/components/layout/office-sidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { LoadingPage, LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -19,10 +13,11 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useLanguage } from "@/lib/i18n";
-import type { LicenseRenewal, Person, RoleInOffice, RenewalAttachment } from "@shared/schema";
+import type { LicenseRenewal, RenewalAttachment } from "@shared/schema";
 import {
   Calendar,
   ArrowLeft,
+  ArrowRight,
   Building2,
   Users,
   FileCheck,
@@ -31,43 +26,10 @@ import {
   CheckCircle2,
   AlertCircle,
   FileText,
-  Plus,
   Send,
-  X,
-  Save,
   FolderOpen,
   Loader2,
 } from "lucide-react";
-
-interface StaffMember {
-  id?: number;
-  fullNameAr: string;
-  fullNameEn: string;
-  nationalId: string;
-  socialSecurityNo: string;
-  nationality: string;
-  gender: string;
-  motherName: string;
-  mobile: string;
-  birthDate: string;
-  currentPosition: string;
-  startDate: string;
-  branch: string;
-  roleType: string;
-}
-
-interface OfficeFormData {
-  officeNameAr: string;
-  officeNameEn: string;
-  licenseNumber: string;
-  commercialRegNumber: string;
-  dateEstablished: string;
-  mainAddress: string;
-  phone: string;
-  email: string;
-  website: string;
-  branchCount: number;
-}
 
 type TabType = "office" | "staff" | "commitment" | "attachments" | "submit";
 
@@ -79,12 +41,23 @@ const PACK_CATEGORIES = [
   { key: "PACK_5_OTHER_DOCS", required: false },
 ] as const;
 
-const CONSENT_TYPES = [
-  "DATA_ACCURACY",
-  "TERMS_ACCEPTANCE",
-  "ANTI_FRAUD",
-  "MINISTRY_AUTHORIZATION",
-] as const;
+interface FormCompletionStatus {
+  officeInfoFormCompleted: boolean;
+  staffFormCompleted: boolean;
+  commitmentFormCompleted: boolean;
+  allFormsCompleted: boolean;
+}
+
+/**
+ * The three renewal forms live on their own pages and write to their own tables
+ * (office_info_forms, people/roles, commitment_forms). This page is the renewal
+ * container: it tracks their completion, collects the document packs, and submits.
+ */
+const FORM_TABS = [
+  { key: "office" as const, href: "/office/office-info-form-2026", icon: Building2 },
+  { key: "staff" as const, href: "/office/staff-2026", icon: Users },
+  { key: "commitment" as const, href: "/office/commitment-form-2026", icon: FileCheck },
+];
 
 export default function Renewal2026Page() {
   const params = useParams();
@@ -97,28 +70,6 @@ export default function Renewal2026Page() {
   const [selectedPackCategory, setSelectedPackCategory] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
 
-  // Form state for Office Info
-  const [officeForm, setOfficeForm] = useState<OfficeFormData>({
-    officeNameAr: "",
-    officeNameEn: "",
-    licenseNumber: "",
-    commercialRegNumber: "",
-    dateEstablished: "",
-    mainAddress: "",
-    phone: "",
-    email: "",
-    website: "",
-    branchCount: 0,
-  });
-
-  // Form state for Staff
-  const [staffList, setStaffList] = useState<StaffMember[]>([]);
-
-  // Form state for Commitment
-  const [consents, setConsents] = useState<string[]>([]);
-  const [complaintNumbers, setComplaintNumbers] = useState("");
-  const [notes, setNotes] = useState("");
-
   const isRtl = language === "ar";
   const sidebarSide = language === 'ar' ? 'right' : 'left';
 
@@ -127,101 +78,24 @@ export default function Renewal2026Page() {
     queryKey: ["/api/office/renewals", renewalId],
   });
 
-  // Redirect to detail page if renewal is already submitted (not DRAFT)
+  // Redirect to detail page once the renewal has been submitted
   useEffect(() => {
     if (!isLoading && renewal && renewal.status !== "DRAFT") {
       setLocation(`/office/renewals/${renewalId}`);
     }
   }, [isLoading, renewal, renewalId, setLocation]);
 
-  // Fetch staff (people + roles)
-  const { data: staffData } = useQuery<{ people: Person[]; roles: RoleInOffice[] }>({
-    queryKey: ["/api/office/renewals-2026", renewalId, "staff"],
-    enabled: !!renewalId,
+  // Completion of the three forms is derived from the records themselves, which is
+  // what the sidebar and the submit endpoint use too.
+  const { data: formStatus } = useQuery<FormCompletionStatus>({
+    queryKey: ["/api/office/form-completion-status"],
+    staleTime: 30_000,
+    refetchOnWindowFocus: true,
   });
 
   // Fetch attachments
   const { data: attachments } = useQuery<RenewalAttachment[]>({
     queryKey: ["/api/office/renewals-2026", renewalId, "attachments"],
-  });
-
-  // Save office form mutation
-  const saveOfficeMutation = useMutation({
-    mutationFn: async (data: OfficeFormData) => {
-      const response = await apiRequest("POST", `/api/office/renewals-2026/${renewalId}/form-office`, data);
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to save office form");
-      }
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/office/renewals", renewalId] });
-      toast({
-        title: t("renewal2026.formSaved"),
-        description: t("renewal2026.officeFormSaved"),
-      });
-    },
-    onError: (error: Error) => {
-      toast({
-        title: t("common.error"),
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
-
-  // Save staff form mutation
-  const saveStaffMutation = useMutation({
-    mutationFn: async (staffList: StaffMember[]) => {
-      const response = await apiRequest("POST", `/api/office/renewals-2026/${renewalId}/form-staff`, { staffList });
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to save staff form");
-      }
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/office/renewals", renewalId] });
-      queryClient.invalidateQueries({ queryKey: ["/api/office/renewals-2026", renewalId, "staff"] });
-      toast({
-        title: t("renewal2026.formSaved"),
-        description: t("renewal2026.staffFormSaved"),
-      });
-    },
-    onError: (error: Error) => {
-      toast({
-        title: t("common.error"),
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
-
-  // Save commitment form mutation
-  const saveCommitmentMutation = useMutation({
-    mutationFn: async (data: { consents: string[]; complaintNumbers: string; notes: string }) => {
-      const response = await apiRequest("POST", `/api/office/renewals-2026/${renewalId}/form-commitment`, data);
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to save commitment form");
-      }
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/office/renewals", renewalId] });
-      toast({
-        title: t("renewal2026.formSaved"),
-        description: t("renewal2026.commitmentFormSaved"),
-      });
-    },
-    onError: (error: Error) => {
-      toast({
-        title: t("common.error"),
-        description: error.message,
-        variant: "destructive",
-      });
-    },
   });
 
   // Upload attachment mutation
@@ -330,59 +204,33 @@ export default function Renewal2026Page() {
     setTimeout(() => fileInputRef.current?.click(), 0);
   };
 
-  const addStaffMember = () => {
-    setStaffList([
-      ...staffList,
-      {
-        fullNameAr: "",
-        fullNameEn: "",
-        nationalId: "",
-        socialSecurityNo: "",
-        nationality: "JO",
-        gender: "male",
-        motherName: "",
-        mobile: "",
-        birthDate: "",
-        currentPosition: "",
-        startDate: "",
-        branch: "",
-        roleType: "EMPLOYEE",
-      },
-    ]);
-  };
-
-  const updateStaffMember = (index: number, field: keyof StaffMember, value: string) => {
-    const updated = [...staffList];
-    (updated[index] as any)[field] = value;
-    setStaffList(updated);
-  };
-
-  const removeStaffMember = (index: number) => {
-    setStaffList(staffList.filter((_, i) => i !== index));
-  };
-
-  const toggleConsent = (consentType: string) => {
-    if (consents.includes(consentType)) {
-      setConsents(consents.filter((c) => c !== consentType));
-    } else {
-      setConsents([...consents, consentType]);
-    }
-  };
 
   const getAttachmentsByCategory = (category: string) => {
     return attachments?.filter((a) => a.category === category) || [];
   };
 
+  const isFormCompleted = (key: TabType) => {
+    switch (key) {
+      case "office":
+        return !!formStatus?.officeInfoFormCompleted;
+      case "staff":
+        return !!formStatus?.staffFormCompleted;
+      case "commitment":
+        return !!formStatus?.commitmentFormCompleted;
+      default:
+        return false;
+    }
+  };
+
   const canSubmit = () => {
-    if (!renewal) return false;
-    const hasAllForms =
-      renewal.officeFormCompleted && renewal.staffFormCompleted && renewal.commitmentFormCompleted;
-    const hasRequiredPacks =
+    if (!renewal || !formStatus?.allFormsCompleted) return false;
+    return (
       getAttachmentsByCategory("PACK_1_FINANCIAL_DOCS").length > 0 &&
       getAttachmentsByCategory("PACK_2_LEGAL_DOCS").length > 0 &&
-      getAttachmentsByCategory("PACK_3_INSURANCE_DOCS").length > 0;
-    return hasAllForms && hasRequiredPacks;
+      getAttachmentsByCategory("PACK_3_INSURANCE_DOCS").length > 0
+    );
   };
+
 
   const sidebarStyle = {
     "--sidebar-width": "16rem",
@@ -451,59 +299,31 @@ export default function Renewal2026Page() {
                 </div>
               </div>
 
-              {/* Progress indicators */}
-              <div className="grid grid-cols-5 gap-2">
-                <div
-                  className={`p-3 rounded-lg border text-center cursor-pointer transition-colors ${
-                    activeTab === "office"
-                      ? "bg-primary text-primary-foreground"
-                      : renewal.officeFormCompleted
-                      ? "bg-emerald-100 dark:bg-emerald-900/30 border-emerald-300"
-                      : "bg-muted/50"
-                  }`}
-                  onClick={() => setActiveTab("office")}
-                  data-testid="tab-office"
-                >
-                  <Building2 className="h-5 w-5 mx-auto mb-1" />
-                  <span className="text-xs font-medium">{t("renewal2026.tabs.office")}</span>
-                  {renewal.officeFormCompleted && activeTab !== "office" && (
-                    <CheckCircle2 className="h-3 w-3 mx-auto mt-1 text-emerald-600" />
-                  )}
-                </div>
-                <div
-                  className={`p-3 rounded-lg border text-center cursor-pointer transition-colors ${
-                    activeTab === "staff"
-                      ? "bg-primary text-primary-foreground"
-                      : renewal.staffFormCompleted
-                      ? "bg-emerald-100 dark:bg-emerald-900/30 border-emerald-300"
-                      : "bg-muted/50"
-                  }`}
-                  onClick={() => setActiveTab("staff")}
-                  data-testid="tab-staff"
-                >
-                  <Users className="h-5 w-5 mx-auto mb-1" />
-                  <span className="text-xs font-medium">{t("renewal2026.tabs.staff")}</span>
-                  {renewal.staffFormCompleted && activeTab !== "staff" && (
-                    <CheckCircle2 className="h-3 w-3 mx-auto mt-1 text-emerald-600" />
-                  )}
-                </div>
-                <div
-                  className={`p-3 rounded-lg border text-center cursor-pointer transition-colors ${
-                    activeTab === "commitment"
-                      ? "bg-primary text-primary-foreground"
-                      : renewal.commitmentFormCompleted
-                      ? "bg-emerald-100 dark:bg-emerald-900/30 border-emerald-300"
-                      : "bg-muted/50"
-                  }`}
-                  onClick={() => setActiveTab("commitment")}
-                  data-testid="tab-commitment"
-                >
-                  <FileCheck className="h-5 w-5 mx-auto mb-1" />
-                  <span className="text-xs font-medium">{t("renewal2026.tabs.commitment")}</span>
-                  {renewal.commitmentFormCompleted && activeTab !== "commitment" && (
-                    <CheckCircle2 className="h-3 w-3 mx-auto mt-1 text-emerald-600" />
-                  )}
-                </div>
+              {/* Progress indicators */}              <div className="grid grid-cols-5 gap-2">
+                {FORM_TABS.map((tab) => {
+                  const Icon = tab.icon;
+                  const completed = isFormCompleted(tab.key);
+                  return (
+                    <div
+                      key={tab.key}
+                      className={`p-3 rounded-lg border text-center cursor-pointer transition-colors ${
+                        activeTab === tab.key
+                          ? "bg-primary text-primary-foreground"
+                          : completed
+                          ? "bg-emerald-100 dark:bg-emerald-900/30 border-emerald-300"
+                          : "bg-muted/50"
+                      }`}
+                      onClick={() => setActiveTab(tab.key)}
+                      data-testid={`tab-${tab.key}`}
+                    >
+                      <Icon className="h-5 w-5 mx-auto mb-1" />
+                      <span className="text-xs font-medium">{t(`renewal2026.tabs.${tab.key}`)}</span>
+                      {completed && activeTab !== tab.key && (
+                        <CheckCircle2 className="h-3 w-3 mx-auto mt-1 text-emerald-600" />
+                      )}
+                    </div>
+                  );
+                })}
                 <div
                   className={`p-3 rounded-lg border text-center cursor-pointer transition-colors ${
                     activeTab === "attachments" ? "bg-primary text-primary-foreground" : "bg-muted/50"
@@ -529,437 +349,51 @@ export default function Renewal2026Page() {
                 </div>
               </div>
 
-              {/* Form 1: Office Information */}
-              {activeTab === "office" && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Building2 className="h-5 w-5" />
-                      {t("renewal2026.officeForm.title")}
-                    </CardTitle>
-                    <CardDescription>{t("renewal2026.officeForm.description")}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="officeNameAr">{t("renewal2026.officeForm.officeNameAr")}</Label>
-                        <Input
-                          id="officeNameAr"
-                          value={officeForm.officeNameAr}
-                          onChange={(e) => setOfficeForm({ ...officeForm, officeNameAr: e.target.value })}
-                          className="text-right"
-                          dir="rtl"
-                          data-testid="input-office-name-ar"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="officeNameEn">{t("renewal2026.officeForm.officeNameEn")}</Label>
-                        <Input
-                          id="officeNameEn"
-                          value={officeForm.officeNameEn}
-                          onChange={(e) => setOfficeForm({ ...officeForm, officeNameEn: e.target.value })}
-                          data-testid="input-office-name-en"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="licenseNumber">{t("renewal2026.officeForm.licenseNumber")}</Label>
-                        <Input
-                          id="licenseNumber"
-                          value={officeForm.licenseNumber}
-                          onChange={(e) => setOfficeForm({ ...officeForm, licenseNumber: e.target.value })}
-                          data-testid="input-license-number"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="commercialRegNumber">{t("renewal2026.officeForm.commercialRegNumber")}</Label>
-                        <Input
-                          id="commercialRegNumber"
-                          value={officeForm.commercialRegNumber}
-                          onChange={(e) => setOfficeForm({ ...officeForm, commercialRegNumber: e.target.value })}
-                          data-testid="input-commercial-reg"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="dateEstablished">{t("renewal2026.officeForm.dateEstablished")}</Label>
-                        <Input
-                          id="dateEstablished"
-                          type="date"
-                          value={officeForm.dateEstablished}
-                          onChange={(e) => setOfficeForm({ ...officeForm, dateEstablished: e.target.value })}
-                          data-testid="input-date-established"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="branchCount">{t("renewal2026.officeForm.branchCount")}</Label>
-                        <Input
-                          id="branchCount"
-                          type="number"
-                          min="0"
-                          value={officeForm.branchCount}
-                          onChange={(e) => setOfficeForm({ ...officeForm, branchCount: parseInt(e.target.value) || 0 })}
-                          data-testid="input-branch-count"
-                        />
-                      </div>
-                    </div>
-
-                    <Separator />
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2 md:col-span-2">
-                        <Label htmlFor="mainAddress">{t("renewal2026.officeForm.mainAddress")}</Label>
-                        <Textarea
-                          id="mainAddress"
-                          value={officeForm.mainAddress}
-                          onChange={(e) => setOfficeForm({ ...officeForm, mainAddress: e.target.value })}
-                          rows={2}
-                          data-testid="input-main-address"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="phone">{t("renewal2026.officeForm.phone")}</Label>
-                        <Input
-                          id="phone"
-                          value={officeForm.phone}
-                          onChange={(e) => setOfficeForm({ ...officeForm, phone: e.target.value })}
-                          data-testid="input-phone"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="email">{t("renewal2026.officeForm.email")}</Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          value={officeForm.email}
-                          onChange={(e) => setOfficeForm({ ...officeForm, email: e.target.value })}
-                          data-testid="input-email"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="website">{t("renewal2026.officeForm.website")}</Label>
-                        <Input
-                          id="website"
-                          value={officeForm.website}
-                          onChange={(e) => setOfficeForm({ ...officeForm, website: e.target.value })}
-                          data-testid="input-website"
-                        />
-                      </div>
-                    </div>
-                  </CardContent>
-                  <CardFooter className="flex justify-end gap-2">
-                    <Button
-                      onClick={() => saveOfficeMutation.mutate(officeForm)}
-                      disabled={saveOfficeMutation.isPending}
-                      className="gap-2"
-                      data-testid="button-save-office"
-                    >
-                      {saveOfficeMutation.isPending ? (
-                        <LoadingSpinner size="sm" />
-                      ) : (
-                        <Save className="h-4 w-4" />
-                      )}
-                      {t("renewal2026.saveForm")}
-                    </Button>
-                    <Button variant="outline" onClick={() => setActiveTab("staff")} data-testid="button-next-staff">
-                      {t("renewal2026.next")}
-                    </Button>
-                  </CardFooter>
-                </Card>
-              )}
-
-              {/* Form 2: Staff Information */}
-              {activeTab === "staff" && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Users className="h-5 w-5" />
-                      {t("renewal2026.staffForm.title")}
-                    </CardTitle>
-                    <CardDescription>{t("renewal2026.staffForm.description")}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    {staffList.length === 0 ? (
-                      <div className="text-center py-8 border-2 border-dashed rounded-lg">
-                        <Users className="h-10 w-10 mx-auto text-muted-foreground mb-2" />
-                        <p className="text-muted-foreground mb-4">{t("renewal2026.staffForm.noStaff")}</p>
-                        <Button onClick={addStaffMember} className="gap-2" data-testid="button-add-staff">
-                          <Plus className="h-4 w-4" />
-                          {t("renewal2026.staffForm.addStaff")}
-                        </Button>
-                      </div>
-                    ) : (
-                      <>
-                        {staffList.map((staff, index) => (
-                          <div key={index} className="border rounded-lg p-4 space-y-4 relative">
-                            <div className="absolute top-2 right-2">
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => removeStaffMember(index)}
-                                className="h-8 w-8 text-destructive hover:text-destructive"
-                                data-testid={`button-remove-staff-${index}`}
-                              >
-                                <X className="h-4 w-4" />
-                              </Button>
-                            </div>
-                            <div className="font-medium text-sm text-muted-foreground">
-                              {t("renewal2026.staffForm.staffMember")} #{index + 1}
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                              <div className="space-y-2">
-                                <Label>{t("renewal2026.staffForm.fullNameAr")}</Label>
-                                <Input
-                                  value={staff.fullNameAr}
-                                  onChange={(e) => updateStaffMember(index, "fullNameAr", e.target.value)}
-                                  className="text-right"
-                                  dir="rtl"
-                                  data-testid={`input-staff-name-ar-${index}`}
-                                />
-                              </div>
-                              <div className="space-y-2">
-                                <Label>{t("renewal2026.staffForm.fullNameEn")}</Label>
-                                <Input
-                                  value={staff.fullNameEn}
-                                  onChange={(e) => updateStaffMember(index, "fullNameEn", e.target.value)}
-                                  data-testid={`input-staff-name-en-${index}`}
-                                />
-                              </div>
-                              <div className="space-y-2">
-                                <Label>{t("renewal2026.staffForm.nationalId")}</Label>
-                                <Input
-                                  value={staff.nationalId}
-                                  onChange={(e) => updateStaffMember(index, "nationalId", e.target.value)}
-                                  data-testid={`input-staff-national-id-${index}`}
-                                />
-                              </div>
-                              <div className="space-y-2">
-                                <Label>{t("renewal2026.staffForm.socialSecurityNo")}</Label>
-                                <Input
-                                  value={staff.socialSecurityNo}
-                                  onChange={(e) => updateStaffMember(index, "socialSecurityNo", e.target.value)}
-                                  data-testid={`input-staff-social-security-${index}`}
-                                />
-                              </div>
-                              <div className="space-y-2">
-                                <Label>{t("renewal2026.staffForm.nationality")}</Label>
-                                <Select
-                                  value={staff.nationality}
-                                  onValueChange={(value) => updateStaffMember(index, "nationality", value)}
-                                >
-                                  <SelectTrigger data-testid={`select-staff-nationality-${index}`}>
-                                    <SelectValue />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="JO">{t("renewal2026.staffForm.nationalities.jo")}</SelectItem>
-                                    <SelectItem value="SY">{t("renewal2026.staffForm.nationalities.sy")}</SelectItem>
-                                    <SelectItem value="EG">{t("renewal2026.staffForm.nationalities.eg")}</SelectItem>
-                                    <SelectItem value="OTHER">{t("renewal2026.staffForm.nationalities.other")}</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                              <div className="space-y-2">
-                                <Label>{t("renewal2026.staffForm.gender")}</Label>
-                                <Select
-                                  value={staff.gender}
-                                  onValueChange={(value) => updateStaffMember(index, "gender", value)}
-                                >
-                                  <SelectTrigger data-testid={`select-staff-gender-${index}`}>
-                                    <SelectValue />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="male">{t("renewal2026.staffForm.genders.male")}</SelectItem>
-                                    <SelectItem value="female">{t("renewal2026.staffForm.genders.female")}</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                              <div className="space-y-2">
-                                <Label>{t("renewal2026.staffForm.motherName")}</Label>
-                                <Input
-                                  value={staff.motherName}
-                                  onChange={(e) => updateStaffMember(index, "motherName", e.target.value)}
-                                  data-testid={`input-staff-mother-name-${index}`}
-                                />
-                              </div>
-                              <div className="space-y-2">
-                                <Label>{t("renewal2026.staffForm.mobile")}</Label>
-                                <Input
-                                  value={staff.mobile}
-                                  onChange={(e) => updateStaffMember(index, "mobile", e.target.value)}
-                                  data-testid={`input-staff-mobile-${index}`}
-                                />
-                              </div>
-                              <div className="space-y-2">
-                                <Label>{t("renewal2026.staffForm.birthDate")}</Label>
-                                <Input
-                                  type="date"
-                                  value={staff.birthDate}
-                                  onChange={(e) => updateStaffMember(index, "birthDate", e.target.value)}
-                                  data-testid={`input-staff-birth-date-${index}`}
-                                />
-                              </div>
-                              <div className="space-y-2">
-                                <Label>{t("renewal2026.staffForm.currentPosition")}</Label>
-                                <Input
-                                  value={staff.currentPosition}
-                                  onChange={(e) => updateStaffMember(index, "currentPosition", e.target.value)}
-                                  data-testid={`input-staff-position-${index}`}
-                                />
-                              </div>
-                              <div className="space-y-2">
-                                <Label>{t("renewal2026.staffForm.startDate")}</Label>
-                                <Input
-                                  type="date"
-                                  value={staff.startDate}
-                                  onChange={(e) => updateStaffMember(index, "startDate", e.target.value)}
-                                  data-testid={`input-staff-start-date-${index}`}
-                                />
-                              </div>
-                              <div className="space-y-2">
-                                <Label>{t("renewal2026.staffForm.branch")}</Label>
-                                <Input
-                                  value={staff.branch}
-                                  onChange={(e) => updateStaffMember(index, "branch", e.target.value)}
-                                  data-testid={`input-staff-branch-${index}`}
-                                />
-                              </div>
-                              <div className="space-y-2">
-                                <Label>{t("renewal2026.staffForm.roleType")}</Label>
-                                <Select
-                                  value={staff.roleType}
-                                  onValueChange={(value) => updateStaffMember(index, "roleType", value)}
-                                >
-                                  <SelectTrigger data-testid={`select-staff-role-${index}`}>
-                                    <SelectValue />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="OWNER">{t("renewal2026.staffForm.roles.owner")}</SelectItem>
-                                    <SelectItem value="MANAGER">{t("renewal2026.staffForm.roles.manager")}</SelectItem>
-                                    <SelectItem value="EMPLOYEE">{t("renewal2026.staffForm.roles.employee")}</SelectItem>
-                                    <SelectItem value="ACCOUNTANT">{t("renewal2026.staffForm.roles.accountant")}</SelectItem>
-                                    <SelectItem value="GUIDE">{t("renewal2026.staffForm.roles.guide")}</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                        <Button onClick={addStaffMember} variant="outline" className="gap-2 w-full" data-testid="button-add-more-staff">
-                          <Plus className="h-4 w-4" />
-                          {t("renewal2026.staffForm.addMore")}
-                        </Button>
-                      </>
-                    )}
-                  </CardContent>
-                  <CardFooter className="flex justify-between gap-2">
-                    <Button variant="outline" onClick={() => setActiveTab("office")} data-testid="button-back-office">
-                      {t("renewal2026.back")}
-                    </Button>
-                    <div className="flex gap-2">
-                      <Button
-                        onClick={() => saveStaffMutation.mutate(staffList)}
-                        disabled={saveStaffMutation.isPending || staffList.length === 0}
-                        className="gap-2"
-                        data-testid="button-save-staff"
-                      >
-                        {saveStaffMutation.isPending ? (
-                          <LoadingSpinner size="sm" />
+              {/* The three forms are filled in on their own pages */}
+              {FORM_TABS.map((tab) => {
+                const Icon = tab.icon;
+                const completed = isFormCompleted(tab.key);
+                return (
+                  activeTab === tab.key && (
+                    <Card key={tab.key}>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Icon className="h-5 w-5" />
+                          {t(`renewal2026.forms.${tab.key}.title`)}
+                        </CardTitle>
+                        <CardDescription>{t(`renewal2026.forms.${tab.key}.description`)}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        {completed ? (
+                          <Alert className="border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20">
+                            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                            <AlertTitle className="text-emerald-700 dark:text-emerald-400">
+                              {t("renewal2026.forms.completed")}
+                            </AlertTitle>
+                            <AlertDescription className="text-emerald-600 dark:text-emerald-300">
+                              {t("renewal2026.forms.completedDesc")}
+                            </AlertDescription>
+                          </Alert>
                         ) : (
-                          <Save className="h-4 w-4" />
+                          <Alert>
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertTitle>{t("renewal2026.forms.notCompleted")}</AlertTitle>
+                            <AlertDescription>{t("renewal2026.forms.notCompletedDesc")}</AlertDescription>
+                          </Alert>
                         )}
-                        {t("renewal2026.saveForm")}
-                      </Button>
-                      <Button variant="outline" onClick={() => setActiveTab("commitment")} data-testid="button-next-commitment">
-                        {t("renewal2026.next")}
-                      </Button>
-                    </div>
-                  </CardFooter>
-                </Card>
-              )}
-
-              {/* Form 3: Commitment */}
-              {activeTab === "commitment" && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <FileCheck className="h-5 w-5" />
-                      {t("renewal2026.commitmentForm.title")}
-                    </CardTitle>
-                    <CardDescription>{t("renewal2026.commitmentForm.description")}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="space-y-4">
-                      {CONSENT_TYPES.map((consentType) => (
-                        <div
-                          key={consentType}
-                          className="flex items-start gap-3 p-4 border rounded-lg hover:bg-muted/50 transition-colors"
-                        >
-                          <Checkbox
-                            id={consentType}
-                            checked={consents.includes(consentType)}
-                            onCheckedChange={() => toggleConsent(consentType)}
-                            data-testid={`checkbox-consent-${consentType}`}
-                          />
-                          <div className="flex-1">
-                            <Label htmlFor={consentType} className="text-sm font-medium cursor-pointer">
-                              {t(`renewal2026.commitmentForm.consents.${consentType}.title`)}
-                            </Label>
-                            <p className="text-sm text-muted-foreground mt-1">
-                              {t(`renewal2026.commitmentForm.consents.${consentType}.description`)}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <Separator />
-
-                    <div className="space-y-2">
-                      <Label htmlFor="complaintNumbers">{t("renewal2026.commitmentForm.complaintNumbers")}</Label>
-                      <Input
-                        id="complaintNumbers"
-                        value={complaintNumbers}
-                        onChange={(e) => setComplaintNumbers(e.target.value)}
-                        placeholder={t("renewal2026.commitmentForm.complaintNumbersPlaceholder")}
-                        data-testid="input-complaint-numbers"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="notes">{t("renewal2026.commitmentForm.notes")}</Label>
-                      <Textarea
-                        id="notes"
-                        value={notes}
-                        onChange={(e) => setNotes(e.target.value)}
-                        placeholder={t("renewal2026.commitmentForm.notesPlaceholder")}
-                        rows={3}
-                        data-testid="input-notes"
-                      />
-                    </div>
-                  </CardContent>
-                  <CardFooter className="flex justify-between gap-2">
-                    <Button variant="outline" onClick={() => setActiveTab("staff")} data-testid="button-back-staff">
-                      {t("renewal2026.back")}
-                    </Button>
-                    <div className="flex gap-2">
-                      <Button
-                        onClick={() => saveCommitmentMutation.mutate({ consents, complaintNumbers, notes })}
-                        disabled={saveCommitmentMutation.isPending || consents.length === 0}
-                        className="gap-2"
-                        data-testid="button-save-commitment"
-                      >
-                        {saveCommitmentMutation.isPending ? (
-                          <LoadingSpinner size="sm" />
-                        ) : (
-                          <Save className="h-4 w-4" />
-                        )}
-                        {t("renewal2026.saveForm")}
-                      </Button>
-                      <Button variant="outline" onClick={() => setActiveTab("attachments")} data-testid="button-next-attachments">
-                        {t("renewal2026.next")}
-                      </Button>
-                    </div>
-                  </CardFooter>
-                </Card>
-              )}
+                      </CardContent>
+                      <CardFooter className="flex justify-end">
+                        <Link href={tab.href}>
+                          <Button className="gap-2" data-testid={`button-open-${tab.key}-form`}>
+                            {completed ? t("renewal2026.forms.review") : t("renewal2026.forms.open")}
+                            <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                          </Button>
+                        </Link>
+                      </CardFooter>
+                    </Card>
+                  )
+                );
+              })}
 
               {/* Attachments Tab */}
               {activeTab === "attachments" && (
@@ -1071,61 +505,33 @@ export default function Renewal2026Page() {
                     <div className="space-y-3">
                       <h4 className="font-medium">{t("renewal2026.submitForm.checklist")}</h4>
                       <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          {renewal.officeFormCompleted ? (
-                            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-                          ) : (
-                            <AlertCircle className="h-5 w-5 text-amber-500" />
-                          )}
-                          <span className={renewal.officeFormCompleted ? "" : "text-muted-foreground"}>
-                            {t("renewal2026.submitForm.officeFormStatus")}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {renewal.staffFormCompleted ? (
-                            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-                          ) : (
-                            <AlertCircle className="h-5 w-5 text-amber-500" />
-                          )}
-                          <span className={renewal.staffFormCompleted ? "" : "text-muted-foreground"}>
-                            {t("renewal2026.submitForm.staffFormStatus")}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {renewal.commitmentFormCompleted ? (
-                            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-                          ) : (
-                            <AlertCircle className="h-5 w-5 text-amber-500" />
-                          )}
-                          <span className={renewal.commitmentFormCompleted ? "" : "text-muted-foreground"}>
-                            {t("renewal2026.submitForm.commitmentFormStatus")}
-                          </span>
-                        </div>
+                        {([
+                          ["office", "renewal2026.submitForm.officeFormStatus"],
+                          ["staff", "renewal2026.submitForm.staffFormStatus"],
+                          ["commitment", "renewal2026.submitForm.commitmentFormStatus"],
+                        ] as const).map(([key, labelKey]) => (
+                          <div key={key} className="flex items-center gap-2">
+                            {isFormCompleted(key) ? (
+                              <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                            ) : (
+                              <AlertCircle className="h-5 w-5 text-amber-500" />
+                            )}
+                            <span className={isFormCompleted(key) ? "" : "text-muted-foreground"}>
+                              {t(labelKey)}
+                            </span>
+                          </div>
+                        ))}
                         <Separator className="my-2" />
-                        <div className="flex items-center gap-2">
-                          {getAttachmentsByCategory("PACK_1_FINANCIAL_DOCS").length > 0 ? (
-                            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-                          ) : (
-                            <AlertCircle className="h-5 w-5 text-amber-500" />
-                          )}
-                          <span>{t("renewal2026.attachments.packs.PACK_1_FINANCIAL_DOCS.title")}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {getAttachmentsByCategory("PACK_2_LEGAL_DOCS").length > 0 ? (
-                            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-                          ) : (
-                            <AlertCircle className="h-5 w-5 text-amber-500" />
-                          )}
-                          <span>{t("renewal2026.attachments.packs.PACK_2_LEGAL_DOCS.title")}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {getAttachmentsByCategory("PACK_3_INSURANCE_DOCS").length > 0 ? (
-                            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-                          ) : (
-                            <AlertCircle className="h-5 w-5 text-amber-500" />
-                          )}
-                          <span>{t("renewal2026.attachments.packs.PACK_3_INSURANCE_DOCS.title")}</span>
-                        </div>
+                        {PACK_CATEGORIES.filter((pack) => pack.required).map((pack) => (
+                          <div key={pack.key} className="flex items-center gap-2">
+                            {getAttachmentsByCategory(pack.key).length > 0 ? (
+                              <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                            ) : (
+                              <AlertCircle className="h-5 w-5 text-amber-500" />
+                            )}
+                            <span>{t(`renewal2026.attachments.packs.${pack.key}.title`)}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
 

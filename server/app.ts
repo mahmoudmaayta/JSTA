@@ -101,6 +101,13 @@ export default async function runApp(
 ) {
   const server = await registerRoutes(app);
 
+  // Unmatched API paths must answer with JSON. Without this they fall through to
+  // the SPA catch-all below and a mistyped endpoint returns 200 text/html, which
+  // clients then try to parse as JSON.
+  app.use("/api", (_req: Request, res: Response) => {
+    res.status(404).json({ message: "Not found" });
+  });
+
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";

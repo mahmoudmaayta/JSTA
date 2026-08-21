@@ -59,12 +59,19 @@ export function OfficeSidebar({ side = "left" }: { side?: "left" | "right" }) {
   const { t } = useTranslation();
   const { language } = useLanguage();
 
+  // These two gate the Renewals nav item. Payment approval happens admin-side, so
+  // they have to go stale on their own rather than waiting for an invalidation the
+  // office's browser will never see.
   const { data: formStatus } = useQuery<FormCompletionStatus>({
     queryKey: ["/api/office/form-completion-status"],
+    staleTime: 30_000,
+    refetchOnWindowFocus: true,
   });
 
   const { data: payment } = useQuery<Payment | null>({
     queryKey: ["/api/payments/current"],
+    staleTime: 30_000,
+    refetchOnWindowFocus: true,
   });
 
   const { data: changeRequests } = useQuery<ChangeRequest[]>({

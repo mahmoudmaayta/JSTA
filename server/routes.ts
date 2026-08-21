@@ -8,7 +8,7 @@ import path from "path";
 import fs from "fs";
 import bcrypt from "bcryptjs";
 import { storage, pool } from "./storage";
-import { generateRenewalPDF } from "./pdf";
+import { generateRenewalPDF, generateRenewalCertificatePDF } from "./pdf";
 import {
   loginRateLimiter,
   uploadRateLimiter,
@@ -29,6 +29,7 @@ import {
 } from "./email";
 import {
   validateInvitationToken,
+  resolveRedeemedInvitationToken,
   redeemInvitationToken,
   createRenewalInvitation,
   sendBulkInvitations,
@@ -141,6 +142,31 @@ async function ensureOffice(req: Request, res: Response, next: NextFunction) {
     }
     next();
   });
+}
+
+/**
+ * Whether the three 2026 renewal forms have been filled in, derived from the
+ * records themselves rather than from flags on the renewal row — the forms are
+ * saved through their own endpoints and are not tied to a single renewal.
+ */
+async function getFormCompletionStatus(officeId: number) {
+  const [officeInfoForm, people, roles, commitmentForm] = await Promise.all([
+    storage.getOfficeInfoFormByOffice(officeId),
+    storage.getPeopleByOffice(officeId),
+    storage.getRolesInOffice(officeId),
+    storage.getCommitmentFormByOffice(officeId),
+  ]);
+
+  const officeInfoFormCompleted = !!officeInfoForm;
+  const staffFormCompleted = people.length > 0 && roles.length > 0;
+  const commitmentFormCompleted = !!commitmentForm;
+
+  return {
+    officeInfoFormCompleted,
+    staffFormCompleted,
+    commitmentFormCompleted,
+    allFormsCompleted: officeInfoFormCompleted && staffFormCompleted && commitmentFormCompleted,
+  };
 }
 
 async function ensureCanTransact2026(req: Request, res: Response, next: NextFunction) {
@@ -518,22 +544,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "No office associated" });
       }
 
-      const officeInfoForm = await storage.getOfficeInfoFormByOffice(user.officeId);
-      const people = await storage.getPeopleByOffice(user.officeId);
-      const roles = await storage.getRolesInOffice(user.officeId);
-      const commitmentForm = await storage.getCommitmentFormByOffice(user.officeId);
-
-      const officeInfoFormCompleted = !!officeInfoForm;
-      const staffFormCompleted = people.length > 0 && roles.length > 0;
-      const commitmentFormCompleted = !!commitmentForm;
-      const allFormsCompleted = officeInfoFormCompleted && staffFormCompleted && commitmentFormCompleted;
-
-      res.json({
-        officeInfoFormCompleted,
-        staffFormCompleted,
-        commitmentFormCompleted,
-        allFormsCompleted,
-      });
+      res.json(await getFormCompletionStatus(user.officeId));
     } catch (error) {
       console.error("Form status check error:", error);
       res.status(500).json({ message: "Internal server error" });
@@ -648,13 +659,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(400).json({ message: "You already have an active renewal for this year" });
     }
 
+    // From 2026 the renewal is filled in through the wizard first, so it is created
+    // as a DRAFT and only becomes SUBMITTED via /api/office/renewals-2026/:id/submit.
+    const isWizardYear = currentYear >= 2026;
+
     const renewal = await storage.createRenewal({
       officeId: user.officeId,
       year: currentYear,
+      status: isWizardYear ? "DRAFT" : "SUBMITTED",
     });
 
-    const office = await storage.getOffice(user.officeId);
-    sendRenewalRequestedEmail("atallaabutaha@gmail.com", office?.tradeNameAr || "Unknown Office", currentYear);
+    if (!isWizardYear) {
+      const office = await storage.getOffice(user.officeId);
+      sendRenewalRequestedEmail("atallaabutaha@gmail.com", office?.tradeNameAr || "Unknown Office", currentYear);
+    }
 
     res.json(renewal);
   });
@@ -687,6 +705,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", `attachment; filename=renewal-${renewal.year}-${office.id}.pdf`);
     
+    pdfStream.pipe(res);
+  });
+
+  // Certificate issued back to the office once the renewal is finally approved.
+  app.get("/api/office/renewals/:id/certificate", ensureOffice, async (req, res) => {
+    const user = (req as any).user;
+    const renewalId = parseInt(req.params.id);
+
+    if (isNaN(renewalId)) {
+      return res.status(400).json({ message: "Invalid renewal ID" });
+    }
+
+    const renewal = await storage.getRenewal(renewalId);
+
+    if (!renewal || renewal.officeId !== user.officeId) {
+      return res.status(404).json({ message: "Renewal not found" });
+    }
+
+    if (renewal.status !== "FINAL_APPROVED") {
+      return res.status(400).json({ message: "Certificate is available once the renewal is finally approved" });
+    }
+
+    const office = await storage.getOffice(user.officeId);
+    if (!office) {
+      return res.status(404).json({ message: "Office not found" });
+    }
+
+    const pdfStream = generateRenewalCertificatePDF(office, renewal);
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename=certificate-${renewal.year}-${office.id}.pdf`);
+
     pdfStream.pipe(res);
   });
 
@@ -2474,197 +2524,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Form 1: Office Information 2026 - Save/Update
-  app.post("/api/office/renewals-2026/:id/form-office", ensureOffice, async (req, res) => {
-    try {
-      const user = (req as any).user;
-      const renewalId = parseInt(req.params.id);
-      
-      if (isNaN(renewalId)) {
-        return res.status(400).json({ message: "Invalid renewal ID" });
-      }
-      
-      const renewal = await storage.getRenewal(renewalId);
-      if (!renewal || renewal.officeId !== user.officeId) {
-        return res.status(404).json({ message: "Renewal not found" });
-      }
-
-      const { 
-        officeData, 
-        branches: branchesData 
-      } = req.body;
-
-      // Update office information using schema fields
-      if (officeData) {
-        await storage.updateOffice(user.officeId, {
-          tradeNameAr: officeData.tradeNameAr,
-          tradeNameEn: officeData.tradeNameEn,
-          legalNameAr: officeData.legalNameAr,
-          nationalEntityNo: officeData.nationalEntityNo,
-          trademark: officeData.trademark,
-          awqafApprovalNo: officeData.awqafApprovalNo,
-          socialSecurityNumber: officeData.socialSecurityNumber,
-          guaranteeExpiryDate: officeData.guaranteeExpiryDate,
-          tourismActivities: officeData.tourismActivities,
-          mainCity: officeData.mainCity,
-          mainArea: officeData.mainArea,
-          mainStreet: officeData.mainStreet,
-          mainBuildingNumber: officeData.mainBuildingNumber,
-          phone: officeData.phone,
-          mobile: officeData.mobile,
-          fax: officeData.fax,
-          website: officeData.website,
-          mainEmail: officeData.mainEmail,
-          extraEmail: officeData.extraEmail,
-          poBox: officeData.poBox,
-          postalCode: officeData.postalCode,
-        });
-      }
-
-      // Update branches - delete old and recreate
-      if (Array.isArray(branchesData)) {
-        await storage.deleteBranchesByOffice(user.officeId);
-        for (const branch of branchesData) {
-          await storage.createBranch({
-            officeId: user.officeId,
-            city: branch.city,
-            area: branch.area,
-            street: branch.street,
-            buildingNumber: branch.buildingNumber,
-            managerName: branch.managerName,
-            managerMobile: branch.managerMobile,
-            phone: branch.phone,
-            fax: branch.fax,
-            geographyLink: branch.geographyLink,
-          });
-        }
-      }
-
-      // Mark office form as completed
-      await storage.updateRenewal(renewalId, {
-        officeFormCompleted: true,
-      });
-
-      res.json({ message: "Office form saved successfully" });
-    } catch (error) {
-      console.error("Form office save error:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  });
-
-  // Form 2: Staff Information 2026 - Save/Update
-  app.post("/api/office/renewals-2026/:id/form-staff", ensureOffice, async (req, res) => {
-    try {
-      const user = (req as any).user;
-      const renewalId = parseInt(req.params.id);
-      
-      if (isNaN(renewalId)) {
-        return res.status(400).json({ message: "Invalid renewal ID" });
-      }
-      
-      const renewal = await storage.getRenewal(renewalId);
-      if (!renewal || renewal.officeId !== user.officeId) {
-        return res.status(404).json({ message: "Renewal not found" });
-      }
-
-      const { staffList } = req.body;
-
-      if (!Array.isArray(staffList)) {
-        return res.status(400).json({ message: "staffList must be an array" });
-      }
-
-      // Delete existing people and roles for this renewal
-      await storage.deleteRolesByRenewal(renewalId);
-      await storage.deletePeopleByRenewal(renewalId);
-
-      // Create new people and roles using schema fields
-      for (const staff of staffList) {
-        const person = await storage.createPerson({
-          officeId: user.officeId,
-          renewalId: renewalId,
-          fullNameAr: staff.fullNameAr,
-          fullNameEn: staff.fullNameEn,
-          nationalId: staff.nationalId,
-          socialSecurityNo: staff.socialSecurityNo,
-          nationality: staff.nationality,
-          gender: staff.gender,
-          motherName: staff.motherName,
-          mobile: staff.mobile,
-          birthDate: staff.birthDate,
-          currentPosition: staff.currentPosition,
-          startDate: staff.startDate,
-          branch: staff.branch,
-        });
-
-        // Create role assignment
-        await storage.createRoleInOffice({
-          personId: person.id,
-          officeId: user.officeId,
-          renewalId: renewalId,
-          roleType: staff.roleType as PersonRoleTypeType,
-        });
-      }
-
-      // Mark staff form as completed
-      await storage.updateRenewal(renewalId, {
-        staffFormCompleted: true,
-      });
-
-      res.json({ message: "Staff form saved successfully" });
-    } catch (error) {
-      console.error("Form staff save error:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  });
-
-  // Form 3: Commitment Form 2026 - Save
-  app.post("/api/office/renewals-2026/:id/form-commitment", ensureOffice, async (req, res) => {
-    try {
-      const user = (req as any).user;
-      const renewalId = parseInt(req.params.id);
-      
-      if (isNaN(renewalId)) {
-        return res.status(400).json({ message: "Invalid renewal ID" });
-      }
-      
-      const renewal = await storage.getRenewal(renewalId);
-      if (!renewal || renewal.officeId !== user.officeId) {
-        return res.status(404).json({ message: "Renewal not found" });
-      }
-
-      const { consents, complaintNumbers, notes } = req.body;
-      const ipAddress = req.ip || req.socket?.remoteAddress || "unknown";
-      const userAgent = req.headers["user-agent"] || "unknown";
-
-      if (!Array.isArray(consents)) {
-        return res.status(400).json({ message: "consents must be an array" });
-      }
-
-      // Create consent records using schema fields
-      for (const consentType of consents) {
-        await storage.createConsent({
-          officeId: user.officeId,
-          renewalId: renewalId,
-          consentType: consentType,
-          userId: user.id,
-          ipAddress: ipAddress,
-          userAgent: userAgent,
-          payload: { complaintNumbers, notes },
-        });
-      }
-
-      // Update renewal with commitment form completion
-      await storage.updateRenewal(renewalId, {
-        commitmentFormCompleted: true,
-        reviewerNotes: notes,
-      });
-
-      res.json({ message: "Commitment form saved successfully" });
-    } catch (error) {
-      console.error("Form commitment save error:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  });
+  // The three renewal forms (office info, staff, commitment) are submitted through
+  // their own endpoints — /api/office-info-form, /api/forms/staff-2026 and
+  // /api/office/commitment-form — which write to their own tables. The duplicate
+  // /form-office, /form-staff and /form-commitment handlers that used to live here
+  // wrote a second, conflicting copy of the same data and have been removed.
 
   // ==========================================
   // STAFF FORM 2026 - Comprehensive Staff Data (Arabic)
@@ -3415,13 +3279,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Validate all forms are completed
-      if (!renewal.officeFormCompleted || !renewal.staffFormCompleted || !renewal.commitmentFormCompleted) {
+      const formStatus = await getFormCompletionStatus(user.officeId);
+      if (!formStatus.allFormsCompleted) {
         return res.status(400).json({ 
           message: "Please complete all forms before submitting",
           incompleteFields: {
-            officeForm: !renewal.officeFormCompleted,
-            staffForm: !renewal.staffFormCompleted,
-            commitmentForm: !renewal.commitmentFormCompleted,
+            officeForm: !formStatus.officeInfoFormCompleted,
+            staffForm: !formStatus.staffFormCompleted,
+            commitmentForm: !formStatus.commitmentFormCompleted,
           }
         });
       }
@@ -3446,6 +3311,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Update renewal status to submitted
       await storage.updateRenewal(renewalId, {
         status: "SUBMITTED",
+        officeFormCompleted: true,
+        staffFormCompleted: true,
+        commitmentFormCompleted: true,
+        submittedAt: new Date(),
       });
 
       const office = await storage.getOffice(user.officeId);
@@ -4565,7 +4434,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/renew/validate/:token", async (req, res) => {
     try {
       const { token } = req.params;
-      const result = await validateInvitationToken(token);
+      // Accept already-redeemed tokens so a returning office resumes the wizard
+      // instead of being told their link is invalid.
+      const result = await resolveRedeemedInvitationToken(token);
       
       if (!result.valid) {
         return res.status(400).json({ valid: false, message: result.error });
@@ -4573,12 +4444,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Get office info for display
       const office = await storage.getOffice(result.officeId!);
+      const renewal = result.renewalId ? await storage.getLicenseRenewal(result.renewalId) : undefined;
       
       res.json({
         valid: true,
         officeId: result.officeId,
         renewalId: result.renewalId,
-        officeName: office?.tradeNameEn || office?.tradeNameAr
+        officeName: office?.tradeNameEn || office?.tradeNameAr,
+        inviteStatus: result.status,
+        renewalState: renewal?.renewalState || 'NOT_STARTED',
+        year: renewal?.year
       });
     } catch (error) {
       console.error("Token validation error:", error);
@@ -4625,9 +4500,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ success: false, message: "Password must be at least 8 characters" });
       }
 
-      // Validate the token matches this renewal (even if consumed)
-      const tokenValidation = await validateInvitationToken(token);
-      
+      if (isNaN(renewalId)) {
+        return res.status(400).json({ success: false, message: "Invalid renewal ID" });
+      }
+
+      // The token is the only proof of identity on this unauthenticated endpoint, so it
+      // must resolve to an invitation issued for exactly this renewal. It has normally
+      // been consumed by the redeem step already, hence the redeemed-aware lookup.
+      const tokenValidation = await resolveRedeemedInvitationToken(token);
+      if (!tokenValidation.valid || tokenValidation.renewalId !== renewalId) {
+        return res.status(403).json({ success: false, message: "Token does not match renewal" });
+      }
+
       // Get renewal to find office
       const renewal = await storage.getLicenseRenewal(renewalId);
       if (!renewal) {
@@ -4636,15 +4520,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Verify renewal is in the correct state for credential update
       if (renewal.renewalState !== 'ACCESS_GRANTED' && renewal.renewalState !== 'CREDENTIALS_UPDATED') {
-        return res.status(403).json({ 
-          success: false, 
-          message: "Invalid renewal state. Please redeem your invitation link first." 
+        return res.status(403).json({
+          success: false,
+          message: "Invalid renewal state. Please redeem your invitation link first."
         });
-      }
-
-      // Extra check: if token was provided and valid, verify it matches the renewal
-      if (tokenValidation.valid && tokenValidation.renewalId !== renewalId) {
-        return res.status(403).json({ success: false, message: "Token does not match renewal" });
       }
 
       // Find user for this office
@@ -4710,8 +4589,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ error: "Token required" });
       }
 
-      // Validate the token
-      const tokenValidation = await validateInvitationToken(token);
+      // Validate the token (already consumed by the redeem step at this point)
+      const tokenValidation = await resolveRedeemedInvitationToken(token);
       if (!tokenValidation.valid) {
         return res.status(403).json({ error: "Invalid or expired token" });
       }
@@ -4759,7 +4638,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/renew/:renewalId/approve-info", ensureOffice, async (req, res) => {
     try {
       const renewalId = parseInt(req.params.renewalId);
-      const officeId = req.session.officeId;
+      const officeId = (req as any).user?.officeId as number | undefined;
+      if (!officeId) {
+        return res.status(403).json({ success: false, message: "Office not associated with user" });
+      }
 
       const renewal = await storage.getLicenseRenewal(renewalId);
       if (!renewal || renewal.officeId !== officeId) {
@@ -4812,7 +4694,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/renew/:renewalId/accept-declarations", ensureOffice, async (req, res) => {
     try {
       const renewalId = parseInt(req.params.renewalId);
-      const officeId = req.session.officeId;
+      const officeId = (req as any).user?.officeId as number | undefined;
+      if (!officeId) {
+        return res.status(403).json({ success: false, message: "Office not associated with user" });
+      }
 
       const renewal = await storage.getLicenseRenewal(renewalId);
       if (!renewal || renewal.officeId !== officeId) {
@@ -4865,7 +4750,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/renew/:renewalId/initiate-payment", ensureOffice, async (req, res) => {
     try {
       const renewalId = parseInt(req.params.renewalId);
-      const officeId = req.session.officeId;
+      const officeId = (req as any).user?.officeId as number | undefined;
+      if (!officeId) {
+        return res.status(403).json({ success: false, message: "Office not associated with user" });
+      }
 
       const renewal = await storage.getLicenseRenewal(renewalId);
       if (!renewal || renewal.officeId !== officeId) {
@@ -4907,7 +4795,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/renew/:renewalId/confirm-payment", ensureOffice, async (req, res) => {
     try {
       const renewalId = parseInt(req.params.renewalId);
-      const officeId = req.session.officeId;
+      const officeId = (req as any).user?.officeId as number | undefined;
+      if (!officeId) {
+        return res.status(403).json({ success: false, message: "Office not associated with user" });
+      }
 
       const renewal = await storage.getLicenseRenewal(renewalId);
       if (!renewal || renewal.officeId !== officeId) {
@@ -4919,6 +4810,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ 
           success: false, 
           message: "Payment cannot be confirmed at this stage" 
+        });
+      }
+
+      // The office cannot vouch for its own payment. Completing the renewal (and
+      // granting canTransact2026) requires a payment an admin has already approved.
+      const payment = await storage.getPaymentByOffice(officeId, renewalId);
+      if (!payment || payment.status !== 'APPROVED') {
+        return res.status(403).json({
+          success: false,
+          message: "Payment has not been approved yet. Please wait for JSTA to verify your payment."
         });
       }
 
@@ -4965,8 +4866,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Office: Get renewal status
   app.get("/api/renew/status", ensureOffice, async (req, res) => {
     try {
-      const officeId = req.session.officeId;
-      const status = await getOfficeRenewalStatus(officeId!, 2026);
+      const officeId = (req as any).user?.officeId as number | undefined;
+      if (!officeId) {
+        return res.status(403).json({ success: false, message: "Office not associated with user" });
+      }
+      const status = await getOfficeRenewalStatus(officeId, 2026);
       res.json(status);
     } catch (error) {
       console.error("Get renewal status error:", error);

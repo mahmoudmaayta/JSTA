@@ -33,6 +33,7 @@ import pkg from "pg";
 const { Pool } = pkg;
 import { eq, desc, inArray, sql, and, gte, lte, count, avg } from "drizzle-orm";
 import bcrypt from "bcryptjs";
+import { toBranchColumns } from "./services/branchFields";
 
 export const pool = new Pool({ 
   connectionString: process.env.DATABASE_URL,
@@ -286,7 +287,10 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createBranch(insertBranch: InsertBranch): Promise<Branch> {
-    const [branch] = await db.insert(branches).values(insertBranch).returning();
+    // The form fields managerName/managerMobile/area have no matching columns;
+    // map them onto the ones that exist instead of letting Drizzle drop them.
+    const values = toBranchColumns(insertBranch);
+    const [branch] = await db.insert(branches).values(values as any).returning();
     return branch;
   }
 
@@ -347,7 +351,9 @@ export class DatabaseStorage implements IStorage {
   async createRenewal(insertRenewal: InsertLicenseRenewal): Promise<LicenseRenewal> {
     const [renewal] = await db.insert(licenseRenewals).values({
       ...insertRenewal,
-      status: "SUBMITTED"
+      // 2026+ renewals start as DRAFT so they can be filled in before submission;
+      // legacy renewals are still created already-submitted.
+      status: insertRenewal.status ?? "SUBMITTED"
     }).returning();
     return renewal;
   }

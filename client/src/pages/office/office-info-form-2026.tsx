@@ -248,6 +248,8 @@ export default function OfficeInfoForm2026() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/office-info-form"] });
+      // Unlocks the Renewals nav item, which is gated on form completion.
+      queryClient.invalidateQueries({ queryKey: ["/api/office/form-completion-status"] });
     },
     onError: (error: any) => {
       console.error("Auto-save error:", error);

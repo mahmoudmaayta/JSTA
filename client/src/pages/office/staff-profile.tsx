@@ -74,7 +74,9 @@ export default function StaffProfile() {
   const params = useParams<{ section: string; index: string }>();
   
   const section = params.section || "owners";
-  const index = parseInt(params.index || "0", 10);
+  // The route param carries the person's id. Older links passed a list index, so
+  // fall back to that when no id matches.
+  const personRef = parseInt(params.index || "0", 10);
 
   const [personData, setPersonData] = useState<PersonRow | null>(null);
   const [uploadingIdentity, setUploadingIdentity] = useState(false);
@@ -111,11 +113,13 @@ export default function StaffProfile() {
           data = staffData.employees || [];
           break;
       }
-      if (data[index]) {
-        setPersonData({ ...data[index] });
+      const byId = data.find((p) => p.id === personRef);
+      const resolved = byId ?? data[personRef];
+      if (resolved) {
+        setPersonData({ ...resolved });
       }
     }
-  }, [staffData, section, index]);
+  }, [staffData, section, personRef]);
 
   const saveMutation = useMutation({
     mutationFn: async (data: PersonRow) => {

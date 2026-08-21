@@ -116,3 +116,124 @@ export function generateRenewalPDF(office: Office, renewal: LicenseRenewal): Pas
 
   return stream;
 }
+
+
+/**
+ * Certificate of membership renewal, issued once a renewal reaches FINAL_APPROVED.
+ * Unlike generateRenewalPDF (which is the request the office takes to the Ministry),
+ * this is the confirmation JSTA issues back to the office.
+ */
+export function generateRenewalCertificatePDF(office: Office, renewal: LicenseRenewal): PassThrough {
+  const doc = new PDFDocument({
+    size: "A4",
+    margin: 50,
+  });
+
+  const stream = new PassThrough();
+  doc.pipe(stream);
+
+  const pageLeft = doc.page.margins.left;
+  const pageRight = doc.page.width - doc.page.margins.right;
+  const contentWidth = pageRight - pageLeft;
+
+  // Outer border
+  doc.lineWidth(2)
+    .rect(30, 30, doc.page.width - 60, doc.page.height - 60)
+    .stroke();
+  doc.lineWidth(0.5)
+    .rect(38, 38, doc.page.width - 76, doc.page.height - 76)
+    .stroke();
+
+  doc.moveDown(3);
+
+  doc.fontSize(12)
+    .font("Helvetica")
+    .text("Jordan Society of Tourism and Travel Agents", { align: "center" });
+
+  doc.moveDown(1.5);
+
+  doc.fontSize(24)
+    .font("Helvetica-Bold")
+    .text("CERTIFICATE OF LICENSE RENEWAL", { align: "center" });
+
+  doc.moveDown(0.5);
+  doc.fontSize(14)
+    .font("Helvetica")
+    .text(`Year ${renewal.year}`, { align: "center" });
+
+  doc.moveDown(2);
+  doc.lineWidth(1)
+    .moveTo(pageLeft + 40, doc.y)
+    .lineTo(pageRight - 40, doc.y)
+    .stroke();
+  doc.moveDown(2);
+
+  doc.fontSize(12)
+    .font("Helvetica")
+    .text("This is to certify that the tourism office named below has completed its", {
+      align: "center",
+      width: contentWidth,
+    });
+  doc.text(`license renewal for the year ${renewal.year}, and that the renewal has been`, {
+    align: "center",
+    width: contentWidth,
+  });
+  doc.text("finally approved.", { align: "center", width: contentWidth });
+
+  doc.moveDown(2);
+
+  // PDFKit's built-in fonts are Latin-only, so the Arabic trade name cannot be
+  // rendered here; the certificate identifies the office in English instead.
+  doc.fontSize(18)
+    .font("Helvetica-Bold")
+    .text(office.tradeNameEn || office.legalNameRegistrar || `Office #${office.id}`, { align: "center" });
+
+  doc.moveDown(2.5);
+
+  const addField = (label: string, value: string | number | null | undefined) => {
+    doc.font("Helvetica-Bold").fontSize(11).text(`${label}: `, pageLeft + 60, doc.y, { continued: true });
+    doc.font("Helvetica").text(String(value || "N/A"));
+    doc.moveDown(0.6);
+  };
+
+  addField("Registration Number", office.registrationNumber);
+  addField("License Category", office.licenseCategory);
+  addField("National Establishment Number", office.nationalEstablishmentNumber);
+  addField("City", office.mainCity);
+  addField("Renewal Reference", `${renewal.year}-${renewal.id}`);
+  addField("Approved On", new Date(renewal.updatedAt || renewal.createdAt).toLocaleDateString());
+
+  doc.moveDown(3);
+
+  const signatureY = doc.y;
+  doc.lineWidth(0.8)
+    .moveTo(pageLeft + 60, signatureY)
+    .lineTo(pageLeft + 240, signatureY)
+    .stroke();
+  doc.fontSize(10)
+    .font("Helvetica")
+    .text("Authorized Signature", pageLeft + 60, signatureY + 6);
+
+  doc.lineWidth(0.8)
+    .moveTo(pageRight - 240, signatureY)
+    .lineTo(pageRight - 60, signatureY)
+    .stroke();
+  doc.fontSize(10)
+    .font("Helvetica")
+    .text("Official Stamp", pageRight - 240, signatureY + 6);
+
+  doc.moveDown(5);
+
+  doc.fontSize(9)
+    .font("Helvetica-Oblique")
+    .text(
+      `Issued by the Tourism Offices Portal on ${new Date().toLocaleString()}. Verify with JSTA using reference ${renewal.year}-${renewal.id}.`,
+      pageLeft + 40,
+      doc.y,
+      { align: "center", width: contentWidth - 80 }
+    );
+
+  doc.end();
+
+  return stream;
+}
