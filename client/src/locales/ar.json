@@ -916,7 +916,8 @@
     "fieldInspection": "الكشف الحسي",
     "reports": "التقارير والإحصائيات",
     "notifications": "الإشعارات",
-    "activityLog": "سجل النشاطات"
+    "activityLog": "سجل النشاطات",
+    "renewalsLockedHint": "يجب إكمال جميع النماذج والموافقة على الدفع أولاً"
   },
   "forms": {
     "continue": "متابعة",

@@ -187,10 +187,7 @@ export function OfficeSidebar({ side = "left" }: { side?: "left" | "right" }) {
                         </TooltipTrigger>
                         <TooltipContent side="right" className="max-w-[220px]">
                           <p className="text-xs">
-                            {language === "ar" 
-                              ? "يجب إكمال جميع النماذج والموافقة على الدفع أولاً"
-                              : "Complete all forms and get payment approved first"
-                            }
+                            {t("navigation.renewalsLockedHint")}
                           </p>
                         </TooltipContent>
                       </Tooltip>

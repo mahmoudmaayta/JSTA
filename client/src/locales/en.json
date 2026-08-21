@@ -916,7 +916,8 @@
     "fieldInspection": "Field Inspection",
     "reports": "Reports & Statistics",
     "notifications": "Notifications",
-    "activityLog": "Activity Log"
+    "activityLog": "Activity Log",
+    "renewalsLockedHint": "Complete all forms and get payment approved first"
   },
   "forms": {
     "continue": "Continue",
